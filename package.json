@@ -1,0 +1,35 @@
+{
+  "name": "ar-design",
+  "version": "1.0.1",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "scripts": {
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc --module commonjs --outdir dist/cjs"
+  },
+  "keywords": [
+    "react",
+    "next",
+    "ui",
+    "desing"
+  ],
+  "author": "Kaan ÇETİN",
+  "license": "ISC",
+  "description": "a design language 🐝",
+  "dependencies": {
+    "next": "^14.2.5"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.2.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
