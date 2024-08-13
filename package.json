@@ -1,13 +1,20 @@
 {
   "name": "ar-design",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outdir dist/cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaancetin-f/ar-design.git"
   },
   "keywords": [
     "react",
@@ -16,8 +23,8 @@
     "desing"
   ],
   "author": "Kaan ÇETİN",
-  "license": "ISC",
-  "description": "a design language 🐝",
+  "license": "MIT",
+  "description": "AR Design...",
   "dependencies": {
     "next": "^14.2.5"
   },
