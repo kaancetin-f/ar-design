@@ -78,5 +78,10 @@ export type Props = {
    */
   upperCase?: boolean;
 
-  width?: "max-width";
+  border?: {
+    style?: "solid" | "dashed" | "none";
+    radius?: "sm" | "lg" | "xl" | "xxl" | "pill";
+  };
+
+  width?: "max-width" | "auto";
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;

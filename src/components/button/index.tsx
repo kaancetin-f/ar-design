@@ -6,11 +6,12 @@ import "../../libs/styles/button/button.css";
 
 const Button: React.FC<Props> = ({
   children,
-  color,
   variant = "filled",
+  color = "primary",
+  border,
+  width = "auto",
   icon,
   upperCase,
-  width,
   ...attributes
 }) => {
   // refs
@@ -20,7 +21,9 @@ const Button: React.FC<Props> = ({
     <button
       ref={_button}
       {...attributes}
-      className={`ar-button-core ${width} ${variant} ${color ?? "light"} ${
+      className={`ar-button-core ${variant} ${color} border-${
+        border?.style ?? "solid"
+      } border-${border?.radius ?? "sm"} ${width} ${
         attributes.className ?? ""
       }`}
       onClick={(event) => {
@@ -28,7 +31,11 @@ const Button: React.FC<Props> = ({
           const _current = _button.current;
           const addClass = "active";
 
-          if (_current && !_current.classList.contains(addClass)) {
+          if (
+            _current &&
+            !_current.classList.contains(addClass) &&
+            border?.style !== "none"
+          ) {
             // Sınıf ekleniyor...
             _current.classList.add(addClass);
 

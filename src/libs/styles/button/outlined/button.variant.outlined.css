@@ -1,15 +1,24 @@
 @import url("./button.variant.outlined.animation.css");
+
 .ar-button-core.outlined {
   background-color: transparent;
+  border-width: 1px;
+  border-color: transparent;
+}
+
+.ar-button-core.outlined.border-solid {
+  border-style: solid;
+}
+.ar-button-core.outlined.border-dashed {
+  border-style: dashed;
+}
+.ar-button-core.outlined.border-none {
+  border-style: none;
 }
 
 .ar-button-core.outlined.primary {
-  border: solid 1px var(--primary);
+  border-color: var(--primary);
   color: var(--primary);
-}
-.ar-button-core.outlined.primary:active {
-  border-color: var(--primary-active);
-  color: var(--primary-active);
 }
 .ar-button-core.outlined.primary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -18,12 +27,8 @@
 }
 
 .ar-button-core.outlined.secondary {
-  border: solid 1px var(--secondary);
+  border-color: var(--secondary);
   color: var(--secondary);
-}
-.ar-button-core.outlined.secondary:active {
-  border-color: var(--primary-active);
-  color: var(--primary-active);
 }
 .ar-button-core.outlined.secondary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -32,12 +37,8 @@
 }
 
 .ar-button-core.outlined.success {
-  border: solid 1px var(--success);
+  border-color: var(--success);
   color: var(--success);
-}
-.ar-button-core.outlined.success:active {
-  border-color: var(--success-active);
-  color: var(--success-active);
 }
 .ar-button-core.outlined.success.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -46,12 +47,8 @@
 }
 
 .ar-button-core.outlined.warning {
-  border: solid 1px var(--warning);
+  border-color: var(--warning);
   color: var(--warning);
-}
-.ar-button-core.outlined.warning:active {
-  border-color: var(--warning-active);
-  color: var(--warning-active);
 }
 .ar-button-core.outlined.warning.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -60,12 +57,8 @@
 }
 
 .ar-button-core.outlined.danger {
-  border: solid 1px var(--danger);
+  border-color: var(--danger);
   color: var(--danger);
-}
-.ar-button-core.outlined.danger:active {
-  border-color: var(--danger-active);
-  color: var(--danger-active);
 }
 .ar-button-core.outlined.danger.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -73,12 +66,8 @@
 }
 
 .ar-button-core.outlined.information {
-  border: solid 1px var(--information);
+  border-color: var(--information);
   color: var(--information);
-}
-.ar-button-core.outlined.information:active {
-  border-color: var(--information-active);
-  color: var(--information-active);
 }
 .ar-button-core.outlined.information.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -87,12 +76,8 @@
 }
 
 .ar-button-core.outlined.light {
-  border: solid 1px var(--light);
-  color: var(--light);
-}
-.ar-button-core.outlined.light:active {
-  border-color: var(--light-active);
-  color: var(--light-active);
+  border-color: var(--light);
+  color: var(--gray-500);
 }
 .ar-button-core.outlined.light.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -100,15 +85,66 @@
 }
 
 .ar-button-core.outlined.dark {
-  background-color: transparent;
-  border: solid 1px var(--dark);
+  border-color: var(--dark);
   color: var(--dark);
-}
-.ar-button-core.outlined.dark:active {
-  border-color: var(--dark-active);
-  color: var(--dark-active);
 }
 .ar-button-core.outlined.dark.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: outlined-dark-active-animation ease-in-out 750ms 0s 1 normal both;
+}
+
+.ar-button-core.outlined.border-none:hover::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  border-radius: var(--border-radius-sm);
+}
+
+.ar-button-core.outlined.primary.border-none:hover::before {
+  background-color: rgba(var(--primary-rgb), 0.1);
+}
+.ar-button-core.outlined.primary.border-none:active::before {
+  background-color: rgba(var(--primary-rgb), 0.2);
+}
+
+.ar-button-core.outlined.secondary.border-none:hover::before {
+  background-color: rgba(var(--secondary-rgb), 0.1);
+}
+.ar-button-core.outlined.secondary.border-none:active::before {
+  background-color: rgba(var(--secondary-rgb), 0.2);
+}
+
+.ar-button-core.outlined.success.border-none:hover::before {
+  background-color: rgba(var(--success-rgb), 0.1);
+}
+.ar-button-core.outlined.success.border-none:active::before {
+  background-color: rgba(var(--success-rgb), 0.2);
+}
+
+.ar-button-core.outlined.warning.border-none:hover::before {
+  background-color: rgba(var(--warning-rgb), 0.1);
+}
+.ar-button-core.outlined.warning.border-none:active::before {
+  background-color: rgba(var(--warning-rgb), 0.2);
+}
+
+.ar-button-core.outlined.danger.border-none:hover::before {
+  background-color: rgba(var(--danger-rgb), 0.1);
+}
+.ar-button-core.outlined.danger.border-none:active::before {
+  background-color: rgba(var(--danger-rgb), 0.2);
+}
+
+.ar-button-core.outlined.information.border-none:hover::before {
+  background-color: rgba(var(--information-rgb), 0.1);
+}
+.ar-button-core.outlined.information.border-none:active::before {
+  background-color: rgba(var(--information-rgb), 0.2);
+}
+
+.ar-button-core.outlined.dark.border-none:hover::before {
+  background-color: rgba(var(--dark-rgb), 0.1);
+}
+.ar-button-core.outlined.dark.border-none:active::before {
+  background-color: rgba(var(--dark-rgb), 0.2);
 }

@@ -7,6 +7,30 @@
   cursor: pointer;
   transition: background-color 150ms, border 150ms, color 150ms ease-in-out;
 }
+.ar-button-core:is(.filled):active::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background-color: rgba(var(--black-rgb), 0.25);
+  border-radius: var(--border-radius-sm);
+}
+
 .ar-button-core.max-width {
   width: 100%;
+}
+
+.ar-button-core.border-sm {
+  border-radius: var(--border-radius-sm);
+}
+.ar-button-core.border-lg {
+  border-radius: var(--border-radius-lg);
+}
+.ar-button-core.border-xl {
+  border-radius: var(--border-radius-xl);
+}
+.ar-button-core.border-xxl {
+  border-radius: var(--border-radius-xxl);
+}
+.ar-button-core.border-pill {
+  border-radius: var(--border-radius-pill);
 }
