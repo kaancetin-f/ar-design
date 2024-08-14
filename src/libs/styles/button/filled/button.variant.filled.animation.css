@@ -1,0 +1,95 @@
+@keyframes filled-primary-active-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(var(--primary-rgb), 0);
+  }
+  25% {
+    box-shadow: 0 0 0 5px rgba(var(--primary-rgb), 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 7.5px rgba(var(--primary-rgb), 0);
+  }
+}
+
+@keyframes filled-secondary-active-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(var(--secondary-rgb), 0);
+  }
+  25% {
+    box-shadow: 0 0 0 5px rgba(var(--secondary-rgb), 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 7.5px rgba(var(--secondary-rgb), 0);
+  }
+}
+
+@keyframes filled-success-active-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(var(--success-rgb), 0);
+  }
+  25% {
+    box-shadow: 0 0 0 5px rgba(var(--success-rgb), 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 7.5px rgba(var(--success-rgb), 0);
+  }
+}
+
+@keyframes filled-warning-active-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(var(--warning-rgb), 0);
+  }
+  25% {
+    box-shadow: 0 0 0 5px rgba(var(--warning-rgb), 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 7.5px rgba(var(--warning-rgb), 0);
+  }
+}
+
+@keyframes filled-danger-active-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(var(--danger-rgb), 0);
+  }
+  25% {
+    box-shadow: 0 0 0 5px rgba(var(--danger-rgb), 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 7.5px rgba(var(--danger-rgb), 0);
+  }
+}
+
+@keyframes filled-information-active-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(var(--information-rgb), 0);
+  }
+  25% {
+    box-shadow: 0 0 0 5px rgba(var(--information-rgb), 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 7.5px rgba(var(--information-rgb), 0);
+  }
+}
+
+@keyframes filled-light-active-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(var(--dark-rgb), 0);
+  }
+  25% {
+    box-shadow: 0 0 0 5px rgba(var(--dark-rgb), 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 7.5px rgba(var(--dark-rgb), 0);
+  }
+}
+
+@keyframes filled-dark-active-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(var(--dark-rgb), 0);
+  }
+  25% {
+    box-shadow: 0 0 0 5px rgba(var(--dark-rgb), 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 7.5px rgba(var(--dark-rgb), 0);
+  }
+}

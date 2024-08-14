@@ -1,0 +1,114 @@
+@import url("./button.variant.outlined.animation.css");
+.ar-button-core.outlined {
+  background-color: transparent;
+}
+
+.ar-button-core.outlined.primary {
+  border: solid 1px var(--primary);
+  color: var(--primary);
+}
+.ar-button-core.outlined.primary:active {
+  border-color: var(--primary-active);
+  color: var(--primary-active);
+}
+.ar-button-core.outlined.primary.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: outlined-primary-active-animation ease-in-out 750ms 0s 1 normal
+    both;
+}
+
+.ar-button-core.outlined.secondary {
+  border: solid 1px var(--secondary);
+  color: var(--secondary);
+}
+.ar-button-core.outlined.secondary:active {
+  border-color: var(--primary-active);
+  color: var(--primary-active);
+}
+.ar-button-core.outlined.secondary.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: outlined-secondary-active-animation ease-in-out 750ms 0s 1 normal
+    both;
+}
+
+.ar-button-core.outlined.success {
+  border: solid 1px var(--success);
+  color: var(--success);
+}
+.ar-button-core.outlined.success:active {
+  border-color: var(--success-active);
+  color: var(--success-active);
+}
+.ar-button-core.outlined.success.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: outlined-success-active-animation ease-in-out 750ms 0s 1 normal
+    both;
+}
+
+.ar-button-core.outlined.warning {
+  border: solid 1px var(--warning);
+  color: var(--warning);
+}
+.ar-button-core.outlined.warning:active {
+  border-color: var(--warning-active);
+  color: var(--warning-active);
+}
+.ar-button-core.outlined.warning.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: outlined-warning-active-animation ease-in-out 750ms 0s 1 normal
+    both;
+}
+
+.ar-button-core.outlined.danger {
+  border: solid 1px var(--danger);
+  color: var(--danger);
+}
+.ar-button-core.outlined.danger:active {
+  border-color: var(--danger-active);
+  color: var(--danger-active);
+}
+.ar-button-core.outlined.danger.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: outlined-danger-active-animation ease-in-out 750ms 0s 1 normal both;
+}
+
+.ar-button-core.outlined.information {
+  border: solid 1px var(--information);
+  color: var(--information);
+}
+.ar-button-core.outlined.information:active {
+  border-color: var(--information-active);
+  color: var(--information-active);
+}
+.ar-button-core.outlined.information.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: outlined-information-active-animation ease-in-out 750ms 0s 1 normal
+    both;
+}
+
+.ar-button-core.outlined.light {
+  border: solid 1px var(--light);
+  color: var(--light);
+}
+.ar-button-core.outlined.light:active {
+  border-color: var(--light-active);
+  color: var(--light-active);
+}
+.ar-button-core.outlined.light.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: outlined-light-active-animation ease-in-out 750ms 0s 1 normal both;
+}
+
+.ar-button-core.outlined.dark {
+  background-color: transparent;
+  border: solid 1px var(--dark);
+  color: var(--dark);
+}
+.ar-button-core.outlined.dark:active {
+  border-color: var(--dark-active);
+  color: var(--dark-active);
+}
+.ar-button-core.outlined.dark.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: outlined-dark-active-animation ease-in-out 750ms 0s 1 normal both;
+}

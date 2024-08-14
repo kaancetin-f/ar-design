@@ -1,0 +1,109 @@
+/* #region General */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style-type: none;
+  font-size: 0.8rem;
+  outline: none;
+  letter-spacing: 0.5px;
+}
+
+html {
+  font-size: 1rem;
+}
+
+body {
+  background-color: var(--pantone-black);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+/* #endregion */
+/* General */
+
+/* #region Color Palette */
+:root {
+  --white: #fff;
+  --white-rgb: 255, 255, 255;
+  --black: #000000;
+  --black-rgb: 0, 0, 0;
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+  --gray-dark: #343a40;
+  --red: #f11a7b;
+  --red-rgb: 241, 26, 123;
+  --green: #00ff00;
+  --green-rgb: 0, 255, 0;
+  --blue: #0000ff;
+  --blue-rgb: 0, 0, 255;
+
+  /* ... */
+  --primary: #007bff;
+  --primary-active: #005abb;
+  --primary-rgb: 0, 123, 255;
+  /* --primary-font: #004a99; */
+  --secondary: #6c757d;
+  --secondary-active: #495055;
+  --secondary-rgb: 108, 117, 125;
+  /* --secondary-font: #40454a; */
+  --success: #28a745;
+  --success-active: #1c7a32;
+  --success-rgb: 40, 167, 69;
+  /* --success-font: #176027; */
+  --warning: #ffc107;
+  --warning-active: #cf9c05;
+  --warning-rgb: 255, 193, 7;
+  --warning-font-color: #463500;
+  --danger: #dc3545;
+  --danger-active: #af2936;
+  --danger-rgb: 220, 53, 69;
+  /* --danger-font: #a22531; */
+  --information: #17a2b8;
+  --information-active: #107c8c;
+  --information-rgb: 23, 162, 184;
+  /* --info-font: #0b5460; */
+  --light: #f8f9fa;
+  --light-active: #a0a1a3;
+  --light-rgb: 248, 249, 250;
+  /* --light-font: var(--gray-300); */
+  --dark: #343a40;
+  --dark-active: #23272b;
+  --dark-rgb: 52, 58, 64;
+  /* --dark-font: var(--gray-800); */
+}
+/* #endregion */
+/* Color Palette */
+
+/* #region Border */
+:root {
+  /* Border */
+
+  /* Border Radius */
+  --border-radius: 0.465rem;
+  --border-radius-sm: 0.25rem;
+  --border-radius-lg: 0.5rem;
+  --border-radius-xl: 1rem;
+  --border-radius-xxl: 2rem;
+  --border-radius-pill: 50rem;
+}
+/* #endregion */
+/* Border */
+
+/* #region Box Shadow */
+:root {
+  --box-shadow: 0 0.5rem 1.5rem -0.5rem var(--gray-500);
+}
+/* #endregion */
+/* Box Shadow */

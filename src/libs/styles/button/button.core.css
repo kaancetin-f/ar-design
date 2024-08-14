@@ -1,0 +1,12 @@
+.ar-button-core {
+  position: relative;
+  height: 2.5rem;
+  padding: 0 1rem;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: background-color 150ms, border 150ms, color 150ms ease-in-out;
+}
+.ar-button-core.max-width {
+  width: 100%;
+}
