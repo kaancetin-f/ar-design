@@ -39,7 +39,7 @@ export type Props = {
    */
   variant?: "filled" | "outlined" | "text";
 
-  shape?: "circle";
+  shape?: "circle" | "square";
 
   /**
    * Bileşenin renk özelliğini belirtir.
@@ -70,7 +70,8 @@ export type Props = {
    */
   icon?: {
     element: React.JSX.Element;
-    direction?: "row" | "row-reverse" | "column" | "column-reverse";
+    direction?: "row" | "column";
+    position?: "start" | "end";
   };
 
   /**

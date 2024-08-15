@@ -15,3 +15,5 @@
 .ar-button-core.ar-button-shape.circle {
   border-radius: var(--border-radius-pill);
 }
+.ar-button-core.ar-button-shape.square {
+}

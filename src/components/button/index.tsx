@@ -32,7 +32,11 @@ const Button: React.FC<Props> = ({
     if (icon) {
       if (icon.element && !shape) className += ` icon`;
       if (icon.direction) className += ` icon-${icon.direction}`;
+      if (icon.position) className += ` icon-${icon.direction ?? "row"}-${icon.position}`;
     }
+
+    if (attributes.disabled) className += ` disabled`;
+
     if (attributes.className) className += ` ${attributes.className}`;
 
     return className;
@@ -44,6 +48,9 @@ const Button: React.FC<Props> = ({
       {...attributes}
       className={handleClassName()}
       onClick={(event) => {
+        // Disabled gelmesi durumunda işlem yapmasına izin verme...
+        if (attributes.disabled) return;
+
         (() => {
           const _current = _button.current;
           const addClass = "active";
@@ -62,9 +69,7 @@ const Button: React.FC<Props> = ({
     >
       {icon?.element}
 
-      {typeof children === "string" && upperCase
-        ? children.toLocaleUpperCase()
-        : children}
+      {typeof children === "string" && upperCase ? children.toLocaleUpperCase() : children}
     </button>
   );
 };

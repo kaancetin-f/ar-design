@@ -10,12 +10,12 @@
 .ar-button-core.icon-row {
   flex-direction: row;
 }
-.ar-button-core.icon-row-reverse {
+.ar-button-core.icon-row-end {
   flex-direction: row-reverse;
 }
 .ar-button-core.icon-column {
   flex-direction: column;
 }
-.ar-button-core.icon-column-reverse {
+.ar-button-core.icon-column-end {
   flex-direction: column-reverse;
 }
