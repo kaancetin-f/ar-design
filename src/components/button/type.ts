@@ -16,8 +16,6 @@ export type Props = {
    *    <span>Hello, World!</span>
    * </Button>
    * ```
-   *
-   * Bu prop isteğe bağlıdır.
    */
   children?: string | React.JSX.Element;
 
@@ -39,6 +37,21 @@ export type Props = {
    */
   variant?: "filled" | "outlined" | "text";
 
+  /**
+   * Bileşenin şekil varyantını belirtir ve genellikle sadece ikon için kullanılmalıdır.
+   * İki seçenekten biri olabilir: "circle" veya "square".
+   *
+   * - `"circle"`: Daire şeklinde stilize edilmiş bir varyant.
+   * - `"square"`: Kare şeklinde stilize edilmiş bir varyant.
+   *
+   * Bu seçenekler, bileşenin şekilsel görünümünü değiştirir.
+   *
+   * Örneğin;
+   *
+   * ```jsx
+   * <Button shape="circle">Hello, World!</Button>
+   * ```
+   */
   shape?: "circle" | "square";
 
   /**
@@ -52,21 +65,34 @@ export type Props = {
    * ```jsx
    * <Button color="success">Hello, World!</Button>
    * ```
-   * Bu prop isteğe bağlıdır.
    */
   color?: Colors;
 
   /**
-   * Bileşenin yanında gösterilecek bir ikonu belirtir.
-   * İkon, bir React JSX elemanı olarak sağlanır.
+   * Bileşenine ikon eklemeyi sağlar.
+   * İkonun kendisini, yönünü ve pozisyonunu tanımlamak için kullanılır.
    *
-   * Örneğin, bir SVG ikon veya bir font ikon bileşeni olabilir:
+   * - `element`: İkon olarak kullanılacak React JSX elemanı.
+   * - `direction` (isteğe bağlı): İkonun ve metnin hizalanma yönünü belirtir.
+   *    - `"row"`: İkon ve metin yatay olarak hizalanır.
+   *    - `"column"`: İkon ve metin dikey olarak hizalanır.
+   * - `position` (isteğe bağlı): İkonun metne göre konumunu belirtir.
+   *    - `"start"`: İkon metnin başında yer alır.
+   *    - `"end"`: İkon metnin sonunda yer alır.
+   *
+   * Örneğin;
    *
    * ```jsx
-   * <Button icon={<Icon name="***" />}>Hello, World!</Button>
+   * <Button
+   *    icon={{
+   *      element: <MyIcon />,
+   *      direction: "row",
+   *      position: "start"
+   *    }}
+   * >
+   *  Click Me!
+   * </Button>
    * ```
-   *
-   * Bu prop isteğe bağlıdır ve sağlanmazsa bileşende bir ikon görünmeyecektir.
    */
   icon?: {
     element: React.JSX.Element;
@@ -85,10 +111,53 @@ export type Props = {
    */
   upperCase?: boolean;
 
+  /**
+   * Bileşenin çervesinde düzenleme yapılmasına olanak tanır.
+   * Kenarlığın stilini ve köşe yuvarlama derecesini tanımlamak için kullanılır.
+   *
+   * - `style` (isteğe bağlı): Kenarlığın stilini belirtir.
+   *    - `"solid"`: Düz çizgi şeklinde kenarlık.
+   *    - `"dashed"`: Kesik çizgi şeklinde kenarlık.
+   *    - `"none"`: Kenarlık yok.
+   * - `radius` (isteğe bağlı): Köşe yuvarlama derecesini belirtir.
+   *    - `"sm"`: Küçük yuvarlama.
+   *    - `"lg"`: Büyük yuvarlama.
+   *    - `"xl"`: Ekstra büyük yuvarlama.
+   *    - `"xxl"`: Çok büyük yuvarlama.
+   *    - `"pill"`: Hap şeklinde yuvarlama.
+   *    - `"none"`: Yuvarlama yok.
+   *
+   * Örneğin;
+   *
+   * ```jsx
+   * <Button
+   *    border={{
+   *     style: "solid",
+   *     radius: "lg"
+   *    }}
+   * >
+   *  Test
+   * </Button>
+   * ```
+   */
   border?: {
     style?: "solid" | "dashed" | "none";
     radius?: "sm" | "lg" | "xl" | "xxl" | "pill" | "none";
   };
 
+  /**
+   * Bileşenin genişlik özelliğini belirtir.
+   * Genişliğin nasıl ayarlanacağını tanımlamak için kullanılır.
+   *
+   * - `width` (isteğe bağlı): Genişlik ayarını belirtir.
+   *    - `"max-width"`: Maksimum genişliğe göre ayarlanır.
+   *    - `"auto"`: Otomatik olarak genişliğe göre ayarlanır.
+   *
+   * Örneğin;
+   *
+   * ```jsx
+   * <Button width="max-width">Submit</Button>
+   * ```
+   */
   width?: "max-width" | "auto";
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
