@@ -1,19 +1,10 @@
-@import url("./button.variant.outlined.animation.css");
+@import url("./animation.css");
+@import url("./border.css");
 
 .ar-button-core.outlined {
   background-color: transparent;
   border-width: 1px;
   border-color: transparent;
-}
-
-.ar-button-core.outlined.border-solid {
-  border-style: solid;
-}
-.ar-button-core.outlined.border-dashed {
-  border-style: dashed;
-}
-.ar-button-core.outlined.border-none {
-  border-style: none;
 }
 
 .ar-button-core.outlined.primary {
@@ -91,60 +82,4 @@
 .ar-button-core.outlined.dark.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: outlined-dark-active-animation ease-in-out 750ms 0s 1 normal both;
-}
-
-.ar-button-core.outlined.border-none:hover::before {
-  position: absolute;
-  inset: 0;
-  content: "";
-  border-radius: var(--border-radius-sm);
-}
-
-.ar-button-core.outlined.primary.border-none:hover::before {
-  background-color: rgba(var(--primary-rgb), 0.1);
-}
-.ar-button-core.outlined.primary.border-none:active::before {
-  background-color: rgba(var(--primary-rgb), 0.2);
-}
-
-.ar-button-core.outlined.secondary.border-none:hover::before {
-  background-color: rgba(var(--secondary-rgb), 0.1);
-}
-.ar-button-core.outlined.secondary.border-none:active::before {
-  background-color: rgba(var(--secondary-rgb), 0.2);
-}
-
-.ar-button-core.outlined.success.border-none:hover::before {
-  background-color: rgba(var(--success-rgb), 0.1);
-}
-.ar-button-core.outlined.success.border-none:active::before {
-  background-color: rgba(var(--success-rgb), 0.2);
-}
-
-.ar-button-core.outlined.warning.border-none:hover::before {
-  background-color: rgba(var(--warning-rgb), 0.1);
-}
-.ar-button-core.outlined.warning.border-none:active::before {
-  background-color: rgba(var(--warning-rgb), 0.2);
-}
-
-.ar-button-core.outlined.danger.border-none:hover::before {
-  background-color: rgba(var(--danger-rgb), 0.1);
-}
-.ar-button-core.outlined.danger.border-none:active::before {
-  background-color: rgba(var(--danger-rgb), 0.2);
-}
-
-.ar-button-core.outlined.information.border-none:hover::before {
-  background-color: rgba(var(--information-rgb), 0.1);
-}
-.ar-button-core.outlined.information.border-none:active::before {
-  background-color: rgba(var(--information-rgb), 0.2);
-}
-
-.ar-button-core.outlined.dark.border-none:hover::before {
-  background-color: rgba(var(--dark-rgb), 0.1);
-}
-.ar-button-core.outlined.dark.border-none:active::before {
-  background-color: rgba(var(--dark-rgb), 0.2);
 }

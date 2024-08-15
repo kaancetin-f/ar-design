@@ -1,0 +1,64 @@
+.ar-button-core.outlined.border-style-solid {
+  border-style: solid;
+}
+.ar-button-core.outlined.border-style-dashed {
+  border-style: dashed;
+}
+.ar-button-core.outlined.border-style-none {
+  border-style: none;
+}
+
+.ar-button-core.outlined.border-style-none:hover::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+}
+
+.ar-button-core.outlined.primary.border-style-none:hover::before {
+  background-color: rgba(var(--primary-rgb), 0.1);
+}
+.ar-button-core.outlined.primary.border-style-none:active::before {
+  background-color: rgba(var(--primary-rgb), 0.2);
+}
+
+.ar-button-core.outlined.secondary.border-style-none:hover::before {
+  background-color: rgba(var(--secondary-rgb), 0.1);
+}
+.ar-button-core.outlined.secondary.border-style-none:active::before {
+  background-color: rgba(var(--secondary-rgb), 0.2);
+}
+
+.ar-button-core.outlined.success.border-style-none:hover::before {
+  background-color: rgba(var(--success-rgb), 0.1);
+}
+.ar-button-core.outlined.success.border-style-none:active::before {
+  background-color: rgba(var(--success-rgb), 0.2);
+}
+
+.ar-button-core.outlined.warning.border-style-none:hover::before {
+  background-color: rgba(var(--warning-rgb), 0.1);
+}
+.ar-button-core.outlined.warning.border-style-none:active::before {
+  background-color: rgba(var(--warning-rgb), 0.2);
+}
+
+.ar-button-core.outlined.danger.border-style-none:hover::before {
+  background-color: rgba(var(--danger-rgb), 0.1);
+}
+.ar-button-core.outlined.danger.border-style-none:active::before {
+  background-color: rgba(var(--danger-rgb), 0.2);
+}
+
+.ar-button-core.outlined.information.border-style-none:hover::before {
+  background-color: rgba(var(--information-rgb), 0.1);
+}
+.ar-button-core.outlined.information.border-style-none:active::before {
+  background-color: rgba(var(--information-rgb), 0.2);
+}
+
+.ar-button-core.outlined.dark.border-style-none:hover::before {
+  background-color: rgba(var(--dark-rgb), 0.1);
+}
+.ar-button-core.outlined.dark.border-style-none:active::before {
+  background-color: rgba(var(--dark-rgb), 0.2);
+}

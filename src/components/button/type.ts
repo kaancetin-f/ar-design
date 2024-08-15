@@ -16,8 +16,10 @@ export type Props = {
    *    <span>Hello, World!</span>
    * </Button>
    * ```
+   *
+   * Bu prop isteğe bağlıdır.
    */
-  children: string | React.JSX.Element;
+  children?: string | React.JSX.Element;
 
   /**
    * Bileşenin stil varyantını belirtir.
@@ -37,6 +39,8 @@ export type Props = {
    */
   variant?: "filled" | "outlined" | "text";
 
+  shape?: "circle";
+
   /**
    * Bileşenin renk özelliğini belirtir.
    * Renklerin tanımlandığı bir `Colors` türü kullanılır.
@@ -48,7 +52,7 @@ export type Props = {
    * ```jsx
    * <Button color="success">Hello, World!</Button>
    * ```
-   * Bu prop isteğe bağlıdır
+   * Bu prop isteğe bağlıdır.
    */
   color?: Colors;
 
@@ -59,13 +63,15 @@ export type Props = {
    * Örneğin, bir SVG ikon veya bir font ikon bileşeni olabilir:
    *
    * ```jsx
-   * <Button icon="fa ****">Hello, World!</Button>
    * <Button icon={<Icon name="***" />}>Hello, World!</Button>
    * ```
    *
    * Bu prop isteğe bağlıdır ve sağlanmazsa bileşende bir ikon görünmeyecektir.
    */
-  icon?: string | React.JSX.Element;
+  icon?: {
+    element: React.JSX.Element;
+    direction?: "row" | "row-reverse" | "column" | "column-reverse";
+  };
 
   /**
    * Bileşendeki metni büyük harflere dönüştürüp dönüştürmeyeceğini belirtir.
@@ -80,7 +86,7 @@ export type Props = {
 
   border?: {
     style?: "solid" | "dashed" | "none";
-    radius?: "sm" | "lg" | "xl" | "xxl" | "pill";
+    radius?: "sm" | "lg" | "xl" | "xxl" | "pill" | "none";
   };
 
   width?: "max-width" | "auto";

@@ -1,5 +1,8 @@
-@import url("./button.core.css");
-@import url("./filled/button.variant.filled.css");
-@import url("./outlined/button.variant.outlined.css");
+@import url("./core/core.css");
+@import url("./core/shape.css");
+@import url("./core/icon.css");
+@import url("./core/border.css");
+@import url("./variant/filled/core.css");
+@import url("./variant/outlined/core.css");
 
 /* Ek CSS kuralları buraya eklenebilir */

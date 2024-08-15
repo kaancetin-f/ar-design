@@ -1,0 +1,18 @@
+.ar-button-core.border-radius-sm {
+  border-radius: var(--border-radius-sm);
+}
+.ar-button-core.border-radius-lg {
+  border-radius: var(--border-radius-lg);
+}
+.ar-button-core.border-radius-xl {
+  border-radius: var(--border-radius-xl);
+}
+.ar-button-core.border-radius-xxl {
+  border-radius: var(--border-radius-xxl);
+}
+.ar-button-core.border-radius-pill {
+  border-radius: var(--border-radius-pill);
+}
+.ar-button-core.border-radius-none {
+  border-radius: 0;
+}

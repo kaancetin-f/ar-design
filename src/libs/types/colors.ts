@@ -6,5 +6,4 @@ export type Colors =
   | "warning"
   | "information"
   | "light"
-  | "dark"
-  | "theme";
+  | "dark";

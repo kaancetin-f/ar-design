@@ -1,0 +1,17 @@
+.ar-button-core.ar-button-shape {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0 !important;
+}
+.ar-button-core.ar-button-shape.circle {
+  border-radius: var(--border-radius-pill);
+}

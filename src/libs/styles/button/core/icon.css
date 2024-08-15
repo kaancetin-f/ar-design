@@ -1,0 +1,21 @@
+.ar-button-core.icon {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  gap: 0 0.5rem;
+}
+.ar-button-core.icon-row {
+  flex-direction: row;
+}
+.ar-button-core.icon-row-reverse {
+  flex-direction: row-reverse;
+}
+.ar-button-core.icon-column {
+  flex-direction: column;
+}
+.ar-button-core.icon-column-reverse {
+  flex-direction: column-reverse;
+}

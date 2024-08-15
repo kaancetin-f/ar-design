@@ -1,12 +1,18 @@
-@import url("./button.variant.filled.animation.css");
+@import url("./animation.css");
 
 .ar-button-core.filled {
   border-color: transparent;
+  color: var(--white);
+}
+.ar-button-core.filled:active::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background-color: rgba(var(--black-rgb), 0.25);
 }
 
 .ar-button-core.filled.primary {
   background-color: var(--primary);
-  color: var(--white);
 }
 .ar-button-core.filled.primary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -15,7 +21,6 @@
 
 .ar-button-core.filled.secondary {
   background-color: var(--secondary);
-  color: var(--white);
 }
 .ar-button-core.filled.secondary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -25,7 +30,6 @@
 
 .ar-button-core.filled.success {
   background-color: var(--success);
-  color: var(--white);
 }
 .ar-button-core.filled.success.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -43,7 +47,6 @@
 
 .ar-button-core.filled.danger {
   background-color: var(--danger);
-  color: var(--white);
 }
 .ar-button-core.filled.danger.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -52,7 +55,6 @@
 
 .ar-button-core.filled.information {
   background-color: var(--information);
-  color: var(--white);
 }
 .ar-button-core.filled.information.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -71,7 +73,6 @@
 
 .ar-button-core.filled.dark {
   background-color: var(--dark);
-  color: var(--white);
 }
 .ar-button-core.filled.dark.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
