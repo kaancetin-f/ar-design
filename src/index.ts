@@ -1,4 +1,13 @@
 import "./libs/styles/ar-core.css";
-import { default as Button } from "./components/button";
 
+import Button from "./components/button";
 export { Button };
+
+import Divider from "./components/divider";
+export { Divider };
+
+import Menu from "./components/menu";
+export { Menu };
+
+import type { MenuProps } from "./components/menu/Types";
+export type { MenuProps };

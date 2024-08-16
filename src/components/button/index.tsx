@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
-import { Props } from "./type";
+import { Props } from "./Types";
 import "../../libs/styles/button/button.css";
 
 const Button: React.FC<Props> = ({

@@ -1,0 +1,37 @@
+@import url("./open-or-close.css");
+
+.ar-menu-core {
+  background-color: var(--white);
+}
+.ar-menu-core ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ar-menu-core ul li {
+  padding: 0.75rem;
+}
+.ar-menu-core ul li:last-child {
+  padding-bottom: 0;
+}
+.ar-menu-core ul li ul {
+  margin-left: 0.25rem;
+  padding-left: 0.25rem;
+}
+
+.ar-menu-core > .ar-menu-core-list {
+  display: flex;
+  flex-direction: column;
+}
+.ar-menu-core > .ar-menu-core-list > .ar-menu-core-list-item {
+}
+.ar-menu-core > .ar-menu-core-list > .ar-menu-core-list-item > .ar-menu-core-list-item-group-item-title {
+}
+.ar-menu-core > .ar-menu-core-list > .ar-menu-core-list-item > .ar-menu-core-list-item-groups {
+}
+.ar-menu-core
+  > .ar-menu-core-list
+  > .ar-menu-core-list-item
+  > .ar-menu-core-list-item-groups
+  > .ar-menu-core-list-item-group-item {
+}

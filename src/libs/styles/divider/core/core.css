@@ -1,0 +1,4 @@
+.ar-divider-core {
+  border: none;
+  border-bottom: solid 1px var(--gray-200);
+}
