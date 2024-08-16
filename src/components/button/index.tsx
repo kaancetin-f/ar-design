@@ -24,8 +24,8 @@ const Button: React.FC<Props> = ({
 
     if (shape) className += ` ar-button-shape ${shape}`;
 
-    if (variant !== "filled" && border) {
-      if (border.style) className += ` border-style-${border.style}`;
+    if (border) {
+      if (variant !== "filled" && border.style) className += ` border-style-${border.style}`;
       if (border.radius) className += ` border-radius-${border?.radius}`;
     }
 
