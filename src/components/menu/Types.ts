@@ -1,6 +1,7 @@
 import React from "react";
 
-export type MenuItemType = "group" | "divider" | "none";
+export type MenuItemVariant = "vertical" | "horizontal";
+export type MenuItemType = "group" | "divider";
 
 export interface MenuProps {
   render?: string | React.JSX.Element;
@@ -10,5 +11,6 @@ export interface MenuProps {
 }
 
 export type Props = {
-  data: MenuProps[];
+  menu: MenuProps[];
+  variant?: MenuItemVariant;
 } & React.HTMLAttributes<HTMLElement>;

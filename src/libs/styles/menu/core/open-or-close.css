@@ -2,7 +2,7 @@
   opacity: 0;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 150ms ease-in-out, opacity 150ms ease-in-out;
+  transition: max-height 250ms ease-in-out, opacity 250ms cubic-bezier(1, 0, 0, 1);
 }
 .ar-menu-core .ar-menu-core-list-item-groups.opened {
   opacity: 1;
@@ -12,21 +12,25 @@
   display: flex;
   align-items: center;
 }
+.ar-menu-core .ar-menu-core-list-item-group-item-title:is(.ar-angle-down, .ar-angle-up) {
+  cursor: pointer;
+}
 .ar-menu-core .ar-menu-core-list-item-group-item-title:is(.ar-angle-down, .ar-angle-up)::after {
   display: inline-block;
   position: relative;
-  top: -1.5px;
+  top: 0.5px;
   content: "";
-  width: 0.25rem;
-  height: 0.25rem;
+  width: 0.5rem;
+  height: 0.5rem;
   margin-left: 0.5rem;
   border: solid 2px transparent;
-  border-right-color: red;
-  border-bottom-color: red;
+  border-right-color: var(--red);
+  border-bottom-color: var(--red);
   transform-origin: center;
   transform: rotate(45deg);
-  transition: transform 250ms ease-in-out;
+  transition: top 250ms, transform 250ms ease-in-out;
 }
 .ar-menu-core .ar-menu-core-list-item-group-item-title.ar-angle-up::after {
+  top: -1px;
   transform: rotate(585deg);
 }
