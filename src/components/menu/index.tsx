@@ -35,17 +35,18 @@ const SubMenu: React.FC<{
   if (!items) return null;
 
   // refs
-  let _className_ul = useRef<string>("ar-menu-core-list-item-groups").current;
-  let _className_li = useRef<string>("ar-menu-core-list-item-group-item").current;
-  let _className_groupTitle = useRef<string>("ar-menu-core-list-item-group-item-title").current;
+  let _className_ul = useRef<string>("ar-menu-list-item-groups").current;
+  let _className_li = useRef<string>("ar-menu-list-item-group-item").current;
+  let _className_groupTitle = useRef<string>("ar-menu-list-item-group-item-title").current;
 
   if (variant === "vertical" && type === "group") _className_ul += " opened";
 
   return (
     <ul className={_className_ul}>
       {items.map((item, index) => {
+        if (variant === "vertical" && item.type === "group") _className_groupTitle += " group";
+
         if (item.submenu && item.submenu.length > 0) {
-          if (variant === "vertical" && item.type === "group") _className_groupTitle += " group";
           if (variant === "horizontal" || item.type !== "group") _className_groupTitle += " ar-angle-down";
         }
 
@@ -64,7 +65,7 @@ const SubMenu: React.FC<{
 
 const Menu: React.FC<Props> = ({ menu, variant = "vertical", ...attributes }) => {
   const handleClassName = () => {
-    let className: string = "ar-menu-core-list";
+    let className: string = "ar-menu-list";
 
     if (variant) className += ` ${variant}`;
 
@@ -72,19 +73,20 @@ const Menu: React.FC<Props> = ({ menu, variant = "vertical", ...attributes }) =>
   };
 
   return (
-    <nav className="ar-menu-core" {...attributes}>
+    <nav className="ar-menu" {...attributes}>
       <ul className={handleClassName()}>
         {menu.map((item, index) => {
           // refs
-          let _className_groupTitle = useRef<string>("ar-menu-core-list-item-group-item-title").current;
+          let _className_groupTitle = useRef<string>("ar-menu-list-item-group-item-title").current;
+
+          if (variant === "vertical" && item.type === "group") _className_groupTitle += " group";
 
           if (item.submenu && item.submenu.length > 0) {
-            if (variant === "vertical" && item.type === "group") _className_groupTitle += " group";
             if (variant === "horizontal" || item.type !== "group") _className_groupTitle += " ar-angle-down";
           }
 
           return (
-            <li key={index} className="ar-menu-core-list-item" onClick={(event) => handleOnClick(event, item, variant)}>
+            <li key={index} className="ar-menu-list-item" onClick={(event) => handleOnClick(event, item, variant)}>
               {item.type === "divider" ? <Divider /> : <div className={_className_groupTitle}>{item.render}</div>}
 
               {/* Alt menü öğeleri */}

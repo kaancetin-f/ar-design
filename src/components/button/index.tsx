@@ -20,7 +20,7 @@ const Button: React.FC<Props> = ({
 
   // methods
   const handleClassName = () => {
-    let className: string = `ar-button-core ${variant} ${color} ${width}`;
+    let className: string = `ar-button ${variant} ${color} ${width}`;
 
     if (shape) className += ` ar-button-shape ${shape}`;
 

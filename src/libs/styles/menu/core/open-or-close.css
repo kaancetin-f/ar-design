@@ -1,21 +1,21 @@
-.ar-menu-core ul li ul {
+.ar-menu ul li ul {
   opacity: 0;
   max-height: 0;
   overflow: hidden;
   transition: max-height 250ms ease-in-out, opacity 250ms cubic-bezier(1, 0, 0, 1);
 }
-.ar-menu-core .ar-menu-core-list-item-groups.opened {
+.ar-menu .ar-menu-list-item-groups.opened {
   opacity: 1;
   max-height: 100rem;
 }
-.ar-menu-core .ar-menu-core-list-item-group-item-title {
+.ar-menu .ar-menu-list-item-group-item-title {
   display: flex;
   align-items: center;
 }
-.ar-menu-core .ar-menu-core-list-item-group-item-title:is(.ar-angle-down, .ar-angle-up) {
+.ar-menu .ar-menu-list-item-group-item-title:is(.ar-angle-down, .ar-angle-up) {
   cursor: pointer;
 }
-.ar-menu-core .ar-menu-core-list-item-group-item-title:is(.ar-angle-down, .ar-angle-up)::after {
+.ar-menu .ar-menu-list-item-group-item-title:is(.ar-angle-down, .ar-angle-up)::after {
   display: inline-block;
   position: relative;
   top: 0.5px;
@@ -30,7 +30,7 @@
   transform: rotate(45deg);
   transition: top 250ms, transform 250ms ease-in-out;
 }
-.ar-menu-core .ar-menu-core-list-item-group-item-title.ar-angle-up::after {
+.ar-menu .ar-menu-list-item-group-item-title.ar-angle-up::after {
   top: -1px;
   transform: rotate(585deg);
 }

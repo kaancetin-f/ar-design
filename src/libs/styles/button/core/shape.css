@@ -1,4 +1,4 @@
-.ar-button-core.ar-button-shape {
+.ar-button.ar-button-shape {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -12,8 +12,8 @@
   min-height: 2rem;
   padding: 0 !important;
 }
-.ar-button-core.ar-button-shape.circle {
+.ar-button.ar-button-shape.circle {
   border-radius: var(--border-radius-pill);
 }
-.ar-button-core.ar-button-shape.square {
+.ar-button.ar-button-shape.square {
 }

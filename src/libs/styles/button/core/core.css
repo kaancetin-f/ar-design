@@ -1,4 +1,4 @@
-.ar-button-core {
+.ar-button {
   position: relative;
   padding: 0.5rem 1rem;
   border: none;
@@ -7,10 +7,10 @@
   transition: background-color 150ms, border 150ms, color 150ms ease-in-out;
   overflow: hidden;
 }
-.ar-button-core.disabled {
+.ar-button.disabled {
   cursor: no-drop;
 }
 
-.ar-button-core.max-width {
+.ar-button.max-width {
   width: 100%;
 }
