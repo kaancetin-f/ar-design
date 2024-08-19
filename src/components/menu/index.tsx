@@ -1,11 +1,17 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import "../../libs/styles/menu/menu.css";
 import { MenuItemType, MenuItemVariant, MenuProps, Props } from "./Types";
 import Divider from "../divider";
 
-const handleOnClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, item: MenuProps, variant: MenuItemVariant) => {
+const handleOnClick = (
+  event: React.MouseEvent<HTMLLIElement, MouseEvent>,
+  item: MenuProps,
+  variant: MenuItemVariant,
+  setSelectedItem: React.Dispatch<React.SetStateAction<MenuProps | null>> | null,
+  setSelectedMenu?: React.Dispatch<React.SetStateAction<MenuProps[]>> | null
+) => {
   event.stopPropagation();
 
   if (variant === "vertical" && item.type === "group") return;
@@ -19,43 +25,82 @@ const handleOnClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, item:
   }
 
   if (ulElement) ulElement.classList.toggle("opened");
+
+  // Birden fazla menü açılmışsa...
+  console.log(setSelectedMenu);
+
+  if (setSelectedMenu) setSelectedMenu((prevSelectedMenu) => [...prevSelectedMenu, item]);
+  else {
+    if (setSelectedItem) setSelectedItem(item);
+  }
 };
 
 /**
  * Alt menüleri sürekli olarak eklemek için özyinelemeli fonksiyon.
- * @param item - Menü öğelerinin dizisi
- * @param type - "group" | "divider" | "none" türlerinden birisi gönderilmelidir.
+ * @param items - Menü öğelerinin dizisi
+ * @param variant - Menü varyantı, "vertical" veya "horizontal"
+ * @param type - "group" | "divider" türlerinden birisi olmalıdır.
  * @returns Menü yapısını temsil eden iç içe geçmiş liste
  */
+
 const SubMenu: React.FC<{
-  items?: MenuProps[];
+  items: MenuProps[];
   variant: MenuItemVariant;
   type?: MenuItemType;
-}> = ({ items, variant, type }) => {
+  setSelectedMenu: React.Dispatch<React.SetStateAction<MenuProps[]>>;
+  selectedMenu: MenuProps[];
+  setSelectedItem: React.Dispatch<React.SetStateAction<MenuProps | null>>;
+  selectedItem: MenuProps | null;
+}> = ({ items, variant, type, setSelectedMenu, selectedMenu, setSelectedItem, selectedItem }) => {
   if (!items) return null;
 
   // refs
   let _className_ul = useRef<string>("ar-menu-list-item-groups").current;
-  let _className_li = useRef<string>("ar-menu-list-item-group-item").current;
-  let _className_groupTitle = useRef<string>("ar-menu-list-item-group-item-title").current;
 
   if (variant === "vertical" && type === "group") _className_ul += " opened";
 
   return (
     <ul className={_className_ul}>
       {items.map((item, index) => {
+        // refs
+        let _className_li = useRef<string>("ar-menu-list-item-group-item").current;
+        let _className_groupTitle = useRef<string>("ar-menu-list-item-group-item-title").current;
+
         if (variant === "vertical" && item.type === "group") _className_groupTitle += " group";
 
         if (item.submenu && item.submenu.length > 0) {
           if (variant === "horizontal" || item.type !== "group") _className_groupTitle += " ar-angle-down";
+
+          // Eğer seçili olan menüyse "selected" sınıfını ekler.
+          if (selectedMenu.length > 0 && selectedMenu.includes(item) && item.type !== "group") _className_li += " selected";
         }
 
+        // Eğer seçili olan menüyse "selected" sınıfını ekler.
+        if (selectedItem === item) _className_groupTitle += " selected";
+
         return (
-          <li key={index} className={_className_li} onClick={(event) => handleOnClick(event, item, variant)}>
+          <li
+            key={index}
+            className={_className_li}
+            onClick={(event) => {
+              if (item.submenu && item.submenu.length > 0) handleOnClick(event, item, variant, null, setSelectedMenu);
+              else handleOnClick(event, item, variant, setSelectedItem, null);
+            }}
+          >
             <div className={_className_groupTitle}>{item.render}</div>
 
             {/* Alt menü öğeleri */}
-            <SubMenu items={item.submenu} variant={variant} type={item.type} />
+            {item.submenu && (
+              <SubMenu
+                items={item.submenu}
+                variant={variant}
+                type={item.type}
+                setSelectedMenu={setSelectedMenu}
+                selectedMenu={selectedMenu}
+                setSelectedItem={setSelectedItem}
+                selectedItem={selectedItem}
+              />
+            )}
           </li>
         );
       })}
@@ -64,6 +109,13 @@ const SubMenu: React.FC<{
 };
 
 const Menu: React.FC<Props> = ({ menu, variant = "vertical", ...attributes }) => {
+  // refs
+  let _className_li = useRef<string>("ar-menu-list-item").current;
+
+  // states
+  const [selectedMenu, setSelectedMenu] = useState<MenuProps[]>([]);
+  const [selectedItem, setSelectedItem] = useState<MenuProps | null>(null);
+
   const handleClassName = () => {
     let className: string = "ar-menu-list";
 
@@ -85,12 +137,29 @@ const Menu: React.FC<Props> = ({ menu, variant = "vertical", ...attributes }) =>
             if (variant === "horizontal" || item.type !== "group") _className_groupTitle += " ar-angle-down";
           }
 
+          // Eğer seçili olan menüyse "selected" sınıfını ekler.
+          if (selectedMenu.length > 0 && selectedMenu.includes(item) && item.type !== "group") _className_li += " selected";
+
           return (
-            <li key={index} className="ar-menu-list-item" onClick={(event) => handleOnClick(event, item, variant)}>
+            <li
+              key={index}
+              className={_className_li}
+              onClick={(event) => handleOnClick(event, item, variant, null, setSelectedMenu)}
+            >
               {item.type === "divider" ? <Divider /> : <div className={_className_groupTitle}>{item.render}</div>}
 
               {/* Alt menü öğeleri */}
-              <SubMenu items={item.submenu} variant={variant} type={item.type} />
+              {item.submenu && (
+                <SubMenu
+                  items={item.submenu}
+                  variant={variant}
+                  type={item.type}
+                  setSelectedMenu={setSelectedMenu}
+                  selectedMenu={selectedMenu}
+                  setSelectedItem={setSelectedItem}
+                  selectedItem={selectedItem}
+                />
+              )}
             </li>
           );
         })}
