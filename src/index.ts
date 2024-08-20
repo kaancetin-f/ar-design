@@ -9,6 +9,9 @@ export { Menu };
 import Typography from "./components/typography";
 export { Typography };
 
+import SyntaxHighlighter from "./components/syntax-highlighter";
+export { SyntaxHighlighter };
+
 import Divider from "./components/divider";
 export { Divider };
 

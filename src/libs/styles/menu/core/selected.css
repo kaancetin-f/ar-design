@@ -3,6 +3,7 @@
   border-top-left-radius: var(--border-radius-lg);
   border-bottom-left-radius: var(--border-radius-lg);
 }
+
 /* SubMenu */
 .ar-menu .ar-menu-list-item-group-item.selected {
   background-color: rgba(var(--black-rgb), 0.03) !important;

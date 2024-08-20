@@ -1,0 +1,19 @@
+.ar-language {
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.ar-language > .ar-tag {
+  color: var(--tag-color);
+}
+.ar-language > .ar-tag > .ar-attribute {
+  color: var(--attribute-color);
+}
+.ar-language > .ar-tag > .ar-equal {
+  color: var(--lt-gt-color);
+}
+.ar-language > .ar-tag > .ar-quot {
+  color: var(--lt-gt-color);
+}
+.ar-language > .ar-tag > .ar-string {
+  color: var(--string-color);
+}

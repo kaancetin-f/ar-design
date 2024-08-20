@@ -25,15 +25,12 @@
   --primary: #007bff;
   --primary-active: #005abb;
   --primary-rgb: 0, 123, 255;
-  /* --primary-font: #004a99; */
   --secondary: #6c757d;
   --secondary-active: #495055;
   --secondary-rgb: 108, 117, 125;
-  /* --secondary-font: #40454a; */
   --success: #28a745;
   --success-active: #1c7a32;
   --success-rgb: 40, 167, 69;
-  /* --success-font: #176027; */
   --warning: #ffc107;
   --warning-active: #cf9c05;
   --warning-rgb: 255, 193, 7;
@@ -41,19 +38,22 @@
   --danger: #dc3545;
   --danger-active: #af2936;
   --danger-rgb: 220, 53, 69;
-  /* --danger-font: #a22531; */
   --information: #17a2b8;
   --information-active: #107c8c;
   --information-rgb: 23, 162, 184;
-  /* --info-font: #0b5460; */
   --light: #f8f9fa;
   --light-active: #a0a1a3;
   --light-rgb: 248, 249, 250;
-  /* --light-font: var(--gray-300); */
   --dark: #343a40;
   --dark-active: #23272b;
   --dark-rgb: 52, 58, 64;
-  /* --dark-font: var(--gray-800); */
+}
+
+:root {
+  --lt-gt-color: #abb2bf;
+  --tag-color: #2e84cb;
+  --attribute-color: #61afef;
+  --string-color: #d19a66;
 }
 /* #endregion */
 /* Color Palette */
