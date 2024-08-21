@@ -50,10 +50,12 @@
 }
 
 :root {
-  --lt-gt-color: #abb2bf;
-  --tag-color: #2e84cb;
-  --attribute-color: #61afef;
-  --string-color: #d19a66;
+  --pre-container: #282c34;
+  --container-color: #abb2bf;
+  --tag-color: #e06c75;
+  --attribute-color: #d19a66;
+  --string-color: #98c379;
+  --boolean-color: #57b0fe;
 }
 /* #endregion */
 /* Color Palette */
