@@ -7,20 +7,30 @@ const SyntaxHighlighter: React.FC<{ children: React.ReactNode }> = ({ children }
   const _code = useRef<HTMLElement>(null);
 
   // tag methods
-  const container = (element: string) => `<span class="ar-language">${element}</span>\n`;
+  const container = (element: string) => `<span class="ar-language">${element}</span>\n\n`;
   const attribute = (value: string) => `<span class="ar-attribute">${value}</span>`;
   const string = (value: string) => `<span class="ar-string">&quot;${value}&quot;</span>`;
   const entries = (value: string) => `<span class="ar-entries">${value}</span>`;
   // tag refs
-  const _equal = '<span class="ar-equal">=</span>';
-  const _colon = '<span class="ar-colon">:</span>';
-  const _openCurlyBracket = '<span class="ar-curly-brackets">{</span>';
-  const _openCurlyBrackets = '<span class="ar-curly-brackets">{{</span>';
-  const _closeCurlyBracket = '<span class="ar-curly-brackets">}</span>';
-  const _closeCurlyBrackets = '<span class="ar-curly-brackets">}}</span>';
+  const equal = '<span class="ar-equal">=</span>';
+  // const _colon = '<span class="ar-colon">:</span>';
+  const oCurlyBracket = '<span class="ar-curly-brackets">{</span>';
+  const oCurlyBrackets = '<span class="ar-curly-brackets">{{</span>';
+  const cCurlyBracket = '<span class="ar-curly-brackets">}</span>';
+  const cCurlyBrackets = '<span class="ar-curly-brackets">}}</span>';
 
   // states
   const [elements, setElements] = useState<string[]>([]);
+
+  const handleEntries = (propValue: any): string | number => {
+    if (propValue && typeof propValue === "object") {
+      return `{${Object.entries(propValue)
+        .map(([key, value]) => `${key}: ${handleEntries(value)}`)
+        .join(", ")}}`;
+    }
+
+    return typeof propValue === "number" ? propValue : `"${propValue}"`;
+  };
 
   // useEffects
   useEffect(() => {
@@ -30,45 +40,54 @@ const SyntaxHighlighter: React.FC<{ children: React.ReactNode }> = ({ children }
     // Fill...
     React.Children.forEach(children, (child) => {
       if (React.isValidElement(child)) {
-        const _Component = typeof child.type === "function" ? child.type["name"] : child.type;
+        const componentType = typeof child.type === "function" ? child.type.name : child.type;
 
-        // BR gelmesi durumunda yazdırma işlemini iptal eder.
-        if (_Component === "br") return;
+        // `br` elementi geldiğinde render işleminden çıkılır.
+        if (componentType === "br") return;
 
         const attributesKeys = Object.keys(child.props).filter((key) => key !== "children");
         const attributes = attributesKeys
           .map((key) => {
-            let result: string = "";
+            const propValue = child.props[key];
+            let result = "";
 
-            if (typeof child.props[key] === "string") {
-              result = `${key}="${child.props[key]}"`;
-            }
+            switch (typeof propValue) {
+              case "number":
+                result = `${key}=${propValue}`;
+                break;
+              case "string":
+                result = `${key}="${propValue}"`;
+                break;
+              case "boolean":
+                result = `${key}={${propValue}}`;
+                break;
+              case "object":
+                const entries = Object.entries(propValue)
+                  .map(([key, value]) => `${key}: ${handleEntries(value)}`)
+                  .join(", ");
 
-            if (typeof child.props[key] === "boolean") {
-              result = `${key}={${child.props[key]}}`;
-            }
-
-            if (typeof child.props[key] === "object") {
-              const entries = Object.entries(child.props[key])
-                .map(([propKey, propValue]) => `${propKey}:"${propValue}"`)
-                .join(", ");
-
-              result = `${key}={${entries}}`;
+                result = `${key}=+ ${entries} +`;
+                break;
+              case "function":
+                result = `${key}={${propValue}}`;
+                break;
+              default:
+                break;
             }
 
             return result;
           })
           .join(" ");
 
-        const _attributes = attributesKeys.length > 0 ? ` ${attributes}` : attributes;
-        const _br = attributesKeys.length >= 3 ? "\n" : "";
-        const _children = attributesKeys.length >= 3 ? `\t${child.props["children"]}` : child.props["children"];
+        const formattedAttributes = attributes ? ` ${attributes}` : "";
+        const lineBreak = attributesKeys.length >= 3 ? "\n" : "";
+        const childrenContent = attributesKeys.length >= 3 ? `   ${child.props.children}` : child.props.children;
 
-        const render = child.props["children"]
-          ? `<${_Component}${_attributes}>${_br}${_children}${_br}</${_Component}>`
-          : `<${_Component}${_attributes}/>`;
+        const renderElement = child.props.children
+          ? `<${componentType}${formattedAttributes}>${lineBreak}${childrenContent}${lineBreak}</${componentType}>`
+          : `<${componentType}${formattedAttributes} />`;
 
-        setElements((elements) => [...elements, render]);
+        setElements((prevElements) => [...prevElements, renderElement]);
       }
     });
   }, [children]);
@@ -78,48 +97,29 @@ const SyntaxHighlighter: React.FC<{ children: React.ReactNode }> = ({ children }
     if (_code.current) _code.current.innerHTML = ""; // Clear...
 
     elements.forEach((element) => {
-      // "<" ve ">" arasında ki bütün değerleri alır ve değiştirir.
-      element = element.replace(/<(.*?)>/g, function (match, tagContent: string) {
-        if (!match.includes("ar-")) {
-          /**
-           * Bu regex ifadesi, HTML veya XML etiket içeriğinde yer alan  `anahtar="değer"`
-           * şeklindeki öznitelikleri bulur ve `attribute(anahtar) + _equal + string(değer)` şeklinde yeniden biçimlendirir.
-           * Ancak, "ar-" ile başlayan öznitelikler bu işleme dahil edilmez ve olduğu gibi bırakılır.
-           */
-          tagContent = tagContent.replace(/(\w+)=["'](.*?)["']/g, function (_match: string, p1: string, p2: string) {
-            if (!_match.includes("ar-")) return `${attribute(p1)}${_equal}${string(p2)}`;
+      element = element.replace(/<(.*?)>/g, (match, tagContent: string) => {
+        const equalsMatches = match.match(/=/g);
+        const lineBreak = equalsMatches && equalsMatches.length >= 3 ? `\n  ` : "";
 
-            return _match;
-          });
+        // tagContent = tagContent.replace(/(\b[A-Z][a-z]*\b)/g, (attr, p1) => {
+        //   return customAttribute(p1);
+        // });
 
-          /**
-           * Bu regex ifadesi, `anahtar={{değer}}` şeklindeki öznitelikleri bulur ve öznitelik içindeki `anahtar: "değer"` şeklindeki alt öznitelikleri işleyerek
-           * `attribute(anahtar) + _equal + {{entries(değer)}}` şeklinde yeniden biçimlendirir.
-           * Alt özniteliklerde "ar-" ile başlayanları değiştirmeden bırakır.
-           * Dış öznitelikler ise "ar-" ile başlamıyorsa yeniden biçimlendirilir, aksi takdirde olduğu gibi bırakılır.
-           */
-          tagContent = tagContent.replace(/(\w+)=[{](.*?)[}]/g, function (match, p1: string, p2: string) {
-            if (!match.includes("ar-")) {
-              p2 = p2.replace(/(\w+):["'](.*?)["']/g, function (_match: string, _p1: string, _p2: string) {
-                if (!_match.includes("ar-")) {
-                  return `${attribute(_p1)}${_colon}${string(_p2)}`;
-                }
+        tagContent = tagContent.replace(/([\w-]+)=\s*["']([^"']*)["']/g, (_, p1, p2) => {
+          return `${lineBreak}${attribute(p1)}${equal}${string(p2)}`;
+        });
 
-                return _match;
-              });
+        tagContent = tagContent.replace(/(\w+)=\s*{(.*?)}/g, (_, p1, p2) => {
+          return `${lineBreak}${attribute(p1)}${equal}${oCurlyBracket}${entries(p2)}${cCurlyBracket}`;
+        });
 
-              return p2.includes(":")
-                ? `${attribute(p1)}${_equal}${_openCurlyBrackets}${entries(p2)}${_closeCurlyBrackets}`
-                : `${attribute(p1)}${_equal}${_openCurlyBracket}${entries(p2)}${_closeCurlyBracket}`;
-            }
+        tagContent = tagContent.replace(/(\w+)=\s*[+](.*?)[+]/g, (_, p1, p2) => {
+          return `${lineBreak}${attribute(p1)}${equal}${oCurlyBrackets}${entries(p2)}${cCurlyBrackets}`;
+        });
 
-            return match;
-          });
-
-          return `<span class="ar-tag-container">&lt;<span class="ar-tag">${tagContent}</span>&gt;</span>`;
-        }
-
-        return match;
+        return !match.toLowerCase().includes("ar-")
+          ? `<span class="ar-tag-container"><span class="ar-tag-lt">&lt;</span><span class="ar-tag">${tagContent}</span><span class="ar-tag-gt">&gt;</span></span>`
+          : match;
       });
 
       if (_code.current) _code.current.innerHTML += container(element);

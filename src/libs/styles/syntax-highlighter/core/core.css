@@ -24,6 +24,10 @@
 .ar-language > .ar-tag-container {
   font-weight: lighter;
 }
+.ar-language > .ar-tag-container > .ar-tag-lt {
+}
+.ar-language > .ar-tag-container > .ar-tag-gt {
+}
 .ar-language > .ar-tag-container > .ar-tag {
   color: var(--tag-color);
   font-weight: 600;
@@ -35,6 +39,7 @@
 .ar-language > .ar-tag-container > .ar-tag > .ar-equal,
 .ar-language > .ar-tag-container > .ar-tag > .ar-entries > .ar-colon {
   color: var(--container-color);
+  font-weight: lighter;
 }
 .ar-language > .ar-tag-container > .ar-tag > .ar-string,
 .ar-language > .ar-tag-container > .ar-tag > .ar-entries > .ar-string {
@@ -45,4 +50,5 @@
 }
 .ar-language > .ar-tag-container > .ar-tag > .ar-curly-brackets {
   color: var(--container-color);
+  font-weight: lighter;
 }
