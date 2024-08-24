@@ -52,10 +52,12 @@
 :root {
   --pre-container: #282c34;
   --container-color: #abb2bf;
-  --tag-color: #e06c75;
+  --tag-color: #ffffff;
+  --custom-tag-color: #e06c75;
   --attribute-color: #d19a66;
   --string-color: #98c379;
   --boolean-color: #57b0fe;
+  --object-color: #57b0fe;
 }
 /* #endregion */
 /* Color Palette */
