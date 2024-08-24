@@ -7,7 +7,6 @@
   background-color: var(--white);
   padding: 1rem;
 }
-
 .ar-syntax > .pre {
   background-color: var(--pre-container);
   margin: 0;
@@ -35,54 +34,24 @@
 .ar-language .ar-attribute-key {
   color: var(--attribute-color);
 }
-
 .ar-language .ar-string-value {
   color: var(--string-color);
 }
-
+.ar-language .ar-number-value {
+  color: var(--number-color);
+}
 .ar-language .ar-boolean-value {
   color: var(--boolean-color);
 }
 .ar-language .ar-boolean-value > span:not([class]) {
   color: var(--container-color);
 }
-
 .ar-language .ar-object-value {
   color: var(--object-color);
 }
 .ar-language .ar-object-value > span:not([class]) {
   color: var(--container-color);
 }
-/* .ar-language > .ar-tag-container {
+.ar-language .ar-object-value > .ar-curly-bracket {
+  color: var(--curly-bracket-color);
 }
-.ar-language > .ar-tag-container > .ar-tag-lt {
-}
-.ar-language > .ar-tag-container > .ar-tag-gt {
-} */
-
-/* .ar-language > .ar-tag-container > .ar-tag > .ar-custom-tag {
-  color: var(--custom-tag-color);
-} */
-/* .ar-language > .ar-tag-container > .ar-tag > .ar-custom-tag-slash {
-  color: var(--container-color);
-}
-.ar-language > .ar-tag-container > .ar-tag > .ar-attribute,
-.ar-language > .ar-tag-container > .ar-tag > .ar-entries > .ar-attribute {
-  color: var(--attribute-color);
-}
-.ar-language > .ar-tag-container > .ar-tag > .ar-equal,
-.ar-language > .ar-tag-container > .ar-tag > .ar-entries > .ar-colon {
-  color: var(--container-color);
-  font-weight: lighter;
-} */
-/* .ar-language > .ar-tag-container > .ar-tag > .ar-string,
-.ar-language > .ar-tag-container > .ar-tag > .ar-entries > .ar-string {
-  color: var(--string-color);
-}
-.ar-language > .ar-tag-container > .ar-tag > .ar-entries {
-  color: var(--boolean-color);
-}
-.ar-language > .ar-tag-container > .ar-tag > .ar-curly-brackets {
-  color: var(--container-color);
-  font-weight: lighter; */
-/* } */

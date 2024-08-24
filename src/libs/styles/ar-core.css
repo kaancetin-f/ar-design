@@ -52,12 +52,14 @@
 :root {
   --pre-container: #282c34;
   --container-color: #abb2bf;
-  --tag-color: #ffffff;
-  --custom-tag-color: #e06c75;
-  --attribute-color: #d19a66;
-  --string-color: #98c379;
+  --tag-color: #679ad1;
+  --custom-tag-color: #6fc2ae;
+  --attribute-color: #a9d9f9;
+  --string-color: #c5947c;
+  --number-color: #bacdab;
   --boolean-color: #57b0fe;
   --object-color: #57b0fe;
+  --curly-bracket-color: #e4e49c;
 }
 /* #endregion */
 /* Color Palette */
