@@ -11,7 +11,7 @@
   background-color: var(--pre-container);
   margin: 0;
   padding: 1rem;
-  border-top: solid 2.5px var(--custom-tag-color);
+  /* border-top: solid 2.5px var(--custom-tag-color); */
   overflow-x: auto;
 }
 .ar-syntax > .pre > code {
