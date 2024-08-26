@@ -49,17 +49,19 @@
   --dark-rgb: 52, 58, 64;
 }
 
+/* Code Editor */
 :root {
-  --pre-container: #282c34;
-  --container-color: #abb2bf;
+  --bg-color: #282c34;
+  --color: #abb2bf;
   --tag-color: #679ad1;
   --custom-tag-color: #6fc2ae;
-  --attribute-color: #a9d9f9;
-  --string-color: #c5947c;
-  --number-color: #bacdab;
-  --boolean-color: #57b0fe;
-  --object-color: #57b0fe;
+  --attribute-key-color: #a9d9f9;
+  --string-value-color: #c5947c;
+  --number-value-color: #bacdab;
+  --boolean-value-color: #57b0fe;
+  --object-value-color: #57b0fe;
   --curly-bracket-color: #e4e49c;
+  --child-curly-bracket-color: #df6ed2;
 }
 /* #endregion */
 /* Color Palette */

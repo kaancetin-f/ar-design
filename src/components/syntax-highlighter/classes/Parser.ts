@@ -56,7 +56,7 @@ class Parser {
     }
 
     componentContent =
-      attributesLength >= this._lineBreakSpaces ? `\n   ${componentContent}\n` : componentContent;
+      attributesLength >= this._lineBreakSpaces ? `\n  ${componentContent}\n` : componentContent;
     const renderElement = componentContent
       ? `${indent}[open]&lt;[/open][tag]${formattedTag}[/tag]${formattedAttributes}[close]>[/close]${componentContent}${indent}[open]&lt;/[/open][tag]${formattedTag}[/tag][close]>[/close]`
       : `${indent}[open]&lt;[/open][tag]${formattedTag}[/tag]${formattedAttributes} [close]/&gt;[/close]`;
@@ -98,11 +98,11 @@ class Parser {
         const entries = Object.entries(value)
           .map(
             ([subKey, subValue]) =>
-              `[attribute-key]${subKey}[/attribute-key][colon]:[/colon] ${this.HandleEntries(
+              `[child-attribute][attribute-key]${subKey}[/attribute-key][colon]:[/colon] ${this.HandleEntries(
                 subValue
-              )}`
+              )}, [/child-attribute]`
           )
-          .join(", ");
+          .join("");
 
         result = `[object]${entries}[/object]`;
         break;
@@ -113,7 +113,7 @@ class Parser {
         return "";
     }
 
-    return `[attribute-key]${key}[/attribute-key][equal]=[/equal]${result}`;
+    return `[attribute][attribute-key]${key}[/attribute-key][equal]=[/equal]${result}[/attribute]`;
   };
 }
 

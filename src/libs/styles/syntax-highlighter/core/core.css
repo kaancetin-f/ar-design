@@ -8,50 +8,13 @@
   padding: 1rem;
 }
 .ar-syntax > .pre {
-  background-color: var(--pre-container);
+  background-color: var(--bg-color);
   margin: 0;
   padding: 1rem;
-  /* border-top: solid 2.5px var(--custom-tag-color); */
   overflow-x: auto;
 }
 .ar-syntax > .pre > code {
   display: flex;
   flex-direction: column;
   gap: 0.5rem 0;
-}
-
-.ar-language {
-  color: var(--container-color);
-}
-.ar-language > .ar-tag {
-  color: var(--tag-color);
-}
-.ar-language > .ar-tag > .ar-custom-tag {
-  color: var(--custom-tag-color);
-}
-.ar-language > .ar-attributes {
-}
-.ar-language .ar-attribute-key {
-  color: var(--attribute-color);
-}
-.ar-language .ar-string-value {
-  color: var(--string-color);
-}
-.ar-language .ar-number-value {
-  color: var(--number-color);
-}
-.ar-language .ar-boolean-value {
-  color: var(--boolean-color);
-}
-.ar-language .ar-boolean-value > span:not([class]) {
-  color: var(--container-color);
-}
-.ar-language .ar-object-value {
-  color: var(--object-color);
-}
-.ar-language .ar-object-value > span:not([class]) {
-  color: var(--container-color);
-}
-.ar-language .ar-object-value > .ar-curly-bracket {
-  color: var(--curly-bracket-color);
 }

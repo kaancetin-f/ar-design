@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../../libs/styles/syntax-highlighter/syntax-highlighter.css";
 import Parser from "./classes/Parser";
-import Replacer from "./classes/Replacer";
+import Compiler from "./classes/Compiler";
 
 const SyntaxHighlighter: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // refs
@@ -13,12 +13,13 @@ const SyntaxHighlighter: React.FC<{ children: React.ReactNode }> = ({ children }
 
   // classes
   const parser = new Parser(setElements);
-  const replacer = new Replacer(_code);
+  const compiler = new Compiler(_code);
 
   // useEffects
   useEffect(() => {
     // Clear...
     setElements([]);
+    if (_code.current) _code.current.innerHTML = "";
 
     // Fill...
     React.Children.forEach(children, (child) => {
@@ -29,7 +30,7 @@ const SyntaxHighlighter: React.FC<{ children: React.ReactNode }> = ({ children }
   useEffect(() => {
     if (elements.length === 0) return;
 
-    replacer.Jsx(elements);
+    compiler.Jsx(elements);
   }, [elements]);
 
   return (
