@@ -3,7 +3,10 @@ import "../../libs/styles/syntax-highlighter/syntax-highlighter.css";
 import Parser from "./classes/Parser";
 import Compiler from "./classes/Compiler";
 
-const SyntaxHighlighter: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const SyntaxHighlighter: React.FC<{
+  children: React.ReactNode;
+  position?: "left" | "center" | "right";
+}> = ({ children, position = "center" }) => {
   // refs
   const _div = useRef<HTMLDivElement>(null);
   const _code = useRef<HTMLElement>(null);
@@ -36,7 +39,7 @@ const SyntaxHighlighter: React.FC<{ children: React.ReactNode }> = ({ children }
   return (
     <React.Fragment>
       <div className="ar-syntax">
-        <div ref={_div} className="preview">
+        <div ref={_div} className={`preview ${position}`}>
           {children}
         </div>
         <pre className="pre">

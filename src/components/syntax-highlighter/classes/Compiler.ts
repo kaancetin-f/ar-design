@@ -94,14 +94,24 @@ class Compiler {
 
       // Open Child Curly Bracket "{"
       element = element.replace(
-        /\[curly-bracket<\]/g,
+        /\[curly-bracket\]/g,
         "<span class='ar-jsx-child-curly-bracket'>{</span>"
       );
 
       // Close Child Curly Bracket "}"
       element = element.replace(
-        /\[curly-bracket>\]/g,
+        /\[\/curly-bracket\]/g,
         "<span class='ar-jsx-child-curly-bracket'>}</span>"
+      );
+
+      element = element.replace(
+        /\[react-element\]/g,
+        "<span class='ar-jsx-child-open-tag'>&lt;</span>"
+      );
+
+      element = element.replace(
+        /\[\/react-element\]/g,
+        "<span class='ar-jsx-child-close-tag'> &#47;&gt;</span>"
       );
 
       element = element.replace(/\[comma\]/g, "<span class='ar-jsx-comma'>,</span>");

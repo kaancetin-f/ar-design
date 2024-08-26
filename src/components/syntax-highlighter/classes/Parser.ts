@@ -74,13 +74,19 @@ class Parser {
   };
 
   private HandleEntries = (propValue: any): string | number => {
+    if (React.isValidElement(propValue)) {
+      const x = propValue.type as JSXElementConstructor<any> & { displayName?: string };
+
+      return `[react-element][react-tag]${x.displayName}[/react-tag][/react-element]` as string;
+    }
+
     if (propValue && typeof propValue === "object") {
-      return `[curly-bracket<] ${Object.entries(propValue)
+      return `[curly-bracket] ${Object.entries(propValue)
         .map(
           ([key, value]) =>
             `[attribute-key]${key}[/attribute-key][colon]&#58;[/colon] ${this.HandleEntries(value)}`
         )
-        .join(", ")} [curly-bracket>]`;
+        .join(", ")} [/curly-bracket]`;
     }
 
     return typeof propValue === "number"

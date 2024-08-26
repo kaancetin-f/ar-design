@@ -1,12 +1,25 @@
 .ar-syntax {
+  border: solid 1px var(--gray-200);
   border-radius: var(--border-radius-lg);
-  box-shadow: 0 0 15px 5px rgba(var(--black-rgb), 0.25);
+  box-shadow: 0px 0px 20px -10px rgba(var(--black-rgb), 0.25);
   overflow: hidden;
 }
 .ar-syntax > .preview {
+  display: flex;
+  gap: 1rem;
   background-color: var(--white);
   padding: 1rem;
 }
+.ar-syntax > .preview.left {
+  justify-content: left;
+}
+.ar-syntax > .preview.center {
+  justify-content: center;
+}
+.ar-syntax > .preview.right {
+  justify-content: right;
+}
+
 .ar-syntax > .pre {
   background-color: var(--bg-color);
   margin: 0;

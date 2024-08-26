@@ -4,7 +4,7 @@
 .ar-jsx-language > .ar-jsx-tag {
   color: var(--tag-color);
 }
-.ar-jsx-language > .ar-jsx-tag > .ar-jsx-custom-tag {
+.ar-jsx-language .ar-jsx-custom-tag {
   color: var(--custom-tag-color);
 }
 
@@ -48,6 +48,14 @@
 }
 .ar-jsx-language > .ar-jsx-attributes .ar-jsx-object-value > .ar-jsx-comma {
   color: var(--object-value-color);
+}
+
+.ar-jsx-language
+  > .ar-jsx-attributes
+  .ar-jsx-object-value
+  > .ar-jsx-attribute
+  > :is(.ar-jsx-child-open-tag, .ar-jsx-child-close-tag) {
+  color: var(--color);
 }
 
 .ar-jsx-language

@@ -27,8 +27,6 @@ const handleOnClick = (
   if (ulElement) ulElement.classList.toggle("opened");
 
   // Birden fazla menü açılmışsa...
-  console.log(setSelectedMenu);
-
   if (setSelectedMenu) setSelectedMenu((prevSelectedMenu) => [...prevSelectedMenu, item]);
   else {
     if (setSelectedItem) setSelectedItem(item);
