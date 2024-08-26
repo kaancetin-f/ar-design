@@ -66,7 +66,7 @@ class Parser {
     return renderElement;
   };
 
-  public HandleEntries = (propValue: any): string | number => {
+  private HandleEntries = (propValue: any): string | number => {
     if (propValue && typeof propValue === "object") {
       return `[curly-bracket<] ${Object.entries(propValue)
         .map(
@@ -81,7 +81,7 @@ class Parser {
       : `[string]${propValue}[/string]`;
   };
 
-  public FormatAttributeValue = (key: string, value: any): string => {
+  private FormatAttributeValue = (key: string, value: any): string => {
     let result: string = "";
 
     switch (typeof value) {
