@@ -29,15 +29,21 @@ const Button: React.FC<Props> = ({
       if (border.radius) className += ` border-radius-${border?.radius}`;
     }
 
+    if (attributes.disabled) className += ` disabled`;
+
+    if (attributes.className) className += ` ${attributes.className}`;
+
+    return className;
+  };
+
+  const handleSpanClassName = () => {
+    let className: string = "text";
+
     if (icon) {
       if (icon.element && !shape) className += ` icon`;
       if (icon.direction) className += ` icon-${icon.direction}`;
       if (icon.position) className += ` icon-${icon.direction ?? "row"}-${icon.position}`;
     }
-
-    if (attributes.disabled) className += ` disabled`;
-
-    if (attributes.className) className += ` ${attributes.className}`;
 
     return className;
   };
@@ -67,9 +73,11 @@ const Button: React.FC<Props> = ({
         (() => attributes.onClick && attributes.onClick(event))();
       }}
     >
-      {icon?.element}
+      <span className={handleSpanClassName()}>
+        {icon?.element}
 
-      {typeof children === "string" && upperCase ? children.toLocaleUpperCase() : children}
+        {typeof children === "string" && upperCase ? children.toLocaleUpperCase() : children}
+      </span>
     </button>
   );
 };

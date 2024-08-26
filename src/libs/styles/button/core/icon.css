@@ -1,4 +1,4 @@
-.ar-button.icon {
+.ar-button > .icon {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -7,15 +7,15 @@
   align-items: flex-start;
   gap: 0 0.5rem;
 }
-.ar-button.icon-row {
+.ar-button > .icon-row {
   flex-direction: row;
 }
-.ar-button.icon-row-end {
+.ar-button > .icon-row-end {
   flex-direction: row-reverse;
 }
-.ar-button.icon-column {
+.ar-button > .icon-column {
   flex-direction: column;
 }
-.ar-button.icon-column-end {
+.ar-button > .icon-column-end {
   flex-direction: column-reverse;
 }
