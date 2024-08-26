@@ -69,10 +69,12 @@ const SubMenu: React.FC<{
         if (variant === "vertical" && item.type === "group") _className_groupTitle += " group";
 
         if (item.submenu && item.submenu.length > 0) {
-          if (variant === "horizontal" || item.type !== "group") _className_groupTitle += " ar-angle-down";
+          if (variant === "horizontal" || item.type !== "group")
+            _className_groupTitle += " ar-angle-down";
 
           // Eğer seçili olan menüyse "selected" sınıfını ekler.
-          if (selectedMenu.length > 0 && selectedMenu.includes(item) && item.type !== "group") _className_li += " selected";
+          if (selectedMenu.length > 0 && selectedMenu.includes(item) && item.type !== "group")
+            _className_li += " selected";
         }
 
         // Eğer seçili olan menüyse "selected" sınıfını ekler.
@@ -83,7 +85,8 @@ const SubMenu: React.FC<{
             key={index}
             className={_className_li}
             onClick={(event) => {
-              if (item.submenu && item.submenu.length > 0) handleOnClick(event, item, variant, null, setSelectedMenu);
+              if (item.submenu && item.submenu.length > 0)
+                handleOnClick(event, item, variant, null, setSelectedMenu);
               else handleOnClick(event, item, variant, setSelectedItem, null);
             }}
           >
@@ -134,11 +137,13 @@ const Menu: React.FC<Props> = ({ menu, variant = "vertical", ...attributes }) =>
           if (variant === "vertical" && item.type === "group") _className_groupTitle += " group";
 
           if (item.submenu && item.submenu.length > 0) {
-            if (variant === "horizontal" || item.type !== "group") _className_groupTitle += " ar-angle-down";
+            if (variant === "horizontal" || item.type !== "group")
+              _className_groupTitle += " ar-angle-down";
           }
 
           // Eğer seçili olan menüyse "selected" sınıfını ekler.
-          if (selectedMenu.length > 0 && selectedMenu.includes(item) && item.type !== "group") _className_li += " selected";
+          if (selectedMenu.length > 0 && selectedMenu.includes(item) && item.type !== "group")
+            _className_li += " selected";
 
           return (
             <li
@@ -146,7 +151,11 @@ const Menu: React.FC<Props> = ({ menu, variant = "vertical", ...attributes }) =>
               className={_className_li}
               onClick={(event) => handleOnClick(event, item, variant, null, setSelectedMenu)}
             >
-              {item.type === "divider" ? <Divider /> : <div className={_className_groupTitle}>{item.render}</div>}
+              {item.type === "divider" ? (
+                <Divider />
+              ) : (
+                <div className={_className_groupTitle}>{item.render}</div>
+              )}
 
               {/* Alt menü öğeleri */}
               {item.submenu && (
@@ -168,4 +177,5 @@ const Menu: React.FC<Props> = ({ menu, variant = "vertical", ...attributes }) =>
   );
 };
 
+Menu.displayName = "Menu";
 export default Menu;

@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { JSXElementConstructor } from "react";
+100004557273;
 class Parser {
   // Public
   public _setElements: React.Dispatch<React.SetStateAction<string[]>>;
@@ -12,21 +12,27 @@ class Parser {
   }
 
   public JsxToString = (
-    child:
-      | React.ReactPortal
-      | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>,
+    child: React.ReactNode,
     subChilde: boolean = false,
     indentLevel: number = 0
   ) => {
-    if (!child) return;
+    if (!React.isValidElement(child)) return;
 
-    const componentType = typeof child.type === "function" ? child.type.name : child.type;
+    let componentName: string = "";
     let componentContent = child.props.children;
-    // İndent seviyesi için boşlukları ekle.
+
+    if (typeof child.type === "string") componentName = child.type;
+    else {
+      const componentType = child.type as JSXElementConstructor<any> & { displayName?: string };
+
+      componentName = componentType.displayName || componentType.name || "Unknown";
+    }
+
+    // Indent seviyesi için boşlukları ekle.
     const indent = "  ".repeat(indentLevel);
 
     // Eğer `br` elementi ise işlemi sonlandır
-    if (componentType === "br") return;
+    if (componentName === "br") return;
 
     const attributes = Object.keys(child.props).filter((key) => key !== "children");
     const attributesLength = attributes.length;
@@ -34,10 +40,11 @@ class Parser {
       .map((key) => this.FormatAttributeValue(key, child.props[key]))
       .join(" ");
 
-    const formattedTag =
-      componentType[0].toUpperCase() === componentType[0]
-        ? `[react-tag]${componentType}[/react-tag]`
-        : componentType;
+    const formattedTag = componentName[0]
+      ? componentName[0].toUpperCase() === componentName[0]
+        ? `[react-tag]${componentName}[/react-tag]`
+        : componentName
+      : "x";
     const formattedAttributes =
       attributesLength > 0 ? ` [attributes]${attributesList}[/attributes]` : "";
 
@@ -58,8 +65,8 @@ class Parser {
     componentContent =
       attributesLength >= this._lineBreakSpaces ? `\n  ${componentContent}\n` : componentContent;
     const renderElement = componentContent
-      ? `${indent}[open]&lt;[/open][tag]${formattedTag}[/tag]${formattedAttributes}[close]>[/close]${componentContent}${indent}[open]&lt;/[/open][tag]${formattedTag}[/tag][close]>[/close]`
-      : `${indent}[open]&lt;[/open][tag]${formattedTag}[/tag]${formattedAttributes} [close]/&gt;[/close]`;
+      ? `${indent}[open]&lt;[/open][tag]${formattedTag}[/tag]${formattedAttributes}[close]&gt;[/close]${componentContent}${indent}[open]&lt;&#47;[/open][tag]${formattedTag}[/tag][close]&gt;[/close]`
+      : `${indent}[open]&lt;[/open][tag]${formattedTag}[/tag]${formattedAttributes} [close]&#47;&gt;[/close]`;
 
     !subChilde && this._setElements((prevElements) => [...prevElements, renderElement]);
 
@@ -71,7 +78,7 @@ class Parser {
       return `[curly-bracket<] ${Object.entries(propValue)
         .map(
           ([key, value]) =>
-            `[attribute-key]${key}[/attribute-key][colon]:[/colon] ${this.HandleEntries(value)}`
+            `[attribute-key]${key}[/attribute-key][colon]&#58;[/colon] ${this.HandleEntries(value)}`
         )
         .join(", ")} [curly-bracket>]`;
     }
@@ -98,7 +105,7 @@ class Parser {
         const entries = Object.entries(value)
           .map(
             ([subKey, subValue]) =>
-              `[child-attribute][attribute-key]${subKey}[/attribute-key][colon]:[/colon] ${this.HandleEntries(
+              `[child-attribute][attribute-key]${subKey}[/attribute-key][colon]&#58;[/colon] ${this.HandleEntries(
                 subValue
               )}, [/child-attribute]`
           )
@@ -113,7 +120,7 @@ class Parser {
         return "";
     }
 
-    return `[attribute][attribute-key]${key}[/attribute-key][equal]=[/equal]${result}[/attribute]`;
+    return `[attribute][attribute-key]${key}[/attribute-key][equal]&#61;[/equal]${result}[/attribute]`;
   };
 }
 

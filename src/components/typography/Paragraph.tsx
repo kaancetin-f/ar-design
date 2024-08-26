@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
 
-const Paragraph: React.FC<{ children: string; align?: "left" | "center" | "right"; upperCase?: boolean }> = ({
-  children,
-  align = "left",
-  upperCase = false,
-}) => {
+const Paragraph: React.FC<{
+  children: string;
+  align?: "left" | "center" | "right";
+  upperCase?: boolean;
+}> = ({ children, align = "left", upperCase = false }) => {
   // refs
   let _className = useRef<string>("ar-typography-paragraph").current;
 
@@ -13,4 +13,5 @@ const Paragraph: React.FC<{ children: string; align?: "left" | "center" | "right
   return <p className={_className}>{upperCase ? children.toLocaleUpperCase() : children}</p>;
 };
 
+Paragraph.displayName = "Paragraph";
 export default Paragraph;
