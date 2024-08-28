@@ -2,7 +2,7 @@
 
 import React, { useRef } from "react";
 import { Props } from "./Types";
-import "../../libs/styles/button/button.css";
+import "../../assest/css/button/button.css";
 
 const Button: React.FC<Props> = ({
   children,
@@ -11,6 +11,7 @@ const Button: React.FC<Props> = ({
   color = "primary",
   border,
   width = "auto",
+  position,
   icon,
   upperCase,
   ...attributes
@@ -27,6 +28,11 @@ const Button: React.FC<Props> = ({
     if (border) {
       if (variant !== "filled" && border.style) className += ` border-style-${border.style}`;
       if (border.radius) className += ` border-radius-${border?.radius}`;
+    }
+
+    if (position) {
+      className += ` ${position.type}`;
+      className += ` ${position.inset.map((_inset) => _inset).join(" ")}`;
     }
 
     if (attributes.disabled) className += ` disabled`;

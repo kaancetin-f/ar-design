@@ -160,4 +160,9 @@ export type Props = {
    * ```
    */
   width?: "max-width" | "auto";
+
+  position?: {
+    type: "fixed" | "absolute";
+    inset: ("top" | "right" | "bottom" | "left")[];
+  };
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;

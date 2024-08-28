@@ -1,18 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../../libs/styles/syntax-highlighter/syntax-highlighter.css";
 import Parser from "./classes/Parser";
 import Compiler from "./classes/Compiler";
+import Button from "../button";
+import "../../assest/css/syntax-highlighter/syntax-highlighter.css";
 
 const SyntaxHighlighter: React.FC<{
   children: React.ReactNode;
   position?: "left" | "center" | "right";
-}> = ({ children, position = "center" }) => {
+}> = ({ children, position = "left" }) => {
   // refs
   const _div = useRef<HTMLDivElement>(null);
   const _code = useRef<HTMLElement>(null);
 
   // states
   const [elements, setElements] = useState<string[]>([]);
+  const [codePanelIsOpen, setCodePanelIsOpen] = useState<boolean>(false);
 
   // classes
   const parser = new Parser(setElements);
@@ -36,13 +38,27 @@ const SyntaxHighlighter: React.FC<{
     compiler.Jsx(elements);
   }, [elements]);
 
+  useEffect(() => {}, [codePanelIsOpen]);
+
   return (
     <React.Fragment>
       <div className="ar-syntax">
         <div ref={_div} className={`preview ${position}`}>
           {children}
         </div>
-        <pre className="pre">
+
+        <div className="ar-syntax-button-group">
+          <Button
+            variant="outlined"
+            color="secondary"
+            shape="square"
+            onClick={() => setCodePanelIsOpen((x) => !x)}
+          >
+            {codePanelIsOpen ? "<>" : "</>"}
+          </Button>
+        </div>
+
+        <pre className={`pre ${!codePanelIsOpen ? "hidden" : "visible"}`}>
           <code ref={_code}></code>
         </pre>
       </div>

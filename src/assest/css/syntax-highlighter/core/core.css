@@ -1,15 +1,19 @@
 .ar-syntax {
+  display: flex;
+  flex-direction: column;
   border: solid 1px var(--gray-200);
   border-radius: var(--border-radius-lg);
-  box-shadow: 0px 0px 20px -10px rgba(var(--black-rgb), 0.25);
   overflow: hidden;
 }
 .ar-syntax > .preview {
+  position: relative;
   display: flex;
+  align-items: center;
   gap: 1rem;
   background-color: var(--white);
   padding: 1rem;
 }
+
 .ar-syntax > .preview.left {
   justify-content: left;
 }
@@ -20,14 +24,32 @@
   justify-content: right;
 }
 
+.ar-syntax > .ar-syntax-button-group {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0;
+  border: dashed 1px transparent;
+  border-top-color: var(--gray-200);
+}
+
 .ar-syntax > .pre {
-  background-color: var(--bg-color);
   margin: 0;
   padding: 1rem;
+  border: dashed 1px transparent;
+  border-top-color: var(--gray-200);
   overflow-x: auto;
+}
+.ar-syntax > .pre.hidden {
+  display: none;
+}
+.ar-syntax > .pre.visible {
+  display: block;
 }
 .ar-syntax > .pre > code {
   display: flex;
   flex-direction: column;
   gap: 0.5rem 0;
+  font-family: var(--jetBrainsMonoRegular) !important;
 }

@@ -1,6 +1,6 @@
 {
   "name": "ar-design",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,8 +10,8 @@
   "scripts": {
     "build": "rm -rf dist/ && npm run build:post-mac && npm run build:esm",
     "build:post-mac": "npm run mkdir:esm && npm run copy:esm",
-    "mkdir:esm": "mkdir -p dist/libs/styles",
-    "copy:esm": "cp -r ./src/libs/styles dist/libs/",
+    "mkdir:esm": "mkdir -p dist/assest && mkdir -p dist/assest/css",
+    "copy:esm": "cp -r ./src/assest dist/ && cp -r ./src/assest/css dist/assest/css/",
     "build:esm": "tsc",
     "mv:esm": "for ext in js ts; do mv ./dist/esm/*.$ext ./dist/; done",
     "mkdir:cjs": "mkdir -p dist/cjs/libs/styles",

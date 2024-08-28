@@ -1,0 +1,74 @@
+@media only screen and (max-width: 575px) {
+  .row > .col-xs-1 {
+    flex: 0 0 calc(100% * 1 / 12);
+    max-width: calc(100% * 1 / 12);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(100% * 1 / 12);
+  }
+  .row > .col-xs-2 {
+    flex: 0 0 calc(100% * 2 / 12);
+    max-width: calc(100% * 2 / 12);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(100% * 2 / 12);
+  }
+  .row > .col-xs-3 {
+    flex: 0 0 calc(100% * 3 / 12);
+    max-width: calc(100% * 3 / 12);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(100% * 3 / 12);
+  }
+  .row > .col-xs-4 {
+    flex: 0 0 calc(100% * 4 / 12);
+    max-width: calc(100% * 4 / 12);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(100% * 4 / 12);
+  }
+  .row > .col-xs-5 {
+    flex: 0 0 calc(100% * 5 / 12);
+    max-width: calc(100% * 5 / 12);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(100% * 5 / 12);
+  }
+  .row > .col-xs-6 {
+    flex: 0 0 calc(100% * 6 / 12);
+    max-width: calc(100% * 6 / 12);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(100% * 6 / 12);
+  }
+  .row > .col-xs-7 {
+    flex: 0 0 calc(100% * 7 / 12);
+    max-width: calc(100% * 7 / 12);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(100% * 7 / 12);
+  }
+  .row > .col-xs-8 {
+    flex: 0 0 calc(100% * 8 / 12);
+    max-width: calc(100% * 8 / 12);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(100% * 8 / 12);
+  }
+  .row > .col-xs-9 {
+    flex: 0 0 calc(100% * 9 / 12);
+    max-width: calc(100% * 9 / 12);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(100% * 9 / 12);
+  }
+  .row > .col-xs-10 {
+    flex: 0 0 calc(100% * 10 / 12);
+    max-width: calc(100% * 10 / 12);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(100% * 10 / 12);
+  }
+  .row > .col-xs-11 {
+    flex: 0 0 calc(100% * 11 / 12);
+    max-width: calc(100% * 11 / 12);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(100% * 11 / 12);
+  }
+  .row > .col-xs-12 {
+    flex: 0 0 calc(100% * 12 / 12);
+    max-width: calc(100% * 12 / 12);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 calc(100% * 12 / 12);
+  }
+}

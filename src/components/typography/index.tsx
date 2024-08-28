@@ -1,6 +1,6 @@
-import Paragraph from "./Paragraph";
-import Title from "./Title";
-import "../../libs/styles/typography/typography.css";
+import Paragraph from "./paragraph/Paragraph";
+import Title from "./title/Title";
+import "../../assest/css/typography/typography.css";
 
 // @@Export
 const Typography = {

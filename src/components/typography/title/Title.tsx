@@ -1,13 +1,7 @@
 import React, { useRef } from "react";
-import { TitleProps } from "./Types";
+import { Props } from "./Types";
 
-const Title: React.FC<TitleProps> = ({
-  children,
-  Level,
-  align = "left",
-  size,
-  upperCase = false,
-}) => {
+const Title: React.FC<Props> = ({ children, Level, align = "left", size, upperCase = false }) => {
   // refs
   let _className = useRef<string>("ar-typography-title").current;
 

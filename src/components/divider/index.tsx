@@ -1,5 +1,5 @@
 import React from "react";
-import "../../libs/styles/divider/divider.css";
+import "../../assest/css/divider/divider.css";
 
 const Divider: React.FC = () => <hr className="ar-divider" />;
 

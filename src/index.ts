@@ -1,10 +1,13 @@
-import "./libs/styles/ar-core.css";
+import "./assest/css/ar-core.css";
 
 import Button from "./components/button";
 export { Button };
 
 import Menu from "./components/menu";
 export { Menu };
+
+import Grid from "./components/grid-system";
+export { Grid };
 
 import Typography from "./components/typography";
 export { Typography };

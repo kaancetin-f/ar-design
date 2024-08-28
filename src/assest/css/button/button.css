@@ -2,5 +2,6 @@
 @import url("./core/shape.css");
 @import url("./core/icon.css");
 @import url("./core/border.css");
+@import url("./core/position.css");
 @import url("./variant/filled/core.css");
 @import url("./variant/outlined/core.css");
