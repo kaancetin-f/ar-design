@@ -5,8 +5,13 @@
   transition: max-height 250ms ease-in-out, opacity 250ms cubic-bezier(1, 0, 0, 1);
 }
 .ar-menu .ar-menu-list-item-groups.opened {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem 0;
   opacity: 1;
   max-height: 100rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
 }
 .ar-menu .ar-menu-list-item-group-item-title {
   display: flex;

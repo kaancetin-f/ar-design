@@ -1,0 +1,29 @@
+.ar-alert.primary {
+  background-color: rgba(var(--primary-rgb), 0.1);
+}
+.ar-alert.secondary {
+  background-color: rgba(var(--secondary-rgb), 0.1);
+}
+.ar-alert.success {
+  background-color: rgba(var(--success-rgb), 0.1);
+}
+.ar-alert.warning {
+  background-color: rgba(var(--warning-rgb), 0.1);
+}
+.ar-alert.danger {
+  background-color: rgba(var(--danger-rgb), 0.1);
+}
+.ar-alert.information {
+  background-color: rgba(var(--information-rgb), 0.1);
+}
+.ar-alert.light {
+  background-color: rgba(var(--light-rgb), 0.1);
+}
+.ar-alert.dark {
+  background-color: rgba(var(--dark-rgb), 0.1);
+}
+.ar-alert.transparent {
+  background-color: transparent;
+  margin-left: 1.25rem;
+  padding: 0 !important;
+}

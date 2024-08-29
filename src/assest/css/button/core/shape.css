@@ -1,7 +1,9 @@
 .ar-button.ar-button-shape {
   align-items: center;
-  width: 2rem;
-  height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
+  max-width: 2rem;
+  max-height: 2rem;
   padding: 0 !important;
 }
 .ar-button.ar-button-shape.circle {

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from "react";
 import Parser from "./classes/Parser";
 import Compiler from "./classes/Compiler";
@@ -50,11 +52,14 @@ const SyntaxHighlighter: React.FC<{
         <div className="ar-syntax-button-group">
           <Button
             variant="outlined"
-            color="secondary"
-            shape="square"
+            _type="dark"
+            border={{
+              style: "solid",
+            }}
+            size="small"
             onClick={() => setCodePanelIsOpen((x) => !x)}
           >
-            {codePanelIsOpen ? "<>" : "</>"}
+            {codePanelIsOpen ? "Close Code" : "Open Code"}
           </Button>
         </div>
 

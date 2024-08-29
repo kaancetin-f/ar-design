@@ -1,2 +1,58 @@
-@import url("./core/core.css");
+.ar-syntax {
+  display: flex;
+  flex-direction: column;
+  border: solid 1px var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+}
+.ar-syntax > .preview {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--white);
+  padding: 1rem;
+  min-height: 5rem;
+}
+
+.ar-syntax > .preview.left {
+  justify-content: left;
+}
+.ar-syntax > .preview.center {
+  justify-content: center;
+}
+.ar-syntax > .preview.right {
+  justify-content: right;
+}
+
+.ar-syntax > .ar-syntax-button-group {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0;
+  border: dashed 1px transparent;
+  border-top-color: var(--gray-300);
+}
+
+.ar-syntax > .pre {
+  background-color: var(--gray-900);
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+}
+.ar-syntax > .pre.hidden {
+  display: none;
+}
+.ar-syntax > .pre.visible {
+  display: block;
+}
+.ar-syntax > .pre > code {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem 0;
+  font-family: var(--jetBrainsMonoRegular) !important;
+}
+
 @import url("./core/jsx.template.css");

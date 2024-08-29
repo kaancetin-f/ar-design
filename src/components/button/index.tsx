@@ -8,9 +8,10 @@ const Button: React.FC<Props> = ({
   children,
   variant = "filled",
   shape,
-  color = "primary",
+  _type = "primary",
   border,
   width = "auto",
+  size = "normal",
   position,
   icon,
   upperCase,
@@ -21,7 +22,7 @@ const Button: React.FC<Props> = ({
 
   // methods
   const handleClassName = () => {
-    let className: string = `ar-button ${variant} ${color} ${width}`;
+    let className: string = `ar-button ${variant} ${_type} ${width}`;
 
     if (shape) className += ` ar-button-shape ${shape}`;
 
@@ -29,6 +30,8 @@ const Button: React.FC<Props> = ({
       if (variant !== "filled" && border.style) className += ` border-style-${border.style}`;
       if (border.radius) className += ` border-radius-${border?.radius}`;
     }
+
+    if (size) className += ` ${size}`;
 
     if (position) {
       className += ` ${position.type}`;

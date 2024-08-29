@@ -1,5 +1,8 @@
 import "./assest/css/ar-core.css";
 
+import Alert from "./components/alert";
+export { Alert };
+
 import Button from "./components/button";
 export { Button };
 

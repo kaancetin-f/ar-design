@@ -1,4 +1,5 @@
 .ar-typography-paragraph {
   margin-bottom: 1rem;
   color: var(--gray-900);
+  font-family: var(--system-fonts);
 }

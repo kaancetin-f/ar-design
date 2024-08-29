@@ -7,6 +7,8 @@ const Column: React.FC<Props> = ({ children, column, align }) => {
       .map(([key, value]) => `col-${key}-${value}`)
       .join(" ");
 
+    if (!column) className += "col";
+
     if (align) className += ` ${align}`;
 
     return className;

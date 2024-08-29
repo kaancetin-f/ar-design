@@ -11,8 +11,8 @@
   border-bottom-left-radius: var(--border-radius-lg);
 }
 .ar-menu .ar-menu-list-item-group-item-title.selected {
-  background-color: rgba(var(--red-rgb), 0.1) !important;
+  background-color: var(--gray-100) !important;
   border-top-left-radius: var(--border-radius-lg);
   border-bottom-left-radius: var(--border-radius-lg);
-  color: var(--red);
+  box-shadow: 0 0 0 1px var(--gray-200);
 }

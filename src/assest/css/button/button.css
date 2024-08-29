@@ -1,7 +1,29 @@
-@import url("./core/core.css");
+.ar-button {
+  position: relative;
+  min-width: fit-content;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-family: var(--system-fonts);
+  cursor: pointer;
+  transition: background-color 150ms, border 150ms, color 150ms ease-in-out;
+  overflow: hidden;
+}
+.ar-button.disabled {
+  cursor: no-drop;
+}
+
+.ar-button.max-width {
+  width: 100%;
+}
+
+/* Core Css */
 @import url("./core/shape.css");
 @import url("./core/icon.css");
 @import url("./core/border.css");
 @import url("./core/position.css");
+@import url("./core/size.css");
+
+/* Variant Css */
 @import url("./variant/filled/core.css");
 @import url("./variant/outlined/core.css");

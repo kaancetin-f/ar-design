@@ -1,1 +1,5 @@
-@import url("./core/core.css");
+.ar-divider {
+  width: 100%;
+  border: none;
+  margin: 1rem 0;
+}
