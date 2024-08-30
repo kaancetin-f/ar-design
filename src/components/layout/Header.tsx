@@ -17,4 +17,5 @@ const Header: React.FC<HeaderProps> = ({ logo, menu }) => {
   );
 };
 
+Header.displayName = "Layout.Header";
 export default Header;

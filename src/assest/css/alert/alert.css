@@ -37,7 +37,7 @@
   border: solid 1px transparent;
   border-radius: var(--border-radius-lg);
 }
-.ar-alert ul li:is(.subMessage)::before {
+.ar-alert ul li:is(.subMessage):not(:has(> ul))::before {
   position: absolute;
   top: -5px;
   left: 0;

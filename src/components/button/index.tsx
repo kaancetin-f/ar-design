@@ -64,7 +64,7 @@ const Button: React.FC<Props> = ({
       className={handleClassName()}
       onClick={(event) => {
         // Disabled gelmesi durumunda işlem yapmasına izin verme...
-        if (attributes.disabled) return;
+        if (attributes.disabled || variant === "text") return;
 
         (() => {
           const _current = _button.current;

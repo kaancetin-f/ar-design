@@ -27,3 +27,4 @@
 /* Variant Css */
 @import url("./variant/filled/core.css");
 @import url("./variant/outlined/core.css");
+@import url("./variant/text/core.css");

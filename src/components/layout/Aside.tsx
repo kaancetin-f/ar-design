@@ -18,4 +18,5 @@ const Aside: React.FC<AsideProps> = ({ menu }) => {
   );
 };
 
+Aside.displayName = "Layout.Aside";
 export default Aside;
