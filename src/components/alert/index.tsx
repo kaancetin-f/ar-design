@@ -53,14 +53,19 @@ const Alert: React.FC<Props> = ({ message, type, border = true, emphasize }) => 
     }, message);
   };
 
-  const createList = (message: any) => {
+  const createList = (message: any, isSubMessage?: boolean) => {
+    let className: string = "";
+
+    if (isSubMessage) className += "subMessage";
+    else className += "message";
+
     return (
       <ul>
         {Array.isArray(message)
           ? message.map((messageItem, index) => (
-              <li key={index}>
+              <li key={index} className={className}>
                 {Array.isArray(messageItem) ? (
-                  createList(messageItem)
+                  createList(messageItem, true)
                 ) : (
                   <div
                     dangerouslySetInnerHTML={{

@@ -1,0 +1,27 @@
+.ar-layout {
+  display: flex;
+  flex-direction: column;
+}
+.ar-layout > main {
+  display: flex;
+  flex-direction: row;
+  gap: 0 2rem;
+  width: 1280px;
+  margin: 0 auto;
+}
+.ar-layout > main > aside {
+  position: sticky;
+  top: 3.75rem;
+  width: 25%;
+  height: 100%;
+  margin: 2rem 0;
+}
+.ar-layout > main > section {
+  background-color: var(--white);
+  width: 100%;
+  margin: 2rem 0;
+  padding: 2rem;
+  border-radius: var(--border-radius-lg);
+}
+
+@import url("./header.css");

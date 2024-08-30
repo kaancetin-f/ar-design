@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 @font-face {
   font-family: "JetBrainsMono-Bold";
   src: url("../../assest/fonts/JetBrainsMono-Bold.ttf");

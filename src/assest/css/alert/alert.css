@@ -13,36 +13,6 @@
   border-radius: var(--border-radius-sm);
 }
 
-/* İlk nesne olan ul içindeki bütün li nesnlerinin before özellikleri kapatıldı. */
-.ar-alert > ul > li::before {
-  display: none;
-}
-/* Item */
-.ar-alert:is(.transparent) > ul > li:not(:has(> ul))::after {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: -1.25rem;
-  content: "";
-  background-color: var(--gray-200);
-  width: 0.5rem;
-  height: 0.5rem;
-  border: solid 1px transparent;
-  border-radius: var(--border-radius-lg);
-}
-/* SubItem */
-.ar-alert ul li:not(:has(> ul))::before {
-  position: absolute;
-  top: -5px;
-  left: -1.25rem;
-  content: "";
-  width: 0.75rem;
-  height: 1rem;
-  border: solid 1px transparent;
-  border-left-color: rgba(var(--black-rgb), 0.25);
-  border-bottom-color: rgba(var(--black-rgb), 0.25);
-}
-
 .ar-alert ul {
   display: flex;
   flex-direction: column;
@@ -53,6 +23,30 @@
 }
 .ar-alert ul li {
   position: relative;
+  padding-left: 1rem;
+}
+.ar-alert:is(.transparent) > ul > li:not(:has(> ul))::before {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  content: "";
+  background-color: var(--gray-200);
+  width: 0.5rem;
+  height: 0.5rem;
+  border: solid 1px transparent;
+  border-radius: var(--border-radius-lg);
+}
+.ar-alert ul li:is(.subMessage)::before {
+  position: absolute;
+  top: -5px;
+  left: 0;
+  content: "";
+  width: 0.75rem;
+  height: 1rem;
+  border: solid 1px transparent;
+  border-left-color: rgba(var(--black-rgb), 0.25);
+  border-bottom-color: rgba(var(--black-rgb), 0.25);
 }
 .ar-alert ul li .ar-alert-tag {
   background-color: var(--gray-100);
@@ -61,7 +55,7 @@
   border-radius: var(--border-radius-sm);
 }
 .ar-alert ul li ul {
-  margin-left: 1.5rem;
+  margin-left: 0.1rem;
 }
 
 /* Core Css */
