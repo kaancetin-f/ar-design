@@ -52,7 +52,7 @@ const Layout: React.FC<LayoutProps> & {
   return (
     <div className="ar-layout">
       <LayoutProvider>
-        <header>{layout?.header}</header>
+        <header className="ar-header">{layout?.header}</header>
         <main>
           {layout?.main?.aside}
           <section>{layout?.main?.section}</section>
