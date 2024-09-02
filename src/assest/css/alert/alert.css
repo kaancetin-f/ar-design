@@ -25,13 +25,13 @@
   position: relative;
   padding-left: 1rem;
 }
-.ar-alert:is(.transparent) > ul > li:not(:has(> ul))::before {
+.ar-alert > ul > li:not(:has(> ul))::before {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   left: 0;
   content: "";
-  background-color: var(--gray-200);
+  background-color: rgba(var(--black-rgb), 0.1);
   width: 0.5rem;
   height: 0.5rem;
   border: solid 1px transparent;
@@ -49,7 +49,7 @@
   border-bottom-color: rgba(var(--black-rgb), 0.25);
 }
 .ar-alert ul li .ar-alert-tag {
-  background-color: var(--gray-100);
+  background-color: var(--white);
   padding: 0 0.25rem;
   border: solid 1px var(--gray-400);
   border-radius: var(--border-radius-sm);

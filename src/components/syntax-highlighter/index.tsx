@@ -52,7 +52,7 @@ const SyntaxHighlighter: React.FC<{
         <div className="ar-syntax-button-group">
           <Button
             variant="outlined"
-            _type="dark"
+            color="dark"
             border={{
               style: "solid",
             }}

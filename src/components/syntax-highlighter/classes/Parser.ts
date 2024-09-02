@@ -44,7 +44,7 @@ class Parser {
       ? componentName[0].toUpperCase() === componentName[0]
         ? `[react-tag]${componentName}[/react-tag]`
         : componentName
-      : "x";
+      : "";
     const formattedAttributes =
       attributesLength > 0 ? ` [attributes]${attributesList}[/attributes]` : "";
 
@@ -55,8 +55,11 @@ class Parser {
     } else if (Array.isArray(componentContent)) {
       // Eğer birden fazla çocuk varsa hepsini işle
       componentContent = componentContent
-        .map((contentChild) => this.JsxToString(contentChild, true))
-        .join(`\n${indent}`);
+        .map(
+          (contentChild) =>
+            `[sub-item]${this.JsxToString(contentChild, true, indentLevel + 1)}[/sub-item]`
+        )
+        .join("");
     } else if (typeof componentContent === "string") {
       // Eğer metin içeriği varsa, trimle
       componentContent = componentContent.trim();

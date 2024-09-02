@@ -66,7 +66,7 @@ export type Props = {
    * <Button color="success">Hello, World!</Button>
    * ```
    */
-  _type?: Colors;
+  color?: Colors;
 
   /**
    * Bileşenine ikon eklemeyi sağlar.

@@ -19,7 +19,7 @@ const Alert: React.FC<Props> = ({ message, type, border = true, emphasize }) => 
   const formattedTags = (message: string) => {
     // TODO: Şuan için sadece transparent olan alert tiplerinde çalışmakta.
     // TODO: Bu konu hakkında düşünüp karar verilecek.
-    if (!emphasize || type !== "transparent") return message;
+    if (!emphasize) return message;
 
     let _lowerCaseMessage = message.toLowerCase();
 

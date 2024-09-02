@@ -8,7 +8,7 @@ const Button: React.FC<Props> = ({
   children,
   variant = "filled",
   shape,
-  _type = "primary",
+  color = "primary",
   border,
   width = "auto",
   size = "normal",
@@ -22,7 +22,7 @@ const Button: React.FC<Props> = ({
 
   // methods
   const handleClassName = () => {
-    let className: string = `ar-button ${variant} ${_type} ${width}`;
+    let className: string = `ar-button ${variant} ${color} ${width}`;
 
     if (shape) className += ` ar-button-shape ${shape}`;
 
@@ -64,7 +64,7 @@ const Button: React.FC<Props> = ({
       className={handleClassName()}
       onClick={(event) => {
         // Disabled gelmesi durumunda işlem yapmasına izin verme...
-        if (attributes.disabled || variant === "text") return;
+        if (attributes.disabled) return;
 
         (() => {
           const _current = _button.current;
