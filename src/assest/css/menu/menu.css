@@ -1,6 +1,6 @@
 .ar-menu {
   padding: 0 0.25rem;
-  font-family: var(--system-fonts);
+  font-family: var(--system);
 }
 .ar-menu ul {
   margin: 0;

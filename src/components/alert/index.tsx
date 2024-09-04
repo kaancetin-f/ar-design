@@ -56,7 +56,7 @@ const Alert: React.FC<Props> = ({ message, type, border = true, emphasize }) => 
   const createList = (message: any, isSubMessage?: boolean) => {
     let className: string = "";
 
-    if (isSubMessage) className += "subMessage";
+    if (isSubMessage) className += "sub-message";
     else className += "message";
 
     return (

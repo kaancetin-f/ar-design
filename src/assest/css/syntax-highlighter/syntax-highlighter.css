@@ -50,8 +50,9 @@
 .ar-syntax > .pre > code {
   display: flex;
   flex-direction: column;
-  gap: 1rem 0;
+  gap: 0.5rem 0;
   font-family: var(--jetBrainsMonoRegular) !important;
+  font-size: 0.9rem;
 }
 
 @import url("./core/jsx.template.css");

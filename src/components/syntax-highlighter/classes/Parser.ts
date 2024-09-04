@@ -67,9 +67,11 @@ class Parser {
 
     componentContent =
       attributesLength >= this._lineBreakSpaces ? `\n  ${componentContent}\n` : componentContent;
-    const renderElement = componentContent
-      ? `${indent}[open]&lt;[/open][tag]${formattedTag}[/tag]${formattedAttributes}[close]&gt;[/close]${componentContent}${indent}[open]&lt;&#47;[/open][tag]${formattedTag}[/tag][close]&gt;[/close]`
-      : `${indent}[open]&lt;[/open][tag]${formattedTag}[/tag]${formattedAttributes} [close]&#47;&gt;[/close]`;
+
+    const renderElement =
+      componentContent != undefined
+        ? `${indent}[open]&lt;[/open][tag]${formattedTag}[/tag]${formattedAttributes}[close]&gt;[/close]${componentContent}${indent}[open]&lt;&#47;[/open][tag]${formattedTag}[/tag][close]&gt;[/close]`
+        : `${indent}[open]&lt;[/open][tag]${formattedTag}[/tag]${formattedAttributes} [close]&#47;&gt;[/close]`;
 
     !subChilde && this._setElements((prevElements) => [...prevElements, renderElement]);
 

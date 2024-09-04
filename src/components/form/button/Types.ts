@@ -1,4 +1,4 @@
-import { Colors } from "../../libs/types/Colors";
+import { Colors } from "../../../libs/types/Colors";
 
 export type Props = {
   /**

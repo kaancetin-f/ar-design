@@ -1,10 +1,11 @@
 .ar-button {
   position: relative;
   min-width: fit-content;
-  padding: 0.5rem 1rem;
+  height: 2.5rem;
+  padding: 0 1rem;
   border: none;
   border-radius: var(--border-radius-sm);
-  font-family: var(--system-fonts);
+  font-family: var(--system);
   cursor: pointer;
   transition: background-color 150ms, border 150ms, color 150ms ease-in-out;
   overflow: hidden;

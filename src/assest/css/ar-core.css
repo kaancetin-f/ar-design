@@ -65,7 +65,7 @@
 
 /* #region Fonts */
 :root {
-  --system-fonts: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+  --system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
     sans-serif;
   --jetBrainsMonoBold: "JetBrainsMono-Bold";
   --jetBrainsMonoRegular: "JetBrainsMono-Regular";
