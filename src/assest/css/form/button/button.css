@@ -5,6 +5,7 @@
   border: none;
   border-radius: var(--border-radius-sm);
   font-family: var(--system);
+  font-size: 1rem;
   cursor: pointer;
   transition: background-color 150ms, border 150ms, color 150ms ease-in-out;
   overflow: hidden;

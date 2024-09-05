@@ -1,4 +1,4 @@
-import { MenuProps } from "../menu/Types";
+import { MenuProps } from "../navigation/menu/Types";
 
 export type LayoutProps = {
   children: React.ReactNode;

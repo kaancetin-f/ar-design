@@ -2,8 +2,8 @@
 
 import React, { useRef, useState } from "react";
 import { MenuItemType, MenuItemVariant, MenuProps, Props } from "./Types";
-import Divider from "../divider";
-import "../../assest/css/menu/menu.css";
+import "../../../assest/css/navigation/menu/menu.css";
+import Divider from "../../data-display/divider";
 
 const handleOnClick = (
   event: React.MouseEvent<HTMLLIElement, MouseEvent>,

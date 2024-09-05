@@ -58,6 +58,9 @@ const Input: React.FC<Props> = ({
           {...attributes}
           className={_inputClassName}
           onChange={(event) => {
+            // Disabled gelmesi durumunda işlem yapmasına izin verme...
+            if (attributes.disabled) return;
+
             (() => {
               if (attributes.onChange) {
                 // Mevcut değeri alın
@@ -85,6 +88,7 @@ const Input: React.FC<Props> = ({
           {...button}
           color={status}
           border={{ style: button.border?.style, radius: border?.radius || "sm" }}
+          disabled={attributes.disabled}
         />
       )}
     </div>

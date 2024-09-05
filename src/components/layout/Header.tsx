@@ -2,7 +2,7 @@
 
 import React from "react";
 import { HeaderProps } from "./Types";
-import Menu from "../menu";
+import Menu from "../navigation/menu";
 
 const Header: React.FC<HeaderProps> = ({ logo, menu }) => {
   return (

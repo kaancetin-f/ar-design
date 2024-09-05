@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Menu from "../menu";
+import Menu from "../navigation/menu";
 import { AsideProps } from "./Types";
 import useLayout from "../../libs/core/application/hooks/useLayout";
 

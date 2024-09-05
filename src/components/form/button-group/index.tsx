@@ -3,7 +3,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import "../../../assest/css/form/button-group/button-group.css";
 import Button from "../button";
-import Alert from "../../alert";
+import Alert from "../../feedback/alert";
 
 const ButtonGroup: React.FC<{
   children: ReactElement<typeof Button> | ReactElement<typeof Button>[];

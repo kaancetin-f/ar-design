@@ -21,6 +21,11 @@
   box-sizing: border-box;
   transition: background 250ms, border 250ms, box-shadow 250ms ease-in-out;
 }
+.ar-input-wrapper > .ar-input > input.disabled {
+  background-color: var(--gray-100);
+  border-color: var(--gray-500);
+  cursor: no-drop;
+}
 
 /* Core Css */
 @import url("./core/icon.css");

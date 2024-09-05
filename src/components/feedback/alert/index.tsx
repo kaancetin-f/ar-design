@@ -2,7 +2,7 @@
 
 import React, { useRef } from "react";
 import { Props } from "./Types";
-import "../../assest/css/alert/alert.css";
+import "../../../assest/css/feedback/alert/alert.css";
 
 const Alert: React.FC<Props> = ({ message, type, border = true, emphasize }) => {
   // refs
