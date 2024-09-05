@@ -1,8 +1,10 @@
 import React from "react";
 import { Props as ButtonProps } from "../button/Types";
+import { Colors } from "../../../libs/types/Colors";
 
 type Props = {
   variant?: "filled" | "outlined" | "borderless";
+  status?: Colors;
   icon?: {
     element: React.JSX.Element;
     position?: "start" | "end";

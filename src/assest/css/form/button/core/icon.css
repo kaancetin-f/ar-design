@@ -16,7 +16,6 @@
 .ar-button > .icon-column {
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
 }
 .ar-button > .icon-column-end {
   flex-direction: column-reverse;

@@ -12,7 +12,7 @@
 .ar-input-wrapper > .ar-input > input {
   background-color: transparent;
   width: 100%;
-  height: 2.5rem;
+  height: 2.25rem;
   padding: 0 0.5rem;
   border: solid 1px transparent;
   font-family: var(--system);
@@ -20,15 +20,6 @@
   outline: none;
   box-sizing: border-box;
   transition: background 250ms, border 250ms, box-shadow 250ms ease-in-out;
-}
-.ar-input-wrapper > .ar-input > input:hover {
-  background-color: var(--white);
-  border-color: rgba(var(--primary-rgb), 0.5);
-}
-.ar-input-wrapper > .ar-input > input:focus {
-  background-color: var(--white);
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), 0.1);
 }
 
 /* Core Css */
@@ -38,6 +29,6 @@
 @import url("./core/addon.css");
 
 /* Variant Css */
-@import url("./variant/filled.css");
-@import url("./variant/outlined.css");
-@import url("./variant/borderless.css");
+@import url("./variant/filled/core.css");
+@import url("./variant/outlined/core.css");
+@import url("./variant/borderless/core.css");

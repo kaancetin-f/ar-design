@@ -1,7 +1,6 @@
 .ar-button {
   position: relative;
   min-width: fit-content;
-  height: 2.5rem;
   padding: 0 1rem;
   border: none;
   border-radius: var(--border-radius-sm);

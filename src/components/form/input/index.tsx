@@ -7,6 +7,7 @@ import Button from "../button";
 
 const Input: React.FC<Props> = ({
   variant = "outlined",
+  status = "light",
   icon,
   border,
   button,
@@ -28,22 +29,16 @@ const Input: React.FC<Props> = ({
 
   // input className
   if (variant) _inputClassName += `${variant}`;
-  if (border && border.radius) _inputClassName += ` border-radius-${border.radius}`;
+  if (status) _inputClassName += ` ${status}`;
 
-  // button className
-  // ...
+  // border radius
+  _inputClassName += ` border-radius-${border?.radius || "sm"}`;
+  _addonBeforeClassName += ` border-radius-${border?.radius || "sm"}`;
+  _addonAfterClassName += ` border-radius-${border?.radius || "sm"}`;
 
   // addon className
   if (addon) {
     _wrapperClassName += ` addon`;
-
-    // Border olması durumunda...
-    if (border) {
-      if ((addon.before || addon.after) && border.radius) {
-        _addonBeforeClassName += ` border-radius-${border.radius}`;
-        _addonAfterClassName += ` border-radius-${border.radius}`;
-      }
-    }
   }
 
   if (attributes.disabled) _inputClassName += ` disabled`;
@@ -61,6 +56,7 @@ const Input: React.FC<Props> = ({
         {/* Input */}
         <input
           {...attributes}
+          className={_inputClassName}
           onChange={(event) => {
             (() => {
               if (attributes.onChange) {
@@ -77,7 +73,6 @@ const Input: React.FC<Props> = ({
               }
             })();
           }}
-          className={_inputClassName}
         />
       </div>
 
@@ -85,7 +80,13 @@ const Input: React.FC<Props> = ({
       {addon?.after && <span className={_addonAfterClassName}>{addon?.after}</span>}
 
       {/* Button */}
-      {button && <Button {...button} border={{ radius: border?.radius }} />}
+      {button && (
+        <Button
+          {...button}
+          color={status}
+          border={{ style: button.border?.style, radius: border?.radius || "sm" }}
+        />
+      )}
     </div>
   );
 };

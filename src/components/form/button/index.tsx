@@ -19,49 +19,39 @@ const Button: React.FC<Props> = ({
 }) => {
   // refs
   const _button = useRef<HTMLButtonElement>(null);
+  let _buttonClassName = useRef<string>(`ar-button ${variant} ${color} ${width}`).current;
+  let _spanClassName = useRef<string>(`text`).current;
 
-  // methods
-  const handleClassName = () => {
-    let className: string = `ar-button ${variant} ${color} ${width}`;
+  // button className
+  if (shape) _buttonClassName += ` ar-button-shape ${shape}`;
 
-    if (shape) className += ` ar-button-shape ${shape}`;
+  if (border) {
+    if (variant !== "filled" && border.style) _buttonClassName += ` border-style-${border.style}`;
+    if (border.radius) _buttonClassName += ` border-radius-${border?.radius}`;
+  }
 
-    if (border) {
-      if (variant !== "filled" && border.style) className += ` border-style-${border.style}`;
-      if (border.radius) className += ` border-radius-${border?.radius}`;
-    }
+  if (size) _buttonClassName += ` ${size}`;
 
-    if (size) className += ` ${size}`;
+  if (position) {
+    _buttonClassName += ` ${position.type}`;
+    _buttonClassName += ` ${position.inset.map((_inset) => _inset).join(" ")}`;
+  }
 
-    if (position) {
-      className += ` ${position.type}`;
-      className += ` ${position.inset.map((_inset) => _inset).join(" ")}`;
-    }
+  if (attributes.disabled) _buttonClassName += ` disabled`;
+  if (attributes.className) _buttonClassName += ` ${attributes.className}`;
 
-    if (attributes.disabled) className += ` disabled`;
-
-    if (attributes.className) className += ` ${attributes.className}`;
-
-    return className;
-  };
-
-  const handleSpanClassName = () => {
-    let className: string = "text";
-
-    if (icon) {
-      if (icon.element && !shape) className += ` icon`;
-      if (icon.direction) className += ` icon-${icon.direction}`;
-      if (icon.position) className += ` icon-${icon.direction ?? "row"}-${icon.position}`;
-    }
-
-    return className;
-  };
+  // span className
+  if (icon) {
+    if (icon.element && !shape) _spanClassName += ` icon`;
+    if (icon.direction) _spanClassName += ` icon-${icon.direction}`;
+    if (icon.position) _spanClassName += ` icon-${icon.direction ?? "row"}-${icon.position}`;
+  }
 
   return (
     <button
       ref={_button}
       {...attributes}
-      className={handleClassName()}
+      className={_buttonClassName}
       onClick={(event) => {
         // Disabled gelmesi durumunda işlem yapmasına izin verme...
         if (attributes.disabled) return;
@@ -82,7 +72,7 @@ const Button: React.FC<Props> = ({
         (() => attributes.onClick && attributes.onClick(event))();
       }}
     >
-      <span className={handleSpanClassName()}>
+      <span className={_spanClassName}>
         {icon?.element}
 
         {typeof children === "string" && upperCase ? children.toLocaleUpperCase() : children}
