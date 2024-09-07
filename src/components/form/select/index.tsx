@@ -150,6 +150,10 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
                         onChange([...selections, option]);
                         setSelections((prev) => [...prev, option]);
                       }
+
+                      // Diğer İşlemler
+                      if (_searchField.current) _searchField.current.value = "";
+                      setSearchText("");
                     }
 
                     // Signle
