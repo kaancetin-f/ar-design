@@ -4,6 +4,7 @@ import "./assest/css/ar-core.css";
 import Button from "./components/form/button";
 import ButtonGroup from "./components/form/button-group";
 import Input from "./components/form/input";
+import Select from "./components/form/select";
 
 // Data Display
 import Typography from "./components/data-display/typography";
@@ -29,6 +30,7 @@ export {
   Button,
   ButtonGroup,
   Input,
+  Select,
 
   // Data Display
   Typography,

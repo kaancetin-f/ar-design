@@ -1,99 +1,94 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { forwardRef, useRef } from "react";
 import { Props } from "./Types";
 import "../../../assest/css/form/input/input.css";
 import Button from "../button";
 
-const Input: React.FC<Props> = ({
-  variant = "outlined",
-  status = "light",
-  icon,
-  border,
-  button,
-  addon,
-  ...attributes
-}) => {
-  // refs
-  let _wrapperClassName = useRef<string>("ar-input-wrapper").current;
-  let _addonBeforeClassName = useRef<string>("addon-before").current;
-  let _addonAfterClassName = useRef<string>("addon-after").current;
-  let _inputWrapperClassName = useRef<string>("ar-input").current;
-  let _inputClassName = useRef<string>("").current;
+const Input = forwardRef<HTMLInputElement, Props>(
+  ({ variant = "outlined", status = "light", icon, border, button, addon, ...attributes }, ref) => {
+    // refs
+    let _wrapperClassName = useRef<string>("ar-input-wrapper").current;
+    let _addonBeforeClassName = useRef<string>("addon-before").current;
+    let _addonAfterClassName = useRef<string>("addon-after").current;
+    let _inputWrapperClassName = useRef<string>("ar-input").current;
+    let _inputClassName = useRef<string>("").current;
 
-  // input wrapper className
-  if (icon && icon.element) {
-    _inputWrapperClassName += ` icon`;
-    _inputWrapperClassName += ` icon-${icon.position ?? "start"}`;
-  }
+    // input wrapper className
+    if (icon && icon.element) {
+      _inputWrapperClassName += ` icon`;
+      _inputWrapperClassName += ` icon-${icon.position ?? "start"}`;
+    }
 
-  // input className
-  if (variant) _inputClassName += `${variant}`;
-  if (status) _inputClassName += ` ${status}`;
+    // input className
+    if (variant) _inputClassName += `${variant}`;
+    if (status) _inputClassName += ` ${status}`;
 
-  // border radius
-  _inputClassName += ` border-radius-${border?.radius || "sm"}`;
-  _addonBeforeClassName += ` border-radius-${border?.radius || "sm"}`;
-  _addonAfterClassName += ` border-radius-${border?.radius || "sm"}`;
+    // border radius
+    _inputClassName += ` border-radius-${border?.radius || "sm"}`;
+    _addonBeforeClassName += ` border-radius-${border?.radius || "sm"}`;
+    _addonAfterClassName += ` border-radius-${border?.radius || "sm"}`;
 
-  // addon className
-  if (addon) {
-    _wrapperClassName += ` addon`;
-  }
+    // addon className
+    if (addon) {
+      _wrapperClassName += ` addon`;
+    }
 
-  if (attributes.disabled) _inputClassName += ` disabled`;
-  if (attributes.className) _inputClassName += ` ${attributes.className}`;
+    if (attributes.disabled) _inputClassName += ` disabled`;
+    if (attributes.className) _inputClassName += ` ${attributes.className}`;
 
-  return (
-    <div className={_wrapperClassName}>
-      {/* Addon Before */}
-      {addon?.before && <span className={_addonBeforeClassName}>{addon?.before}</span>}
+    return (
+      <div className={_wrapperClassName}>
+        {/* Addon Before */}
+        {addon?.before && <span className={_addonBeforeClassName}>{addon?.before}</span>}
 
-      <div className={_inputWrapperClassName}>
-        {/* Icon */}
-        {icon?.element && <span className="icon-element">{icon.element}</span>}
+        <div className={_inputWrapperClassName}>
+          {/* Icon */}
+          {icon?.element && <span className="icon-element">{icon.element}</span>}
 
-        {/* Input */}
-        <input
-          {...attributes}
-          className={_inputClassName}
-          onChange={(event) => {
-            // Disabled gelmesi durumunda işlem yapmasına izin verme...
-            if (attributes.disabled) return;
+          {/* Input */}
+          <input
+            ref={ref}
+            {...attributes}
+            className={_inputClassName}
+            onChange={(event) => {
+              // Disabled gelmesi durumunda işlem yapmasına izin verme...
+              if (attributes.disabled) return;
 
-            (() => {
-              if (attributes.onChange) {
-                // Mevcut değeri alın
-                const currentValue = event.target.value;
+              (() => {
+                if (attributes.onChange) {
+                  // Mevcut değeri alın
+                  const currentValue = event.target.value;
 
-                // Yeni değeri oluşturun ve onChange fonksiyonunu çağırın
-                const newValue = `${addon?.before || ""}${currentValue}${addon?.after || ""}`;
+                  // Yeni değeri oluşturun ve onChange fonksiyonunu çağırın
+                  const newValue = `${addon?.before || ""}${currentValue}${addon?.after || ""}`;
 
-                attributes.onChange({
-                  ...event,
-                  target: { ...event.target, value: newValue },
-                });
-              }
-            })();
-          }}
-        />
+                  attributes.onChange({
+                    ...event,
+                    target: { ...event.target, value: newValue },
+                  });
+                }
+              })();
+            }}
+          />
+        </div>
+
+        {/* Addon Afrer */}
+        {addon?.after && <span className={_addonAfterClassName}>{addon?.after}</span>}
+
+        {/* Button */}
+        {button && (
+          <Button
+            {...button}
+            color={status}
+            border={{ style: button.border?.style, radius: border?.radius || "sm" }}
+            disabled={attributes.disabled}
+          />
+        )}
       </div>
-
-      {/* Addon Afrer */}
-      {addon?.after && <span className={_addonAfterClassName}>{addon?.after}</span>}
-
-      {/* Button */}
-      {button && (
-        <Button
-          {...button}
-          color={status}
-          border={{ style: button.border?.style, radius: border?.radius || "sm" }}
-          disabled={attributes.disabled}
-        />
-      )}
-    </div>
-  );
-};
+    );
+  }
+);
 
 Input.displayName = "Input";
 

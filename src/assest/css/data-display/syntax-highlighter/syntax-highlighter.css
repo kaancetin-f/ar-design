@@ -3,7 +3,6 @@
   flex-direction: column;
   border: solid 1px var(--gray-200);
   border-radius: var(--border-radius-lg);
-  overflow: hidden;
 }
 .ar-syntax > .preview {
   position: relative;
@@ -13,6 +12,7 @@
   gap: 1rem;
   background-color: var(--white);
   padding: 1rem;
+  border-radius: var(--border-radius-lg);
 }
 
 .ar-syntax > .preview.left {
