@@ -4,12 +4,12 @@
 
 @font-face {
   font-family: "JetBrainsMono-Bold";
-  src: url("../../assest/fonts/JetBrainsMono-Bold.ttf");
+  src: url("../../../assest/fonts/JetBrainsMono-Bold.ttf");
 }
 
 @font-face {
   font-family: "JetBrainsMono-Regular";
-  src: url("../../assest/fonts/JetBrainsMono-Regular.ttf");
+  src: url("../../../assest/fonts/JetBrainsMono-Regular.ttf");
 }
 
 /* #region Color Palette */
@@ -111,3 +111,12 @@
 }
 /* #endregion */
 /* Box Shadow */
+
+/* #region Variants */
+@import url("./variants/filled/filled.css");
+@import url("./variants/outlined/outlined.css");
+@import url("./variants/borderless/borderless.css");
+@import url("./variants/border.css");
+@import url("./variants/disabled.css");
+/* #endregion */
+/* Variants */

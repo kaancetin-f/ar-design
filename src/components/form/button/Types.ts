@@ -1,4 +1,5 @@
 import { Colors } from "../../../libs/types/Colors";
+import { Variants } from "../../../libs/types/Variants";
 
 export type Props = {
   /**
@@ -35,7 +36,7 @@ export type Props = {
    * <Button variant="filled">Hello, World!</Button>
    * ```
    */
-  variant?: "filled" | "outlined" | "text";
+  variant?: Variants;
 
   /**
    * Bileşenin şekil varyantını belirtir ve genellikle sadece ikon için kullanılmalıdır.

@@ -11,6 +11,7 @@
 .ar-select-wrapper > .ar-select > .selections {
   display: flex;
   align-items: center;
+  gap: 0 0.25rem;
   height: 2.25rem;
   padding: 0 0.35rem;
   border: solid 1px var(--gray-300);

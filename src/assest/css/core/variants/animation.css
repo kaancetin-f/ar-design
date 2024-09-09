@@ -1,4 +1,4 @@
-@keyframes text-primary-active-animation {
+@keyframes primary-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--primary-rgb), 0);
   }
@@ -10,7 +10,7 @@
   }
 }
 
-@keyframes text-secondary-active-animation {
+@keyframes secondary-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--secondary-rgb), 0);
   }
@@ -22,7 +22,7 @@
   }
 }
 
-@keyframes text-success-active-animation {
+@keyframes success-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--success-rgb), 0);
   }
@@ -34,7 +34,7 @@
   }
 }
 
-@keyframes text-warning-active-animation {
+@keyframes warning-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--warning-rgb), 0);
   }
@@ -46,7 +46,7 @@
   }
 }
 
-@keyframes text-danger-active-animation {
+@keyframes danger-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--danger-rgb), 0);
   }
@@ -58,7 +58,7 @@
   }
 }
 
-@keyframes text-information-active-animation {
+@keyframes information-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--information-rgb), 0);
   }
@@ -70,7 +70,7 @@
   }
 }
 
-@keyframes text-light-active-animation {
+@keyframes dark-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--dark-rgb), 0);
   }
@@ -82,7 +82,7 @@
   }
 }
 
-@keyframes text-dark-active-animation {
+@keyframes light-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--dark-rgb), 0);
   }

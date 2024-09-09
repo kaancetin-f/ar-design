@@ -1,4 +1,4 @@
-import "./assest/css/ar-core.css";
+import "./assest/css/core/ar-core.css";
 
 // Form Elements
 import Button from "./components/form/button";
@@ -7,6 +7,7 @@ import Input from "./components/form/input";
 import Select from "./components/form/select";
 
 // Data Display
+import Chip from "./components/data-display/chip";
 import Typography from "./components/data-display/typography";
 import Divider from "./components/data-display/divider";
 import SyntaxHighlighter from "./components/data-display/syntax-highlighter";
@@ -33,6 +34,7 @@ export {
   Select,
 
   // Data Display
+  Chip,
   Typography,
   Divider,
 

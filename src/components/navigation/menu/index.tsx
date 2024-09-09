@@ -1,14 +1,15 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { MenuItemType, MenuItemVariant, MenuProps, Props } from "./Types";
-import "../../../assest/css/navigation/menu/menu.css";
+import { MenuItemType, MenuProps, Props } from "./Types";
+import "../../../assest/css/components/navigation/menu/menu.css";
 import Divider from "../../data-display/divider";
+import { MenuItemVariants } from "../../../libs/types/Variants";
 
 const handleOnClick = (
   event: React.MouseEvent<HTMLLIElement, MouseEvent>,
   item: MenuProps,
-  variant: MenuItemVariant,
+  variant: MenuItemVariants,
   setSelectedItem: React.Dispatch<React.SetStateAction<MenuProps | null>> | null,
   setSelectedMenu?: React.Dispatch<React.SetStateAction<MenuProps[]>> | null
 ) => {
@@ -43,7 +44,7 @@ const handleOnClick = (
 
 const SubMenu: React.FC<{
   items: MenuProps[];
-  variant: MenuItemVariant;
+  variant: MenuItemVariants;
   type?: MenuItemType;
   setSelectedMenu: React.Dispatch<React.SetStateAction<MenuProps[]>>;
   selectedMenu: MenuProps[];

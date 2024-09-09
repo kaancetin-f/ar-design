@@ -1,0 +1,182 @@
+.borderless {
+  background-color: transparent;
+  border-width: 1px;
+  border-color: transparent;
+  transition: border 250ms, box-shadow 250ms ease-in-out;
+}
+
+/* #region Primary */
+.borderless:not(.disabled).primary {
+  color: var(--primary);
+}
+.borderless:not(.disabled).primary:hover {
+  background-color: rgba(var(--primary-rgb), 0.25);
+}
+input.borderless:not(.disabled).primary:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), 0.1);
+}
+button.borderless:not(.disabled).primary:focus {
+  background-color: var(--primary);
+  color: var(--white);
+}
+.borderless:not(.disabled).primary.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: primary-active-animation ease-in-out 750ms 0s 1 normal both;
+}
+/* #endregion Primary */
+/* Primary */
+
+/* #region Secondary */
+.borderless:not(.disabled).secondary {
+  color: var(--secondary);
+}
+.borderless:not(.disabled).secondary:hover {
+  background-color: rgba(var(--secondary-rgb), 0.25);
+}
+input.borderless:not(.disabled).secondary:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), 0.1);
+}
+button.borderless:not(.disabled).secondary:focus {
+  background-color: var(--secondary);
+  color: var(--white);
+}
+.borderless:not(.disabled).secondary.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: secondary-active-animation ease-in-out 750ms 0s 1 normal both;
+}
+/* #endregion Secondary */
+/* Secondary */
+
+/* #region Success */
+.borderless:not(.disabled).success {
+  color: var(--success);
+}
+.borderless:not(.disabled).success:hover {
+  background-color: rgba(var(--success-rgb), 0.25);
+}
+input.borderless:not(.disabled).success:focus {
+  border-color: var(--success);
+  box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), 0.1);
+}
+button.borderless:not(.disabled).success:focus {
+  background-color: var(--success);
+  color: var(--white);
+}
+.borderless:not(.disabled).success.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: success-active-animation ease-in-out 750ms 0s 1 normal both;
+}
+/* #endregion Success */
+/* Success */
+
+/* #region Warning */
+.borderless:not(.disabled).warning {
+  color: var(--warning);
+}
+.borderless:not(.disabled).warning:hover {
+  background-color: rgba(var(--warning-rgb), 0.25);
+}
+input.borderless:not(.disabled).warning:focus {
+  border-color: var(--warning);
+  box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), 0.1);
+}
+button.borderless:not(.disabled).warning:focus {
+  background-color: var(--warning);
+  color: var(--white);
+}
+.borderless:not(.disabled).warning.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: warning-active-animation ease-in-out 750ms 0s 1 normal both;
+}
+/* #endregion Warning */
+/* Warning */
+
+/* #region Danger */
+.borderless:not(.disabled).danger {
+  color: var(--danger);
+}
+.borderless:not(.disabled).danger:hover {
+  background-color: rgba(var(--danger-rgb), 0.25);
+}
+input.borderless:not(.disabled).danger:focus {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), 0.1);
+}
+button.borderless:not(.disabled).danger:focus {
+  background-color: var(--danger);
+  color: var(--white);
+}
+.borderless:not(.disabled).danger.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: danger-active-animation ease-in-out 750ms 0s 1 normal both;
+}
+/* #endregion Danger */
+/* Danger */
+
+/* #region Information */
+.borderless:not(.disabled).information {
+  color: var(--information);
+}
+.borderless:not(.disabled).information:hover {
+  background-color: rgba(var(--information-rgb), 0.25);
+}
+input.borderless:not(.disabled).information:focus {
+  border-color: var(--information);
+  box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), 0.1);
+}
+button.borderless:not(.disabled).information:focus {
+  background-color: var(--information);
+  color: var(--white);
+}
+.borderless:not(.disabled).information.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: information-active-animation ease-in-out 750ms 0s 1 normal both;
+}
+/* #endregion Information */
+/* Information */
+
+/* #region Dark */
+.borderless:not(.disabled).dark {
+  color: var(--dark);
+}
+.borderless:not(.disabled).dark:hover {
+  background-color: rgba(var(--dark-rgb), 0.25);
+}
+input.borderless:not(.disabled).dark:focus {
+  border-color: var(--dark);
+  box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), 0.1);
+}
+button.borderless:not(.disabled).dark:focus {
+  background-color: var(--dark);
+  color: var(--white);
+}
+.borderless:not(.disabled).dark.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: dark-active-animation ease-in-out 750ms 0s 1 normal both;
+}
+/* #endregion Dark */
+/* Dark */
+
+/* #region Light */
+.borderless:not(.disabled).light {
+  color: var(--light);
+}
+.borderless:not(.disabled).light:hover {
+  background-color: rgba(var(--light-rgb), 0.25);
+}
+input.borderless:not(.disabled).light:focus {
+  border-color: var(--light);
+  box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), 0.1);
+}
+button.borderless:not(.disabled).light:focus {
+  background-color: var(--light);
+  color: var(--white);
+}
+.borderless:not(.disabled).light.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: light-active-animation ease-in-out 750ms 0s 1 normal both;
+}
+/* #endregion Light */
+/* Light */

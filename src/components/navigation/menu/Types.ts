@@ -1,6 +1,6 @@
 import React from "react";
+import { MenuItemVariants } from "../../../libs/types/Variants";
 
-export type MenuItemVariant = "vertical" | "horizontal";
 export type MenuItemType = "group" | "divider";
 
 export interface MenuProps {
@@ -12,5 +12,5 @@ export interface MenuProps {
 
 export type Props = {
   menu: MenuProps[];
-  variant?: MenuItemVariant;
+  variant?: MenuItemVariants;
 } & React.HTMLAttributes<HTMLElement>;

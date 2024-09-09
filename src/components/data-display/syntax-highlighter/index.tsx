@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Parser from "./classes/Parser";
 import Compiler from "./classes/Compiler";
-import "../../../assest/css/data-display/syntax-highlighter/syntax-highlighter.css";
+import "../../../assest/css/components/data-display/syntax-highlighter/syntax-highlighter.css";
 import Button from "../../form/button";
 
 const SyntaxHighlighter: React.FC<{

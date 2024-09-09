@@ -1,6 +1,0 @@
-.ar-input-wrapper > .ar-input > input.outlined:not(.disabled) {
-  background-color: var(--white);
-  border: solid 1px var(--gray-200);
-}
-
-@import url("./status.css");

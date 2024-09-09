@@ -9,19 +9,37 @@
   z-index: 5;
 }
 .ar-select-wrapper > .options > .search-field {
-  background-color: var(--gray-100);
+  /* background-color: var(--gray-100); */
   padding: 0.5rem;
   border-bottom: solid 1px var(--gray-200);
 }
 
 .ar-select-wrapper > .options > ul {
   width: 100%;
+  margin: 0.5rem 0;
 }
 .ar-select-wrapper > .options > ul > li {
+  margin: 0 0.5rem;
   padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-sm);
   cursor: pointer;
 }
 .ar-select-wrapper > .options > ul > li:hover {
+  background-color: var(--gray-200);
+}
+/* .ar-select-wrapper > .options > ul > li.selectedItem {
+  background-color: rgba(var(--primary-rgb), 0.1);
+}
+.ar-select-wrapper > .options > ul > li.selectedItem:is(:first-child) {
+  border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+}
+.ar-select-wrapper > .options > ul > li.selectedItem:not(:first-child, :last-child) {
+  border-radius: 0;
+}
+.ar-select-wrapper > .options > ul > li.selectedItem:is(:last-child) {
+  border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm);
+} */
+.ar-select-wrapper > .options > ul > li.navigate-with-arrow-keys {
   background-color: var(--gray-100);
 }
 .ar-select-wrapper > .options:is(.opened) {

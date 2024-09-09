@@ -21,19 +21,8 @@
   box-sizing: border-box;
   transition: background 250ms, border 250ms, box-shadow 250ms ease-in-out;
 }
-.ar-input-wrapper > .ar-input > input.disabled {
-  background-color: var(--gray-100);
-  border-color: var(--gray-500);
-  cursor: no-drop;
-}
 
 /* Core Css */
 @import url("./core/icon.css");
-@import url("./core/border.css");
 @import url("./core/button.css");
 @import url("./core/addon.css");
-
-/* Variant Css */
-@import url("./variant/filled/core.css");
-@import url("./variant/outlined/core.css");
-@import url("./variant/borderless/core.css");

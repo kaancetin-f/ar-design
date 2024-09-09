@@ -1,0 +1,9 @@
+.outlined.border-style-solid {
+  border-style: solid;
+}
+.outlined.border-style-dashed {
+  border-style: dashed;
+}
+.outlined.border-style-none {
+  border-style: none;
+}

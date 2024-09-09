@@ -1,18 +1,18 @@
-.ar-button.border-radius-sm {
+.border-radius-sm {
   border-radius: var(--border-radius-sm);
 }
-.ar-button.border-radius-lg {
+.border-radius-lg {
   border-radius: var(--border-radius-lg);
 }
-.ar-button.border-radius-xl {
+.border-radius-xl {
   border-radius: var(--border-radius-xl);
 }
-.ar-button.border-radius-xxl {
+.border-radius-xxl {
   border-radius: var(--border-radius-xxl);
 }
-.ar-button.border-radius-pill {
+.border-radius-pill {
   border-radius: var(--border-radius-pill);
 }
-.ar-button.border-radius-none {
+.border-radius-none {
   border-radius: 0;
 }

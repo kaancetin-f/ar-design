@@ -21,11 +21,5 @@
 /* Core Css */
 @import url("./core/shape.css");
 @import url("./core/icon.css");
-@import url("./core/border.css");
 @import url("./core/position.css");
 @import url("./core/size.css");
-
-/* Variant Css */
-@import url("./variant/filled/core.css");
-@import url("./variant/outlined/core.css");
-@import url("./variant/text/core.css");

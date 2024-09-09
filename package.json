@@ -11,7 +11,7 @@
     "build": "rm -rf dist/ && npm run build:post-mac && npm run build:esm",
     "build:post-mac": "npm run mkdir:esm && npm run copy:esm",
     "mkdir:esm": "mkdir -p dist/assest && mkdir -p dist/assest/css",
-    "copy:esm": "cp -r ./src/assest dist/ && cp -r ./src/assest/css dist/assest/css/",
+    "copy:esm": "cp -r ./src/assest dist/ && cp -r ./src/assest/css dist/assest/",
     "build:esm": "tsc",
     "mv:esm": "for ext in js ts; do mv ./dist/esm/*.$ext ./dist/; done",
     "mkdir:cjs": "mkdir -p dist/cjs/libs/styles",
