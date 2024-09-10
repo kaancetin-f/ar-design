@@ -14,13 +14,14 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
   const _optionItems = useRef<(HTMLLIElement | null)[]>([]);
   const _searchField = useRef<HTMLInputElement>(null);
   let _otoFocus = useRef<NodeJS.Timeout>().current;
-  let _selectedIndex = useRef<number>(0).current;
+  let _navigationIndex = useRef<number>(0);
 
   // states
   const [optionsOpen, setOptionsOpen] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>("");
   const [selection, setSelection] = useState<Option | null>(null);
   const [selections, setSelections] = useState<Option[]>([]);
+  const [navigationIndex, setNavigationIndex] = useState<number>(0);
   let [optionsClassName, setOptionsClassName] = useState<string[]>(["options", "closed"]);
 
   // methods
@@ -32,7 +33,7 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
     }
   };
 
-  const handleItemSelected = (option: Option) => {
+  const handleItemSelected = (option: Option, index: number) => {
     // Multiple
     if (multiple) {
       const isSelectionItem = selections.some((selection) => selection.value === option.value);
@@ -53,55 +54,55 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
         ]);
       }
 
-      // Diğer İşlemler
-      if (_searchField.current) _searchField.current.value = "";
+      // Selected Items
+      _optionItems.current[index]?.classList.toggle("selectedItem");
+      // Temizleme işlemi...
       setSearchText("");
+      if (_searchField.current) _searchField.current.value = "";
     }
 
     // Signle
     if (!multiple) {
-      if (_input.current) {
-        _input.current.value = option.text;
-      }
+      if (_input.current) _input.current.value = option.text;
 
       onChange(option);
       setSelection(option);
       setOptionsOpen(false);
+
+      _optionItems.current.forEach((item) => item?.classList.remove("selectedItem"));
+      _optionItems.current[index]?.classList.add("selectedItem");
     }
   };
 
   const handleKeys = (event: KeyboardEvent) => {
-    // Önce tüm öğelerin 'navigate-with-arrow-keys' sınıfını kaldır
-    _optionItems.current.forEach((item) => item?.classList.remove("navigate-with-arrow-keys"));
-
     const key = event.key;
 
     if (key === "ArrowUp" || key === "ArrowLeft") {
-      _selectedIndex = _selectedIndex === 0 ? _optionItems.current.length - 1 : _selectedIndex - 1;
-    } else if (key === "ArrowDown" || key === "ArrowRight") {
-      _selectedIndex = _selectedIndex === _optionItems.current.length - 1 ? 0 : _selectedIndex + 1;
-    } else if (key === "Enter") {
-      const event = new MouseEvent("click", { bubbles: true });
+      setNavigationIndex((prev) => {
+        let result: number = 0;
 
-      _optionItems.current[_selectedIndex]?.dispatchEvent(event);
+        if (prev > 0) result = prev - 1;
+        if (prev === 0) result = _optionItems.current.length - 1;
+
+        _navigationIndex.current = result;
+        return result;
+      });
+    } else if (key === "ArrowDown" || key === "ArrowRight") {
+      setNavigationIndex((prev) => {
+        let result: number = 0;
+
+        if (prev === _optionItems.current.length - 1) result = 0;
+        if (prev < _optionItems.current.length - 1) result = prev + 1;
+
+        _navigationIndex.current = result;
+        return result;
+      });
+    } else if (key === "Enter") {
+      if (_navigationIndex.current === -1) return;
+
+      _optionItems.current[_navigationIndex.current]?.click();
     } else if (key === "Escape") {
       setOptionsOpen(false);
-    }
-
-    // Seçilen öğeye 'navigate-with-arrow-keys' sınıfını ekle
-    _optionItems.current[_selectedIndex]?.classList.add("navigate-with-arrow-keys");
-  };
-
-  /**
-   * Seçilmiş olan `option` nesnesini belirtmek için kullanılmaktadır.
-   * @param option
-   * @returns
-   */
-  const isSelected = (option: Option) => {
-    if (multiple) {
-      return selections.some((v) => v.value === option.value) ? "selectedItem" : "";
-    } else {
-      return selection?.value === option.value ? "selectedItem" : "";
     }
   };
 
@@ -115,16 +116,14 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
         if (_searchField.current) _searchField.current.focus();
       }, 250);
 
-      if (_input.current) {
-        _input.current.value = "";
-        _input.current.placeholder = selection?.text || "";
+      if (!multiple) {
+        if (_input.current) {
+          _input.current.value = "";
+          _input.current.placeholder = selection?.text || "";
+        }
       }
 
-      setSearchText("");
       setOptionsClassName((prev) => [...prev, "opened"]);
-
-      // Başlangıçta ilk değeri seçer.
-      _optionItems.current[_selectedIndex]?.classList.add("navigate-with-arrow-keys");
 
       // Options paneli için olay dinleyileri ekleniyor.
       document.addEventListener("click", handleClickOutSide);
@@ -138,7 +137,8 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
       };
     } else {
       if (multiple) {
-        //...
+        setSearchText("");
+        if (_searchField.current) _searchField.current.value = "";
       } else {
         if (_input.current) {
           _input.current.value = selection?.text || "";
@@ -149,6 +149,20 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
       setOptionsClassName((prev) => [...prev, "closed"]);
     }
   }, [optionsOpen]);
+
+  useEffect(() => {
+    setNavigationIndex(0);
+    _navigationIndex.current = 0;
+  }, [searchText]);
+
+  useEffect(() => {
+    // Seçilen öğeye 'navigate-with-arrow-keys' sınıfını ekle
+    _optionItems.current.forEach((item, index) => {
+      index === navigationIndex
+        ? item?.classList.add("navigate-with-arrow-keys")
+        : item?.classList.remove("navigate-with-arrow-keys");
+    });
+  }, [navigationIndex]);
 
   return (
     <div ref={_arSelect} className="ar-select-wrapper">
@@ -166,6 +180,7 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
             ref={_input}
             variant={variant}
             onClick={() => setOptionsOpen((x) => !x)}
+            onChange={() => !optionsOpen && setOptionsOpen(true)}
             onKeyUp={(event) => {
               // Arama yapmak için kullanılan state bu kısımda dolduruluyor.
               setSearchText(event.currentTarget.value);
@@ -197,7 +212,7 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
         )}
       </div>
 
-      {options && (
+      {options.length > 0 && (
         <div ref={_options} className={optionsClassName.map((className) => className).join(" ")}>
           {/* Eğer çoklu seçim olarak kullanılıyorsa bu arama kısmı açılıyor... */}
           {multiple && (
@@ -217,13 +232,16 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
 
           <ul>
             {options
-              .filter((option) => option.text.toLowerCase().includes(searchText.toLowerCase()))
+              .filter((option) => {
+                if (!optionsOpen) return option;
+
+                return option.text.toLowerCase().includes(searchText.toLowerCase());
+              })
               .map((option, index) => (
                 <li
                   ref={(element) => (_optionItems.current[index] = element)}
                   key={index}
-                  className={isSelected(option)}
-                  onClick={() => handleItemSelected(option)}
+                  onClick={() => handleItemSelected(option, index)}
                 >
                   {/* 
                     TODO: Bu kısmı checkbox bileşeni yapıldıktan sonra tekrar düzenlenecek.
