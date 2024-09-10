@@ -4,12 +4,8 @@
   border-color: transparent;
   color: var(--white);
 }
-/* .filled.disabled {
-  background-color: var(--gray-100);
-  color: var(--gray-500);
-  border: solid 1px var(--gray-500);
-}
-.filled:not(.disabled):active::before {
+
+/* .filled:not(.disabled):active::before {
   position: absolute;
   inset: 0;
   content: "";
@@ -26,6 +22,9 @@
 input.filled:not(.disabled).primary:focus {
   background-color: var(--primary);
   box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), 0.25);
+}
+button.filled:not(.disabled).primary:focus {
+  background-color: var(--primary);
 }
 .filled:not(.disabled).primary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -45,6 +44,9 @@ input.filled:not(.disabled).secondary:focus {
   background-color: var(--secondary);
   box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), 0.25);
 }
+button.filled:not(.disabled).secondary:focus {
+  background-color: var(--secondary);
+}
 .filled:not(.disabled).secondary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: secondary-active-animation ease-in-out 750ms 0s 1 normal both;
@@ -62,6 +64,9 @@ input.filled:not(.disabled).secondary:focus {
 input.filled:not(.disabled).success:focus {
   background-color: var(--success);
   box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), 0.25);
+}
+button.filled:not(.disabled).success:focus {
+  background-color: var(--success);
 }
 .filled:not(.disabled).success.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -81,6 +86,9 @@ input.filled:not(.disabled).warning:focus {
   background-color: var(--warning);
   box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), 0.25);
 }
+button.filled:not(.disabled).warning:focus {
+  background-color: var(--warning);
+}
 .filled:not(.disabled).warning.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: warning-active-animation ease-in-out 750ms 0s 1 normal both;
@@ -98,6 +106,9 @@ input.filled:not(.disabled).warning:focus {
 input.filled:not(.disabled).danger:focus {
   background-color: var(--danger);
   box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), 0.25);
+}
+button.filled:not(.disabled).danger:focus {
+  background-color: var(--danger);
 }
 .filled:not(.disabled).danger.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -117,6 +128,9 @@ input.filled:not(.disabled).information:focus {
   background-color: var(--information);
   box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), 0.25);
 }
+button.filled:not(.disabled).information:focus {
+  background-color: var(--information);
+}
 .filled:not(.disabled).information.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: information-active-animation ease-in-out 750ms 0s 1 normal both;
@@ -135,6 +149,9 @@ input.filled:not(.disabled).dark:focus {
   background-color: var(--dark);
   box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), 0.25);
 }
+button.filled:not(.disabled).dark:focus {
+  background-color: var(--dark);
+}
 .filled:not(.disabled).dark.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: dark-active-animation ease-in-out 750ms 0s 1 normal both;
@@ -145,6 +162,7 @@ input.filled:not(.disabled).dark:focus {
 /* #region Light */
 .filled:not(.disabled).light {
   background-color: var(--light);
+  color: var(--black) !important;
 }
 .filled:not(.disabled).light:hover {
   background-color: rgba(var(--light-rgb), 0.5);
@@ -152,6 +170,9 @@ input.filled:not(.disabled).dark:focus {
 input.filled:not(.disabled).light:focus {
   background-color: var(--light);
   box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), 0.25);
+}
+button.filled:not(.disabled).light:focus {
+  background-color: var(--light);
 }
 .filled:not(.disabled).light.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */

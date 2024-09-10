@@ -161,7 +161,7 @@ button.borderless:not(.disabled).dark:focus {
 
 /* #region Light */
 .borderless:not(.disabled).light {
-  color: var(--light);
+  color: var(--black);
 }
 .borderless:not(.disabled).light:hover {
   background-color: rgba(var(--light-rgb), 0.25);
@@ -172,7 +172,7 @@ input.borderless:not(.disabled).light:focus {
 }
 button.borderless:not(.disabled).light:focus {
   background-color: var(--light);
-  color: var(--white);
+  color: var(--black);
 }
 .borderless:not(.disabled).light.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */

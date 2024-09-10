@@ -13,6 +13,7 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
   const _options = useRef<HTMLDivElement>(null);
   const _optionItems = useRef<(HTMLLIElement | null)[]>([]);
   const _searchField = useRef<HTMLInputElement>(null);
+  let _otoFocus = useRef<NodeJS.Timeout>().current;
   let _selectedIndex = useRef<number>(0).current;
 
   // states
@@ -69,38 +70,26 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
     }
   };
 
-  const handleEscapeKey = (event: KeyboardEvent) => {
-    if (event.code === "Escape") setOptionsOpen(false);
-  };
-
-  const handleArrowKeys = (event: KeyboardEvent) => {
+  const handleKeys = (event: KeyboardEvent) => {
     // Önce tüm öğelerin 'navigate-with-arrow-keys' sınıfını kaldır
     _optionItems.current.forEach((item) => item?.classList.remove("navigate-with-arrow-keys"));
 
     const key = event.key;
 
-    // Yukarı veya sola ok tuşlarına basıldıysa
     if (key === "ArrowUp" || key === "ArrowLeft") {
       _selectedIndex = _selectedIndex === 0 ? _optionItems.current.length - 1 : _selectedIndex - 1;
-    }
-    // Aşağı veya sağa ok tuşlarına basıldıysa
-    else if (key === "ArrowDown" || key === "ArrowRight") {
+    } else if (key === "ArrowDown" || key === "ArrowRight") {
       _selectedIndex = _selectedIndex === _optionItems.current.length - 1 ? 0 : _selectedIndex + 1;
+    } else if (key === "Enter") {
+      const event = new MouseEvent("click", { bubbles: true });
+
+      _optionItems.current[_selectedIndex]?.dispatchEvent(event);
+    } else if (key === "Escape") {
+      setOptionsOpen(false);
     }
 
     // Seçilen öğeye 'navigate-with-arrow-keys' sınıfını ekle
     _optionItems.current[_selectedIndex]?.classList.add("navigate-with-arrow-keys");
-  };
-
-  const handleEnterKey = (event: KeyboardEvent) => {
-    const key = event.key;
-
-    if (key === "Enter" && _selectedIndex !== null) {
-      // Geçerli bir öğe seçildiyse ve Enter'a basıldıysa
-      _optionItems.current[_selectedIndex]?.dispatchEvent(
-        new MouseEvent("click", { bubbles: true })
-      ); // Click olayını tetikle
-    }
   };
 
   /**
@@ -122,7 +111,7 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
 
     if (optionsOpen) {
       // Options açıldıktan 100ms sonra arama kutusuna otomatik olarak focus oluyor.
-      const otoFocus = setTimeout(() => {
+      _otoFocus = setTimeout(() => {
         if (_searchField.current) _searchField.current.focus();
       }, 250);
 
@@ -134,38 +123,32 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
       setSearchText("");
       setOptionsClassName((prev) => [...prev, "opened"]);
 
-      window.addEventListener("keydown", handleArrowKeys);
-      window.addEventListener("keydown", handleEnterKey);
+      // Başlangıçta ilk değeri seçer.
+      _optionItems.current[_selectedIndex]?.classList.add("navigate-with-arrow-keys");
 
-      // Temizlik fonksiyonu: Dinleyicileri kaldır ve zamanlayıcıyı temizle
+      // Options paneli için olay dinleyileri ekleniyor.
+      document.addEventListener("click", handleClickOutSide);
+      document.addEventListener("keydown", handleKeys);
+
+      // Dinleyicileri kaldır ve zamanlayıcıyı temizle.
       return () => {
-        clearTimeout(otoFocus); // setTimeout'u temizle
-
-        window.removeEventListener("keydown", handleArrowKeys);
-        window.removeEventListener("keydown", handleEnterKey);
+        clearTimeout(_otoFocus);
+        document.removeEventListener("click", handleClickOutSide);
+        document.removeEventListener("keydown", handleKeys);
       };
     } else {
-      if (_input.current) {
-        _input.current.value = selection?.text || "";
-        _input.current.placeholder = "";
+      if (multiple) {
+        //...
+      } else {
+        if (_input.current) {
+          _input.current.value = selection?.text || "";
+          _input.current.removeAttribute("placeholder");
+        }
       }
 
       setOptionsClassName((prev) => [...prev, "closed"]);
     }
   }, [optionsOpen]);
-
-  useEffect(() => {
-    window.addEventListener("click", handleClickOutSide);
-    window.addEventListener("keydown", handleEscapeKey);
-
-    // Başlangıçta ilk değeri seçer...
-    _optionItems.current[0]?.classList.add("navigate-with-arrow-keys");
-
-    return () => {
-      window.removeEventListener("click", handleClickOutSide);
-      window.removeEventListener("keydown", handleEscapeKey);
-    };
-  }, []);
 
   return (
     <div ref={_arSelect} className="ar-select-wrapper">
@@ -222,7 +205,7 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
               <Input
                 ref={_searchField}
                 variant="outlined"
-                status="primary"
+                status="light"
                 placeholder="Search..."
                 onKeyUp={(event) => {
                   // Arama yapmak için kullanılan state bu kısımda dolduruluyor.
