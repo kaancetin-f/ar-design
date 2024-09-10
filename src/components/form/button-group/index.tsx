@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ReactElement, useEffect, useState } from "react";
-import "../../../assest/css/components/form/button-group/button-group.css";
+import "../../../assets/css/components/form/button-group/button-group.css";
 import Button from "../button";
 import Alert from "../../feedback/alert";
 

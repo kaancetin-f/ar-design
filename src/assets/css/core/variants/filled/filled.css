@@ -1,18 +1,4 @@
-@import url("../animation.css");
-
-.filled {
-  border-color: transparent;
-  color: var(--white);
-}
-
-/* .filled:not(.disabled):active::before {
-  position: absolute;
-  inset: 0;
-  content: "";
-  background-color: rgba(var(--black-rgb), 0.25);
-} */
-
-/* #region Primary */
+/* #region PRIMARY */
 .filled:not(.disabled).primary {
   background-color: var(--primary);
 }
@@ -30,10 +16,10 @@ button.filled:not(.disabled).primary:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: primary-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Primary */
-/* Primary */
+/* #endregion */
+/* PRIMARY */
 
-/* #region Secondary */
+/* #region SECONDARY */
 .filled:not(.disabled).secondary {
   background-color: var(--secondary);
 }
@@ -51,10 +37,10 @@ button.filled:not(.disabled).secondary:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: secondary-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Secondary */
-/* Secondary */
+/* #endregion */
+/* SECONDARY */
 
-/* #region Success */
+/* #region SUCCESS */
 .filled:not(.disabled).success {
   background-color: var(--success);
 }
@@ -72,10 +58,10 @@ button.filled:not(.disabled).success:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: success-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Success */
-/* Success */
+/* #endregion */
+/* SUCCESS */
 
-/* #region Warning */
+/* #region WARNING */
 .filled:not(.disabled).warning {
   background-color: var(--warning);
 }
@@ -93,10 +79,10 @@ button.filled:not(.disabled).warning:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: warning-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Warning */
-/* Warning */
+/* #endregion */
+/* WARNING */
 
-/* #region Danger */
+/* #region DANGER */
 .filled:not(.disabled).danger {
   background-color: var(--danger);
 }
@@ -114,10 +100,10 @@ button.filled:not(.disabled).danger:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: danger-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Danger */
-/* Danger */
+/* #endregion */
+/* DANGER */
 
-/* #region Information */
+/* #region INFORMATION */
 .filled:not(.disabled).information {
   background-color: var(--information);
 }
@@ -135,10 +121,10 @@ button.filled:not(.disabled).information:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: information-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Information */
-/* Information */
+/* #endregion */
+/* INFORMATION */
 
-/* #region Dark */
+/* #region DARK */
 .filled:not(.disabled).dark {
   background-color: var(--dark);
 }
@@ -156,13 +142,12 @@ button.filled:not(.disabled).dark:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: dark-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Dark */
-/* Dark */
+/* #endregion */
+/* DARK */
 
-/* #region Light */
+/* #region LIGHT */
 .filled:not(.disabled).light {
   background-color: var(--light);
-  color: var(--black) !important;
 }
 .filled:not(.disabled).light:hover {
   background-color: rgba(var(--light-rgb), 0.5);
@@ -178,5 +163,6 @@ button.filled:not(.disabled).light:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: light-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Light */
-/* Light */
+/* #endregion */
+/* LIGHT */
+

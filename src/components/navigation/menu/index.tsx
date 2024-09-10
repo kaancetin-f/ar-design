@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import { MenuItemType, MenuProps, Props } from "./Types";
-import "../../../assest/css/components/navigation/menu/menu.css";
+import "../../../assets/css/components/navigation/menu/menu.css";
 import Divider from "../../data-display/divider";
 import { MenuItemVariants } from "../../../libs/types/Variants";
 

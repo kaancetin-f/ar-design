@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Option, Props } from "./Types";
 import Input from "../input";
-import "../../../assest/css/components/form/select/select.css";
+import "../../../assets/css/components/form/select/select.css";
 import Chip from "../../data-display/chip";
 
 const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, multiple }) => {

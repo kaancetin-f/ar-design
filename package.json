@@ -8,16 +8,17 @@
     "dist"
   ],
   "scripts": {
-    "build": "rm -rf dist/ && npm run build:post-mac && npm run build:esm",
+    "build": "npm run script && rm -rf dist/ && npm run build:post-mac && npm run build:esm",
     "build:post-mac": "npm run mkdir:esm && npm run copy:esm",
-    "mkdir:esm": "mkdir -p dist/assest && mkdir -p dist/assest/css",
-    "copy:esm": "cp -r ./src/assest dist/ && cp -r ./src/assest/css dist/assest/",
+    "mkdir:esm": "mkdir -p dist/assets && mkdir -p dist/assets/css",
+    "copy:esm": "cp -r ./src/assets dist/ && cp -r ./src/assets/css dist/assets/",
     "build:esm": "tsc",
     "mv:esm": "for ext in js ts; do mv ./dist/esm/*.$ext ./dist/; done",
     "mkdir:cjs": "mkdir -p dist/cjs/libs/styles",
     "copy:cjs": "cp -r ./src/libs/styles dist/cjs/libs/",
     "build:cjs": "tsc --module commonjs --outdir dist/cjs",
-    "mv:cjs": "for ext in js ts; do mv ./dist/cjs/*.$ext ./dist/; done"
+    "mv:cjs": "for ext in js ts; do mv ./dist/cjs/*.$ext ./dist/; done",
+    "script": "ts-node src/script/index.cjs"
   },
   "repository": {
     "type": "git",

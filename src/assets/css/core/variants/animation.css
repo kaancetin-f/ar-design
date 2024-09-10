@@ -1,3 +1,4 @@
+/* #region Animation -> PRIMARY */
 @keyframes primary-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--primary-rgb), 0);
@@ -9,7 +10,10 @@
     box-shadow: 0 0 0 7.5px rgba(var(--primary-rgb), 0);
   }
 }
+/* #endregion */
+/* Animation -> PRIMARY */
 
+/* #region Animation -> SECONDARY */
 @keyframes secondary-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--secondary-rgb), 0);
@@ -21,7 +25,10 @@
     box-shadow: 0 0 0 7.5px rgba(var(--secondary-rgb), 0);
   }
 }
+/* #endregion */
+/* Animation -> SECONDARY */
 
+/* #region Animation -> SUCCESS */
 @keyframes success-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--success-rgb), 0);
@@ -33,7 +40,10 @@
     box-shadow: 0 0 0 7.5px rgba(var(--success-rgb), 0);
   }
 }
+/* #endregion */
+/* Animation -> SUCCESS */
 
+/* #region Animation -> WARNING */
 @keyframes warning-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--warning-rgb), 0);
@@ -45,7 +55,10 @@
     box-shadow: 0 0 0 7.5px rgba(var(--warning-rgb), 0);
   }
 }
+/* #endregion */
+/* Animation -> WARNING */
 
+/* #region Animation -> DANGER */
 @keyframes danger-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--danger-rgb), 0);
@@ -57,7 +70,10 @@
     box-shadow: 0 0 0 7.5px rgba(var(--danger-rgb), 0);
   }
 }
+/* #endregion */
+/* Animation -> DANGER */
 
+/* #region Animation -> INFORMATION */
 @keyframes information-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--information-rgb), 0);
@@ -69,7 +85,10 @@
     box-shadow: 0 0 0 7.5px rgba(var(--information-rgb), 0);
   }
 }
+/* #endregion */
+/* Animation -> INFORMATION */
 
+/* #region Animation -> DARK */
 @keyframes dark-active-animation {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--dark-rgb), 0);
@@ -81,15 +100,20 @@
     box-shadow: 0 0 0 7.5px rgba(var(--dark-rgb), 0);
   }
 }
+/* #endregion */
+/* Animation -> DARK */
 
+/* #region Animation -> LIGHT */
 @keyframes light-active-animation {
   0% {
-    box-shadow: 0 0 0 0px rgba(var(--dark-rgb), 0);
+    box-shadow: 0 0 0 0px rgba(var(--light-rgb), 0);
   }
   25% {
-    box-shadow: 0 0 0 5px rgba(var(--dark-rgb), 0.25);
+    box-shadow: 0 0 0 5px rgba(var(--light-rgb), 0.25);
   }
   100% {
-    box-shadow: 0 0 0 7.5px rgba(var(--dark-rgb), 0);
+    box-shadow: 0 0 0 7.5px rgba(var(--light-rgb), 0);
   }
 }
+/* #endregion */
+/* Animation -> LIGHT */

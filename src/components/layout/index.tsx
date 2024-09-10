@@ -3,7 +3,7 @@
 import React, { JSXElementConstructor, useEffect, useState } from "react";
 import { AsideProps, HeaderProps, LayoutProps, SectionProps } from "./Types";
 import Footer from "./Footer";
-import "../../assest/css/components/layout/layout.css";
+import "../../assets/css/components/layout/layout.css";
 import Header from "./Header";
 import Aside from "./Aside";
 import Section from "./Section";

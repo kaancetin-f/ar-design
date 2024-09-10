@@ -4,12 +4,12 @@
 
 @font-face {
   font-family: "JetBrainsMono-Bold";
-  src: url("../../../assest/fonts/JetBrainsMono-Bold.ttf");
+  src: url("../../../assets/fonts/JetBrainsMono-Bold.ttf");
 }
 
 @font-face {
   font-family: "JetBrainsMono-Regular";
-  src: url("../../../assest/fonts/JetBrainsMono-Regular.ttf");
+  src: url("../../../assets/fonts/JetBrainsMono-Regular.ttf");
 }
 
 /* #region Color Palette */
@@ -113,8 +113,29 @@
 /* Box Shadow */
 
 /* #region Variants */
+@import url("./variants/animation.css");
+
+.filled {
+  border-color: transparent;
+  color: var(--white);
+}
+
 @import url("./variants/filled/filled.css");
+
+.outlined {
+  background-color: transparent;
+  border-width: 1px !important;
+  border-color: transparent;
+}
+
 @import url("./variants/outlined/outlined.css");
+
+.borderless {
+  background-color: transparent;
+  border-width: 1px;
+  border-color: transparent;
+  transition: border 250ms, box-shadow 250ms ease-in-out;
+}
 @import url("./variants/borderless/borderless.css");
 @import url("./variants/border.css");
 @import url("./variants/disabled.css");

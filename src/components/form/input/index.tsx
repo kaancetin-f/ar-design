@@ -2,7 +2,7 @@
 
 import React, { forwardRef, useRef } from "react";
 import { Props } from "./Types";
-import "../../../assest/css/components/form/input/input.css";
+import "../../../assets/css/components/form/input/input.css";
 import Button from "../button";
 
 const Input = forwardRef<HTMLInputElement, Props>(

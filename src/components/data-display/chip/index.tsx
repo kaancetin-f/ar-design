@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Props } from "./Types";
-import "../../../assest/css/components/data-display/chip/chip.css";
+import "../../../assets/css/components/data-display/chip/chip.css";
 
 const Chip: React.FC<Props> = ({ variant = "outlined", color = "primary", border, text }) => {
   let _className = useRef<string>("ar-chip").current;

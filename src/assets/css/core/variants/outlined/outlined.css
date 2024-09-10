@@ -1,18 +1,6 @@
-@import url("../animation.css");
 @import url("./border.css");
 
-.outlined {
-  background-color: transparent;
-  border-width: 1px !important;
-  border-color: transparent;
-}
-
-/* .outlined.disabled {
-  border-color: var(--gray-500);
-  color: var(--gray-500);
-} */
-
-/* #region Primary */
+/* #region PRIMARY */
 .outlined:not(.disabled).primary {
   border-color: var(--primary);
   color: var(--primary);
@@ -29,10 +17,10 @@ input.outlined:not(.disabled).primary:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: primary-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Primary */
-/* Primary */
+/* #endregion */
+/* PRIMARY */
 
-/* #region Secondary */
+/* #region SECONDARY */
 .outlined:not(.disabled).secondary {
   border-color: var(--secondary);
   color: var(--secondary);
@@ -49,10 +37,10 @@ input.outlined:not(.disabled).secondary:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: secondary-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Secondary */
-/* Secondary */
+/* #endregion */
+/* SECONDARY */
 
-/* #region Success */
+/* #region SUCCESS */
 .outlined:not(.disabled).success {
   border-color: var(--success);
   color: var(--success);
@@ -69,10 +57,10 @@ input.outlined:not(.disabled).success:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: success-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Success */
-/* Success */
+/* #endregion */
+/* SUCCESS */
 
-/* #region Warning */
+/* #region WARNING */
 .outlined:not(.disabled).warning {
   border-color: var(--warning);
   color: var(--warning);
@@ -89,10 +77,10 @@ input.outlined:not(.disabled).warning:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: warning-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Warning */
-/* Warning */
+/* #endregion */
+/* WARNING */
 
-/* #region Danger */
+/* #region DANGER */
 .outlined:not(.disabled).danger {
   border-color: var(--danger);
   color: var(--danger);
@@ -109,10 +97,10 @@ input.outlined:not(.disabled).danger:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: danger-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Danger */
-/* Danger */
+/* #endregion */
+/* DANGER */
 
-/* #region Informartion */
+/* #region INFORMATION */
 .outlined:not(.disabled).information {
   border-color: var(--information);
   color: var(--information);
@@ -129,10 +117,10 @@ input.outlined:not(.disabled).information:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: information-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Informartion */
-/* Informartion */
+/* #endregion */
+/* INFORMATION */
 
-/* #region Dark */
+/* #region DARK */
 .outlined:not(.disabled).dark {
   border-color: var(--dark);
   color: var(--dark);
@@ -149,13 +137,13 @@ input.outlined:not(.disabled).dark:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: dark-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Dark */
-/* Dark */
+/* #endregion */
+/* DARK */
 
-/* #region Light */
+/* #region LIGHT */
 .outlined:not(.disabled).light {
   border-color: var(--light);
-  color: var(--black);
+  color: var(--light);
   transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 .outlined:not(.disabled).light:hover {
@@ -169,5 +157,6 @@ input.outlined:not(.disabled).light:focus {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: light-active-animation ease-in-out 750ms 0s 1 normal both;
 }
-/* #endregion Light */
-/* Light */
+/* #endregion */
+/* LIGHT */
+

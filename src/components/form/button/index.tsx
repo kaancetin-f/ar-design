@@ -2,7 +2,7 @@
 
 import React, { useRef } from "react";
 import { Props } from "./Types";
-import "../../../assest/css/components/form/button/button.css";
+import "../../../assets/css/components/form/button/button.css";
 
 const Button: React.FC<Props> = ({
   children,

@@ -24,5 +24,6 @@
 
 /* Core Css */
 @import url("./core/icon.css");
+@import url("./core/border.css");
 @import url("./core/button.css");
 @import url("./core/addon.css");
