@@ -34,7 +34,6 @@ const Input = forwardRef<HTMLInputElement, Props>(
       _wrapperClassName += ` addon`;
     }
 
-    if (attributes.disabled) _inputClassName += ` disabled`;
     if (attributes.className) _inputClassName += ` ${attributes.className}`;
 
     return (

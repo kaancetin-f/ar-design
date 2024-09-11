@@ -18,7 +18,7 @@
     "copy:cjs": "cp -r ./src/libs/styles dist/cjs/libs/",
     "build:cjs": "tsc --module commonjs --outdir dist/cjs",
     "mv:cjs": "for ext in js ts; do mv ./dist/cjs/*.$ext ./dist/; done",
-    "script": "ts-node src/script/index.cjs"
+    "script": "node src/script/index.cjs"
   },
   "repository": {
     "type": "git",

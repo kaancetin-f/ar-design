@@ -5,9 +5,19 @@ import { Option, Props } from "./Types";
 import Input from "../input";
 import "../../../assets/css/components/form/select/select.css";
 import Chip from "../../data-display/chip";
+import Checkbox from "../checkbox";
 
-const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, multiple }) => {
+const Select: React.FC<Props> = ({
+  variant = "outlined",
+  status,
+  border,
+  options,
+  onChange,
+  multiple,
+}) => {
   // refs
+  let _selectionClassName = useRef<string>("selections").current;
+
   const _arSelect = useRef<HTMLDivElement>(null);
   const _input = useRef<HTMLInputElement>(null);
   const _options = useRef<HTMLDivElement>(null);
@@ -23,6 +33,14 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
   const [selections, setSelections] = useState<Option[]>([]);
   const [navigationIndex, setNavigationIndex] = useState<number>(0);
   let [optionsClassName, setOptionsClassName] = useState<string[]>(["options", "closed"]);
+
+  // selection className
+  if (variant) _selectionClassName += ` ${variant}`;
+  _selectionClassName += multiple ? ` ${status?.color || "light"}` : status || "light";
+
+  // border
+  _selectionClassName += ` border-radius-${border?.radius || "sm"}`;
+  _selectionClassName += ` border-style-solid}`;
 
   // methods
   const handleClickOutSide = (event: MouseEvent) => {
@@ -166,12 +184,13 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
 
   return (
     <div ref={_arSelect} className="ar-select-wrapper">
+      {/* :Begin: Select and Multiple Select Field */}
       <div className="ar-select">
         {/* Multiple */}
         {multiple ? (
-          <div className="selections" onClick={() => setOptionsOpen((x) => !x)}>
+          <div className={_selectionClassName} onClick={() => setOptionsOpen((x) => !x)}>
             {selections.map((selection, index) => (
-              <Chip key={index} text={selection.text} />
+              <Chip key={index} color={status?.selected || "primary"} text={selection.text} />
             ))}
           </div>
         ) : (
@@ -179,6 +198,7 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
           <Input
             ref={_input}
             variant={variant}
+            status={status || "light"}
             onClick={() => setOptionsOpen((x) => !x)}
             onChange={() => !optionsOpen && setOptionsOpen(true)}
             onKeyUp={(event) => {
@@ -211,7 +231,9 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
           ></span>
         )}
       </div>
+      {/* :End: Select and Multiple Select Field */}
 
+      {/* :Begin: Options Field */}
       {options.length > 0 && (
         <div ref={_options} className={optionsClassName.map((className) => className).join(" ")}>
           {/* Eğer çoklu seçim olarak kullanılıyorsa bu arama kısmı açılıyor... */}
@@ -237,23 +259,30 @@ const Select: React.FC<Props> = ({ variant = "outlined", options, onChange, mult
 
                 return option.text.toLowerCase().includes(searchText.toLowerCase());
               })
-              .map((option, index) => (
-                <li
-                  ref={(element) => (_optionItems.current[index] = element)}
-                  key={index}
-                  onClick={() => handleItemSelected(option, index)}
-                >
-                  {/* 
-                    TODO: Bu kısmı checkbox bileşeni yapıldıktan sonra tekrar düzenlenecek.
-                    TODO: Eğer çoklu seçim kullanıyorsa checkbox dahil edilerek daha güzel bir görünüm kazandırılacak.
-                  */}
-                  {/* {multiple && <span className="check"></span>} */}
-                  <span>{option.text}</span>
-                </li>
-              ))}
+              .map((option, index) => {
+                const isItem = selections.some((selection) => selection.value === option.value);
+
+                return (
+                  <li
+                    ref={(element) => (_optionItems.current[index] = element)}
+                    key={index}
+                    onClick={() => handleItemSelected(option, index)}
+                  >
+                    {multiple && (
+                      <Checkbox
+                        checked={isItem}
+                        status={isItem ? status?.selected || "primary" : "light"}
+                        disabled
+                      />
+                    )}
+                    <span>{option.text}</span>
+                  </li>
+                );
+              })}
           </ul>
         </div>
       )}
+      {/* :End: Options Field */}
     </div>
   );
 };

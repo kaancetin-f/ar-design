@@ -37,7 +37,6 @@ const Button: React.FC<Props> = ({
     _buttonClassName += ` ${position.inset.map((_inset) => _inset).join(" ")}`;
   }
 
-  if (attributes.disabled) _buttonClassName += ` disabled`;
   if (attributes.className) _buttonClassName += ` ${attributes.className}`;
 
   // span className

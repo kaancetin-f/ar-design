@@ -117,15 +117,17 @@
 
 .filled {
   border-color: transparent;
-  color: var(--white);
+  transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 
 @import url("./variants/filled/filled.css");
 
 .outlined {
   background-color: transparent;
+  border-style: solid;
   border-width: 1px !important;
   border-color: transparent;
+  transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 
 @import url("./variants/outlined/outlined.css");
@@ -138,6 +140,12 @@
 }
 @import url("./variants/borderless/borderless.css");
 @import url("./variants/border.css");
-@import url("./variants/disabled.css");
+
+:is(input, button):disabled {
+  background-color: var(--gray-100) !important;
+  border: solid 1px var(--gray-500) !important;
+  color: var(--gray-500) !important;
+  cursor: no-drop !important;
+}
 /* #endregion */
 /* Variants */

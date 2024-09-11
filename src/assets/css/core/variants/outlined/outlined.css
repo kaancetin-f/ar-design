@@ -4,18 +4,20 @@
 .outlined:not(.disabled).primary {
   border-color: var(--primary);
   color: var(--primary);
-  transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 .outlined:not(.disabled).primary:hover {
   border-color: rgba(var(--primary-rgb), 0.5);
 }
-input.outlined:not(.disabled).primary:focus {
+input.outlined:not(.disabled).primary:focus{
   border-color: var(--primary);
+  box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), 0.1);
+}
+input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).primary{
   box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), 0.1);
 }
 .outlined:not(.disabled).primary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: primary-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-primary ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* PRIMARY */
@@ -24,18 +26,20 @@ input.outlined:not(.disabled).primary:focus {
 .outlined:not(.disabled).secondary {
   border-color: var(--secondary);
   color: var(--secondary);
-  transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 .outlined:not(.disabled).secondary:hover {
   border-color: rgba(var(--secondary-rgb), 0.5);
 }
-input.outlined:not(.disabled).secondary:focus {
+input.outlined:not(.disabled).secondary:focus{
   border-color: var(--secondary);
+  box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), 0.1);
+}
+input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).secondary{
   box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), 0.1);
 }
 .outlined:not(.disabled).secondary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: secondary-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-secondary ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* SECONDARY */
@@ -44,18 +48,20 @@ input.outlined:not(.disabled).secondary:focus {
 .outlined:not(.disabled).success {
   border-color: var(--success);
   color: var(--success);
-  transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 .outlined:not(.disabled).success:hover {
   border-color: rgba(var(--success-rgb), 0.5);
 }
-input.outlined:not(.disabled).success:focus {
+input.outlined:not(.disabled).success:focus{
   border-color: var(--success);
+  box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), 0.1);
+}
+input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).success{
   box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), 0.1);
 }
 .outlined:not(.disabled).success.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: success-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-success ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* SUCCESS */
@@ -64,18 +70,20 @@ input.outlined:not(.disabled).success:focus {
 .outlined:not(.disabled).warning {
   border-color: var(--warning);
   color: var(--warning);
-  transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 .outlined:not(.disabled).warning:hover {
   border-color: rgba(var(--warning-rgb), 0.5);
 }
-input.outlined:not(.disabled).warning:focus {
+input.outlined:not(.disabled).warning:focus{
   border-color: var(--warning);
+  box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), 0.1);
+}
+input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).warning{
   box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), 0.1);
 }
 .outlined:not(.disabled).warning.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: warning-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-warning ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* WARNING */
@@ -84,18 +92,20 @@ input.outlined:not(.disabled).warning:focus {
 .outlined:not(.disabled).danger {
   border-color: var(--danger);
   color: var(--danger);
-  transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 .outlined:not(.disabled).danger:hover {
   border-color: rgba(var(--danger-rgb), 0.5);
 }
-input.outlined:not(.disabled).danger:focus {
+input.outlined:not(.disabled).danger:focus{
   border-color: var(--danger);
+  box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), 0.1);
+}
+input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).danger{
   box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), 0.1);
 }
 .outlined:not(.disabled).danger.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: danger-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-danger ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* DANGER */
@@ -104,18 +114,20 @@ input.outlined:not(.disabled).danger:focus {
 .outlined:not(.disabled).information {
   border-color: var(--information);
   color: var(--information);
-  transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 .outlined:not(.disabled).information:hover {
   border-color: rgba(var(--information-rgb), 0.5);
 }
-input.outlined:not(.disabled).information:focus {
+input.outlined:not(.disabled).information:focus{
   border-color: var(--information);
+  box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), 0.1);
+}
+input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).information{
   box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), 0.1);
 }
 .outlined:not(.disabled).information.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: information-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-information ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* INFORMATION */
@@ -124,18 +136,20 @@ input.outlined:not(.disabled).information:focus {
 .outlined:not(.disabled).dark {
   border-color: var(--dark);
   color: var(--dark);
-  transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 .outlined:not(.disabled).dark:hover {
   border-color: rgba(var(--dark-rgb), 0.5);
 }
-input.outlined:not(.disabled).dark:focus {
+input.outlined:not(.disabled).dark:focus{
   border-color: var(--dark);
+  box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), 0.1);
+}
+input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).dark{
   box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), 0.1);
 }
 .outlined:not(.disabled).dark.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: dark-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-dark ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* DARK */
@@ -143,19 +157,21 @@ input.outlined:not(.disabled).dark:focus {
 /* #region LIGHT */
 .outlined:not(.disabled).light {
   border-color: var(--light);
-  color: var(--light);
-  transition: border 250ms, box-shadow 250ms ease-in-out;
+  color: var(--dark);
 }
 .outlined:not(.disabled).light:hover {
   border-color: rgba(var(--light-rgb), 0.5);
 }
-input.outlined:not(.disabled).light:focus {
+input.outlined:not(.disabled).light:focus{
   border-color: var(--light);
+  box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), 0.1);
+}
+input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).light{
   box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), 0.1);
 }
 .outlined:not(.disabled).light.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: light-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-light ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* LIGHT */

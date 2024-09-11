@@ -1,8 +1,0 @@
-:is(input, button).disabled {
-  border-color: var(--gray-500) !important;
-  color: var(--gray-500) !important;
-  cursor: no-drop !important;
-}
-:is(input).disabled {
-  background-color: var(--gray-100) !important;
-}

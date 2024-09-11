@@ -17,6 +17,9 @@
   width: 100%;
 }
 .ar-select-wrapper > .options > ul > li {
+  display: flex;
+  align-items: center;
+  gap: 0 0.5rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
 }

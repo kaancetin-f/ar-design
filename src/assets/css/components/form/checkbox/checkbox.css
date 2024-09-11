@@ -1,0 +1,28 @@
+.ar-checkbox-wrapper {
+}
+.ar-checkbox-wrapper > label > input[type="checkbox"] {
+  display: none;
+}
+.ar-checkbox-wrapper > label > span {
+  display: flex;
+  align-items: center;
+}
+.ar-checkbox-wrapper > label > span > .ar-checkbox {
+  position: relative;
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+}
+.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  display: inline-block;
+  content: "";
+  width: 0.25rem;
+  height: 0.5rem;
+  border: solid 1px transparent;
+}
+
+@import url("./core/border.css");

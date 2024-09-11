@@ -15,7 +15,7 @@ button.borderless:not(.disabled).primary:focus {
 }
 .borderless:not(.disabled).primary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: primary-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-primary ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* PRIMARY */
@@ -37,7 +37,7 @@ button.borderless:not(.disabled).secondary:focus {
 }
 .borderless:not(.disabled).secondary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: secondary-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-secondary ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* SECONDARY */
@@ -59,7 +59,7 @@ button.borderless:not(.disabled).success:focus {
 }
 .borderless:not(.disabled).success.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: success-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-success ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* SUCCESS */
@@ -81,7 +81,7 @@ button.borderless:not(.disabled).warning:focus {
 }
 .borderless:not(.disabled).warning.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: warning-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-warning ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* WARNING */
@@ -103,7 +103,7 @@ button.borderless:not(.disabled).danger:focus {
 }
 .borderless:not(.disabled).danger.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: danger-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-danger ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* DANGER */
@@ -125,7 +125,7 @@ button.borderless:not(.disabled).information:focus {
 }
 .borderless:not(.disabled).information.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: information-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-information ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* INFORMATION */
@@ -147,14 +147,14 @@ button.borderless:not(.disabled).dark:focus {
 }
 .borderless:not(.disabled).dark.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: dark-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-dark ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* DARK */
 
 /* #region LIGHT */
 .borderless:not(.disabled).light {
-  color: var(--light);
+  color: var(--dark);
 }
 .borderless:not(.disabled).light:hover {
   background-color: rgba(var(--light-rgb), 0.25);
@@ -169,7 +169,7 @@ button.borderless:not(.disabled).light:focus {
 }
 .borderless:not(.disabled).light.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: light-active-animation ease-in-out 750ms 0s 1 normal both;
+  animation: clicked-light ease-in-out 750ms 0s 1 normal both;
 }
 /* #endregion */
 /* LIGHT */

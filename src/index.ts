@@ -5,6 +5,7 @@ import Button from "./components/form/button";
 import ButtonGroup from "./components/form/button-group";
 import Input from "./components/form/input";
 import Select from "./components/form/select";
+import Checkbox from "./components/form/checkbox";
 
 // Data Display
 import Chip from "./components/data-display/chip";
@@ -32,6 +33,7 @@ export {
   ButtonGroup,
   Input,
   Select,
+  Checkbox,
 
   // Data Display
   Chip,

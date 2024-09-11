@@ -14,8 +14,6 @@
   gap: 0 0.25rem;
   height: 2.25rem;
   padding: 0 0.35rem;
-  border: solid 1px var(--gray-300);
-  border-radius: var(--border-radius-sm);
 }
 .ar-select-wrapper > .ar-select > .selections > ul {
   display: flex;

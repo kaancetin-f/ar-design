@@ -1,5 +1,5 @@
 /* #region Animation -> PRIMARY */
-@keyframes primary-active-animation {
+@keyframes clicked-primary {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--primary-rgb), 0);
   }
@@ -14,7 +14,7 @@
 /* Animation -> PRIMARY */
 
 /* #region Animation -> SECONDARY */
-@keyframes secondary-active-animation {
+@keyframes clicked-secondary {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--secondary-rgb), 0);
   }
@@ -29,7 +29,7 @@
 /* Animation -> SECONDARY */
 
 /* #region Animation -> SUCCESS */
-@keyframes success-active-animation {
+@keyframes clicked-success {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--success-rgb), 0);
   }
@@ -44,7 +44,7 @@
 /* Animation -> SUCCESS */
 
 /* #region Animation -> WARNING */
-@keyframes warning-active-animation {
+@keyframes clicked-warning {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--warning-rgb), 0);
   }
@@ -59,7 +59,7 @@
 /* Animation -> WARNING */
 
 /* #region Animation -> DANGER */
-@keyframes danger-active-animation {
+@keyframes clicked-danger {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--danger-rgb), 0);
   }
@@ -74,7 +74,7 @@
 /* Animation -> DANGER */
 
 /* #region Animation -> INFORMATION */
-@keyframes information-active-animation {
+@keyframes clicked-information {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--information-rgb), 0);
   }
@@ -89,7 +89,7 @@
 /* Animation -> INFORMATION */
 
 /* #region Animation -> DARK */
-@keyframes dark-active-animation {
+@keyframes clicked-dark {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--dark-rgb), 0);
   }
@@ -104,7 +104,7 @@
 /* Animation -> DARK */
 
 /* #region Animation -> LIGHT */
-@keyframes light-active-animation {
+@keyframes clicked-light {
   0% {
     box-shadow: 0 0 0 0px rgba(var(--light-rgb), 0);
   }
@@ -117,3 +117,4 @@
 }
 /* #endregion */
 /* Animation -> LIGHT */
+
