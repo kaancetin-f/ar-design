@@ -8,11 +8,11 @@
   transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;
 }
 .ar-select-wrapper > .options.top {
-  inset: var(--input-height) 0 auto 0;
+  inset: 100% 0 auto 0;
   box-shadow: 0 5px 15px -2.5px rgba(var(--black-rgb), 0.1);
 }
 .ar-select-wrapper > .options.bottom {
-  inset: auto 0 var(--input-height) 0;
+  inset: auto 0 100% 0;
   box-shadow: 0 -5px 15px -2.5px rgba(var(--black-rgb), 0.1);
 }
 
@@ -23,12 +23,16 @@
 
 .ar-select-wrapper > .options > ul {
   width: 100%;
+  max-height: calc(var(--input-height) * 5);
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .ar-select-wrapper > .options > ul > li {
   display: flex;
   align-items: center;
   gap: 0 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0 1rem;
+  height: var(--input-height);
   cursor: pointer;
 }
 .ar-select-wrapper > .options > ul > li:hover {
@@ -44,7 +48,6 @@
 .ar-select-wrapper > .options:is(.opened) {
   visibility: visible;
   opacity: 1;
-  background-color: var(--white);
   transform: scaleY(1);
 }
 .ar-select-wrapper > .options:is(.closed) {

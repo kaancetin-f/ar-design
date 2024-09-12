@@ -1,3 +1,4 @@
+import { BorderRadiuses } from "../../../libs/types/BorderRadius";
 import { Colors } from "../../../libs/types/Colors";
 import { Variants } from "../../../libs/types/Variants";
 
@@ -143,7 +144,7 @@ export type Props = {
    */
   border?: {
     style?: "solid" | "dashed" | "none";
-    radius?: "sm" | "lg" | "xl" | "xxl" | "pill" | "none";
+    radius?: BorderRadiuses;
   };
 
   /**

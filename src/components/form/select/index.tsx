@@ -6,6 +6,7 @@ import Input from "../input";
 import "../../../assets/css/components/form/select/select.css";
 import Chip from "../../data-display/chip";
 import Checkbox from "../checkbox";
+import Paragraph from "../../data-display/typography/paragraph/Paragraph";
 
 const Select: React.FC<Props> = ({
   variant = "outlined",
@@ -31,6 +32,7 @@ const Select: React.FC<Props> = ({
 
   // states
   const [optionsOpen, setOptionsOpen] = useState<boolean>(false);
+  const [filteredOptions, setFilteredOptions] = useState<Option[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [selection, setSelection] = useState<Option | null>(null);
   const [selections, setSelections] = useState<Option[]>([]);
@@ -164,8 +166,13 @@ const Select: React.FC<Props> = ({
         document.removeEventListener("keydown", handleKeys);
       };
     } else {
-      if (multiple) {
+      // Options paneli kapanma süresi 250ms.
+      // 300ms sonra temizlenmesinin sebebi kapanırken birder veriler gerliyor ve panel yüksekliği artıyor.
+      setTimeout(() => {
         setSearchText("");
+      }, 300);
+
+      if (multiple) {
         if (_searchField.current) _searchField.current.value = "";
       } else {
         if (_singleInput.current) {
@@ -179,6 +186,15 @@ const Select: React.FC<Props> = ({
   }, [optionsOpen]);
 
   useEffect(() => {
+    // Arama kriterlerine uygun olan değerleri bir state e gönderiyoruz.
+    setFilteredOptions(
+      options.filter((option) => {
+        if (!optionsOpen) return option;
+
+        return option.text.toLowerCase().includes(searchText.toLowerCase());
+      })
+    );
+
     // Arama yapılması durumunda değerleri sıfırla.
     setNavigationIndex(0);
     _navigationIndex.current = 0;
@@ -193,9 +209,16 @@ const Select: React.FC<Props> = ({
     _optionItems.current
       .filter((optionItem) => optionItem !== null)
       .forEach((item, index) => {
-        index === navigationIndex
-          ? item?.classList.add("navigate-with-arrow-keys")
-          : item?.classList.remove("navigate-with-arrow-keys");
+        if (index === navigationIndex) {
+          item?.classList.add("navigate-with-arrow-keys");
+
+          item.scrollIntoView({
+            behavior: "smooth", // Yumuşak bir kaydırma animasyonu
+            block: "nearest", // En yakın pozisyona kaydır
+          });
+        } else {
+          item?.classList.remove("navigate-with-arrow-keys");
+        }
       });
   }, [navigationIndex]);
 
@@ -206,9 +229,20 @@ const Select: React.FC<Props> = ({
         {/* Multiple */}
         {multiple ? (
           <div className={_selectionClassName} onClick={() => setOptionsOpen((x) => !x)}>
-            {selections.map((selection, index) => (
-              <Chip key={index} color={status?.selected || "primary"} text={selection.text} />
-            ))}
+            <div className="items">
+              {selections.length > 0 ? (
+                selections.map((selection, index) => (
+                  <Chip
+                    key={index}
+                    variant={status?.selected?.variant || "filled"}
+                    color={status?.selected?.color || status?.color}
+                    text={selection.text}
+                  />
+                ))
+              ) : (
+                <span className={`placeholder ${status?.color || "light"}`}>{placeholder}</span>
+              )}
+            </div>
           </div>
         ) : (
           // Single
@@ -252,58 +286,64 @@ const Select: React.FC<Props> = ({
               }}
             ></span>
           )}
+
+        <span
+          className={`angel-down ${optionsOpen ? "opened" : "closed"}`}
+          onClick={() => setOptionsOpen((x) => !x)}
+        ></span>
       </div>
       {/* :End: Select and Multiple Select Field */}
 
       {/* :Begin: Options Field */}
-      {options.length > 0 && (
-        <div ref={_options} className={optionsClassName.map((className) => className).join(" ")}>
-          {/* Eğer çoklu seçim olarak kullanılıyorsa bu arama kısmı açılıyor... */}
-          {multiple && (
-            <div className="search-field">
-              <Input
-                ref={_searchField}
-                variant="outlined"
-                status="light"
-                placeholder="Search..."
-                onKeyUp={(event) => {
-                  // Arama yapmak için kullanılan state bu kısımda dolduruluyor.
-                  setSearchText(event.currentTarget.value);
-                }}
-              />
-            </div>
-          )}
+      <div ref={_options} className={optionsClassName.map((className) => className).join(" ")}>
+        {/* Eğer çoklu seçim olarak kullanılıyorsa bu arama kısmı açılıyor... */}
+        {multiple && (
+          <div className="search-field">
+            <Input
+              ref={_searchField}
+              variant="outlined"
+              status="light"
+              placeholder="Search..."
+              onKeyUp={(event) => {
+                // Arama yapmak için kullanılan state bu kısımda dolduruluyor.
+                setSearchText(event.currentTarget.value);
+              }}
+            />
+          </div>
+        )}
 
+        {filteredOptions.length > 0 ? (
           <ul>
-            {options
-              .filter((option) => {
-                if (!optionsOpen) return option;
+            {filteredOptions.map((option, index) => {
+              const isItem = selections.some((selection) => selection.value === option.value);
 
-                return option.text.toLowerCase().includes(searchText.toLowerCase());
-              })
-              .map((option, index) => {
-                const isItem = selections.some((selection) => selection.value === option.value);
-
-                return (
-                  <li
-                    ref={(element) => (_optionItems.current[index] = element)}
-                    key={index}
-                    onClick={() => handleItemSelected(option, index)}
-                  >
-                    {multiple && (
-                      <Checkbox
-                        checked={isItem}
-                        status={isItem ? status?.selected || "primary" : "light"}
-                        disabled
-                      />
-                    )}
-                    <span>{option.text}</span>
-                  </li>
-                );
-              })}
+              return (
+                <li
+                  ref={(element) => (_optionItems.current[index] = element)}
+                  key={index}
+                  onClick={() => handleItemSelected(option, index)}
+                >
+                  {multiple && (
+                    <Checkbox
+                      checked={isItem}
+                      status={isItem ? status?.selected?.color || status?.color : "light"}
+                      disabled
+                    />
+                  )}
+                  <span>{option.text}</span>
+                </li>
+              );
+            })}
           </ul>
-        </div>
-      )}
+        ) : (
+          <Paragraph color="gray-500" align="center">
+            Het hangi bir kayıt bulunumadı!
+          </Paragraph>
+        )}
+      </div>
+      {/* {options.length > 0 && (
+        
+      )} */}
       {/* :End: Options Field */}
     </div>
   );

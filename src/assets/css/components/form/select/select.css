@@ -8,30 +8,45 @@
   width: 100%;
 }
 
-.ar-select-wrapper > .ar-select > .selections {
-  display: flex;
-  align-items: center;
-  gap: 0 0.25rem;
-  height: var(--input-height);
-  padding: 0 0.35rem;
+.ar-select-wrapper > .ar-select > .angel-down {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  cursor: pointer;
+  transform-origin: center;
+  transition: transform 250ms ease-in-out;
 }
-.ar-select-wrapper > .ar-select > .selections > ul {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
+.ar-select-wrapper > .ar-select > .angel-down:is(.opened) {
+  transform: translateY(-50%) scaleY(-1);
 }
-.ar-select-wrapper > .ar-select > .selections > ul > li {
-  background-color: var(--gray-100);
-  padding: 0 0.5rem;
-  border: solid 1px var(--gray-200);
-  border-radius: var(--border-radius-sm);
+.ar-select-wrapper > .ar-select > .angel-down:is(.closed) {
+  transform: translateY(-50%) scaleY(1);
+}
+.ar-select-wrapper > .ar-select > .angel-down::before {
+  display: inline-block;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 1px transparent;
+  border-top-style: dashed;
+  border-right-style: dashed;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: rgba(var(--black-rgb), 0.1);
+  border-right-color: rgba(var(--black-rgb), 0.1);
+  border-bottom-color: rgba(var(--black-rgb), 0.5);
+  border-left-color: rgba(var(--black-rgb), 0.5);
+  transform: rotate(-45deg);
 }
 
 .ar-select-wrapper > .ar-select > .button-clear {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: 0.5rem;
+  right: 2rem;
   background-color: rgba(var(--black-rgb), 0.25);
   backdrop-filter: blur(5px);
   width: 1rem;
@@ -45,6 +60,36 @@
   content: "x";
   color: var(--white);
   font-size: 0.75rem;
+}
+
+.ar-select-wrapper > .ar-select > .selections {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  min-height: var(--input-height);
+  padding: 0.35rem;
+}
+.ar-select-wrapper > .ar-select > .selections > .items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  width: calc(100% - 2.75rem);
+}
+.ar-select-wrapper > .ar-select > .selections > .items > span.placeholder {
+  opacity: 0.5;
+  font-weight: 800;
+}
+.ar-select-wrapper > .ar-select > .selections > ul {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+.ar-select-wrapper > .ar-select > .selections > ul > li {
+  background-color: var(--gray-100);
+  padding: 0 0.5rem;
+  border: solid 1px var(--gray-200);
+  border-radius: var(--border-radius-sm);
 }
 
 @import url("./options.css");

@@ -1,19 +1,26 @@
+import { BorderRadiuses } from "../../../libs/types/BorderRadius";
 import { Colors } from "../../../libs/types/Colors";
 import { Variants } from "../../../libs/types/Variants";
 
 export type Option = { value: string | number; text: string };
 
 type Multiple = {
-  status?: { color?: Colors; selected?: Colors };
+  status?: {
+    color?: Colors;
+    selected?: {
+      variant?: Variants;
+      color?: Colors;
+    };
+  };
   onChange: (option: Option[]) => void;
   multiple: true;
 };
 type Single = { status?: Colors; onChange: (option: Option | undefined) => void; multiple?: false };
 
 export type Props = {
-  variant?: Variants;
+  variant?: Exclude<Variants, "borderless">;
   border?: {
-    radius: "sm" | "lg" | "xl" | "xxl" | "pill" | "none";
+    radius: BorderRadiuses;
   };
   options: Option[];
   placeholder?: string;

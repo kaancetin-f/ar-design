@@ -4,6 +4,10 @@
 .outlined.border-style-dashed {
   border-style: dashed;
 }
+.outlined.border-style-dashed:disabled {
+  border-style: dashed !important;
+  border-color: var(--gray-500) !important;
+}
 .outlined.border-style-none {
   border-style: none;
 }

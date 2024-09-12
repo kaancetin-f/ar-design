@@ -14,7 +14,7 @@
 
 /* #region Height */
 :root {
-  --input-height: 2.25rem;
+  --input-height: 2.5rem;
 }
 /* #endregion */
 /* Height */
@@ -147,6 +147,13 @@
   border-color: transparent;
   transition: border 250ms, box-shadow 250ms ease-in-out;
 }
+.borderless:disabled {
+  background-color: var(--gray-100) !important;
+  border: none !important;
+  color: var(--gray-500) !important;
+  cursor: no-drop !important;
+}
+
 @import url("./variants/borderless/borderless.css");
 @import url("./variants/border.css");
 
@@ -156,5 +163,16 @@
   color: var(--gray-500) !important;
   cursor: no-drop !important;
 }
+/* :is(button):disabled {
+  background-color: var(--gray-100) !important;
+  color: var(--gray-500) !important;
+  cursor: no-drop !important;
+}
+:is(button):is(.filled):disabled {
+  border: solid 1px var(--gray-500) !important;
+}
+:is(button):is(.outlined):is(.):disabled {
+  border: solid 1px var(--gray-500) !important;
+} */
 /* #endregion */
 /* Variants */

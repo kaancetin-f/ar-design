@@ -147,6 +147,10 @@ const _Input_CheckboxCss = () => {
   border-right-color: var(--${color});
   border-bottom-color: var(--${color});
 }
+.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.borderless.${color}::before {
+  border-right-color: var(--${color});
+  border-bottom-color: var(--${color});
+}
 /* #endregion */
 /* Border Color -> ${color.toUpperCase()} */\n\n`
       );
