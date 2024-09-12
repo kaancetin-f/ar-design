@@ -14,7 +14,7 @@ type Props = {
     radius: "sm" | "lg" | "xl" | "xxl" | "pill" | "none";
   };
   button?: ButtonProps;
-  addon?: { before?: string | number; after?: string | number };
+  addon?: { variant?: Variants; before?: string | number; after?: string | number };
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 export { Props };

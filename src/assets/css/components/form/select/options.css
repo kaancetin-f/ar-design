@@ -1,13 +1,21 @@
 .ar-select-wrapper > .options {
   position: absolute;
-  inset: 2.25rem 0 auto 0;
+  inset: auto 0 auto 0;
   background-color: var(--white);
   border-radius: var(--border-radius-sm);
-  box-shadow: 0 5px 15px -2.5px rgba(var(--black-rgb), 0.1);
-  transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;
   overflow: hidden;
   z-index: 5;
+  transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;
 }
+.ar-select-wrapper > .options.top {
+  inset: var(--input-height) 0 auto 0;
+  box-shadow: 0 5px 15px -2.5px rgba(var(--black-rgb), 0.1);
+}
+.ar-select-wrapper > .options.bottom {
+  inset: auto 0 var(--input-height) 0;
+  box-shadow: 0 -5px 15px -2.5px rgba(var(--black-rgb), 0.1);
+}
+
 .ar-select-wrapper > .options > .search-field {
   padding: 0.5rem;
   border-bottom: solid 1px var(--gray-200);
@@ -32,16 +40,24 @@
 .ar-select-wrapper > .options > ul > li.navigate-with-arrow-keys {
   background-color: var(--gray-100);
 }
+
 .ar-select-wrapper > .options:is(.opened) {
   visibility: visible;
   opacity: 1;
   background-color: var(--white);
-  transform-origin: top;
   transform: scaleY(1);
 }
 .ar-select-wrapper > .options:is(.closed) {
   visibility: hidden;
   opacity: 0;
-  transform-origin: top;
   transform: scaleY(0.8);
+}
+
+.ar-select-wrapper > .options.top:is(.opened, .closed),
+.ar-select-wrapper > .options.top:is(.opened, .closed) {
+  transform-origin: top;
+}
+.ar-select-wrapper > .options.bottom:is(.opened, .closed),
+.ar-select-wrapper > .options.bottom:is(.opened, .closed) {
+  transform-origin: bottom;
 }

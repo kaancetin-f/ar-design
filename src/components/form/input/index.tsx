@@ -22,16 +22,27 @@ const Input = forwardRef<HTMLInputElement, Props>(
 
     // input className
     if (variant) _inputClassName += `${variant}`;
+
     if (status) _inputClassName += ` ${status}`;
 
     // border radius
     _inputClassName += ` border-radius-${border?.radius || "sm"}`;
-    _addonBeforeClassName += ` border-radius-${border?.radius || "sm"}`;
-    _addonAfterClassName += ` border-radius-${border?.radius || "sm"}`;
 
     // addon className
     if (addon) {
       _wrapperClassName += ` addon`;
+
+      // variant
+      _addonBeforeClassName += ` ${addon?.variant || "filled"}`;
+      _addonAfterClassName += ` ${addon?.variant || "filled"}`;
+
+      // status
+      _addonBeforeClassName += ` ${status}`;
+      _addonAfterClassName += ` ${status}`;
+
+      // border radius
+      _addonBeforeClassName += ` border-radius-${border?.radius || "sm"}`;
+      _addonAfterClassName += ` border-radius-${border?.radius || "sm"}`;
     }
 
     if (attributes.className) _inputClassName += ` ${attributes.className}`;

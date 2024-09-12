@@ -14,12 +14,15 @@ const Select: React.FC<Props> = ({
   options,
   onChange,
   multiple,
+  placeholder,
+  disabled = false,
 }) => {
   // refs
   let _selectionClassName = useRef<string>("selections").current;
 
   const _arSelect = useRef<HTMLDivElement>(null);
-  const _input = useRef<HTMLInputElement>(null);
+  const _singleInput = useRef<HTMLInputElement>(null);
+  const _multipleInput = useRef<HTMLDivElement>(null);
   const _options = useRef<HTMLDivElement>(null);
   const _optionItems = useRef<(HTMLLIElement | null)[]>([]);
   const _searchField = useRef<HTMLInputElement>(null);
@@ -44,9 +47,9 @@ const Select: React.FC<Props> = ({
 
   // methods
   const handleClickOutSide = (event: MouseEvent) => {
-    const _target = event.target as HTMLElement;
+    const target = event.target as HTMLElement;
 
-    if (_arSelect.current && !_arSelect.current.contains(_target)) {
+    if (_arSelect.current && !_arSelect.current.contains(target)) {
       setOptionsOpen(false);
     }
   };
@@ -81,7 +84,7 @@ const Select: React.FC<Props> = ({
 
     // Signle
     if (!multiple) {
-      if (_input.current) _input.current.value = option.text;
+      if (_singleInput.current) _singleInput.current.value = option.text;
 
       onChange(option);
       setSelection(option);
@@ -94,13 +97,14 @@ const Select: React.FC<Props> = ({
 
   const handleKeys = (event: KeyboardEvent) => {
     const key = event.key;
+    const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
 
     if (key === "ArrowUp" || key === "ArrowLeft") {
       setNavigationIndex((prev) => {
         let result: number = 0;
 
         if (prev > 0) result = prev - 1;
-        if (prev === 0) result = _optionItems.current.length - 1;
+        if (prev === 0) result = optionItems.length - 1;
 
         _navigationIndex.current = result;
         return result;
@@ -109,8 +113,8 @@ const Select: React.FC<Props> = ({
       setNavigationIndex((prev) => {
         let result: number = 0;
 
-        if (prev === _optionItems.current.length - 1) result = 0;
-        if (prev < _optionItems.current.length - 1) result = prev + 1;
+        if (prev === optionItems.length - 1) result = 0;
+        if (prev < optionItems.length - 1) result = prev + 1;
 
         _navigationIndex.current = result;
         return result;
@@ -118,7 +122,7 @@ const Select: React.FC<Props> = ({
     } else if (key === "Enter") {
       if (_navigationIndex.current === -1) return;
 
-      _optionItems.current[_navigationIndex.current]?.click();
+      optionItems[_navigationIndex.current]?.click();
     } else if (key === "Escape") {
       setOptionsOpen(false);
     }
@@ -126,6 +130,12 @@ const Select: React.FC<Props> = ({
 
   // effects
   useEffect(() => {
+    const screenCenter = window.innerHeight / 2 + 100;
+    const rect = _singleInput.current
+      ? _singleInput.current.getBoundingClientRect()
+      : _multipleInput.current?.getBoundingClientRect();
+    const direction = rect && rect.top > screenCenter ? "bottom" : "top";
+
     setOptionsClassName(["options"]);
 
     if (optionsOpen) {
@@ -135,13 +145,13 @@ const Select: React.FC<Props> = ({
       }, 250);
 
       if (!multiple) {
-        if (_input.current) {
-          _input.current.value = "";
-          _input.current.placeholder = selection?.text || "";
+        if (_singleInput.current) {
+          _singleInput.current.value = "";
+          _singleInput.current.placeholder = selection?.text || placeholder || "";
         }
       }
 
-      setOptionsClassName((prev) => [...prev, "opened"]);
+      setOptionsClassName((prev) => [...prev, direction, "opened"]);
 
       // Options paneli için olay dinleyileri ekleniyor.
       document.addEventListener("click", handleClickOutSide);
@@ -158,34 +168,41 @@ const Select: React.FC<Props> = ({
         setSearchText("");
         if (_searchField.current) _searchField.current.value = "";
       } else {
-        if (_input.current) {
-          _input.current.value = selection?.text || "";
-          _input.current.removeAttribute("placeholder");
+        if (_singleInput.current) {
+          _singleInput.current.value = selection?.text || "";
+          _singleInput.current.placeholder = placeholder || "";
         }
       }
 
-      setOptionsClassName((prev) => [...prev, "closed"]);
+      setOptionsClassName((prev) => [...prev, direction, "closed"]);
     }
   }, [optionsOpen]);
 
   useEffect(() => {
+    // Arama yapılması durumunda değerleri sıfırla.
     setNavigationIndex(0);
     _navigationIndex.current = 0;
+
+    // Arama yapılması durumunda arama sonuçlarından ilk olan değeri işaretle.
+    const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
+    optionItems[_navigationIndex.current]?.classList.add("navigate-with-arrow-keys");
   }, [searchText]);
 
   useEffect(() => {
     // Seçilen öğeye 'navigate-with-arrow-keys' sınıfını ekle
-    _optionItems.current.forEach((item, index) => {
-      index === navigationIndex
-        ? item?.classList.add("navigate-with-arrow-keys")
-        : item?.classList.remove("navigate-with-arrow-keys");
-    });
+    _optionItems.current
+      .filter((optionItem) => optionItem !== null)
+      .forEach((item, index) => {
+        index === navigationIndex
+          ? item?.classList.add("navigate-with-arrow-keys")
+          : item?.classList.remove("navigate-with-arrow-keys");
+      });
   }, [navigationIndex]);
 
   return (
     <div ref={_arSelect} className="ar-select-wrapper">
       {/* :Begin: Select and Multiple Select Field */}
-      <div className="ar-select">
+      <div ref={_multipleInput} className="ar-select">
         {/* Multiple */}
         {multiple ? (
           <div className={_selectionClassName} onClick={() => setOptionsOpen((x) => !x)}>
@@ -196,40 +213,45 @@ const Select: React.FC<Props> = ({
         ) : (
           // Single
           <Input
-            ref={_input}
+            ref={_singleInput}
             variant={variant}
             status={status || "light"}
             onClick={() => setOptionsOpen((x) => !x)}
             onChange={() => !optionsOpen && setOptionsOpen(true)}
             onKeyUp={(event) => {
+              if (event.key === "Enter") return;
+
               // Arama yapmak için kullanılan state bu kısımda dolduruluyor.
               setSearchText(event.currentTarget.value);
             }}
+            placeholder={placeholder}
+            disabled={disabled}
           />
         )}
 
-        {(Object.keys(selection || {}).length > 0 || (multiple && selections.length > 0)) && (
-          <span
-            className="button-clear"
-            onClick={() => {
-              // Multiple
-              if (multiple) {
-                if (_searchField.current) _searchField.current.value = "";
+        {!disabled &&
+          (Object.keys(selection || {}).length > 0 || (multiple && selections.length > 0)) && (
+            <span
+              className="button-clear"
+              onClick={() => {
+                // Multiple
+                if (multiple) {
+                  if (_searchField.current) _searchField.current.value = "";
 
-                setSelections([]);
-              }
-
-              // Single
-              if (!multiple) {
-                if (_input.current) {
-                  _input.current.value = "";
+                  setSelections([]);
                 }
 
-                setSelection(null);
-              }
-            }}
-          ></span>
-        )}
+                // Single
+                if (!multiple) {
+                  if (_singleInput.current) {
+                    _singleInput.current.value = "";
+                  }
+
+                  setSelection(null);
+                }
+              }}
+            ></span>
+          )}
       </div>
       {/* :End: Select and Multiple Select Field */}
 

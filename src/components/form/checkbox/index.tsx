@@ -20,7 +20,7 @@ const Checkbox: React.FC<Props> = ({
   if (status) _checkboxClassName += ` ${status}`;
 
   // border
-  if (variant === "outlined") _checkboxClassName += ` border-style-solid`;
+  _checkboxClassName += ` border-style-solid`;
   _checkboxClassName += ` border-radius-${border?.radius || "sm"}`;
 
   return (

@@ -16,4 +16,6 @@ export type Props = {
     radius: "sm" | "lg" | "xl" | "xxl" | "pill" | "none";
   };
   options: Option[];
+  placeholder?: string;
+  disabled?: boolean;
 } & (Multiple | Single);

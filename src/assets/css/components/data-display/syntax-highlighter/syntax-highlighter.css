@@ -4,17 +4,14 @@
   border: solid 1px var(--gray-200);
   border-radius: var(--border-radius-lg);
 }
+
 .ar-syntax > .preview {
   position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
   gap: 1rem;
   background-color: var(--white);
   padding: 1rem;
   border-radius: var(--border-radius-lg);
 }
-
 .ar-syntax > .preview.left {
   justify-content: left;
 }

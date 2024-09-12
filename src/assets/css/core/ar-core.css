@@ -12,6 +12,13 @@
   src: url("../../../assets/fonts/JetBrainsMono-Regular.ttf");
 }
 
+/* #region Height */
+:root {
+  --input-height: 2.25rem;
+}
+/* #endregion */
+/* Height */
+
 /* #region Color Palette */
 :root {
   --white: #fff;
@@ -28,8 +35,8 @@
   --gray-800: #343a40;
   --gray-900: #212529;
   --gray-dark: #343a40;
-  --red: #f11a7b;
-  --red-rgb: 241, 26, 123;
+  --red: #ff0000;
+  --red-rgb: 255, 0, 0;
   --green: #00ff00;
   --green-rgb: 0, 255, 0;
   --blue: #0000ff;
@@ -62,6 +69,8 @@
   --dark-active: #23272b;
   --dark-rgb: 52, 58, 64;
 }
+/* #endregion */
+/* Color Palette */
 
 /* #region Fonts */
 :root {

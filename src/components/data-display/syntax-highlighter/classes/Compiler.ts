@@ -92,10 +92,15 @@ class Compiler {
         return `<span class='ar-jsx-curly-brackets'>{{${_lineBreakSpaces}</span><span class="${_className}">${p1}</span><span class='ar-jsx-curly-brackets'>${_lineBreakSpaces}}}</span>`;
       });
 
-      // Object
-      element = element.replace(/\[sub-item\](.*?)\[\/sub-item\]/g, (_, p1) => {
-        return `<span class='ar-jsx-sub-item'>${p1}</span>`;
-      });
+      // Sub Item
+      element = element.replace(/\[sub-item\]/g, "<span class='ar-jsx-sub-item'>");
+      element = element.replace(/\[\/sub-item\]/g, "</span>");
+
+      // Close Child Curly Bracket "}"
+      element = element.replace(
+        /\[\/curly-bracket\]/g,
+        "<span class='ar-jsx-child-curly-bracket'>}</span>"
+      );
 
       // Open Child Curly Bracket "{"
       element = element.replace(
