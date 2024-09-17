@@ -1,0 +1,47 @@
+.ar-switch-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  width: 100%;
+  height: var(--input-height);
+}
+.ar-switch-wrapper > label {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0 0.5rem;
+  width: 100%;
+  user-select: none;
+}
+.ar-switch-wrapper > label > :is(input[type="checkbox"]) {
+  display: none;
+}
+
+.ar-switch-wrapper > label > .ar-switch {
+  position: relative;
+  display: inline-block;
+  width: 2.25rem;
+  height: 1rem;
+  transition: box-shadow 250ms ease-in-out;
+}
+
+.ar-switch-wrapper > label > :is(input[type="checkbox"]) + .ar-switch > .xxy {
+  position: absolute;
+  top: 50%;
+  left: 0.15rem;
+  transform: translateY(-50%);
+  display: inline-block;
+  content: "";
+  background-color: var(--white);
+  width: 0.75rem;
+  height: 0.75rem;
+  transition: left 150ms, width 150ms 350ms, height 150ms 350ms, box-shadow 150ms 500ms ease-in-out;
+}
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch > .xxy {
+  left: calc(2.25rem - 0.9rem);
+  width: 1rem;
+  height: 1rem;
+}
+
+@import url("./core/border.css");

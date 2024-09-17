@@ -6,9 +6,11 @@ import ButtonGroup from "./components/form/button-group";
 import Input from "./components/form/input";
 import Select from "./components/form/select";
 import Checkbox from "./components/form/checkbox";
+import Switch from "./components/form/switch";
 import Radio from "./components/form/radio";
 
 // Data Display
+import Card from "./components/data-display/card";
 import Chip from "./components/data-display/chip";
 import Typography from "./components/data-display/typography";
 import Divider from "./components/data-display/divider";
@@ -33,10 +35,12 @@ export {
   ButtonGroup,
   Input,
   Select,
+  Switch,
   Checkbox,
   Radio,
 
   // Data Display
+  Card,
   Chip,
   Typography,
   Divider,

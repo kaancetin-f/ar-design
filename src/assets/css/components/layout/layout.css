@@ -38,10 +38,4 @@
   min-width: calc(60% - 5%);
 }
 
-.ar-layout > main > aside.ar-aside.right {
-  background-color: var(--white);
-  padding: 1rem;
-  border-radius: var(--border-radius-lg);
-}
-
 @import url("./header.css");

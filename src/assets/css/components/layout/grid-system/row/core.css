@@ -6,6 +6,9 @@
   margin-top: -0.75rem;
   margin-left: -0.75rem;
 }
+.row:has(+ .row) {
+  margin-bottom: 0.75rem;
+}
 .row > * {
   padding-top: 0.75rem;
   padding-left: 0.75rem;

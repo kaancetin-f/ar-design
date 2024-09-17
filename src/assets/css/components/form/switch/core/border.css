@@ -1,0 +1,80 @@
+/* #region Border Color -> PRIMARY */
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.primary {
+  box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), .1);
+}
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.primary > .xxy {
+  box-shadow: 0 0 0 2.5px var(--primary);
+}
+/* #endregion */
+/* Border Color -> PRIMARY */
+
+/* #region Border Color -> SECONDARY */
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.secondary {
+  box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), .1);
+}
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.secondary > .xxy {
+  box-shadow: 0 0 0 2.5px var(--secondary);
+}
+/* #endregion */
+/* Border Color -> SECONDARY */
+
+/* #region Border Color -> SUCCESS */
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.success {
+  box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), .1);
+}
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.success > .xxy {
+  box-shadow: 0 0 0 2.5px var(--success);
+}
+/* #endregion */
+/* Border Color -> SUCCESS */
+
+/* #region Border Color -> WARNING */
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.warning {
+  box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), .1);
+}
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.warning > .xxy {
+  box-shadow: 0 0 0 2.5px var(--warning);
+}
+/* #endregion */
+/* Border Color -> WARNING */
+
+/* #region Border Color -> DANGER */
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.danger {
+  box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), .1);
+}
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.danger > .xxy {
+  box-shadow: 0 0 0 2.5px var(--danger);
+}
+/* #endregion */
+/* Border Color -> DANGER */
+
+/* #region Border Color -> INFORMATION */
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.information {
+  box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), .1);
+}
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.information > .xxy {
+  box-shadow: 0 0 0 2.5px var(--information);
+}
+/* #endregion */
+/* Border Color -> INFORMATION */
+
+/* #region Border Color -> DARK */
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.dark {
+  box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), .1);
+}
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.dark > .xxy {
+  box-shadow: 0 0 0 2.5px var(--dark);
+}
+/* #endregion */
+/* Border Color -> DARK */
+
+/* #region Border Color -> LIGHT */
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.light {
+  box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), .1);
+}
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.light > .xxy {
+  box-shadow: 0 0 0 2.5px var(--light);
+}
+/* #endregion */
+/* Border Color -> LIGHT */
+

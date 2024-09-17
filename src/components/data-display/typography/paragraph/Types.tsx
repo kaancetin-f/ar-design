@@ -15,5 +15,6 @@ export type Props = {
   children: string;
   color?: ParagraphColors | Colors;
   align?: "left" | "center" | "right";
+  size?: "small" | "normal" | "large";
   upperCase?: boolean;
 };

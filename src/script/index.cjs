@@ -162,6 +162,58 @@ const _Input_CheckboxCss = () => {
   }
 };
 
+const _Input_SwitchCss = () => {
+  console.log("\x1b[34m%s\x1b[0m", "#Switch -> Border Color");
+
+  try {
+    // Dosyanın ekleneceği yeri ve adı.
+    const file = path.join(
+      __dirname,
+      "../assets",
+      "css",
+      "components",
+      "form",
+      "switch",
+      "core",
+      "border.css"
+    );
+    // Dosya oluşturma ve yazma işlemi (senkron)
+    fs.writeFileSync(file, "");
+
+    // Mevcut dosyaya yazma işlemi (senkron)
+    _colors.map((color) => {
+      switch (color) {
+        case "warning":
+          _customFontColor = "dark";
+          break;
+        case "light":
+          _customFontColor = "dark";
+          break;
+        default:
+          _customFontColor = "white";
+          break;
+      }
+
+      fs.appendFileSync(
+        file,
+        `/* #region Border Color -> ${color.toUpperCase()} */
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.${color} {
+  box-shadow: 0 0 0 2.5px rgba(var(--${color}-rgb), .1);
+}
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.${color} > .xxy {
+  box-shadow: 0 0 0 2.5px var(--${color});
+}
+/* #endregion */
+/* Border Color -> ${color.toUpperCase()} */\n\n`
+      );
+    });
+
+    console.log("\x1b[32m%s\x1b[0m", "[border.css] -> Oluşturuldu.");
+  } catch (error) {
+    console.log("\x1b[31m%s\x1b[0m", "[border.css] -> Oluşturulamadı!");
+  }
+};
+
 const _Animation_Css = () => {
   console.log("\x1b[34m%s\x1b[0m", "#Variant -> Animation");
 
@@ -447,6 +499,7 @@ button.borderless:not(.disabled).${color}:focus {
 _Input_BorderCss();
 _Input_ButtonCss();
 _Input_CheckboxCss();
+_Input_SwitchCss();
 
 _Animation_Css();
 

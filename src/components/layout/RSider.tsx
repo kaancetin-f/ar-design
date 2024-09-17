@@ -7,12 +7,11 @@ import useLayout from "../../libs/core/application/hooks/useLayout";
 const RSider: React.FC<SiderProps> = () => {
   // hooks
   const { options } = useLayout();
+  const sider = options?.sider?.right;
 
-  return (
-    options?.sider?.right?.element && (
-      <aside className="ar-aside right">{options?.sider?.right?.element}</aside>
-    )
-  );
+  if (!sider?.active) return null;
+
+  return <aside className="ar-aside right">{sider.element}</aside>;
 };
 
 RSider.displayName = "Layout.RSider";

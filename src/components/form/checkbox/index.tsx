@@ -12,14 +12,15 @@ const Checkbox: React.FC<Props> = ({
   ...attributes
 }) => {
   // refs
-  let _wrapperClassName = useRef<string>("ar-checkbox-wrapper").current;
-  let _checkboxClassName = useRef<string>("ar-checkbox").current;
+  let _checkbox = useRef<HTMLInputElement>(null);
+  let _wrapperClassName = "ar-checkbox-wrapper";
+  let _checkboxClassName = "ar-checkbox";
 
   // checkbox -> variant
   if (variant) _checkboxClassName += ` ${variant}`;
 
   // status
-  if (status) _checkboxClassName += ` ${status}`;
+  _checkboxClassName += ` light`;
 
   // border
   _checkboxClassName += ` border-style-solid`;
@@ -28,9 +29,25 @@ const Checkbox: React.FC<Props> = ({
   return (
     <div className={_wrapperClassName}>
       <label>
-        <input type={attributes.type || "checkbox"} {...attributes} />
+        <input
+          type={attributes.type || "checkbox"}
+          {...attributes}
+          onChange={(event) => {
+            (() => {
+              const _current = _checkbox.current;
+              if (!_current) return;
+
+              event.target.checked
+                ? _current.classList.replace("light", status)
+                : _current.classList.replace(status, "light");
+            })();
+
+            (() => attributes.onChange && attributes.onChange(event))();
+          }}
+        />
+
         <span>
-          <span className={_checkboxClassName}></span>
+          <span ref={_checkbox} className={_checkboxClassName}></span>
           {label && <span className="label">{label}</span>}
         </span>
       </label>

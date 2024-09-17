@@ -1,0 +1,15 @@
+.ar-card {
+  background-color: var(--white);
+  border: solid 1px var(--gray-200);
+  border-radius: var(--border-radius-lg);
+}
+.ar-card > .title {
+  padding: 1rem;
+  border-bottom: solid 1px var(--gray-200);
+}
+.ar-card > .title > .ar-typography-title {
+  margin-bottom: 0 !important;
+}
+.ar-card > .content {
+  padding: 1rem;
+}
