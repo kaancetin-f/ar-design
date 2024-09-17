@@ -91,7 +91,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
           <Button
             {...button}
             color={status}
-            border={{ style: button.border?.style, radius: border?.radius || "sm" }}
+            border={{ radius: border?.radius || "sm" }}
             disabled={attributes.disabled}
           />
         )}

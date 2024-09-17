@@ -15,6 +15,7 @@ const Select: React.FC<Props> = ({
   options,
   onChange,
   multiple,
+  defaultValueIndex,
   placeholder,
   disabled = false,
 }) => {
@@ -29,12 +30,13 @@ const Select: React.FC<Props> = ({
   const _searchField = useRef<HTMLInputElement>(null);
   let _otoFocus = useRef<NodeJS.Timeout>().current;
   let _navigationIndex = useRef<number>(0);
+  let _selectedItemIndex = useRef<number>(0);
 
   // states
   const [optionsOpen, setOptionsOpen] = useState<boolean>(false);
   const [filteredOptions, setFilteredOptions] = useState<Option[]>([]);
   const [searchText, setSearchText] = useState<string>("");
-  const [selection, setSelection] = useState<Option | null>(null);
+  const [selection, setSelection] = useState<Option | undefined>(undefined);
   const [selections, setSelections] = useState<Option[]>([]);
   const [navigationIndex, setNavigationIndex] = useState<number>(0);
   let [optionsClassName, setOptionsClassName] = useState<string[]>(["options", "closed"]);
@@ -92,6 +94,7 @@ const Select: React.FC<Props> = ({
       setSelection(option);
       setOptionsOpen(false);
 
+      _selectedItemIndex.current = index;
       _optionItems.current.forEach((item) => item?.classList.remove("selectedItem"));
       _optionItems.current[index]?.classList.add("selectedItem");
     }
@@ -132,6 +135,7 @@ const Select: React.FC<Props> = ({
 
   // effects
   useEffect(() => {
+    const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
     const screenCenter = window.innerHeight / 2 + 100;
     const rect = _singleInput.current
       ? _singleInput.current.getBoundingClientRect()
@@ -151,6 +155,11 @@ const Select: React.FC<Props> = ({
           _singleInput.current.value = "";
           _singleInput.current.placeholder = selection?.text || placeholder || "";
         }
+
+        optionItems[_selectedItemIndex.current].scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
       }
 
       setOptionsClassName((prev) => [...prev, direction, "opened"]);
@@ -213,14 +222,23 @@ const Select: React.FC<Props> = ({
           item?.classList.add("navigate-with-arrow-keys");
 
           item.scrollIntoView({
-            behavior: "smooth", // Yumuşak bir kaydırma animasyonu
-            block: "nearest", // En yakın pozisyona kaydır
+            behavior: "smooth",
+            block: "nearest",
           });
         } else {
           item?.classList.remove("navigate-with-arrow-keys");
         }
       });
   }, [navigationIndex]);
+
+  useEffect(() => {
+    if (multiple) {
+    } else {
+      if (defaultValueIndex !== undefined && defaultValueIndex >= 0) {
+        handleItemSelected(options[defaultValueIndex], defaultValueIndex);
+      }
+    }
+  }, [defaultValueIndex]);
 
   return (
     <div ref={_arSelect} className="ar-select-wrapper">
@@ -273,6 +291,7 @@ const Select: React.FC<Props> = ({
                   if (_searchField.current) _searchField.current.value = "";
 
                   setSelections([]);
+                  onChange([]);
                 }
 
                 // Single
@@ -281,7 +300,8 @@ const Select: React.FC<Props> = ({
                     _singleInput.current.value = "";
                   }
 
-                  setSelection(null);
+                  setSelection(undefined);
+                  onChange(undefined);
                 }
               }}
             ></span>

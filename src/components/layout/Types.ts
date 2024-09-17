@@ -9,9 +9,11 @@ export type HeaderProps = {
   menu: MenuProps[];
 };
 
-export type AsideProps = {
-  menu: MenuProps[];
+export type MainProps = {
+  children: React.ReactNode;
 };
+
+export type SiderProps = {};
 
 export type SectionProps = {
   children: React.ReactNode;

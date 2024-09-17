@@ -139,15 +139,15 @@ const _Input_CheckboxCss = () => {
       fs.appendFileSync(
         file,
         `/* #region Border Color -> ${color.toUpperCase()} */
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.filled.${color}::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.filled.${color}::before {
   border-right-color: var(--${_customFontColor});
   border-bottom-color: var(--${_customFontColor});
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.outlined.${color}::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.outlined.${color}::before {
   border-right-color: var(--${color});
   border-bottom-color: var(--${color});
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.borderless.${color}::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.borderless.${color}::before {
   border-right-color: var(--${color});
   border-bottom-color: var(--${color});
 }
@@ -237,7 +237,7 @@ const _Variant_FilledCss = () => {
   color: var(--${_customFontColor})
 }
 .filled:not(.disabled).${color}:hover {
-  background-color: rgba(var(--${color}-rgb), 0.5);
+  background-color: var(--${color}-active);
 }
 input.filled:not(.disabled).${color}:focus {
   background-color: var(--${color});
@@ -279,7 +279,7 @@ const _Variant_OutlinedCss = () => {
       "outlined.css"
     );
     // Dosya oluşturma ve yazma işlemi (senkron)
-    fs.writeFileSync(file, '@import url("./border.css");\n\n');
+    fs.writeFileSync(file, "");
 
     // Mevcut dosyaya yazma işlemi (senkron)
     _colors.map((color) => {
@@ -321,6 +321,66 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).${c
     console.log("\x1b[32m%s\x1b[0m", "[outlined.css] -> Oluşturuldu.");
   } catch (error) {
     console.log("\x1b[31m%s\x1b[0m", "[outlined.css] -> Oluşturulamadı!");
+  }
+};
+
+const _Variant_DashedCss = () => {
+  console.log("\x1b[34m%s\x1b[0m", "#Variant -> Dashed");
+
+  try {
+    // Dosyanın ekleneceği yeri ve adı.
+    const file = path.join(
+      __dirname,
+      "../assets",
+      "css",
+      "core",
+      "variants",
+      "dashed",
+      "dashed.css"
+    );
+    // Dosya oluşturma ve yazma işlemi (senkron)
+    fs.writeFileSync(file, "");
+
+    // Mevcut dosyaya yazma işlemi (senkron)
+    _colors.map((color) => {
+      switch (color) {
+        case "light":
+          _customFontColor = "dark";
+          break;
+        default:
+          _customFontColor = color;
+          break;
+      }
+
+      fs.appendFileSync(
+        file,
+        `/* #region ${color.toUpperCase()} */
+.dashed:not(.disabled).${color} {
+  border-color: var(--${color});
+  color: var(--${_customFontColor});
+}
+.dashed:not(.disabled).${color}:hover {
+  border-color: rgba(var(--${color}-rgb), 0.5);
+}
+input.dashed:not(.disabled).${color}:focus{
+  border-color: var(--${color});
+  box-shadow: 0 0 0 2.5px rgba(var(--${color}-rgb), 0.1);
+}
+input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).${color}{
+  box-shadow: 0 0 0 2.5px rgba(var(--${color}-rgb), 0.1);
+}
+.dashed:not(.disabled).${color}.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
+}
+/* #endregion */
+/* ${color.toUpperCase()} */\n\n`
+      );
+    });
+
+    console.log("\x1b[32m%s\x1b[0m", "[dashed.css] -> Oluşturuldu.");
+  } catch (error) {
+    console.log("\x1b[31m%s\x1b[0m", "[dashed.css] -> Oluşturulamadı!");
   }
 };
 
@@ -392,4 +452,5 @@ _Animation_Css();
 
 _Variant_FilledCss();
 _Variant_OutlinedCss();
+_Variant_DashedCss();
 _Variant_BorderlessCss();

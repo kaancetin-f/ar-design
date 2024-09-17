@@ -10,7 +10,6 @@ const Button: React.FC<Props> = ({
   shape,
   color = "primary",
   border,
-  width = "auto",
   size = "normal",
   position,
   icon,
@@ -19,16 +18,12 @@ const Button: React.FC<Props> = ({
 }) => {
   // refs
   const _button = useRef<HTMLButtonElement>(null);
-  let _buttonClassName = useRef<string>(`ar-button ${variant} ${color} ${width}`).current;
-  let _spanClassName = useRef<string>(`text`).current;
+  let _buttonClassName = `ar-button ${variant} ${color}`;
+  let _spanClassName = `text`;
 
   // button className
-  if (shape) _buttonClassName += ` ar-button-shape ${shape}`;
-
-  if (border) {
-    if (variant !== "filled" && border.style) _buttonClassName += ` border-style-${border.style}`;
-    if (border.radius) _buttonClassName += ` border-radius-${border?.radius}`;
-  }
+  if (shape) _buttonClassName += ` ar-button-shape ${shape} border-radius-sm`;
+  if (!shape) _buttonClassName += ` border-radius-${border?.radius || "sm"}`;
 
   if (size) _buttonClassName += ` ${size}`;
 
@@ -43,7 +38,9 @@ const Button: React.FC<Props> = ({
   if (icon) {
     if (icon.element && !shape) _spanClassName += ` icon`;
     if (icon.direction) _spanClassName += ` icon-${icon.direction}`;
-    if (icon.position) _spanClassName += ` icon-${icon.direction ?? "row"}-${icon.position}`;
+    if (icon.position) {
+      _spanClassName += ` icon-${icon.direction ?? "row"}-${icon.position}`;
+    }
   }
 
   return (
@@ -74,7 +71,11 @@ const Button: React.FC<Props> = ({
       <span className={_spanClassName}>
         {icon?.element}
 
-        {typeof children === "string" && upperCase ? children.toLocaleUpperCase() : children}
+        {!shape
+          ? typeof children === "string" && upperCase
+            ? children.toLocaleUpperCase()
+            : children
+          : ""}
       </span>
     </button>
   );

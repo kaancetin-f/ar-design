@@ -5,22 +5,42 @@
 .ar-layout > main {
   display: flex;
   flex-direction: row;
-  gap: 0 2rem;
+  gap: 0 2.5%;
   width: 1280px;
   margin: 0 auto;
 }
-.ar-layout > main > aside {
+.ar-layout > main > aside.ar-aside {
   position: sticky;
   top: 3.75rem;
-  width: 25%;
   height: 100%;
   margin: 2rem 0;
 }
+.ar-layout > main > aside.ar-aside.left {
+  min-width: 20%;
+}
+.ar-layout > main > aside.ar-aside.right {
+  min-width: 20%;
+}
 .ar-layout > main > section {
   background-color: var(--white);
-  width: 100%;
+  height: fit-content;
   margin: 2rem 0;
   padding: 2rem;
+  border-radius: var(--border-radius-lg);
+}
+.ar-layout > main:not(:has(> .ar-aside)) > section {
+  min-width: 100%;
+}
+.ar-layout > main:has(> .ar-aside) > section {
+  min-width: calc(80% - 2.5%);
+}
+.ar-layout > main:has(> .ar-aside) > section:has(~ .ar-aside) {
+  min-width: calc(60% - 5%);
+}
+
+.ar-layout > main > aside.ar-aside.right {
+  background-color: var(--white);
+  padding: 1rem;
   border-radius: var(--border-radius-lg);
 }
 

@@ -1,6 +1,9 @@
 .ar-checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  height: var(--input-height);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"] {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]) {
   display: none;
 }
 .ar-checkbox-wrapper > label > span {
@@ -15,7 +18,11 @@
   min-width: 1rem;
   min-height: 1rem;
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox::before {
+.ar-checkbox-wrapper
+  > label
+  > :is(input[type="checkbox"], input[type="radio"]):checked
+  + span
+  > .ar-checkbox::before {
   position: absolute;
   top: 50%;
   left: 50%;

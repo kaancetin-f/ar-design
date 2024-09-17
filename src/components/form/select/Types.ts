@@ -1,4 +1,4 @@
-import { BorderRadiuses } from "../../../libs/types/BorderRadius";
+import { BorderRadiuses } from "../../../libs/types/BorderRadiuses";
 import { Colors } from "../../../libs/types/Colors";
 import { Variants } from "../../../libs/types/Variants";
 
@@ -12,10 +12,16 @@ type Multiple = {
       color?: Colors;
     };
   };
+  defaultValueIndex?: number[];
   onChange: (option: Option[]) => void;
   multiple: true;
 };
-type Single = { status?: Colors; onChange: (option: Option | undefined) => void; multiple?: false };
+type Single = {
+  status?: Colors;
+  defaultValueIndex?: number;
+  onChange: (option: Option | undefined) => void;
+  multiple?: false;
+};
 
 export type Props = {
   variant?: Exclude<Variants, "borderless">;

@@ -1,19 +1,19 @@
 /* #region PRIMARY */
-.outlined:not(.disabled).primary {
+.dashed:not(.disabled).primary {
   border-color: var(--primary);
   color: var(--primary);
 }
-.outlined:not(.disabled).primary:hover {
+.dashed:not(.disabled).primary:hover {
   border-color: rgba(var(--primary-rgb), 0.5);
 }
-input.outlined:not(.disabled).primary:focus{
+input.dashed:not(.disabled).primary:focus{
   border-color: var(--primary);
   box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), 0.1);
 }
-input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).primary{
+input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).primary{
   box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), 0.1);
 }
-.outlined:not(.disabled).primary.active {
+.dashed:not(.disabled).primary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-primary ease-in-out 750ms 0s 1 normal both;
 }
@@ -21,21 +21,21 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).pri
 /* PRIMARY */
 
 /* #region SECONDARY */
-.outlined:not(.disabled).secondary {
+.dashed:not(.disabled).secondary {
   border-color: var(--secondary);
   color: var(--secondary);
 }
-.outlined:not(.disabled).secondary:hover {
+.dashed:not(.disabled).secondary:hover {
   border-color: rgba(var(--secondary-rgb), 0.5);
 }
-input.outlined:not(.disabled).secondary:focus{
+input.dashed:not(.disabled).secondary:focus{
   border-color: var(--secondary);
   box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), 0.1);
 }
-input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).secondary{
+input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).secondary{
   box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), 0.1);
 }
-.outlined:not(.disabled).secondary.active {
+.dashed:not(.disabled).secondary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-secondary ease-in-out 750ms 0s 1 normal both;
 }
@@ -43,21 +43,21 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).sec
 /* SECONDARY */
 
 /* #region SUCCESS */
-.outlined:not(.disabled).success {
+.dashed:not(.disabled).success {
   border-color: var(--success);
   color: var(--success);
 }
-.outlined:not(.disabled).success:hover {
+.dashed:not(.disabled).success:hover {
   border-color: rgba(var(--success-rgb), 0.5);
 }
-input.outlined:not(.disabled).success:focus{
+input.dashed:not(.disabled).success:focus{
   border-color: var(--success);
   box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), 0.1);
 }
-input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).success{
+input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).success{
   box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), 0.1);
 }
-.outlined:not(.disabled).success.active {
+.dashed:not(.disabled).success.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-success ease-in-out 750ms 0s 1 normal both;
 }
@@ -65,21 +65,21 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).suc
 /* SUCCESS */
 
 /* #region WARNING */
-.outlined:not(.disabled).warning {
+.dashed:not(.disabled).warning {
   border-color: var(--warning);
   color: var(--warning);
 }
-.outlined:not(.disabled).warning:hover {
+.dashed:not(.disabled).warning:hover {
   border-color: rgba(var(--warning-rgb), 0.5);
 }
-input.outlined:not(.disabled).warning:focus{
+input.dashed:not(.disabled).warning:focus{
   border-color: var(--warning);
   box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), 0.1);
 }
-input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).warning{
+input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).warning{
   box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), 0.1);
 }
-.outlined:not(.disabled).warning.active {
+.dashed:not(.disabled).warning.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-warning ease-in-out 750ms 0s 1 normal both;
 }
@@ -87,21 +87,21 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).war
 /* WARNING */
 
 /* #region DANGER */
-.outlined:not(.disabled).danger {
+.dashed:not(.disabled).danger {
   border-color: var(--danger);
   color: var(--danger);
 }
-.outlined:not(.disabled).danger:hover {
+.dashed:not(.disabled).danger:hover {
   border-color: rgba(var(--danger-rgb), 0.5);
 }
-input.outlined:not(.disabled).danger:focus{
+input.dashed:not(.disabled).danger:focus{
   border-color: var(--danger);
   box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), 0.1);
 }
-input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).danger{
+input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).danger{
   box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), 0.1);
 }
-.outlined:not(.disabled).danger.active {
+.dashed:not(.disabled).danger.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-danger ease-in-out 750ms 0s 1 normal both;
 }
@@ -109,21 +109,21 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).dan
 /* DANGER */
 
 /* #region INFORMATION */
-.outlined:not(.disabled).information {
+.dashed:not(.disabled).information {
   border-color: var(--information);
   color: var(--information);
 }
-.outlined:not(.disabled).information:hover {
+.dashed:not(.disabled).information:hover {
   border-color: rgba(var(--information-rgb), 0.5);
 }
-input.outlined:not(.disabled).information:focus{
+input.dashed:not(.disabled).information:focus{
   border-color: var(--information);
   box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), 0.1);
 }
-input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).information{
+input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).information{
   box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), 0.1);
 }
-.outlined:not(.disabled).information.active {
+.dashed:not(.disabled).information.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-information ease-in-out 750ms 0s 1 normal both;
 }
@@ -131,21 +131,21 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).inf
 /* INFORMATION */
 
 /* #region DARK */
-.outlined:not(.disabled).dark {
+.dashed:not(.disabled).dark {
   border-color: var(--dark);
   color: var(--dark);
 }
-.outlined:not(.disabled).dark:hover {
+.dashed:not(.disabled).dark:hover {
   border-color: rgba(var(--dark-rgb), 0.5);
 }
-input.outlined:not(.disabled).dark:focus{
+input.dashed:not(.disabled).dark:focus{
   border-color: var(--dark);
   box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), 0.1);
 }
-input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).dark{
+input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).dark{
   box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), 0.1);
 }
-.outlined:not(.disabled).dark.active {
+.dashed:not(.disabled).dark.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-dark ease-in-out 750ms 0s 1 normal both;
 }
@@ -153,21 +153,21 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).dar
 /* DARK */
 
 /* #region LIGHT */
-.outlined:not(.disabled).light {
+.dashed:not(.disabled).light {
   border-color: var(--light);
   color: var(--dark);
 }
-.outlined:not(.disabled).light:hover {
+.dashed:not(.disabled).light:hover {
   border-color: rgba(var(--light-rgb), 0.5);
 }
-input.outlined:not(.disabled).light:focus{
+input.dashed:not(.disabled).light:focus{
   border-color: var(--light);
   box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), 0.1);
 }
-input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).light{
+input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).light{
   box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), 0.1);
 }
-.outlined:not(.disabled).light.active {
+.dashed:not(.disabled).light.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-light ease-in-out 750ms 0s 1 normal both;
 }

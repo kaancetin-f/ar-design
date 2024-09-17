@@ -1,13 +1,13 @@
 /* #region Border Color -> PRIMARY */
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.filled.primary::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.filled.primary::before {
   border-right-color: var(--white);
   border-bottom-color: var(--white);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.outlined.primary::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.outlined.primary::before {
   border-right-color: var(--primary);
   border-bottom-color: var(--primary);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.borderless.primary::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.borderless.primary::before {
   border-right-color: var(--primary);
   border-bottom-color: var(--primary);
 }
@@ -15,15 +15,15 @@
 /* Border Color -> PRIMARY */
 
 /* #region Border Color -> SECONDARY */
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.filled.secondary::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.filled.secondary::before {
   border-right-color: var(--white);
   border-bottom-color: var(--white);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.outlined.secondary::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.outlined.secondary::before {
   border-right-color: var(--secondary);
   border-bottom-color: var(--secondary);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.borderless.secondary::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.borderless.secondary::before {
   border-right-color: var(--secondary);
   border-bottom-color: var(--secondary);
 }
@@ -31,15 +31,15 @@
 /* Border Color -> SECONDARY */
 
 /* #region Border Color -> SUCCESS */
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.filled.success::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.filled.success::before {
   border-right-color: var(--white);
   border-bottom-color: var(--white);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.outlined.success::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.outlined.success::before {
   border-right-color: var(--success);
   border-bottom-color: var(--success);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.borderless.success::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.borderless.success::before {
   border-right-color: var(--success);
   border-bottom-color: var(--success);
 }
@@ -47,15 +47,15 @@
 /* Border Color -> SUCCESS */
 
 /* #region Border Color -> WARNING */
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.filled.warning::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.filled.warning::before {
   border-right-color: var(--dark);
   border-bottom-color: var(--dark);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.outlined.warning::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.outlined.warning::before {
   border-right-color: var(--warning);
   border-bottom-color: var(--warning);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.borderless.warning::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.borderless.warning::before {
   border-right-color: var(--warning);
   border-bottom-color: var(--warning);
 }
@@ -63,15 +63,15 @@
 /* Border Color -> WARNING */
 
 /* #region Border Color -> DANGER */
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.filled.danger::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.filled.danger::before {
   border-right-color: var(--white);
   border-bottom-color: var(--white);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.outlined.danger::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.outlined.danger::before {
   border-right-color: var(--danger);
   border-bottom-color: var(--danger);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.borderless.danger::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.borderless.danger::before {
   border-right-color: var(--danger);
   border-bottom-color: var(--danger);
 }
@@ -79,15 +79,15 @@
 /* Border Color -> DANGER */
 
 /* #region Border Color -> INFORMATION */
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.filled.information::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.filled.information::before {
   border-right-color: var(--white);
   border-bottom-color: var(--white);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.outlined.information::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.outlined.information::before {
   border-right-color: var(--information);
   border-bottom-color: var(--information);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.borderless.information::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.borderless.information::before {
   border-right-color: var(--information);
   border-bottom-color: var(--information);
 }
@@ -95,15 +95,15 @@
 /* Border Color -> INFORMATION */
 
 /* #region Border Color -> DARK */
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.filled.dark::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.filled.dark::before {
   border-right-color: var(--white);
   border-bottom-color: var(--white);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.outlined.dark::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.outlined.dark::before {
   border-right-color: var(--dark);
   border-bottom-color: var(--dark);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.borderless.dark::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.borderless.dark::before {
   border-right-color: var(--dark);
   border-bottom-color: var(--dark);
 }
@@ -111,15 +111,15 @@
 /* Border Color -> DARK */
 
 /* #region Border Color -> LIGHT */
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.filled.light::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.filled.light::before {
   border-right-color: var(--dark);
   border-bottom-color: var(--dark);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.outlined.light::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.outlined.light::before {
   border-right-color: var(--light);
   border-bottom-color: var(--light);
 }
-.ar-checkbox-wrapper > label > input[type="checkbox"]:checked + span > .ar-checkbox.borderless.light::before {
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.borderless.light::before {
   border-right-color: var(--light);
   border-bottom-color: var(--light);
 }

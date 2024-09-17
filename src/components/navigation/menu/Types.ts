@@ -3,12 +3,12 @@ import { MenuItemVariants } from "../../../libs/types/Variants";
 
 export type MenuItemType = "group" | "divider";
 
-export interface MenuProps {
+export type MenuProps = {
   render?: string | React.JSX.Element;
   type?: MenuItemType;
   icon?: React.JSX.Element;
   submenu?: MenuProps[];
-}
+};
 
 export type Props = {
   menu: MenuProps[];

@@ -1,4 +1,4 @@
-import { BorderRadiuses } from "../../../libs/types/BorderRadius";
+import { BorderRadiuses } from "../../../libs/types/BorderRadiuses";
 import { Colors } from "../../../libs/types/Colors";
 import { Variants } from "../../../libs/types/Variants";
 
@@ -143,25 +143,8 @@ export type Props = {
    * ```
    */
   border?: {
-    style?: "solid" | "dashed" | "none";
     radius?: BorderRadiuses;
   };
-
-  /**
-   * Bileşenin genişlik özelliğini belirtir.
-   * Genişliğin nasıl ayarlanacağını tanımlamak için kullanılır.
-   *
-   * - `width` (isteğe bağlı): Genişlik ayarını belirtir.
-   *    - `"max-width"`: Maksimum genişliğe göre ayarlanır.
-   *    - `"auto"`: Otomatik olarak genişliğe göre ayarlanır.
-   *
-   * Örneğin;
-   *
-   * ```jsx
-   * <Button width="max-width">Submit</Button>
-   * ```
-   */
-  width?: "max-width" | "auto";
 
   size?: "large" | "normal" | "small";
 

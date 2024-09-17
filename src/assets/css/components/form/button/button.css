@@ -2,8 +2,6 @@
   position: relative;
   min-width: fit-content;
   padding: 0 1rem;
-  border: none;
-  border-radius: var(--border-radius-sm);
   font-family: var(--system);
   font-size: 1rem;
   cursor: pointer;

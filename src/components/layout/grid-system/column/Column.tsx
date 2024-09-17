@@ -1,20 +1,24 @@
-import React from "react";
+"use client";
+
+import React, { useRef } from "react";
 import { Props } from "./Types";
 
-const Column: React.FC<Props> = ({ children, column, align }) => {
-  const ClassName = () => {
-    let className: string = Object.entries(column ?? {})
+const Column: React.FC<Props> = ({ children, size, align }) => {
+  // refs
+  let _className = useRef<string>("").current;
+
+  // className
+  if (size) {
+    _className = Object.entries(size)
       .map(([key, value]) => `col-${key}-${value}`)
       .join(" ");
+  } else {
+    _className = "col";
+  }
 
-    if (!column) className += "col";
+  if (align) _className += ` ${align}`;
 
-    if (align) className += ` ${align}`;
-
-    return className;
-  };
-
-  return <div className={ClassName()}>{children}</div>;
+  return <div className={_className}>{children}</div>;
 };
 
 export default Column;

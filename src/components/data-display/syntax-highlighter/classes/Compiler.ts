@@ -1,9 +1,9 @@
 class Compiler {
-  public _code: React.RefObject<HTMLElement>;
+  public _setHtmlContent: React.Dispatch<React.SetStateAction<string>>;
   private _attributesCount: number = 0;
 
-  constructor(code: React.RefObject<HTMLElement>) {
-    this._code = code;
+  constructor(setHtmlContent: React.Dispatch<React.SetStateAction<string>>) {
+    this._setHtmlContent = setHtmlContent;
   }
 
   public Jsx = (elements: string[]) => {
@@ -126,8 +126,7 @@ class Compiler {
 
       element = element.replace(/\[comma\]/g, "<span class='ar-jsx-comma'>,</span>");
 
-      if (this._code.current)
-        this._code.current.innerHTML += `<span class="ar-jsx-language">${element}</span>`;
+      this._setHtmlContent(`<span class="ar-jsx-language">${element}</span>`);
     });
   };
 }

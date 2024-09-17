@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useRef } from "react";
 import { Props } from "./Types";
 import "../../../assets/css/components/data-display/chip/chip.css";

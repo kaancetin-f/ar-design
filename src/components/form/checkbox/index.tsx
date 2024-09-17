@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useRef } from "react";
 import { Props } from "./Types";
 import "../../../assets/css/components/form/checkbox/checkbox.css";
@@ -26,14 +28,16 @@ const Checkbox: React.FC<Props> = ({
   return (
     <div className={_wrapperClassName}>
       <label>
-        <input {...attributes} type="checkbox" />
+        <input type={attributes.type || "checkbox"} {...attributes} />
         <span>
           <span className={_checkboxClassName}></span>
-          <span className="label">{label}</span>
+          {label && <span className="label">{label}</span>}
         </span>
       </label>
     </div>
   );
 };
+
+Checkbox.displayName = "Checkbox";
 
 export default Checkbox;

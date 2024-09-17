@@ -4,7 +4,7 @@
   color: var(--white)
 }
 .filled:not(.disabled).primary:hover {
-  background-color: rgba(var(--primary-rgb), 0.5);
+  background-color: var(--primary-active);
 }
 input.filled:not(.disabled).primary:focus {
   background-color: var(--primary);
@@ -29,7 +29,7 @@ button.filled:not(.disabled).primary:focus {
   color: var(--white)
 }
 .filled:not(.disabled).secondary:hover {
-  background-color: rgba(var(--secondary-rgb), 0.5);
+  background-color: var(--secondary-active);
 }
 input.filled:not(.disabled).secondary:focus {
   background-color: var(--secondary);
@@ -54,7 +54,7 @@ button.filled:not(.disabled).secondary:focus {
   color: var(--white)
 }
 .filled:not(.disabled).success:hover {
-  background-color: rgba(var(--success-rgb), 0.5);
+  background-color: var(--success-active);
 }
 input.filled:not(.disabled).success:focus {
   background-color: var(--success);
@@ -79,7 +79,7 @@ button.filled:not(.disabled).success:focus {
   color: var(--dark)
 }
 .filled:not(.disabled).warning:hover {
-  background-color: rgba(var(--warning-rgb), 0.5);
+  background-color: var(--warning-active);
 }
 input.filled:not(.disabled).warning:focus {
   background-color: var(--warning);
@@ -104,7 +104,7 @@ button.filled:not(.disabled).warning:focus {
   color: var(--white)
 }
 .filled:not(.disabled).danger:hover {
-  background-color: rgba(var(--danger-rgb), 0.5);
+  background-color: var(--danger-active);
 }
 input.filled:not(.disabled).danger:focus {
   background-color: var(--danger);
@@ -129,7 +129,7 @@ button.filled:not(.disabled).danger:focus {
   color: var(--white)
 }
 .filled:not(.disabled).information:hover {
-  background-color: rgba(var(--information-rgb), 0.5);
+  background-color: var(--information-active);
 }
 input.filled:not(.disabled).information:focus {
   background-color: var(--information);
@@ -154,7 +154,7 @@ button.filled:not(.disabled).information:focus {
   color: var(--white)
 }
 .filled:not(.disabled).dark:hover {
-  background-color: rgba(var(--dark-rgb), 0.5);
+  background-color: var(--dark-active);
 }
 input.filled:not(.disabled).dark:focus {
   background-color: var(--dark);
@@ -179,7 +179,7 @@ button.filled:not(.disabled).dark:focus {
   color: var(--dark)
 }
 .filled:not(.disabled).light:hover {
-  background-color: rgba(var(--light-rgb), 0.5);
+  background-color: var(--light-active);
 }
 input.filled:not(.disabled).light:focus {
   background-color: var(--light);

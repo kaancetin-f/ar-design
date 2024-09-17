@@ -78,7 +78,7 @@
 }
 .ar-select-wrapper > .ar-select > .selections > .items > span.placeholder {
   opacity: 0.5;
-  font-weight: 800;
+  font-weight: 100;
 }
 .ar-select-wrapper > .ar-select > .selections > ul {
   display: flex;

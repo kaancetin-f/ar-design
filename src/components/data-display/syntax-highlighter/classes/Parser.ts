@@ -5,7 +5,7 @@ class Parser {
   public _setElements: React.Dispatch<React.SetStateAction<string[]>>;
 
   // Private
-  private _lineBreakSpaces = 4;
+  // private _lineBreakSpaces = 4;
 
   constructor(setElements: React.Dispatch<React.SetStateAction<string[]>>) {
     this._setElements = setElements;
@@ -29,6 +29,7 @@ class Parser {
     }
 
     // Indent seviyesi için boşlukları ekle.
+
     const indent = "  ".repeat(indentLevel);
 
     // Eğer `br` elementi ise işlemi sonlandır
@@ -65,12 +66,14 @@ class Parser {
       componentContent = componentContent.trim();
     }
 
-    componentContent =
-      attributesLength >= this._lineBreakSpaces ? `\n  ${componentContent}\n` : componentContent;
+    // componentContent =
+    //   attributesLength >= this._lineBreakSpaces ? `\n  ${componentContent}\n` : componentContent;
 
     const renderElement =
       componentContent != undefined
-        ? `${indent}[open]&lt;[/open][tag]${formattedTag}[/tag]${formattedAttributes}[close]&gt;[/close]${componentContent}${indent}[open]&lt;&#47;[/open][tag]${formattedTag}[/tag][close]&gt;[/close]`
+        ? `${indent}[open]&lt;[/open][tag]${formattedTag}[/tag]${formattedAttributes}[close]&gt;[/close]${componentContent}${
+            typeof child.props["children"] === "object" ? indent : ""
+          }[open]&lt;&#47;[/open][tag]${formattedTag}[/tag][close]&gt;[/close]`
         : `${indent}[open]&lt;[/open][tag]${formattedTag}[/tag]${formattedAttributes} [close]&#47;&gt;[/close]`;
 
     !subChilde && this._setElements((prevElements) => [...prevElements, renderElement]);
@@ -118,9 +121,9 @@ class Parser {
             ([subKey, subValue]) =>
               `[child-attribute][attribute-key]${subKey}[/attribute-key][colon]&#58;[/colon] ${this.HandleEntries(
                 subValue
-              )}, [/child-attribute]`
+              )}[/child-attribute]`
           )
-          .join("");
+          .join(", ");
 
         result = `[object]${entries}[/object]`;
         break;

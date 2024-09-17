@@ -1,14 +1,15 @@
 .ar-syntax {
   display: flex;
   flex-direction: column;
-  border: solid 1px var(--gray-200);
+  background-color: var(--gray-200);
+  /* border: solid 1px var(--gray-200); */
   border-radius: var(--border-radius-lg);
 }
 
 .ar-syntax > .preview {
   position: relative;
   gap: 1rem;
-  background-color: var(--white);
+  /* background-color: var(--white); */
   padding: 1rem;
   border-radius: var(--border-radius-lg);
 }
@@ -36,6 +37,8 @@
   background-color: var(--gray-900);
   margin: 0;
   padding: 1rem;
+  border-top: solid 2.5px var(--custom-tag-color);
+  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
   overflow-x: auto;
 }
 .ar-syntax > .pre.hidden {

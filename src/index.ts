@@ -6,6 +6,7 @@ import ButtonGroup from "./components/form/button-group";
 import Input from "./components/form/input";
 import Select from "./components/form/select";
 import Checkbox from "./components/form/checkbox";
+import Radio from "./components/form/radio";
 
 // Data Display
 import Chip from "./components/data-display/chip";
@@ -18,7 +19,6 @@ import Alert from "./components/feedback/alert";
 
 // Navigation
 import Menu from "./components/navigation/menu";
-import type { MenuProps } from "./components/navigation/menu/Types";
 
 // Layout
 import Grid from "./components/layout/grid-system";
@@ -34,6 +34,7 @@ export {
   Input,
   Select,
   Checkbox,
+  Radio,
 
   // Data Display
   Chip,
@@ -54,4 +55,3 @@ export {
   // Others
   SyntaxHighlighter,
 };
-export type { MenuProps };

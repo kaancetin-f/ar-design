@@ -141,6 +141,16 @@
 
 @import url("./variants/outlined/outlined.css");
 
+.dashed {
+  background-color: transparent;
+  border-style: dashed;
+  border-width: 1px !important;
+  border-color: transparent;
+  transition: border 250ms, box-shadow 250ms ease-in-out;
+}
+
+@import url("./variants/dashed/dashed.css");
+
 .borderless {
   background-color: transparent;
   border-width: 1px;
@@ -157,22 +167,21 @@
 @import url("./variants/borderless/borderless.css");
 @import url("./variants/border.css");
 
-:is(input, button):disabled {
+:is(input, button):disabled,
+:is(input[type="checkbox"]):disabled + span > .ar-checkbox:is(.filled, .outlined) {
   background-color: var(--gray-100) !important;
   border: solid 1px var(--gray-500) !important;
   color: var(--gray-500) !important;
   cursor: no-drop !important;
 }
-/* :is(button):disabled {
+:is(input[type="checkbox"]):disabled + span > .ar-checkbox:is(.borderless) {
   background-color: var(--gray-100) !important;
   color: var(--gray-500) !important;
   cursor: no-drop !important;
 }
-:is(button):is(.filled):disabled {
-  border: solid 1px var(--gray-500) !important;
+:is(input[type="checkbox"]):disabled + span {
+  color: var(--gray-500) !important;
+  cursor: no-drop !important;
 }
-:is(button):is(.outlined):is(.):disabled {
-  border: solid 1px var(--gray-500) !important;
-} */
 /* #endregion */
 /* Variants */

@@ -1,4 +1,4 @@
-import { BorderRadiuses } from "../../../libs/types/BorderRadius";
+import { BorderRadiuses } from "../../../libs/types/BorderRadiuses";
 import { Colors } from "../../../libs/types/Colors";
 import { Variants } from "../../../libs/types/Variants";
 

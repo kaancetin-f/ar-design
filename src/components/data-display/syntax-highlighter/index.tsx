@@ -4,33 +4,36 @@ import React, { useEffect, useRef, useState } from "react";
 import Parser from "./classes/Parser";
 import Compiler from "./classes/Compiler";
 import "../../../assets/css/components/data-display/syntax-highlighter/syntax-highlighter.css";
-import Button from "../../form/button";
+import Import from "./Import";
+// import Button from "../../form/button";
 
 const SyntaxHighlighter: React.FC<{
   children: React.ReactNode;
   position?: "left" | "center" | "right";
-}> = ({ children, position = "left" }) => {
+}> & {
+  Import: React.FC<{ children: string }>;
+} = ({ children, position = "left" }) => {
   // refs
   const _div = useRef<HTMLDivElement>(null);
-  const _code = useRef<HTMLElement>(null);
 
   // states
   const [elements, setElements] = useState<string[]>([]);
-  const [codePanelIsOpen, setCodePanelIsOpen] = useState<boolean>(false);
+  const [htmlContent, setHtmlContent] = useState<string>("");
+  // const [codePanelIsOpen, setCodePanelIsOpen] = useState<boolean>(false);
 
   // classes
   const parser = new Parser(setElements);
-  const compiler = new Compiler(_code);
+  const compiler = new Compiler(setHtmlContent);
 
   // useEffects
   useEffect(() => {
     // Clear...
     setElements([]);
-    if (_code.current) _code.current.innerHTML = "";
-
     // Fill...
     React.Children.forEach(children, (child) => {
-      if (React.isValidElement(child)) parser.JsxToString(child);
+      if (React.isValidElement(child)) {
+        parser.JsxToString(child);
+      }
     });
   }, [children]);
 
@@ -40,8 +43,6 @@ const SyntaxHighlighter: React.FC<{
     compiler.Jsx(elements);
   }, [elements]);
 
-  useEffect(() => {}, [codePanelIsOpen]);
-
   return (
     <React.Fragment>
       <div className="ar-syntax">
@@ -49,26 +50,26 @@ const SyntaxHighlighter: React.FC<{
           {children}
         </div>
 
-        <div className="ar-syntax-button-group">
+        {/* <div className="ar-syntax-button-group">
           <Button
             variant="outlined"
             color="dark"
-            border={{
-              style: "solid",
-            }}
             size="small"
             onClick={() => setCodePanelIsOpen((x) => !x)}
           >
             {codePanelIsOpen ? "Close Code" : "Open Code"}
           </Button>
-        </div>
+        </div> */}
 
-        <pre className={`pre ${!codePanelIsOpen ? "hidden" : "visible"}`}>
-          <code ref={_code}></code>
+        {/* <pre className={`pre ${!codePanelIsOpen ? "hidden" : "visible"}`}> */}
+        <pre className="pre">
+          <code dangerouslySetInnerHTML={{ __html: htmlContent }}></code>
         </pre>
       </div>
     </React.Fragment>
   );
 };
+
+SyntaxHighlighter.Import = Import;
 
 export default SyntaxHighlighter;
