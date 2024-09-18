@@ -9,7 +9,7 @@ const Switch: React.FC<Props> = ({ label, status = "primary", border, ...attribu
   // variables
   let _wrapperClassName = "ar-switch-wrapper";
   let _switchClassName = `ar-switch filled`;
-  let _xxyClassName = `xxy`;
+  let _handleClassName = `handle`;
 
   // status
   _switchClassName += ` light`;
@@ -17,7 +17,7 @@ const Switch: React.FC<Props> = ({ label, status = "primary", border, ...attribu
   // border
   _switchClassName += ` border-style-solid`;
   _switchClassName += ` border-radius-${border?.radius || "pill"}`;
-  _xxyClassName += ` border-radius-${border?.radius || "pill"}`;
+  _handleClassName += ` border-radius-${border?.radius || "pill"}`;
 
   return (
     <div className={_wrapperClassName}>
@@ -40,7 +40,7 @@ const Switch: React.FC<Props> = ({ label, status = "primary", border, ...attribu
         />
 
         <span ref={_switch} className={_switchClassName}>
-          <span className={_xxyClassName}></span>
+          <span className={_handleClassName}></span>
         </span>
 
         {label && <span className="label">{label}</span>}

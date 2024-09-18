@@ -200,8 +200,8 @@ const _Input_SwitchCss = () => {
 .ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.${color} {
   box-shadow: 0 0 0 2.5px rgba(var(--${color}-rgb), .1);
 }
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.${color} > .xxy {
-  box-shadow: 0 0 0 2.5px var(--${color});
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.${color} > .handle {
+  box-shadow: 0 0 0 2px rgba(var(--${color}-rgb), .5);
 }
 /* #endregion */
 /* Border Color -> ${color.toUpperCase()} */\n\n`
