@@ -1,15 +1,15 @@
 .ar-syntax {
   display: flex;
   flex-direction: column;
-  background-color: var(--gray-100);
   border-radius: var(--border-radius-lg);
 }
 
 .ar-syntax > .preview {
   position: relative;
   gap: 1rem;
+  border: solid 1px var(--gray-200);
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
   padding: 1rem;
-  border-radius: var(--border-radius-lg);
 }
 .ar-syntax > .preview.left {
   justify-content: left;
