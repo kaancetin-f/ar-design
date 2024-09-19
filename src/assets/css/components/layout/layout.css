@@ -11,7 +11,7 @@
 }
 .ar-layout > main > aside.ar-aside {
   position: sticky;
-  top: 3.75rem;
+  top: 4rem;
   height: 100%;
   margin: 2rem 0;
 }

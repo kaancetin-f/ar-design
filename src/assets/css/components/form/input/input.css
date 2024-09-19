@@ -14,7 +14,6 @@
   width: 100%;
   height: var(--input-height);
   padding: 0 0.5rem;
-  border: solid 1px transparent;
   font-family: var(--system);
   font-size: 1rem;
   outline: none;

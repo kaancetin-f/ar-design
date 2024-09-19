@@ -1,20 +1,25 @@
 "use client";
 
-import React, { useRef } from "react";
-import { Props } from "./Types";
+import React from "react";
 import "../../../assets/css/components/feedback/alert/alert.css";
+import IProps from "./IProps";
 
-const Alert: React.FC<Props> = ({ message, type, border = true, emphasize }) => {
+const Alert: React.FC<IProps> = ({
+  children,
+  message,
+  status = "primary",
+  border = { radius: "sm" },
+  emphasize,
+}) => {
   // refs
-  let _className = useRef<string>("ar-alert").current;
+  let _className = "ar-alert";
 
-  // methods
-  const className = () => {
-    if (type) _className += ` ${type}`;
-    if (border) _className += ` ${type}-border`;
+  // status
+  if (status) _className += ` ${status}`;
 
-    return _className;
-  };
+  // border
+  _className += ` border-style-solid`;
+  _className += ` border-radius-${border.radius}`;
 
   const formattedTags = (message: string) => {
     // TODO: Şuan için sadece transparent olan alert tiplerinde çalışmakta.
@@ -88,11 +93,15 @@ const Alert: React.FC<Props> = ({ message, type, border = true, emphasize }) => 
   const cleanMessage = (message: string) => message.replace(/<\/?[^>]+>/g, "");
 
   return (
-    <div className={className()}>
-      {Array.isArray(message) ? (
-        createList(message)
+    <div className={_className}>
+      {message ? (
+        Array.isArray(message) ? (
+          createList(message)
+        ) : (
+          <p dangerouslySetInnerHTML={{ __html: formattedTags(cleanMessage(message)) ?? "" }}></p>
+        )
       ) : (
-        <p dangerouslySetInnerHTML={{ __html: formattedTags(cleanMessage(message)) ?? "" }}></p>
+        children
       )}
     </div>
   );

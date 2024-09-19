@@ -1,8 +1,8 @@
 import React from "react";
-import { Props } from "./Types";
 import Checkbox from "../checkbox";
+import IProps from "./IProps";
 
-const Radio: React.FC<Props> = ({
+const Radio: React.FC<IProps> = ({
   label,
   variant = "outlined",
   status = "primary",

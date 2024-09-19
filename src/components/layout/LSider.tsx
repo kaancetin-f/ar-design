@@ -1,10 +1,9 @@
 "use client";
 
 import React from "react";
-import { SiderProps } from "./Types";
-import useLayout from "../../libs/core/application/hooks/useLayout";
+import { useLayout } from "../../libs/core/application/hooks";
 
-const LSider: React.FC<SiderProps> = () => {
+const LSider: React.FC = () => {
   // hooks
   const { options } = useLayout();
   const sider = options?.sider?.left;

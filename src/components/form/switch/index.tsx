@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
-import { Props } from "./Types";
 import "../../../assets/css/components/form/switch/switch.css";
+import IProps from "./IProps";
 
-const Switch: React.FC<Props> = ({ label, status = "primary", border, ...attributes }) => {
+const Switch: React.FC<IProps> = ({ label, status = "primary", border, ...attributes }) => {
   // refs
   let _switch = useRef<HTMLInputElement>(null);
 
@@ -25,6 +25,7 @@ const Switch: React.FC<Props> = ({ label, status = "primary", border, ...attribu
         <input
           type={attributes.type || "checkbox"}
           {...attributes}
+          size={0}
           onChange={(event) => {
             (() => {
               const _current = _switch.current;

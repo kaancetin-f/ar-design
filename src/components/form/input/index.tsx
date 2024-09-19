@@ -1,11 +1,11 @@
 "use client";
 
 import React, { forwardRef, useRef } from "react";
-import { Props } from "./Types";
 import "../../../assets/css/components/form/input/input.css";
 import Button from "../button";
+import IProps from "./IProps";
 
-const Input = forwardRef<HTMLInputElement, Props>(
+const Input = forwardRef<HTMLInputElement, IProps>(
   ({ variant = "outlined", status = "light", icon, border, button, addon, ...attributes }, ref) => {
     // refs
     let _wrapperClassName = useRef<string>("ar-input-wrapper").current;
@@ -60,6 +60,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
           <input
             ref={ref}
             {...attributes}
+            size={20}
             className={_inputClassName}
             onChange={(event) => {
               // Disabled gelmesi durumunda işlem yapmasına izin verme...

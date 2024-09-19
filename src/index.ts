@@ -25,7 +25,6 @@ import Menu from "./components/navigation/menu";
 // Layout
 import Grid from "./components/layout/grid-system";
 import Layout from "./components/layout";
-import useLayout from "./libs/core/application/hooks/useLayout";
 
 // Others
 
@@ -54,7 +53,6 @@ export {
   // Layout
   Grid,
   Layout,
-  useLayout,
 
   // Others
   SyntaxHighlighter,

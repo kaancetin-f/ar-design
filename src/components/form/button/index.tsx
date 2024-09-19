@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useRef } from "react";
-import { Props } from "./Types";
 import "../../../assets/css/components/form/button/button.css";
+import IProps from "./IProps";
 
-const Button: React.FC<Props> = ({
+const Button: React.FC<IProps> = ({
   children,
   variant = "filled",
   shape,
-  color = "primary",
+  status = "primary",
   border,
   size = "normal",
   position,
@@ -18,7 +18,7 @@ const Button: React.FC<Props> = ({
 }) => {
   // refs
   const _button = useRef<HTMLButtonElement>(null);
-  let _buttonClassName = `ar-button ${variant} ${color}`;
+  let _buttonClassName = `ar-button ${variant} ${status}`;
   let _spanClassName = `text`;
 
   // button className

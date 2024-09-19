@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useRef } from "react";
-import { Props } from "./Types";
+import IProps from "./IProps";
 import "../../../assets/css/components/form/checkbox/checkbox.css";
 
-const Checkbox: React.FC<Props> = ({
+const Checkbox: React.FC<IProps> = ({
   label,
   variant = "outlined",
   status = "primary",
-  border,
+  border = { radius: "sm" },
   ...attributes
 }) => {
   // refs
@@ -24,7 +24,7 @@ const Checkbox: React.FC<Props> = ({
 
   // border
   _checkboxClassName += ` border-style-solid`;
-  _checkboxClassName += ` border-radius-${border?.radius || "sm"}`;
+  _checkboxClassName += ` border-radius-${border.radius}`;
 
   return (
     <div className={_wrapperClassName}>
@@ -32,6 +32,7 @@ const Checkbox: React.FC<Props> = ({
         <input
           type={attributes.type || "checkbox"}
           {...attributes}
+          size={0}
           onChange={(event) => {
             (() => {
               const _current = _checkbox.current;

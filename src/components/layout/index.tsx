@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { SiderProps, HeaderProps, LayoutProps, MainProps, SectionProps } from "./Types";
+import { IHeaderProps, ILayoutProps, IMainProps, ISectionProps } from "./IProps";
 import Footer from "./Footer";
 import "../../assets/css/components/layout/layout.css";
 import Header from "./Header";
@@ -11,12 +11,12 @@ import Main from "./Main";
 import LSider from "./LSider";
 import RSider from "./RSider";
 
-const Layout: React.FC<LayoutProps> & {
-  Header: React.FC<HeaderProps>;
-  Main: React.FC<MainProps>;
-  LSider: React.FC<SiderProps>;
-  Section: React.FC<SectionProps>;
-  RSider: React.FC<SiderProps>;
+const Layout: React.FC<ILayoutProps> & {
+  Header: React.FC<IHeaderProps>;
+  Main: React.FC<IMainProps>;
+  LSider: React.FC;
+  Section: React.FC<ISectionProps>;
+  RSider: React.FC;
   Footer: React.FC;
 } = ({ children }) => {
   return (

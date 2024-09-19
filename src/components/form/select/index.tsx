@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Option, Props } from "./Types";
+import { Props } from "./Props";
 import Input from "../input";
 import "../../../assets/css/components/form/select/select.css";
 import Chip from "../../data-display/chip";
 import Checkbox from "../checkbox";
 import Paragraph from "../../data-display/typography/paragraph/Paragraph";
+import { Option } from "../../../libs/types/index";
 
 const Select: React.FC<Props> = ({
   variant = "outlined",
@@ -16,8 +17,7 @@ const Select: React.FC<Props> = ({
   onChange,
   multiple,
   defaultValueIndex,
-  placeholder,
-  disabled = false,
+  ...attributes
 }) => {
   // refs
   let _selectionClassName = useRef<string>("selections").current;
@@ -153,7 +153,7 @@ const Select: React.FC<Props> = ({
       if (!multiple) {
         if (_singleInput.current) {
           _singleInput.current.value = "";
-          _singleInput.current.placeholder = selection?.text || placeholder || "";
+          _singleInput.current.placeholder = selection?.text || attributes.placeholder || "";
         }
 
         optionItems[_selectedItemIndex.current].scrollIntoView({
@@ -186,7 +186,7 @@ const Select: React.FC<Props> = ({
       } else {
         if (_singleInput.current) {
           _singleInput.current.value = selection?.text || "";
-          _singleInput.current.placeholder = placeholder || "";
+          _singleInput.current.placeholder = attributes.placeholder || "";
         }
       }
 
@@ -253,12 +253,14 @@ const Select: React.FC<Props> = ({
                   <Chip
                     key={index}
                     variant={status?.selected?.variant || "filled"}
-                    color={status?.selected?.color || status?.color}
+                    status={status?.selected?.color || status?.color}
                     text={selection.text}
                   />
                 ))
               ) : (
-                <span className={`placeholder ${status?.color || "light"}`}>{placeholder}</span>
+                <span className={`placeholder ${status?.color || "light"}`}>
+                  {attributes.placeholder}
+                </span>
               )}
             </div>
           </div>
@@ -276,12 +278,12 @@ const Select: React.FC<Props> = ({
               // Arama yapmak için kullanılan state bu kısımda dolduruluyor.
               setSearchText(event.currentTarget.value);
             }}
-            placeholder={placeholder}
-            disabled={disabled}
+            placeholder={attributes.placeholder}
+            disabled={attributes.disabled}
           />
         )}
 
-        {!disabled &&
+        {!attributes.disabled &&
           (Object.keys(selection || {}).length > 0 || (multiple && selections.length > 0)) && (
             <span
               className="button-clear"

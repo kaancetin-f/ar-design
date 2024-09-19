@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useRef } from "react";
-import { Props } from "./Types";
+import IProps from "./IProps";
 
-const Paragraph: React.FC<Props> = ({
+const Paragraph: React.FC<IProps> = ({
   children,
   color,
   align = "left",
@@ -17,7 +17,11 @@ const Paragraph: React.FC<Props> = ({
   if (color) _className += ` ${color}`;
   if (size) _className += ` ${size}`;
 
-  return <p className={_className}>{upperCase ? children.toLocaleUpperCase() : children}</p>;
+  return (
+    <p className={_className}>
+      {typeof children === "string" && upperCase ? children.toLocaleUpperCase() : children}
+    </p>
+  );
 };
 
 Paragraph.displayName = "Paragraph";

@@ -1,7 +1,7 @@
 import React from "react";
-import { MainProps } from "./Types";
+import { IMainProps } from "./IProps";
 
-const Main: React.FC<MainProps> = ({ children }) => <main>{children}</main>;
+const Main: React.FC<IMainProps> = ({ children }) => <main>{children}</main>;
 
 Main.displayName = "Layout.Main";
 export default Main;

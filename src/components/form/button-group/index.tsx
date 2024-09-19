@@ -33,7 +33,7 @@ const ButtonGroup: React.FC<{
 
   return (
     <div className="ar-button-group">
-      {error ? <Alert type="danger" message={error} border={false} /> : children}
+      {error ? <Alert status="danger" message={error} /> : children}
     </div>
   );
 };

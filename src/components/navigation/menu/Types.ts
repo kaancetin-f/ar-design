@@ -1,5 +1,5 @@
 import React from "react";
-import { MenuItemVariants } from "../../../libs/types/Variants";
+import { MenuItemVariants } from "../../../libs/types";
 
 export type MenuItemType = "group" | "divider";
 

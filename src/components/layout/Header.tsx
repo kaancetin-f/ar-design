@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { HeaderProps } from "./Types";
 import Menu from "../navigation/menu";
+import { IHeaderProps } from "./IProps";
 
-const Header: React.FC<HeaderProps> = ({ logo, menu }) => {
+const Header: React.FC<IHeaderProps> = ({ logo, menu }) => {
   return (
     <header>
       <div className="ar-header-with-wrap">

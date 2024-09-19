@@ -1,7 +1,7 @@
 import React from "react";
-import { SectionProps } from "./Types";
+import { ISectionProps } from "./IProps";
 
-const Section: React.FC<SectionProps> = ({ children }) => <section>{children}</section>;
+const Section: React.FC<ISectionProps> = ({ children }) => <section>{children}</section>;
 
 Section.displayName = "Layout.Section";
 export default Section;

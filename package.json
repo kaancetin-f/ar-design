@@ -4,11 +4,17 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./@hooks": "./dist/libs/core/application/hooks/index.js",
+    "./@types": "./dist/libs/types/index.js",
+    "./@styles": "./dist/assets/css/core/ar-core.css"
+  },
   "files": [
     "dist/"
   ],
   "scripts": {
-    "build": "npm run script && rm -rf dist/ && npm run build:post-mac && npm run build:esm",
+    "build": "npm run scripts && rm -rf dist/ && npm run build:post-mac && npm run build:esm",
     "build:post-mac": "npm run mkdir:esm && npm run copy:esm",
     "mkdir:esm": "mkdir -p dist/assets && mkdir -p dist/assets/css",
     "copy:esm": "cp -r ./src/assets dist/ && cp -r ./src/assets/css dist/assets/",
@@ -18,7 +24,7 @@
     "copy:cjs": "cp -r ./src/libs/styles dist/cjs/libs/",
     "build:cjs": "tsc --module commonjs --outdir dist/cjs",
     "mv:cjs": "for ext in js ts; do mv ./dist/cjs/*.$ext ./dist/; done",
-    "script": "node src/script/index.cjs"
+    "scripts": "node src/scripts/index.cjs"
   },
   "repository": {
     "type": "git",
