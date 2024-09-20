@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { MenuItemType, MenuProps, Props } from "./Types";
+import { Props } from "./Types";
 import "../../../assets/css/components/navigation/menu/menu.css";
 import Divider from "../../data-display/divider";
-import { MenuItemVariants } from "../../../libs/types";
+import { MenuItemType, MenuItemVariants, MenuProps } from "../../../libs/types";
 
 const handleOnClick = (
   event: React.MouseEvent<HTMLLIElement, MouseEvent>,

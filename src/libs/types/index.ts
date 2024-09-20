@@ -1,9 +1,4 @@
-// // Navigation
-// import type { MenuProps } from "../../components/navigation/menu/Types";
-
 export type Variants = "filled" | "outlined" | "dashed" | "borderless";
-
-export type MenuItemVariants = "vertical" | "horizontal";
 
 export type Status =
   | "primary"
@@ -31,3 +26,15 @@ export type BorderRadiuses = "sm" | "lg" | "xl" | "xxl" | "pill" | "none";
 export type Sizes = "large" | "normal" | "small";
 
 export type Option = { value: string | number; text: string };
+
+// Menu Types
+export type MenuItemVariants = "vertical" | "horizontal";
+
+export type MenuItemType = "group" | "divider";
+
+export type MenuProps = {
+  render?: string | React.JSX.Element;
+  type?: MenuItemType;
+  icon?: React.JSX.Element;
+  submenu?: MenuProps[];
+};

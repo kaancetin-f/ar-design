@@ -1,5 +1,5 @@
+import { MenuProps } from "../../libs/types";
 import { IGlobalProps } from "../../libs/types/IGlobalProps";
-import { MenuProps } from "../navigation/menu/Types";
 
 interface ILayoutProps
   extends Omit<IGlobalProps, "variant" | "status" | "icon" | "border" | "size" | "upperCase"> {}
