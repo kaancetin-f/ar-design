@@ -34,10 +34,10 @@
 .ar-syntax > .pre {
   background-color: var(--gray-900);
   margin: 0;
-  padding: 1rem;
+
   border-top: solid 2.5px var(--custom-tag-color);
   border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
-  overflow-x: auto;
+  overflow: hidden;
 }
 .ar-syntax > .pre.hidden {
   display: none;
@@ -49,8 +49,10 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem 0;
+  padding: 1rem;
   font-family: var(--jetBrainsMonoRegular) !important;
   font-size: 0.9rem;
+  overflow-x: auto;
 }
 
 @import url("./core/jsx.template.css");

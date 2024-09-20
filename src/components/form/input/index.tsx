@@ -1,18 +1,29 @@
 "use client";
 
-import React, { forwardRef, useRef } from "react";
+import React, { forwardRef } from "react";
 import "../../../assets/css/components/form/input/input.css";
 import Button from "../button";
 import IProps from "./IProps";
 
 const Input = forwardRef<HTMLInputElement, IProps>(
-  ({ variant = "outlined", status = "light", icon, border, button, addon, ...attributes }, ref) => {
-    // refs
-    let _wrapperClassName = useRef<string>("ar-input-wrapper").current;
-    let _addonBeforeClassName = useRef<string>("addon-before").current;
-    let _addonAfterClassName = useRef<string>("addon-after").current;
-    let _inputWrapperClassName = useRef<string>("ar-input").current;
-    let _inputClassName = useRef<string>("").current;
+  (
+    {
+      variant = "outlined",
+      status = "light",
+      icon,
+      border = { radius: "sm" },
+      button,
+      addon,
+      ...attributes
+    },
+    ref
+  ) => {
+    // variables
+    let _wrapperClassName = "ar-input-wrapper";
+    let _addonBeforeClassName = "addon-before";
+    let _addonAfterClassName = "addon-after";
+    let _inputWrapperClassName = "ar-input";
+    let _inputClassName = "";
 
     // input wrapper className
     if (icon && icon.element) {
@@ -26,7 +37,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     if (status) _inputClassName += ` ${status}`;
 
     // border radius
-    _inputClassName += ` border-radius-${border?.radius || "sm"}`;
+    _inputClassName += ` border-radius-${border.radius}`;
 
     // addon className
     if (addon) {
@@ -91,8 +102,8 @@ const Input = forwardRef<HTMLInputElement, IProps>(
         {button && (
           <Button
             {...button}
-            color={status}
-            border={{ radius: border?.radius || "sm" }}
+            status={status}
+            border={{ radius: border.radius }}
             disabled={attributes.disabled}
           />
         )}
