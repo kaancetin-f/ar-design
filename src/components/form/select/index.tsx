@@ -12,7 +12,7 @@ import { Option } from "../../../libs/types/index";
 const Select: React.FC<Props> = ({
   variant = "outlined",
   status,
-  border,
+  border = { radius: "sm" },
   options,
   onChange,
   multiple,
@@ -20,7 +20,7 @@ const Select: React.FC<Props> = ({
   ...attributes
 }) => {
   // refs
-  let _selectionClassName = useRef<string>("selections").current;
+  let _selectionClassName = "selections";
 
   const _arSelect = useRef<HTMLDivElement>(null);
   const _singleInput = useRef<HTMLInputElement>(null);
@@ -46,7 +46,7 @@ const Select: React.FC<Props> = ({
   _selectionClassName += multiple ? ` ${status?.color || "light"}` : status || "light";
 
   // border
-  _selectionClassName += ` border-radius-${border?.radius || "sm"}`;
+  _selectionClassName += ` border-radius-${border.radius}`;
   _selectionClassName += ` border-style-solid}`;
 
   // methods
@@ -134,6 +134,8 @@ const Select: React.FC<Props> = ({
   };
 
   // effects
+  useEffect(() => setFilteredOptions(options), [options]);
+
   useEffect(() => {
     const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
     const screenCenter = window.innerHeight / 2 + 100;
@@ -156,7 +158,7 @@ const Select: React.FC<Props> = ({
           _singleInput.current.placeholder = selection?.text || attributes.placeholder || "";
         }
 
-        optionItems[_selectedItemIndex.current].scrollIntoView({
+        optionItems[_selectedItemIndex.current]?.scrollIntoView({
           behavior: "smooth",
           block: "start",
         });
@@ -197,7 +199,7 @@ const Select: React.FC<Props> = ({
   useEffect(() => {
     // Arama kriterlerine uygun olan değerleri bir state e gönderiyoruz.
     setFilteredOptions(
-      options.filter((option) => {
+      options?.filter((option) => {
         if (!optionsOpen) return option;
 
         return option.text.toLowerCase().includes(searchText.toLowerCase());
@@ -270,6 +272,7 @@ const Select: React.FC<Props> = ({
             ref={_singleInput}
             variant={variant}
             status={status || "light"}
+            border={{ radius: border.radius }}
             onClick={() => setOptionsOpen((x) => !x)}
             onChange={() => !optionsOpen && setOptionsOpen(true)}
             onKeyUp={(event) => {
@@ -334,9 +337,9 @@ const Select: React.FC<Props> = ({
           </div>
         )}
 
-        {filteredOptions.length > 0 ? (
+        {filteredOptions?.length > 0 ? (
           <ul>
-            {filteredOptions.map((option, index) => {
+            {filteredOptions?.map((option, index) => {
               const isItem = selections.some((selection) => selection.value === option.value);
 
               return (

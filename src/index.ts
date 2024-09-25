@@ -4,6 +4,7 @@ import "./assets/css/core/ar-core.css";
 import Button from "./components/form/button";
 import ButtonGroup from "./components/form/button-group";
 import Input from "./components/form/input";
+import DatePicker from "./components/form/date-picker";
 import Select from "./components/form/select";
 import Checkbox from "./components/form/checkbox";
 import Switch from "./components/form/switch";
@@ -33,6 +34,7 @@ export {
   Button,
   ButtonGroup,
   Input,
+  DatePicker,
   Select,
   Switch,
   Checkbox,

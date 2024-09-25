@@ -1,0 +1,101 @@
+.ar-date-picker {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+}
+.ar-date-picker > .calendar {
+  position: absolute;
+  left: 0;
+  top: calc(var(--input-height) + 0.5rem);
+  background-color: rgba(var(--white-rgb), 0.25);
+  backdrop-filter: blur(10px);
+  width: 20rem;
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 0 10px -5px rgba(var(--black-rgb), 0.25);
+  z-index: 5;
+}
+
+.ar-date-picker > .calendar > .select-field {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  gap: 0 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-bottom: solid 1px var(--gray-200);
+}
+.ar-date-picker > .calendar > .select-field > .selects {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  height: var(--input-height);
+}
+
+/* #region Prev and Next Buttons */
+.ar-date-picker > .calendar > .select-field > .prev,
+.ar-date-picker > .calendar > .select-field > .next {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0 0.5rem;
+  color: var(--gray-600);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* #endregion Prev and Next Buttons */
+/* Prev and Next Buttons */
+
+/* #region Weekdays */
+.ar-date-picker > .calendar > .weekdays {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.ar-date-picker > .calendar > .weekdays > span {
+  width: calc(100% / 7);
+  color: var(--gray-600);
+  font-size: 0.8rem;
+  text-align: center;
+  user-select: none;
+}
+/* #endregion Weekdays */
+/* Weekdays */
+
+/* #region Days */
+.ar-date-picker > .calendar > .days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0;
+  margin: 1rem 0;
+  user-select: none;
+}
+.ar-date-picker > .calendar > .days > span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(100% / 7);
+  text-align: center;
+}
+.ar-date-picker > .calendar > .days > span > span {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  text-align: center;
+  line-height: 1.5rem;
+  cursor: pointer;
+}
+.ar-date-picker > .calendar > .days > span > span:hover {
+  background-color: var(--gray-200);
+  border-radius: var(--border-radius-sm);
+}
+/* #endregion Days */
+/* Days */
+
+/* #region Actions */
+.ar-date-picker > .calendar > .actions {
+  padding: 0.5rem;
+  border-top: solid 1px var(--gray-200);
+}
+/* #endregion Actions */
+/* Actions */

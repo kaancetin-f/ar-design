@@ -8,7 +8,7 @@
 }
 input.dashed:not(.disabled).primary:focus{
   border-color: var(--primary);
-  box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--primary-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).primary{
   box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), 0.1);
@@ -30,7 +30,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).prima
 }
 input.dashed:not(.disabled).secondary:focus{
   border-color: var(--secondary);
-  box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--secondary-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).secondary{
   box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), 0.1);
@@ -52,7 +52,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).secon
 }
 input.dashed:not(.disabled).success:focus{
   border-color: var(--success);
-  box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--success-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).success{
   box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), 0.1);
@@ -74,7 +74,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).succe
 }
 input.dashed:not(.disabled).warning:focus{
   border-color: var(--warning);
-  box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--warning-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).warning{
   box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), 0.1);
@@ -96,7 +96,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).warni
 }
 input.dashed:not(.disabled).danger:focus{
   border-color: var(--danger);
-  box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--danger-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).danger{
   box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), 0.1);
@@ -118,7 +118,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).dange
 }
 input.dashed:not(.disabled).information:focus{
   border-color: var(--information);
-  box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--information-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).information{
   box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), 0.1);
@@ -140,7 +140,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).infor
 }
 input.dashed:not(.disabled).dark:focus{
   border-color: var(--dark);
-  box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--dark-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).dark{
   box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), 0.1);
@@ -162,7 +162,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).dark{
 }
 input.dashed:not(.disabled).light:focus{
   border-color: var(--light);
-  box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--light-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).light{
   box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), 0.1);
@@ -173,4 +173,3 @@ input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).light
 }
 /* #endregion */
 /* LIGHT */
-

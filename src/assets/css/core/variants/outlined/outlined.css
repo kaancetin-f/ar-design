@@ -8,7 +8,7 @@
 }
 input.outlined:not(.disabled).primary:focus{
   border-color: var(--primary);
-  box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--primary-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).primary{
   box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), 0.1);
@@ -30,7 +30,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).pri
 }
 input.outlined:not(.disabled).secondary:focus{
   border-color: var(--secondary);
-  box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--secondary-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).secondary{
   box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), 0.1);
@@ -52,7 +52,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).sec
 }
 input.outlined:not(.disabled).success:focus{
   border-color: var(--success);
-  box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--success-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).success{
   box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), 0.1);
@@ -74,7 +74,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).suc
 }
 input.outlined:not(.disabled).warning:focus{
   border-color: var(--warning);
-  box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--warning-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).warning{
   box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), 0.1);
@@ -96,7 +96,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).war
 }
 input.outlined:not(.disabled).danger:focus{
   border-color: var(--danger);
-  box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--danger-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).danger{
   box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), 0.1);
@@ -118,7 +118,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).dan
 }
 input.outlined:not(.disabled).information:focus{
   border-color: var(--information);
-  box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--information-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).information{
   box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), 0.1);
@@ -140,7 +140,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).inf
 }
 input.outlined:not(.disabled).dark:focus{
   border-color: var(--dark);
-  box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--dark-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).dark{
   box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), 0.1);
@@ -162,7 +162,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).dar
 }
 input.outlined:not(.disabled).light:focus{
   border-color: var(--light);
-  box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), 0.1);
+  box-shadow: 0 0 0 3.5px rgba(var(--light-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).light{
   box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), 0.1);
@@ -173,4 +173,3 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).lig
 }
 /* #endregion */
 /* LIGHT */
-
