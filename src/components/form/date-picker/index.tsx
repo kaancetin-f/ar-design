@@ -5,6 +5,7 @@ import Input from "../input";
 import Select from "../select";
 import { Option } from "../../../libs/types";
 import Button from "../button";
+import Alert from "../../feedback/alert";
 
 const weekdays = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
 const months = [
@@ -30,8 +31,27 @@ const DatePicker: React.FC<IProps> = ({ format }) => {
   // states
   const [calendar, setCalendar] = useState<React.ReactNode[]>([]);
   const [years, setYears] = useState<Option[]>([]);
-  const [currentMonth, setCurrentMonth] = useState<number>(_currentDate.getMonth());
+
+  // states => Selected Date
   const [currentYear, setCurrentYear] = useState<number>(_currentDate.getFullYear());
+  const [currentMonth, setCurrentMonth] = useState<number>(_currentDate.getMonth());
+  const [currentDay, setCurrentDay] = useState<number>(_currentDate.getDate());
+
+  // methods
+  // TODO: Getter ve Setter metod yaz... (Tarih için)
+  const setInput = (year: number, month: number, day: number) => {
+    if (_beginDate.current) {
+      const [date, time] = new Date(Date.UTC(year, month, day, 0, 0, 0)).toISOString().split("T");
+
+      _beginDate.current.value = date;
+    }
+
+    setCurrentDay(day);
+  };
+
+  const setToday = () => {
+    setInput(_currentDate.getFullYear(), _currentDate.getMonth(), _currentDate.getDate());
+  };
 
   // useEffects
   useEffect(() => {
@@ -54,12 +74,17 @@ const DatePicker: React.FC<IProps> = ({ format }) => {
 
   useEffect(() => {
     const calendar = [];
+    const beginDateValue = _beginDate.current?.value || "";
     const date = {
+      input: {
+        begin: new Date(beginDateValue),
+      },
       current: {
-        firstDay: new Date(currentYear, currentMonth, 1),
-        lastDay: new Date(currentYear, currentMonth + 1, 0),
+        firstDay: new Date(currentYear, currentMonth, 1), // Geçerli ayın ilk günü
+        lastDay: new Date(currentYear, currentMonth + 1, 0), // Geçerli ayın son günü
       },
     };
+
     const startingDay = date.current.firstDay.getDay() === 0 ? 7 : date.current.firstDay.getDay();
     const endDay = date.current.lastDay.getDay() === 0 ? 7 : date.current.lastDay.getDay();
 
@@ -68,17 +93,17 @@ const DatePicker: React.FC<IProps> = ({ format }) => {
     }
 
     for (let i = date.current.firstDay.getDate(); i <= date.current.lastDay.getDate(); i++) {
+      const isSelected =
+        date.input.begin.getFullYear() == currentYear &&
+        date.input.begin.getMonth() == currentMonth &&
+        currentDay == i;
+
       calendar.push(
         <span
           key={i}
+          {...(isSelected ? { className: "selection-day" } : {})}
           onClick={() => {
-            if (_beginDate.current) {
-              const [date, time] = new Date(Date.UTC(currentYear, currentMonth, i, 0, 0, 0))
-                .toISOString()
-                .split("T");
-
-              _beginDate.current.value = date;
-            }
+            setInput(currentYear, currentMonth, i);
           }}
         >
           <span>{i}</span>
@@ -91,7 +116,7 @@ const DatePicker: React.FC<IProps> = ({ format }) => {
     }
 
     setCalendar(calendar);
-  }, [currentMonth, currentYear]);
+  }, [currentYear, currentMonth, currentDay]);
 
   return (
     <div className="ar-date-picker">
@@ -106,51 +131,97 @@ const DatePicker: React.FC<IProps> = ({ format }) => {
       />
 
       <div className="calendar">
-        <div className="select-field">
-          <div className="prev">
-            <span onClick={() => setCurrentYear((prev) => (prev -= 1))}>{"«"}</span>
-            <span onClick={() => setCurrentMonth((prev) => (prev -= 1))}>{"‹"}</span>
-          </div>
+        <div className="header">
+          <div className="select-field">
+            <div className="prev">
+              <span onClick={() => setCurrentYear((prev) => (prev -= 1))}>{"«"}</span>
+              <span
+                onClick={() =>
+                  setCurrentMonth((prev) => {
+                    if (prev <= 0) {
+                      setCurrentYear((prev) => (prev -= 1));
+                      return 11;
+                    }
 
-          <div className="selects">
-            <Select
-              defaultValueIndex={currentMonth}
-              variant="borderless"
-              options={months}
-              onChange={(option) => setCurrentMonth(option?.value as number)}
-              placeholder="Begin"
-            />
+                    return (prev -= 1);
+                  })
+                }
+              >
+                {"‹"}
+              </span>
+            </div>
 
-            <Select
-              variant="borderless"
-              defaultValueIndex={years.findIndex((year) => year.value == currentYear)}
-              options={years}
-              onChange={(option) => setCurrentYear(option?.value as number)}
-              placeholder="End"
-            />
-          </div>
+            <div className="selects">
+              <Select
+                defaultValueIndex={months.findIndex((month) => month.value == currentMonth)}
+                variant="borderless"
+                options={months}
+                onChange={(option) => setCurrentMonth(option?.value as number)}
+                placeholder="Ay"
+              />
 
-          <div className="next">
-            <span onClick={() => setCurrentMonth((prev) => (prev += 1))}>{"›"}</span>
-            <span onClick={() => setCurrentYear((prev) => (prev += 1))}>{"»"}</span>
+              <Select
+                variant="borderless"
+                defaultValueIndex={years.findIndex((year) => year.value == currentYear)}
+                options={years}
+                onChange={(option) => setCurrentYear(option?.value as number)}
+                placeholder="Yıl"
+              />
+            </div>
+
+            <div className="next">
+              <span
+                onClick={() =>
+                  setCurrentMonth((prev) => {
+                    if (prev >= 11) {
+                      setCurrentYear((prev) => (prev += 1));
+                      return 0;
+                    }
+
+                    return (prev += 1);
+                  })
+                }
+              >
+                {"›"}
+              </span>
+              <span onClick={() => setCurrentYear((prev) => (prev += 1))}>{"»"}</span>
+            </div>
           </div>
         </div>
 
-        {/* :Begin: Weekdays */}
-        <div className="weekdays">
-          {weekdays.map((weekday) => (
-            <span>{weekday}</span>
-          ))}
-        </div>
-        {/* :End: Weekdays */}
+        <div className="content">
+          {!isNaN(currentMonth) && !isNaN(currentYear) ? (
+            <React.Fragment>
+              {/* :Begin: Weekdays */}
+              <div className="weekdays">
+                {weekdays.map((weekday, index) => (
+                  <span key={index}>{weekday}</span>
+                ))}
+              </div>
+              {/* :End: Weekdays */}
 
-        {/* :Begin: Days */}
-        <div className="days">{calendar}</div>
-        {/* :End: Days */}
+              {/* :Begin: Days */}
+              <div className="days">{calendar}</div>
+              {/* :End: Days */}
+            </React.Fragment>
+          ) : (
+            <Alert status="warning">Ay veya yıl seçimi yapmanız gerekmektedir.</Alert>
+          )}
+        </div>
 
         {/* :Begin: Actions */}
         <div className="actions">
-          <Button variant="outlined">Bugün</Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setCurrentYear(_currentDate.getFullYear());
+              setCurrentMonth(_currentDate.getMonth());
+
+              setToday();
+            }}
+          >
+            Bugün
+          </Button>
         </div>
         {/* :End: Actions */}
       </div>
