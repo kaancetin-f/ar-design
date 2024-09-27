@@ -96,7 +96,7 @@ const DatePicker: React.FC<IProps> = ({ format }) => {
       const isSelected =
         date.input.begin.getFullYear() == currentYear &&
         date.input.begin.getMonth() == currentMonth &&
-        currentDay == i;
+        i == currentDay;
 
       calendar.push(
         <span
