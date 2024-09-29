@@ -170,6 +170,14 @@
 :is(input) {
   border: solid 1px transparent;
 }
+:is(input[type="date"]) {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+:is(input[type="date"])::-webkit-calendar-picker-indicator {
+  display: none;
+}
 :is(input, button):disabled,
 :is(input[type="checkbox"]):disabled + span > .ar-checkbox:is(.filled, .outlined) {
   background-color: var(--gray-100) !important;

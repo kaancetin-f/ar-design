@@ -34,12 +34,12 @@ const Select: React.FC<Props> = ({
 
   // states
   const [optionsOpen, setOptionsOpen] = useState<boolean>(false);
+  let [optionsClassName, setOptionsClassName] = useState<string[]>(["options", "closed"]);
   const [filteredOptions, setFilteredOptions] = useState<Option[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [selection, setSelection] = useState<Option | undefined>(undefined);
   const [selections, setSelections] = useState<Option[]>([]);
   const [navigationIndex, setNavigationIndex] = useState<number>(0);
-  let [optionsClassName, setOptionsClassName] = useState<string[]>(["options", "closed"]);
 
   // selection className
   if (variant) _selectionClassName += ` ${variant}`;
@@ -273,7 +273,7 @@ const Select: React.FC<Props> = ({
             variant={variant}
             status={status || "light"}
             border={{ radius: border.radius }}
-            onClick={() => setOptionsOpen((x) => !x)}
+            onClick={() => setOptionsOpen((prev) => !prev)}
             onChange={() => !optionsOpen && setOptionsOpen(true)}
             onKeyUp={(event) => {
               if (event.key === "Enter") return;
