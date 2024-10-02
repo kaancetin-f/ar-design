@@ -1,4 +1,4 @@
-import { BorderRadiuses, Sizes, Status, Variants } from ".";
+import { Border, Icon, Sizes, Status, Variants } from ".";
 
 /**
  * Ortak olabilecek özellikler bu interface altına konumlandırıldı.
@@ -82,11 +82,7 @@ export interface IGlobalProps {
    * </Component>
    * ```
    */
-  icon?: {
-    element: React.JSX.Element;
-    direction?: "row" | "column";
-    position?: "start" | "end";
-  };
+  icon?: Icon;
 
   /**
    * Bileşenin çervesinde düzenleme yapılmasına olanak tanır.
@@ -108,9 +104,7 @@ export interface IGlobalProps {
    * </Component>
    * ```
    */
-  border?: {
-    radius: BorderRadiuses;
-  };
+  border?: Border;
 
   size?: Sizes;
 

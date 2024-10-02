@@ -356,7 +356,7 @@ input.borderless:not(.disabled).${color}:focus {
 }
 button.borderless:not(.disabled).${color}:focus {
   background-color: var(--${color});
-  color: var(--white);
+  color: var(--${customFontColor});
 }
 .borderless:not(.disabled).${color}.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */

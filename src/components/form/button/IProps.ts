@@ -1,7 +1,7 @@
 import { IGlobalProps } from "../../../libs/types/IGlobalProps";
 
 interface IProps
-  extends Omit<IGlobalProps, "children">,
+  extends Omit<IGlobalProps, "children" | "disabled">,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * Bileşenin şekil varyantını belirtir ve genellikle sadece ikon için kullanılmalıdır.

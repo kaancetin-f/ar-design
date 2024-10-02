@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import IProps from "./IProps";
 import "../../../assets/css/components/form/date-picker/date-picker.css";
 import Input from "../input";
 import Select from "../select";
 import { Option } from "../../../libs/types";
 import Button from "../button";
 import Alert from "../../feedback/alert";
+import Props from "./Props";
 
 const weekdays = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
 const months = [
@@ -23,16 +23,20 @@ const months = [
   { value: 11, text: "Aralık" },
 ];
 
-const DatePicker: React.FC<IProps> = ({ format }) => {
+const DatePicker: React.FC<Props> = ({ format, onChange, multiple, ...attributes }) => {
   // refs
   const _currentDate = useRef<Date>(new Date()).current;
   const _beginDate = useRef<HTMLInputElement>(null);
 
   // states
   const [calendarOpen, setCalendarOpen] = useState<boolean>(false);
-  let [calendarClassName, setCalendarClassName] = useState<string[]>(["calendar", "closed"]);
+  const [clockOpen, setClockOpen] = useState<boolean>(false);
   const [calendar, setCalendar] = useState<React.ReactNode[]>([]);
   const [years, setYears] = useState<Option[]>([]);
+  let [calendarClassName, setCalendarClassName] = useState<string[]>([
+    "calendar-wrapper",
+    "closed",
+  ]);
 
   // states => Selected Date
   const [currentYear, setCurrentYear] = useState<number>(_currentDate.getFullYear());
@@ -40,14 +44,19 @@ const DatePicker: React.FC<IProps> = ({ format }) => {
   const [currentDay, setCurrentDay] = useState<number>(_currentDate.getDate());
 
   // methods
-  // TODO: Getter ve Setter metod yaz... (Tarih için)
   const setInput = (year: number, month: number, day: number) => {
     if (_beginDate.current) {
-      const [date, time] = new Date(Date.UTC(year, month, day, 0, 0, 0)).toISOString().split("T");
+      const inputDate = new Date(Date.UTC(year, month, day, 0, 0, 0));
 
+      if (isNaN(inputDate.getTime())) return;
+
+      const [date, time] = inputDate.toISOString().split("T");
       _beginDate.current.value = date;
 
-      setCalendarOpen(false);
+      // Değerler aktarılıyor.
+      multiple
+        ? onChange({ begin: inputDate.toISOString(), end: "" })
+        : onChange(inputDate.toISOString());
     }
 
     setCurrentDay(day);
@@ -59,6 +68,20 @@ const DatePicker: React.FC<IProps> = ({ format }) => {
     setCurrentYear(_currentDate.getFullYear());
     setCurrentMonth(_currentDate.getMonth());
     setCurrentDay(_currentDate.getDate());
+
+    setCalendarOpen(false);
+  };
+
+  const getClock = () => {
+    const hours: React.JSX.Element[] = [];
+    const minutes: React.JSX.Element[] = [];
+    const seconds: React.JSX.Element[] = [];
+
+    for (let i = 0; i <= 24; i++) hours.push(<li>{i.toString().padStart(2, "0")}</li>);
+    for (let i = 0; i <= 59; i++) minutes.push(<li>{i.toString().padStart(2, "0")}</li>);
+    for (let i = 0; i <= 59; i++) seconds.push(<li>{i.toString().padStart(2, "0")}</li>);
+
+    return { hour: <ul>{hours}</ul>, minute: <ul>{minutes}</ul>, second: <ul>{seconds}</ul> };
   };
 
   // useEffects
@@ -85,7 +108,7 @@ const DatePicker: React.FC<IProps> = ({ format }) => {
     const rect = _beginDate.current?.getBoundingClientRect();
     const direction = rect && rect.top > screenCenter ? "bottom" : "top";
 
-    setCalendarClassName(["calendar"]);
+    setCalendarClassName(["calendar-wrapper"]);
 
     if (!calendarOpen) {
       setCalendarClassName((prev) => [...prev, direction, "closed"]);
@@ -129,6 +152,7 @@ const DatePicker: React.FC<IProps> = ({ format }) => {
           {...(isSelected ? { className: "selection-day" } : {})}
           onClick={() => {
             setInput(currentYear, currentMonth, i);
+            setCalendarOpen(false);
           }}
         >
           <span>{i}</span>
@@ -147,14 +171,29 @@ const DatePicker: React.FC<IProps> = ({ format }) => {
     <div className="ar-date-picker">
       <Input
         ref={_beginDate}
-        type="date"
-        onKeyDown={(event) => {
-          if (event.code == "Space") event.preventDefault();
+        type={clockOpen ? "datetime-local" : "date"}
+        onKeyDown={(event) => event.code == "Space" && event.preventDefault()}
+        onChange={(event) => {
+          // Disabled gelmesi durumunda işlem yapmasına izin verme...
+          if (attributes.disabled) return;
+
+          (() => {
+            const value = event.target.value;
+            const [year, month, day] = value.split("-");
+
+            setInput(Number(year), Number(month) - 1, Number(day));
+
+            if (Number(year) > 999) setCurrentYear(Number(year));
+            setCurrentMonth(Number(month) - 1);
+            setCurrentDay(Number(day));
+          })();
         }}
-        onClick={() => setCalendarOpen((prev) => !prev)}
+        onClick={(event) => {
+          event.preventDefault();
+          setCalendarOpen(true);
+        }}
         autoComplete="off"
         placeholder={format}
-        readOnly
       />
 
       <div className={calendarClassName.map((className) => className).join(" ")}>
@@ -219,17 +258,25 @@ const DatePicker: React.FC<IProps> = ({ format }) => {
         <div className="content">
           {!isNaN(currentMonth) && !isNaN(currentYear) ? (
             <React.Fragment>
-              {/* :Begin: Weekdays */}
-              <div className="weekdays">
-                {weekdays.map((weekday, index) => (
-                  <span key={index}>{weekday}</span>
-                ))}
-              </div>
-              {/* :End: Weekdays */}
+              <div className="calendar">
+                {/* :Begin: Weekdays */}
+                <div className="weekdays">
+                  {weekdays.map((weekday, index) => (
+                    <span key={index}>{weekday}</span>
+                  ))}
+                </div>
+                {/* :End: Weekdays */}
 
-              {/* :Begin: Days */}
-              <div className="days">{calendar}</div>
-              {/* :End: Days */}
+                {/* :Begin: Days */}
+                <div className="days">{calendar}</div>
+                {/* :End: Days */}
+              </div>
+
+              <div className={`clock ${clockOpen ? "active" : "passive"}`}>
+                <div>{getClock().hour}</div>
+                <div>{getClock().minute}</div>
+                <div>{getClock().second}</div>
+              </div>
             </React.Fragment>
           ) : (
             <Alert status="warning">Ay veya yıl seçimi yapmanız gerekmektedir.</Alert>
@@ -240,6 +287,13 @@ const DatePicker: React.FC<IProps> = ({ format }) => {
         <div className="actions">
           <Button variant="outlined" onClick={() => setToday()}>
             Bugün
+          </Button>
+          <Button
+            variant="outlined"
+            status={!clockOpen ? "primary" : "danger"}
+            onClick={() => setClockOpen((prev) => !prev)}
+          >
+            {!clockOpen ? "Saat" : "Saati Kapat"}
           </Button>
         </div>
         {/* :End: Actions */}

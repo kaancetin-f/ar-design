@@ -21,7 +21,13 @@ export type ParagraphColors =
   | "gray-800"
   | "gray-900";
 
+export type Border = { radius: BorderRadiuses };
 export type BorderRadiuses = "sm" | "lg" | "xl" | "xxl" | "pill" | "none";
+
+export type Icon = {
+  element: React.JSX.Element;
+  position?: "start" | "end";
+};
 
 export type Sizes = "large" | "normal" | "small";
 

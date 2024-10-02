@@ -1,22 +1,12 @@
-.ar-button > .icon {
-  display: -webkit-box;
-  display: -ms-flexbox;
+.ar-button > .text {
   display: flex;
-  -webkit-box-align: start;
-  -ms-flex-align: start;
-  align-items: flex-start;
+}
+.ar-button:is(.icon) > .text {
   gap: 0 0.5rem;
 }
-.ar-button > .icon-row {
+.ar-button:is(.icon-start) > .text {
   flex-direction: row;
 }
-.ar-button > .icon-row-end {
+.ar-button:is(.icon-end) > .text {
   flex-direction: row-reverse;
-}
-.ar-button > .icon-column {
-  flex-direction: column;
-  align-items: center;
-}
-.ar-button > .icon-column-end {
-  flex-direction: column-reverse;
 }

@@ -3,6 +3,7 @@
 import React, { useRef } from "react";
 import "../../../assets/css/components/form/button/button.css";
 import IProps from "./IProps";
+import Utils from "../../../libs/Utils";
 
 const Button: React.FC<IProps> = ({
   children,
@@ -18,36 +19,24 @@ const Button: React.FC<IProps> = ({
 }) => {
   // refs
   const _button = useRef<HTMLButtonElement>(null);
-  let _buttonClassName = `ar-button ${variant} ${status}`;
-  let _spanClassName = `text`;
+  const _buttonClassName: string[] = ["ar-button"];
 
-  // button className
-  if (shape) _buttonClassName += ` ar-button-shape ${shape} border-radius-sm`;
-  if (!shape) _buttonClassName += ` border-radius-${border?.radius || "sm"}`;
+  _buttonClassName.push(
+    ...Utils.GetClassName(variant, status, border, size, icon, attributes.className)
+  );
 
-  if (size) _buttonClassName += ` ${size}`;
+  if (shape) _buttonClassName.push(`ar-button-shape ${shape}`);
 
   if (position) {
-    _buttonClassName += ` ${position.type}`;
-    _buttonClassName += ` ${position.inset.map((_inset) => _inset).join(" ")}`;
-  }
-
-  if (attributes.className) _buttonClassName += ` ${attributes.className}`;
-
-  // span className
-  if (icon) {
-    if (icon.element && !shape) _spanClassName += ` icon`;
-    if (icon.direction) _spanClassName += ` icon-${icon.direction}`;
-    if (icon.position) {
-      _spanClassName += ` icon-${icon.direction ?? "row"}-${icon.position}`;
-    }
+    _buttonClassName.push(position.type);
+    _buttonClassName.push(position.inset.map((_inset) => _inset).join(" "));
   }
 
   return (
     <button
       ref={_button}
       {...attributes}
-      className={_buttonClassName}
+      className={_buttonClassName.map((c) => c).join(" ")}
       onClick={(event) => {
         // Disabled gelmesi durumunda işlem yapmasına izin verme...
         if (attributes.disabled) return;
@@ -68,7 +57,7 @@ const Button: React.FC<IProps> = ({
         (() => attributes.onClick && attributes.onClick(event))();
       }}
     >
-      <span className={_spanClassName}>
+      <span className="text">
         {icon?.element}
 
         {!shape

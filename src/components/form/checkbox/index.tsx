@@ -3,31 +3,27 @@
 import React, { useRef } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/form/checkbox/checkbox.css";
+import Utils from "../../../libs/Utils";
 
 const Checkbox: React.FC<IProps> = ({
   label,
   variant = "outlined",
-  status = "primary",
+  status = "light",
+  size = "normal",
   border = { radius: "sm" },
+  upperCase,
   ...attributes
 }) => {
   // refs
-  let _checkbox = useRef<HTMLInputElement>(null);
-  let _wrapperClassName = "ar-checkbox-wrapper";
-  let _checkboxClassName = "ar-checkbox";
+  const _checkbox = useRef<HTMLInputElement>(null);
+  const _checkboxClassName: string[] = ["ar-checkbox"];
 
-  // checkbox -> variant
-  if (variant) _checkboxClassName += ` ${variant}`;
-
-  // status
-  _checkboxClassName += ` light`;
-
-  // border
-  _checkboxClassName += ` border-style-solid`;
-  _checkboxClassName += ` border-radius-${border.radius}`;
+  _checkboxClassName.push(
+    ...Utils.GetClassName(variant, undefined, border, size, undefined, attributes.className)
+  );
 
   return (
-    <div className={_wrapperClassName}>
+    <div className="ar-checkbox-wrapper">
       <label>
         <input
           type={attributes.type || "checkbox"}
@@ -48,8 +44,8 @@ const Checkbox: React.FC<IProps> = ({
         />
 
         <span>
-          <span ref={_checkbox} className={_checkboxClassName}></span>
-          {label && <span className="label">{label}</span>}
+          <span ref={_checkbox} className={_checkboxClassName.map((c) => c).join(" ")}></span>
+          {label && <span className="label">{upperCase ? label.toUpperCase() : label}</span>}
         </span>
       </label>
     </div>

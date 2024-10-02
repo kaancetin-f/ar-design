@@ -4,12 +4,14 @@ import React, { forwardRef } from "react";
 import "../../../assets/css/components/form/input/input.css";
 import Button from "../button";
 import IProps from "./IProps";
+import Utils from "../../../libs/Utils";
 
 const Input = forwardRef<HTMLInputElement, IProps>(
   (
     {
       variant = "outlined",
       status = "light",
+      size = "normal",
       icon,
       border = { radius: "sm" },
       button,
@@ -19,51 +21,37 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     ref
   ) => {
     // variables
-    let _wrapperClassName = "ar-input-wrapper";
-    let _addonBeforeClassName = "addon-before";
-    let _addonAfterClassName = "addon-after";
-    let _inputWrapperClassName = "ar-input";
-    let _inputClassName = "";
+    const _wrapperClassName: string[] = ["ar-input-wrapper"];
+    const _addonBeforeClassName: string[] = ["addon-before"];
+    const _addonAfterClassName: string[] = ["addon-after"];
+    const _inputClassName: string[] = [];
 
-    // input wrapper className
-    if (icon && icon.element) {
-      _inputWrapperClassName += ` icon`;
-      _inputWrapperClassName += ` icon-${icon.position ?? "start"}`;
-    }
-
-    // input className
-    if (variant) _inputClassName += `${variant}`;
-
-    if (status) _inputClassName += ` ${status}`;
-
-    // border radius
-    _inputClassName += ` border-radius-${border.radius}`;
+    _inputClassName.push(
+      ...Utils.GetClassName(variant, status, border, size, icon, attributes.className)
+    );
 
     // addon className
     if (addon) {
-      _wrapperClassName += ` addon`;
+      _wrapperClassName.push("addon");
 
-      // variant
-      _addonBeforeClassName += ` ${addon?.variant || "filled"}`;
-      _addonAfterClassName += ` ${addon?.variant || "filled"}`;
+      _addonBeforeClassName.push(`${addon.variant || "filled"}`);
+      _addonBeforeClassName.push(`${status}`);
 
-      // status
-      _addonBeforeClassName += ` ${status}`;
-      _addonAfterClassName += ` ${status}`;
+      _addonAfterClassName.push(`${addon.variant || "filled"}`);
+      _addonAfterClassName.push(`${status}`);
 
-      // border radius
-      _addonBeforeClassName += ` border-radius-${border?.radius || "sm"}`;
-      _addonAfterClassName += ` border-radius-${border?.radius || "sm"}`;
+      _addonBeforeClassName.push(`border-radius-${border.radius}`);
+      _addonAfterClassName.push(`border-radius-${border.radius}`);
     }
 
-    if (attributes.className) _inputClassName += ` ${attributes.className}`;
-
     return (
-      <div className={_wrapperClassName}>
+      <div className={_wrapperClassName.map((c) => c).join(" ")}>
         {/* Addon Before */}
-        {addon?.before && <span className={_addonBeforeClassName}>{addon?.before}</span>}
+        {addon?.before && (
+          <span className={_addonBeforeClassName.map((c) => c).join(" ")}>{addon?.before}</span>
+        )}
 
-        <div className={_inputWrapperClassName}>
+        <div className="ar-input">
           {/* Icon */}
           {icon?.element && <span className="icon-element">{icon.element}</span>}
 
@@ -72,7 +60,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
             ref={ref}
             {...attributes}
             size={20}
-            className={_inputClassName}
+            className={_inputClassName.map((c) => c).join(" ")}
             onChange={(event) => {
               // Disabled gelmesi durumunda işlem yapmasına izin verme...
               if (attributes.disabled) return;
@@ -96,7 +84,9 @@ const Input = forwardRef<HTMLInputElement, IProps>(
         </div>
 
         {/* Addon Afrer */}
-        {addon?.after && <span className={_addonAfterClassName}>{addon?.after}</span>}
+        {addon?.after && (
+          <span className={_addonAfterClassName.map((c) => c).join(" ")}>{addon?.after}</span>
+        )}
 
         {/* Button */}
         {button && (
