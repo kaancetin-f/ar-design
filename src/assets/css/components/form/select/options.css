@@ -1,8 +1,10 @@
 .ar-select-wrapper > .options {
   position: absolute;
   inset: auto 0 auto 0;
-  background-color: var(--white);
-  border-radius: var(--border-radius-sm);
+  background-color: rgba(var(--white-rgb), 0.25);
+  backdrop-filter: blur(10px);
+  border: solid 1px var(--gray-200);
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
   z-index: 5;
   transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;

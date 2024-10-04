@@ -1,0 +1,6 @@
+.ar-date-picker > .calendar-wrapper > .clock > .header {
+  height: var(--header-height);
+  border-bottom: solid 1px var(--gray-200);
+  text-align: center;
+  line-height: var(--header-height);
+}

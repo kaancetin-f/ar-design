@@ -9,10 +9,6 @@ input.borderless:not(.disabled).primary:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 3.5px rgba(var(--primary-rgb), 0.25);
 }
-button.borderless:not(.disabled).primary:focus {
-  background-color: var(--primary);
-  color: var(--primary);
-}
 .borderless:not(.disabled).primary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-primary ease-in-out 750ms 0s 1 normal both;
@@ -30,10 +26,6 @@ button.borderless:not(.disabled).primary:focus {
 input.borderless:not(.disabled).secondary:focus {
   border-color: var(--secondary);
   box-shadow: 0 0 0 3.5px rgba(var(--secondary-rgb), 0.25);
-}
-button.borderless:not(.disabled).secondary:focus {
-  background-color: var(--secondary);
-  color: var(--secondary);
 }
 .borderless:not(.disabled).secondary.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -53,10 +45,6 @@ input.borderless:not(.disabled).success:focus {
   border-color: var(--success);
   box-shadow: 0 0 0 3.5px rgba(var(--success-rgb), 0.25);
 }
-button.borderless:not(.disabled).success:focus {
-  background-color: var(--success);
-  color: var(--success);
-}
 .borderless:not(.disabled).success.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-success ease-in-out 750ms 0s 1 normal both;
@@ -74,10 +62,6 @@ button.borderless:not(.disabled).success:focus {
 input.borderless:not(.disabled).warning:focus {
   border-color: var(--warning);
   box-shadow: 0 0 0 3.5px rgba(var(--warning-rgb), 0.25);
-}
-button.borderless:not(.disabled).warning:focus {
-  background-color: var(--warning);
-  color: var(--warning);
 }
 .borderless:not(.disabled).warning.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -97,10 +81,6 @@ input.borderless:not(.disabled).danger:focus {
   border-color: var(--danger);
   box-shadow: 0 0 0 3.5px rgba(var(--danger-rgb), 0.25);
 }
-button.borderless:not(.disabled).danger:focus {
-  background-color: var(--danger);
-  color: var(--danger);
-}
 .borderless:not(.disabled).danger.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-danger ease-in-out 750ms 0s 1 normal both;
@@ -118,10 +98,6 @@ button.borderless:not(.disabled).danger:focus {
 input.borderless:not(.disabled).information:focus {
   border-color: var(--information);
   box-shadow: 0 0 0 3.5px rgba(var(--information-rgb), 0.25);
-}
-button.borderless:not(.disabled).information:focus {
-  background-color: var(--information);
-  color: var(--information);
 }
 .borderless:not(.disabled).information.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
@@ -141,10 +117,6 @@ input.borderless:not(.disabled).dark:focus {
   border-color: var(--dark);
   box-shadow: 0 0 0 3.5px rgba(var(--dark-rgb), 0.25);
 }
-button.borderless:not(.disabled).dark:focus {
-  background-color: var(--dark);
-  color: var(--dark);
-}
 .borderless:not(.disabled).dark.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-dark ease-in-out 750ms 0s 1 normal both;
@@ -162,10 +134,6 @@ button.borderless:not(.disabled).dark:focus {
 input.borderless:not(.disabled).light:focus {
   border-color: var(--light);
   box-shadow: 0 0 0 3.5px rgba(var(--light-rgb), 0.25);
-}
-button.borderless:not(.disabled).light:focus {
-  background-color: var(--light);
-  color: var(--dark);
 }
 .borderless:not(.disabled).light.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */

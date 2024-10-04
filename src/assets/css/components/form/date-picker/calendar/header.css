@@ -1,0 +1,33 @@
+.ar-date-picker > .calendar-wrapper > .header {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  border-bottom: solid 1px var(--gray-200);
+}
+.ar-date-picker > .calendar-wrapper > .header > .select-field {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  gap: 0 0.75rem;
+  padding: 0 0.5rem;
+}
+.ar-date-picker > .calendar-wrapper > .header > .select-field > .selects {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  height: var(--input-height);
+}
+
+/* #region Prev and Next Buttons */
+.ar-date-picker > .calendar-wrapper > .header > .select-field > .prev,
+.ar-date-picker > .calendar-wrapper > .header > .select-field > .next {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0 0.5rem;
+  color: var(--gray-600);
+  cursor: pointer;
+  user-select: none;
+}
+/* #endregion Prev and Next Buttons */
+/* Prev and Next Buttons */

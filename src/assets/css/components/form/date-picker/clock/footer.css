@@ -1,0 +1,7 @@
+.ar-date-picker > .calendar-wrapper > .clock > .footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: var(--header-height);
+  border-top: solid 1px var(--gray-200);
+}

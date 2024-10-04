@@ -23,16 +23,27 @@ const months = [
   { value: 11, text: "Aralık" },
 ];
 
-const DatePicker: React.FC<Props> = ({ format, onChange, multiple, ...attributes }) => {
+const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
   // refs
   const _currentDate = useRef<Date>(new Date()).current;
   const _beginDate = useRef<HTMLInputElement>(null);
+  const _clockOpen = useRef<boolean>(false);
+
+  // refs -> Saatler
+  const _hours = useRef<number>(_currentDate.getHours());
+  const _minutes = useRef<number>(_currentDate.getMinutes());
+  const _hoursListElement = useRef<HTMLUListElement>(null);
+  const _hoursLiElements = useRef<(HTMLLIElement | null)[]>([]);
+  const _minutesListElement = useRef<HTMLUListElement>(null);
+  const _minutesLiElements = useRef<(HTMLLIElement | null)[]>([]);
 
   // states
   const [calendarOpen, setCalendarOpen] = useState<boolean>(false);
   const [clockOpen, setClockOpen] = useState<boolean>(false);
   const [calendar, setCalendar] = useState<React.ReactNode[]>([]);
   const [years, setYears] = useState<Option[]>([]);
+  const [hours, setHours] = useState<React.ReactNode>();
+  const [minutes, setMinutes] = useState<React.ReactNode>();
   let [calendarClassName, setCalendarClassName] = useState<string[]>([
     "calendar-wrapper",
     "closed",
@@ -42,46 +53,90 @@ const DatePicker: React.FC<Props> = ({ format, onChange, multiple, ...attributes
   const [currentYear, setCurrentYear] = useState<number>(_currentDate.getFullYear());
   const [currentMonth, setCurrentMonth] = useState<number>(_currentDate.getMonth());
   const [currentDay, setCurrentDay] = useState<number>(_currentDate.getDate());
+  const [currentHours, setCurrentHours] = useState<number>(_currentDate.getHours());
+  const [currentMinutes, setCurrentMinutes] = useState<number>(_currentDate.getMinutes());
 
   // methods
-  const setInput = (year: number, month: number, day: number) => {
+  const updateDateInput = (
+    year: number,
+    month: number,
+    day: number,
+    hours: number = _hours.current,
+    minutes: number = _minutes.current
+  ) => {
     if (_beginDate.current) {
-      const inputDate = new Date(Date.UTC(year, month, day, 0, 0, 0));
+      const inputDate = new Date(Date.UTC(year, month, day, hours, minutes, 0));
 
       if (isNaN(inputDate.getTime())) return;
 
       const [date, time] = inputDate.toISOString().split("T");
-      _beginDate.current.value = date;
+      const [clock, ms] = time.split(".");
 
-      // Değerler aktarılıyor.
-      multiple
-        ? onChange({ begin: inputDate.toISOString(), end: "" })
-        : onChange(inputDate.toISOString());
+      _beginDate.current.value = !_clockOpen.current ? date : `${date}T${clock}`;
     }
-
-    setCurrentDay(day);
   };
 
   const setToday = () => {
-    setInput(_currentDate.getFullYear(), _currentDate.getMonth(), _currentDate.getDate());
-
+    // Stateler güncelleniyor...
     setCurrentYear(_currentDate.getFullYear());
     setCurrentMonth(_currentDate.getMonth());
     setCurrentDay(_currentDate.getDate());
 
+    if (clockOpen) {
+      setCurrentHours(_currentDate.getHours());
+      setCurrentMinutes(_currentDate.getMinutes());
+    }
+
+    // Input güncelleniyor...
+    updateDateInput(
+      _currentDate.getFullYear(),
+      _currentDate.getMonth(),
+      _currentDate.getDate(),
+      _currentDate.getHours(),
+      _currentDate.getMinutes()
+    );
+
+    // Takvim kapatılıyor...
     setCalendarOpen(false);
+
+    // Değer gönderiliyor...
+    const inputDate = new Date(
+      Date.UTC(
+        _currentDate.getFullYear(),
+        _currentDate.getMonth(),
+        _currentDate.getDate(),
+        !clockOpen ? 0 : _currentDate.getHours(),
+        !clockOpen ? 0 : _currentDate.getMinutes(),
+        0
+      )
+    );
+    onChange(inputDate.toISOString());
   };
 
-  const getClock = () => {
-    const hours: React.JSX.Element[] = [];
-    const minutes: React.JSX.Element[] = [];
-    const seconds: React.JSX.Element[] = [];
+  const handleOnChange = () => {
+    const inputDate = new Date(
+      Date.UTC(
+        currentYear,
+        currentMonth,
+        currentDay,
+        !clockOpen ? 0 : currentHours,
+        !clockOpen ? 0 : currentMinutes,
+        0
+      )
+    );
 
-    for (let i = 0; i <= 24; i++) hours.push(<li>{i.toString().padStart(2, "0")}</li>);
-    for (let i = 0; i <= 59; i++) minutes.push(<li>{i.toString().padStart(2, "0")}</li>);
-    for (let i = 0; i <= 59; i++) seconds.push(<li>{i.toString().padStart(2, "0")}</li>);
-
-    return { hour: <ul>{hours}</ul>, minute: <ul>{minutes}</ul>, second: <ul>{seconds}</ul> };
+    return (
+      <Button
+        variant="borderless"
+        status="success"
+        onClick={() => {
+          onChange(inputDate.toISOString());
+          setCalendarOpen(false);
+        }}
+      >
+        Tamam
+      </Button>
+    );
   };
 
   // useEffects
@@ -104,15 +159,15 @@ const DatePicker: React.FC<Props> = ({ format, onChange, multiple, ...attributes
   }, [currentYear]);
 
   useEffect(() => {
+    // Sıfırlama işlemi...
+    setCalendarClassName(["calendar-wrapper"]);
+
     const screenCenter = window.innerHeight / 2 + 100;
     const rect = _beginDate.current?.getBoundingClientRect();
     const direction = rect && rect.top > screenCenter ? "bottom" : "top";
 
-    setCalendarClassName(["calendar-wrapper"]);
-
     if (!calendarOpen) {
       setCalendarClassName((prev) => [...prev, direction, "closed"]);
-
       return;
     }
 
@@ -148,11 +203,11 @@ const DatePicker: React.FC<Props> = ({ format, onChange, multiple, ...attributes
 
       calendar.push(
         <span
-          key={i}
+          key={`current-${i}`}
           {...(isSelected ? { className: "selection-day" } : {})}
           onClick={() => {
-            setInput(currentYear, currentMonth, i);
-            setCalendarOpen(false);
+            setCurrentDay(i);
+            updateDateInput(currentYear, currentMonth, i);
           }}
         >
           <span>{i}</span>
@@ -167,6 +222,68 @@ const DatePicker: React.FC<Props> = ({ format, onChange, multiple, ...attributes
     setCalendar(calendar);
   }, [currentYear, currentMonth, currentDay, calendarOpen]);
 
+  useEffect(() => {
+    const generateList = (
+      count: number,
+      current: number,
+      setFunc: React.Dispatch<React.SetStateAction<any>>
+    ) => {
+      const items = Array.from({ length: count }, (_, i) => (
+        <li
+          ref={(element) =>
+            count === 24
+              ? (_hoursLiElements.current[i] = element)
+              : (_minutesLiElements.current[i] = element)
+          }
+          key={i}
+          {...(current === i ? { className: "selection-time" } : {})}
+          onClick={() => {
+            if (count === 24) {
+              setCurrentHours(i);
+              _hours.current = i;
+            } else {
+              setCurrentMinutes(i);
+              _minutes.current = i;
+            }
+          }}
+        >
+          <span>
+            <span>{i.toString().padStart(2, "0")}</span>
+          </span>
+        </li>
+      ));
+
+      setFunc(items);
+    };
+
+    // Listeler oluşturuyor...
+    generateList(24, currentHours, setHours);
+    generateList(60, currentMinutes, setMinutes);
+
+    // Input güncelleniyor...
+    updateDateInput(currentYear, currentMonth, currentDay, currentHours, currentMinutes);
+
+    if (!clockOpen) return;
+
+    // Seçim sonrasında en yukarı getirme işlemi için aşağıda yer alan kodlar yazılmıştır
+    const hourLiElement = _hoursLiElements.current[currentHours];
+    const minuteLiElement = _minutesLiElements.current[currentMinutes];
+
+    if (hourLiElement) {
+      _hoursListElement.current?.scrollTo({
+        top: hourLiElement.offsetTop - _hoursListElement.current.offsetTop - 8,
+        behavior: "smooth",
+      });
+    }
+
+    if (minuteLiElement) {
+      _minutesListElement.current?.scrollTo({
+        top: minuteLiElement.offsetTop - _minutesListElement.current.offsetTop - 8,
+        behavior: "smooth",
+      });
+    }
+  }, [currentHours, currentMinutes, clockOpen]);
+
   return (
     <div className="ar-date-picker">
       <Input
@@ -179,13 +296,20 @@ const DatePicker: React.FC<Props> = ({ format, onChange, multiple, ...attributes
 
           (() => {
             const value = event.target.value;
-            const [year, month, day] = value.split("-");
+            const [date, time] = value.split("T");
+            const [year, month, day] = date.split("-").map(Number);
+            const hours = time ? Number(time.split(".")[0].split(":")[0]) : 0;
+            const minutes = time ? Number(time.split(".")[0].split(":")[1]) : 0;
 
-            setInput(Number(year), Number(month) - 1, Number(day));
+            setCurrentYear(year);
+            setCurrentMonth(month - 1);
+            setCurrentDay(day);
+            if (hours || minutes) {
+              setCurrentHours(hours);
+              setCurrentMinutes(minutes);
+            }
 
-            if (Number(year) > 999) setCurrentYear(Number(year));
-            setCurrentMonth(Number(month) - 1);
-            setCurrentDay(Number(day));
+            updateDateInput(Number(year), Number(month) - 1, Number(day), hours, minutes);
           })();
         }}
         onClick={(event) => {
@@ -193,10 +317,10 @@ const DatePicker: React.FC<Props> = ({ format, onChange, multiple, ...attributes
           setCalendarOpen(true);
         }}
         autoComplete="off"
-        placeholder={format}
       />
 
       <div className={calendarClassName.map((className) => className).join(" ")}>
+        {/* :Begin: Calendar */}
         <div className="header">
           <div className="select-field">
             <div className="prev">
@@ -257,51 +381,64 @@ const DatePicker: React.FC<Props> = ({ format, onChange, multiple, ...attributes
 
         <div className="content">
           {!isNaN(currentMonth) && !isNaN(currentYear) ? (
-            <React.Fragment>
-              <div className="calendar">
-                {/* :Begin: Weekdays */}
-                <div className="weekdays">
-                  {weekdays.map((weekday, index) => (
-                    <span key={index}>{weekday}</span>
-                  ))}
-                </div>
-                {/* :End: Weekdays */}
-
-                {/* :Begin: Days */}
-                <div className="days">{calendar}</div>
-                {/* :End: Days */}
+            <div className="calendar">
+              {/* :Begin: Weekdays */}
+              <div className="weekdays">
+                {weekdays.map((weekday, index) => (
+                  <span key={index}>{weekday}</span>
+                ))}
               </div>
+              {/* :End: Weekdays */}
 
-              <div className={`clock ${clockOpen ? "active" : "passive"}`}>
-                <div>{getClock().hour}</div>
-                <div>{getClock().minute}</div>
-                <div>{getClock().second}</div>
-              </div>
-            </React.Fragment>
+              {/* :Begin: Days */}
+              <div className="days">{calendar}</div>
+              {/* :End: Days */}
+            </div>
           ) : (
             <Alert status="warning">Ay veya yıl seçimi yapmanız gerekmektedir.</Alert>
           )}
         </div>
 
-        {/* :Begin: Actions */}
-        <div className="actions">
-          <Button variant="outlined" onClick={() => setToday()}>
-            Bugün
-          </Button>
-          <Button
-            variant="outlined"
-            status={!clockOpen ? "primary" : "danger"}
-            onClick={() => setClockOpen((prev) => !prev)}
-          >
-            {!clockOpen ? "Saat" : "Saati Kapat"}
-          </Button>
+        <div className="footer">
+          <div>
+            <Button variant="borderless" onClick={() => setToday()}>
+              Şimdi
+            </Button>
+
+            <Button
+              variant="borderless"
+              status={!clockOpen ? "primary" : "danger"}
+              onClick={() => {
+                _clockOpen.current = !_clockOpen.current;
+                setClockOpen((prev) => !prev);
+              }}
+            >
+              Saat
+            </Button>
+          </div>
+
+          <div>{!clockOpen && handleOnChange()}</div>
         </div>
-        {/* :End: Actions */}
+        {/* :End: Calendar */}
+
+        {/* :Begin: Clock */}
+        <div className={`clock ${clockOpen ? "active" : "passive"}`}>
+          <div className="header">
+            {currentHours.toString().padStart(2, "0")}
+            {" : "}
+            {currentMinutes.toString().padStart(2, "0")}
+          </div>
+          <div className="content">
+            <ul ref={_hoursListElement}>{hours}</ul>
+            <ul ref={_minutesListElement}>{minutes}</ul>
+          </div>
+          {clockOpen && <div className="footer">{handleOnChange()}</div>}
+        </div>
+        {/* :End: Clock */}
       </div>
     </div>
   );
 };
 
 DatePicker.displayName = "DatePicker";
-
 export default DatePicker;

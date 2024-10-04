@@ -1,0 +1,30 @@
+.ar-date-picker > .calendar-wrapper > .clock {
+  position: absolute;
+  top: -1px;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(var(--white-rgb), 0.25);
+  backdrop-filter: blur(10px);
+  width: 7.5rem;
+  height: 100.5%;
+  border: solid 1px var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 0 10px -5px rgba(var(--black-rgb), 0.25);
+  z-index: 5;
+  user-select: none;
+}
+.ar-date-picker > .calendar-wrapper > .clock.active {
+  visibility: visible;
+  opacity: 1;
+  right: -8rem;
+  transform: scale(1);
+  transition: visibility 250ms, opacity 250ms, right 250ms, transform 150ms 300ms ease-in-out;
+}
+.ar-date-picker > .calendar-wrapper > .clock.passive {
+  visibility: hidden;
+  opacity: 0;
+  right: -5rem;
+  transform: scale(0.8);
+  transition: visibility 250ms 200ms, opacity 250ms 200ms, right 250ms 200ms,
+    transform 150ms ease-in-out;
+}

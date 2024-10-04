@@ -354,10 +354,6 @@ input.borderless:not(.disabled).${color}:focus {
   border-color: var(--${color});
   box-shadow: 0 0 0 3.5px rgba(var(--${color}-rgb), 0.25);
 }
-button.borderless:not(.disabled).${color}:focus {
-  background-color: var(--${color});
-  color: var(--${customFontColor});
-}
 .borderless:not(.disabled).${color}.active {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;

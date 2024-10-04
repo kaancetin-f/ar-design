@@ -1,3 +1,8 @@
+:root {
+  --header-height: 2.75rem;
+  --footer-height: 2.75rem;
+}
+
 .ar-date-picker {
   position: relative;
   display: flex;
@@ -36,173 +41,11 @@
   transform-origin: bottom;
 }
 
-.ar-date-picker > .calendar-wrapper > .header > .select-field {
-  display: flex;
-  flex-direction: row;
-  justify-content: stretch;
-  gap: 0 0.75rem;
-  padding: 0.5rem;
-  border-bottom: solid 1px var(--gray-200);
-}
-.ar-date-picker > .calendar-wrapper > .header > .select-field > .selects {
-  display: flex;
-  flex-direction: row;
-  justify-content: stretch;
-  height: var(--input-height);
-}
+@import url("./calendar/header.css");
+@import url("./calendar/content.css");
+@import url("./calendar/footer.css");
 
-/* #region Prev and Next Buttons */
-.ar-date-picker > .calendar-wrapper > .header > .select-field > .prev,
-.ar-date-picker > .calendar-wrapper > .header > .select-field > .next {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0 0.5rem;
-  color: var(--gray-600);
-  cursor: pointer;
-  user-select: none;
-}
-/* #endregion Prev and Next Buttons */
-/* Prev and Next Buttons */
-
-/* #region Content */
-.ar-date-picker > .calendar-wrapper > .content {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  gap: 1rem;
-  margin: 0.5rem;
-}
-
-/* #region Weekdays */
-.ar-date-picker > .calendar-wrapper > .content > .calendar > .weekdays {
-  display: flex;
-  flex-wrap: nowrap;
-}
-.ar-date-picker > .calendar-wrapper > .content > .calendar > .weekdays > span {
-  width: calc(100% / 7);
-  color: var(--gray-600);
-  font-size: 0.8rem;
-  text-align: center;
-  user-select: none;
-}
-/* #endregion Weekdays */
-/* Weekdays */
-
-/* #region Days */
-.ar-date-picker > .calendar-wrapper > .content > .calendar > .days {
-  display: flex;
-  flex-wrap: wrap;
-  user-select: none;
-}
-.ar-date-picker > .calendar-wrapper > .content > .calendar > .days > span {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: calc(100% / 7);
-  height: var(--input-height);
-  cursor: pointer;
-}
-.ar-date-picker > .calendar-wrapper > .content > .calendar > .days > span > span {
-  display: grid;
-  justify-content: center;
-  align-content: center;
-  width: 75%;
-  height: 75%;
-  border-radius: var(--border-radius-sm);
-}
-.ar-date-picker
-  > .calendar-wrapper
-  > .content
-  > .calendar
-  > .days
-  > span:not(.empty-day)
-  > span:hover {
-  background-color: var(--gray-200);
-  color: var(--gray-700);
-}
-.ar-date-picker > .calendar-wrapper > .content > .calendar > .days > span.selection-day > span {
-  background-color: var(--primary);
-  color: var(--white);
-  box-shadow: 0 0 0 2px var(--white), 0 0 0 4px var(--primary);
-}
-
-/* #endregion Days */
-/* Days */
-
-/* #region Clock */
-.ar-date-picker > .calendar-wrapper > .content > .clock {
-  visibility: hidden;
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  right: -8rem;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  background-color: rgba(var(--white-rgb), 0.25);
-  backdrop-filter: blur(10px);
-  width: 10rem;
-  height: 100%;
-  border: solid 1px var(--gray-200);
-  border-radius: var(--border-radius-lg);
-  box-shadow: 0 0 10px -5px rgba(var(--black-rgb), 0.25);
-  z-index: 5;
-  transition: visibility 250ms, opacity 250ms, right 250ms ease-in-out;
-  user-select: none;
-}
-.ar-date-picker > .calendar-wrapper > .content > .clock::before {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 100%;
-  content: "";
-  width: 1rem;
-  height: 1rem;
-  border: solid 10px transparent;
-  border-right-color: var(--gray-300);
-}
-.ar-date-picker > .calendar-wrapper > .content > .clock.active {
-  visibility: visible;
-  opacity: 1;
-  right: -11rem;
-}
-.ar-date-picker > .calendar-wrapper > .content > .clock > div {
-  width: calc(100% / 3);
-  overflow-y: auto;
-  scrollbar-width: none;
-}
-.ar-date-picker > .calendar-wrapper > .content > .clock > div:nth-child(2) {
-  border-left: solid 1px var(--gray-200);
-  border-right: solid 1px var(--gray-200);
-}
-.ar-date-picker > .calendar-wrapper > .content > .clock > div > ul {
-  display: flex;
-  flex-direction: column;
-}
-.ar-date-picker > .calendar-wrapper > .content > .clock > div > ul > li {
-  height: 2.5rem;
-  text-align: center;
-  line-height: 2.5rem;
-  cursor: pointer;
-}
-/* width */
-.ar-date-picker > .calendar-wrapper > .content > .clock > div::-webkit-scrollbar {
-  display: none;
-}
-/* #endregion */
-/* Clock */
-
-/* #endregion Content */
-/* Content */
-
-/* #region Actions */
-.ar-date-picker > .calendar-wrapper > .actions {
-  display: flex;
-  flex-direction: row;
-  gap: 0 0.5rem;
-  padding: 0.5rem;
-  border-top: solid 1px var(--gray-200);
-}
-/* #endregion Actions */
-/* Actions */
+@import url("./clock/clock.css");
+@import url("./clock/header.css");
+@import url("./clock/content.css");
+@import url("./clock/footer.css");
