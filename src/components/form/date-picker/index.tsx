@@ -25,6 +25,7 @@ const months = [
 
 const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
   // refs
+  const _arCalendar = useRef<HTMLDivElement>(null);
   const _currentDate = useRef<Date>(new Date()).current;
   const _beginDate = useRef<HTMLInputElement>(null);
   const _clockOpen = useRef<boolean>(false);
@@ -57,23 +58,18 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
   const [currentMinutes, setCurrentMinutes] = useState<number>(_currentDate.getMinutes());
 
   // methods
-  const updateDateInput = (
-    year: number,
-    month: number,
-    day: number,
-    hours: number = _hours.current,
-    minutes: number = _minutes.current
-  ) => {
-    if (_beginDate.current) {
-      const inputDate = new Date(Date.UTC(year, month, day, hours, minutes, 0));
+  const handleClickOutSide = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
 
-      if (isNaN(inputDate.getTime())) return;
-
-      const [date, time] = inputDate.toISOString().split("T");
-      const [clock, ms] = time.split(".");
-
-      _beginDate.current.value = !_clockOpen.current ? date : `${date}T${clock}`;
+    if (_arCalendar.current && !_arCalendar.current.contains(target)) {
+      setCalendarOpen(false);
     }
+  };
+
+  const handleKeys = (event: KeyboardEvent) => {
+    const key = event.key;
+
+    if (key === "Escape") setCalendarOpen(false);
   };
 
   const setNow = () => {
@@ -141,6 +137,25 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
     );
   };
 
+  const updateDateInput = (
+    year: number = currentYear,
+    month: number = currentMonth,
+    day: number = currentDay,
+    hours: number = _hours.current,
+    minutes: number = _minutes.current
+  ) => {
+    if (_beginDate.current) {
+      const inputDate = new Date(Date.UTC(year, month, day, hours, minutes, 0));
+
+      if (isNaN(inputDate.getTime())) return;
+
+      const [date, time] = inputDate.toISOString().split("T");
+      const [clock, ms] = time.split(".");
+
+      _beginDate.current.value = !_clockOpen.current ? date : `${date}T${clock}`;
+    }
+  };
+
   // useEffects
   useEffect(() => {
     if (isNaN(currentYear)) return;
@@ -168,60 +183,71 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
     const rect = _beginDate.current?.getBoundingClientRect();
     const direction = rect && rect.top > screenCenter ? "bottom" : "top";
 
-    if (!calendarOpen) {
+    if (calendarOpen) {
+      setCalendarClassName((prev) => [...prev, direction, "opened"]);
+
+      const calendar = [];
+      const beginDateValue = _beginDate.current?.value || "";
+      const date = {
+        input: {
+          begin: new Date(beginDateValue),
+        },
+        current: {
+          firstDay: new Date(currentYear, currentMonth, 1), // Geçerli ayın ilk günü
+          lastDay: new Date(currentYear, currentMonth + 1, 0), // Geçerli ayın son günü
+        },
+      };
+
+      const startingDay = date.current.firstDay.getDay() === 0 ? 7 : date.current.firstDay.getDay();
+      const endDay = date.current.lastDay.getDay() === 0 ? 7 : date.current.lastDay.getDay();
+
+      for (let i = 1; i < startingDay; i++) {
+        calendar.push(<span key={`prev-${i}`} className="empty-day"></span>);
+      }
+
+      for (let i = date.current.firstDay.getDate(); i <= date.current.lastDay.getDate(); i++) {
+        const isSelected = !isNaN(date.input.begin.getTime())
+          ? date.input.begin.getFullYear() == currentYear &&
+            date.input.begin.getMonth() == currentMonth &&
+            i == currentDay
+          : _currentDate.getFullYear() == currentYear &&
+            _currentDate.getMonth() == currentMonth &&
+            i == currentDay;
+
+        calendar.push(
+          <span
+            key={`current-${i}`}
+            {...(isSelected ? { className: "selection-day" } : {})}
+            onClick={() => {
+              setCurrentDay(i);
+              updateDateInput(currentYear, currentMonth, i);
+            }}
+          >
+            <span>{i}</span>
+          </span>
+        );
+      }
+
+      for (let i = endDay; i < 7; i++) {
+        calendar.push(<span key={`next-${i}`} className="empty-day"></span>);
+      }
+
+      // Takvim nesneleri ekleniyor.
+      setCalendar(calendar);
+
+      // Takvim paneli için olay dinleyileri ekleniyor.
+      document.addEventListener("click", handleClickOutSide);
+      document.addEventListener("keydown", handleKeys);
+
+      // Dinleyicileri kaldır ve zamanlayıcıyı temizle.
+      return () => {
+        document.removeEventListener("click", handleClickOutSide);
+        document.removeEventListener("keydown", handleKeys);
+      };
+    } else {
       setCalendarClassName((prev) => [...prev, direction, "closed"]);
       return;
     }
-
-    setCalendarClassName((prev) => [...prev, direction, "opened"]);
-
-    const calendar = [];
-    const beginDateValue = _beginDate.current?.value || "";
-    const date = {
-      input: {
-        begin: new Date(beginDateValue),
-      },
-      current: {
-        firstDay: new Date(currentYear, currentMonth, 1), // Geçerli ayın ilk günü
-        lastDay: new Date(currentYear, currentMonth + 1, 0), // Geçerli ayın son günü
-      },
-    };
-
-    const startingDay = date.current.firstDay.getDay() === 0 ? 7 : date.current.firstDay.getDay();
-    const endDay = date.current.lastDay.getDay() === 0 ? 7 : date.current.lastDay.getDay();
-
-    for (let i = 1; i < startingDay; i++) {
-      calendar.push(<span key={`prev-${i}`} className="empty-day"></span>);
-    }
-
-    for (let i = date.current.firstDay.getDate(); i <= date.current.lastDay.getDate(); i++) {
-      const isSelected = !isNaN(date.input.begin.getTime())
-        ? date.input.begin.getFullYear() == currentYear &&
-          date.input.begin.getMonth() == currentMonth &&
-          i == currentDay
-        : _currentDate.getFullYear() == currentYear &&
-          _currentDate.getMonth() == currentMonth &&
-          i == currentDay;
-
-      calendar.push(
-        <span
-          key={`current-${i}`}
-          {...(isSelected ? { className: "selection-day" } : {})}
-          onClick={() => {
-            setCurrentDay(i);
-            updateDateInput(currentYear, currentMonth, i);
-          }}
-        >
-          <span>{i}</span>
-        </span>
-      );
-    }
-
-    for (let i = endDay; i < 7; i++) {
-      calendar.push(<span key={`next-${i}`} className="empty-day"></span>);
-    }
-
-    setCalendar(calendar);
   }, [currentYear, currentMonth, currentDay, calendarOpen]);
 
   useEffect(() => {
@@ -321,7 +347,7 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
         autoComplete="off"
       />
 
-      <div className={calendarClassName.map((className) => className).join(" ")}>
+      <div ref={_arCalendar} className={calendarClassName.map((className) => className).join(" ")}>
         {/* :Begin: Calendar */}
         <div className="header">
           <div className="select-field">
