@@ -76,24 +76,26 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
     }
   };
 
-  const setToday = () => {
+  const setNow = () => {
+    const now = new Date();
+
     // Stateler güncelleniyor...
-    setCurrentYear(_currentDate.getFullYear());
-    setCurrentMonth(_currentDate.getMonth());
-    setCurrentDay(_currentDate.getDate());
+    setCurrentYear(now.getFullYear());
+    setCurrentMonth(now.getMonth());
+    setCurrentDay(now.getDate());
 
     if (clockOpen) {
-      setCurrentHours(_currentDate.getHours());
-      setCurrentMinutes(_currentDate.getMinutes());
+      setCurrentHours(now.getHours());
+      setCurrentMinutes(now.getMinutes());
     }
 
     // Input güncelleniyor...
     updateDateInput(
-      _currentDate.getFullYear(),
-      _currentDate.getMonth(),
-      _currentDate.getDate(),
-      _currentDate.getHours(),
-      _currentDate.getMinutes()
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      now.getHours(),
+      now.getMinutes()
     );
 
     // Takvim kapatılıyor...
@@ -102,18 +104,18 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
     // Değer gönderiliyor...
     const inputDate = new Date(
       Date.UTC(
-        _currentDate.getFullYear(),
-        _currentDate.getMonth(),
-        _currentDate.getDate(),
-        !clockOpen ? 0 : _currentDate.getHours(),
-        !clockOpen ? 0 : _currentDate.getMinutes(),
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        !clockOpen ? 0 : now.getHours(),
+        !clockOpen ? 0 : now.getMinutes(),
         0
       )
     );
     onChange(inputDate.toISOString());
   };
 
-  const handleOnChange = () => {
+  const okayButton = () => {
     const inputDate = new Date(
       Date.UTC(
         currentYear,
@@ -401,7 +403,7 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
 
         <div className="footer">
           <div>
-            <Button variant="borderless" onClick={() => setToday()}>
+            <Button variant="borderless" onClick={() => setNow()}>
               Şimdi
             </Button>
 
@@ -417,7 +419,7 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
             </Button>
           </div>
 
-          <div>{!clockOpen && handleOnChange()}</div>
+          <div>{!clockOpen && okayButton()}</div>
         </div>
         {/* :End: Calendar */}
 
@@ -432,7 +434,7 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
             <ul ref={_hoursListElement}>{hours}</ul>
             <ul ref={_minutesListElement}>{minutes}</ul>
           </div>
-          {clockOpen && <div className="footer">{handleOnChange()}</div>}
+          {clockOpen && <div className="footer">{okayButton()}</div>}
         </div>
         {/* :End: Clock */}
       </div>
