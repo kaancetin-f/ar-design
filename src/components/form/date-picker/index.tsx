@@ -82,11 +82,14 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
     setCurrentYear(now.getFullYear());
     setCurrentMonth(now.getMonth());
     setCurrentDay(now.getDate());
+    setCurrentHours(now.getHours());
+    setCurrentMinutes(now.getMinutes());
 
-    if (clockOpen) {
-      setCurrentHours(now.getHours());
-      setCurrentMinutes(now.getMinutes());
-    }
+    _year.current = now.getFullYear();
+    _month.current = now.getMonth();
+    _day.current = now.getDate();
+    _hours.current = now.getHours();
+    _minutes.current = now.getMinutes();
 
     // Input güncelleniyor...
     updateDateInput(
@@ -140,6 +143,22 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
         variant="borderless"
         status="success"
         onClick={() => {
+          // Input güncelleniyor...
+          updateDateInput(
+            _year.current,
+            _month.current,
+            _day.current,
+            _hours.current,
+            _minutes.current
+          );
+
+          // Stateler güncelleniyor...
+          setCurrentYear(_year.current);
+          setCurrentMonth(_month.current);
+          setCurrentDay(_day.current);
+          setCurrentHours(_hours.current);
+          setCurrentMinutes(_minutes.current);
+
           const inputDate = new Date(
             Date.UTC(
               _year.current,
@@ -151,26 +170,8 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
             )
           );
 
-          // Input güncelleniyor...
-          updateDateInput(
-            _year.current,
-            _month.current,
-            _day.current,
-            !clockOpen ? 0 : _hours.current,
-            !clockOpen ? 0 : _minutes.current
-          );
-
-          // Stateler güncelleniyor...
-          setCurrentYear(_year.current);
-          setCurrentMonth(_month.current);
-          setCurrentDay(_day.current);
-
-          if (clockOpen) {
-            setCurrentHours(_hours.current);
-            setCurrentMinutes(_minutes.current);
-          }
-
           onChange(inputDate.toISOString());
+
           setCalendarOpen(false);
         }}
       >
@@ -185,10 +186,8 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
     _year.current = currentYear;
     _month.current = currentMonth;
     _day.current = currentDay;
-    if (hours || minutes) {
-      _hours.current = currentHours;
-      _minutes.current = currentMinutes;
-    }
+    _hours.current = currentHours;
+    _minutes.current = currentMinutes;
 
     setCalendarOpen(false);
   };
