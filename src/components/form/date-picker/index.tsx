@@ -30,9 +30,13 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
   const _beginDate = useRef<HTMLInputElement>(null);
   const _clockOpen = useRef<boolean>(false);
 
-  // refs -> Saatler
+  // refs
+  const _year = useRef<number>(_currentDate.getFullYear());
+  const _month = useRef<number>(_currentDate.getMonth());
+  const _day = useRef<number>(_currentDate.getDate());
   const _hours = useRef<number>(_currentDate.getHours());
   const _minutes = useRef<number>(_currentDate.getMinutes());
+  // refs -> List Elements
   const _hoursListElement = useRef<HTMLUListElement>(null);
   const _hoursLiElements = useRef<(HTMLLIElement | null)[]>([]);
   const _minutesListElement = useRef<HTMLUListElement>(null);
@@ -45,11 +49,12 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
   const [years, setYears] = useState<Option[]>([]);
   const [hours, setHours] = useState<React.ReactNode>();
   const [minutes, setMinutes] = useState<React.ReactNode>();
+  const [dateTrigger, setDateTrigger] = useState<boolean>(false);
+  const [timeTrigger, setTimeTrigger] = useState<boolean>(false);
   let [calendarClassName, setCalendarClassName] = useState<string[]>([
     "calendar-wrapper",
     "closed",
   ]);
-
   // states => Selected Date
   const [currentYear, setCurrentYear] = useState<number>(_currentDate.getFullYear());
   const [currentMonth, setCurrentMonth] = useState<number>(_currentDate.getMonth());
@@ -61,15 +66,13 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
   const handleClickOutSide = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
 
-    if (_arCalendar.current && !_arCalendar.current.contains(target)) {
-      setCalendarOpen(false);
-    }
+    if (_arCalendar.current && !_arCalendar.current.contains(target)) cancelProgress();
   };
 
   const handleKeys = (event: KeyboardEvent) => {
     const key = event.key;
 
-    if (key === "Escape") setCalendarOpen(false);
+    if (key === "Escape") cancelProgress();
   };
 
   const setNow = () => {
@@ -108,39 +111,14 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
         0
       )
     );
+
     onChange(inputDate.toISOString());
   };
 
-  const okayButton = () => {
-    const inputDate = new Date(
-      Date.UTC(
-        currentYear,
-        currentMonth,
-        currentDay,
-        !clockOpen ? 0 : currentHours,
-        !clockOpen ? 0 : currentMinutes,
-        0
-      )
-    );
-
-    return (
-      <Button
-        variant="borderless"
-        status="success"
-        onClick={() => {
-          onChange(inputDate.toISOString());
-          setCalendarOpen(false);
-        }}
-      >
-        Tamam
-      </Button>
-    );
-  };
-
   const updateDateInput = (
-    year: number = currentYear,
-    month: number = currentMonth,
-    day: number = currentDay,
+    year: number = _year.current,
+    month: number = _month.current,
+    day: number = _day.current,
     hours: number = _hours.current,
     minutes: number = _minutes.current
   ) => {
@@ -156,24 +134,83 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
     }
   };
 
+  const okayButton = () => {
+    return (
+      <Button
+        variant="borderless"
+        status="success"
+        onClick={() => {
+          const inputDate = new Date(
+            Date.UTC(
+              _year.current,
+              _month.current,
+              _day.current,
+              !clockOpen ? 0 : _hours.current,
+              !clockOpen ? 0 : _minutes.current,
+              0
+            )
+          );
+
+          // Input güncelleniyor...
+          updateDateInput(
+            _year.current,
+            _month.current,
+            _day.current,
+            !clockOpen ? 0 : _hours.current,
+            !clockOpen ? 0 : _minutes.current
+          );
+
+          // Stateler güncelleniyor...
+          setCurrentYear(_year.current);
+          setCurrentMonth(_month.current);
+          setCurrentDay(_day.current);
+
+          if (clockOpen) {
+            setCurrentHours(_hours.current);
+            setCurrentMinutes(_minutes.current);
+          }
+
+          onChange(inputDate.toISOString());
+          setCalendarOpen(false);
+        }}
+      >
+        Tamam
+      </Button>
+    );
+  };
+
+  const cancelProgress = () => {
+    updateDateInput(currentYear, currentMonth, currentDay, currentHours, currentMinutes);
+
+    _year.current = currentYear;
+    _month.current = currentMonth;
+    _day.current = currentDay;
+    if (hours || minutes) {
+      _hours.current = currentHours;
+      _minutes.current = currentMinutes;
+    }
+
+    setCalendarOpen(false);
+  };
+
   // useEffects
   useEffect(() => {
-    if (isNaN(currentYear)) return;
+    if (isNaN(_year.current)) return;
 
     const years: Option[] = [];
 
     // Son 20 yıl
-    for (let i = currentYear - 20; i <= currentYear; i++) {
+    for (let i = _year.current - 20; i <= _year.current; i++) {
       years.push({ value: i, text: `${i}` });
     }
 
     // Önümüzdeki 20 yıl
-    for (let i = currentYear + 1; i <= currentYear + 20; i++) {
+    for (let i = _year.current + 1; i <= _year.current + 20; i++) {
       years.push({ value: i, text: `${i}` });
     }
 
     setYears(years);
-  }, [currentYear]);
+  }, []);
 
   useEffect(() => {
     // Sıfırlama işlemi...
@@ -193,8 +230,8 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
           begin: new Date(beginDateValue),
         },
         current: {
-          firstDay: new Date(currentYear, currentMonth, 1), // Geçerli ayın ilk günü
-          lastDay: new Date(currentYear, currentMonth + 1, 0), // Geçerli ayın son günü
+          firstDay: new Date(_year.current, _month.current, 1), // Geçerli ayın ilk günü
+          lastDay: new Date(_year.current, _month.current + 1, 0), // Geçerli ayın son günü
         },
       };
 
@@ -207,20 +244,21 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
 
       for (let i = date.current.firstDay.getDate(); i <= date.current.lastDay.getDate(); i++) {
         const isSelected = !isNaN(date.input.begin.getTime())
-          ? date.input.begin.getFullYear() == currentYear &&
-            date.input.begin.getMonth() == currentMonth &&
-            i == currentDay
-          : _currentDate.getFullYear() == currentYear &&
-            _currentDate.getMonth() == currentMonth &&
-            i == currentDay;
+          ? date.input.begin.getFullYear() == _year.current &&
+            date.input.begin.getMonth() == _month.current &&
+            i == _day.current
+          : _currentDate.getFullYear() == _year.current &&
+            _currentDate.getMonth() == _month.current &&
+            i == _day.current;
 
         calendar.push(
           <span
             key={`current-${i}`}
             {...(isSelected ? { className: "selection-day" } : {})}
             onClick={() => {
-              setCurrentDay(i);
-              updateDateInput(currentYear, currentMonth, i);
+              _day.current = i;
+              updateDateInput(_year.current, _month.current, _day.current);
+              setDateTrigger((prev) => !prev);
             }}
           >
             <span>{i}</span>
@@ -246,9 +284,8 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
       };
     } else {
       setCalendarClassName((prev) => [...prev, direction, "closed"]);
-      return;
     }
-  }, [currentYear, currentMonth, currentDay, calendarOpen]);
+  }, [dateTrigger, calendarOpen]);
 
   useEffect(() => {
     const generateList = (
@@ -267,10 +304,10 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
           {...(current === i ? { className: "selection-time" } : {})}
           onClick={() => {
             if (count === 24) {
-              setCurrentHours(i);
+              setTimeTrigger((prev) => !prev);
               _hours.current = i;
             } else {
-              setCurrentMinutes(i);
+              setTimeTrigger((prev) => !prev);
               _minutes.current = i;
             }
           }}
@@ -285,17 +322,17 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
     };
 
     // Listeler oluşturuyor...
-    generateList(24, currentHours, setHours);
-    generateList(60, currentMinutes, setMinutes);
+    generateList(24, _hours.current, setHours);
+    generateList(60, _minutes.current, setMinutes);
 
     // Input güncelleniyor...
-    updateDateInput(currentYear, currentMonth, currentDay, currentHours, currentMinutes);
+    updateDateInput(_year.current, _month.current, _day.current, _hours.current, _minutes.current);
 
     if (!clockOpen) return;
 
     // Seçim sonrasında en yukarı getirme işlemi için aşağıda yer alan kodlar yazılmıştır
-    const hourLiElement = _hoursLiElements.current[currentHours];
-    const minuteLiElement = _minutesLiElements.current[currentMinutes];
+    const hourLiElement = _hoursLiElements.current[_hours.current];
+    const minuteLiElement = _minutesLiElements.current[_minutes.current];
 
     if (hourLiElement) {
       _hoursListElement.current?.scrollTo({
@@ -310,7 +347,7 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
         behavior: "smooth",
       });
     }
-  }, [currentHours, currentMinutes, clockOpen]);
+  }, [timeTrigger, calendarOpen, clockOpen]);
 
   return (
     <div className="ar-date-picker">
@@ -324,20 +361,22 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
 
           (() => {
             const value = event.target.value;
+
             const [date, time] = value.split("T");
             const [year, month, day] = date.split("-").map(Number);
-            const hours = time ? Number(time.split(".")[0].split(":")[0]) : 0;
-            const minutes = time ? Number(time.split(".")[0].split(":")[1]) : 0;
+            const hours = time ? time.split(".")[0].split(":").map(Number)[0] : 0;
+            const minutes = time ? time.split(".")[0].split(":").map(Number)[1] : 0;
 
-            setCurrentYear(year);
-            setCurrentMonth(month - 1);
-            setCurrentDay(day);
+            _year.current = year;
+            _month.current = month - 1;
+            _day.current = day;
             if (hours || minutes) {
-              setCurrentHours(hours);
-              setCurrentMinutes(minutes);
+              _hours.current = hours;
+              _minutes.current = minutes;
             }
 
-            updateDateInput(Number(year), Number(month) - 1, Number(day), hours, minutes);
+            setDateTrigger((prev) => !prev);
+            setTimeTrigger((prev) => !prev);
           })();
         }}
         onClick={(event) => {
@@ -352,18 +391,26 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
         <div className="header">
           <div className="select-field">
             <div className="prev">
-              <span onClick={() => setCurrentYear((prev) => (prev -= 1))}>{"«"}</span>
               <span
-                onClick={() =>
-                  setCurrentMonth((prev) => {
-                    if (prev <= 0) {
-                      setCurrentYear((prev) => (prev -= 1));
-                      return 11;
-                    }
+                onClick={() => {
+                  _year.current -= 1;
+                  setDateTrigger((prev) => !prev);
+                }}
+              >
+                {"«"}
+              </span>
+              <span
+                onClick={() => {
+                  if (_month.current <= 0) {
+                    _year.current -= 1;
+                    _month.current = 12;
+                  }
 
-                    return (prev -= 1);
-                  })
-                }
+                  _month.current -= 1;
+
+                  updateDateInput(_year.current, _month.current, _day.current);
+                  setDateTrigger((prev) => !prev);
+                }}
               >
                 {"‹"}
               </span>
@@ -371,44 +418,64 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
 
             <div className="selects">
               <Select
-                defaultValueIndex={months.findIndex((month) => month.value == currentMonth)}
+                defaultValueIndex={months.findIndex((month) => month.value == _month.current)}
                 variant="borderless"
                 options={months}
-                onChange={(option) => setCurrentMonth(option?.value as number)}
+                onChange={(option) => {
+                  _month.current = option?.value as number;
+
+                  updateDateInput(_year.current, _month.current, _day.current);
+                  setDateTrigger((prev) => !prev);
+                }}
                 placeholder="Ay"
               />
 
               <Select
                 variant="borderless"
-                defaultValueIndex={years.findIndex((year) => year.value == currentYear)}
+                defaultValueIndex={years.findIndex((year) => year.value == _year.current)}
                 options={years}
-                onChange={(option) => setCurrentYear(option?.value as number)}
+                onChange={(option) => {
+                  _year.current = option?.value as number;
+
+                  updateDateInput(_year.current, _month.current, _day.current);
+                  setDateTrigger((prev) => !prev);
+                }}
                 placeholder="Yıl"
               />
             </div>
 
             <div className="next">
               <span
-                onClick={() =>
-                  setCurrentMonth((prev) => {
-                    if (prev >= 11) {
-                      setCurrentYear((prev) => (prev += 1));
-                      return 0;
-                    }
+                onClick={() => {
+                  if (_month.current >= 11) {
+                    _year.current += 1;
+                    _month.current = -1;
+                  }
 
-                    return (prev += 1);
-                  })
-                }
+                  _month.current += 1;
+
+                  updateDateInput(_year.current, _month.current, _day.current);
+                  setDateTrigger((prev) => !prev);
+                }}
               >
                 {"›"}
               </span>
-              <span onClick={() => setCurrentYear((prev) => (prev += 1))}>{"»"}</span>
+              <span
+                onClick={() => {
+                  _year.current += 1;
+
+                  updateDateInput(_year.current, _month.current, _day.current);
+                  setDateTrigger((prev) => !prev);
+                }}
+              >
+                {"»"}
+              </span>
             </div>
           </div>
         </div>
 
         <div className="content">
-          {!isNaN(currentMonth) && !isNaN(currentYear) ? (
+          {!isNaN(_month.current) && !isNaN(_year.current) ? (
             <div className="calendar">
               {/* :Begin: Weekdays */}
               <div className="weekdays">
@@ -452,9 +519,9 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
         {/* :Begin: Clock */}
         <div className={`clock ${clockOpen ? "active" : "passive"}`}>
           <div className="header">
-            {currentHours.toString().padStart(2, "0")}
+            {_hours.current.toString().padStart(2, "0")}
             {" : "}
-            {currentMinutes.toString().padStart(2, "0")}
+            {_minutes.current.toString().padStart(2, "0")}
           </div>
           <div className="content">
             <ul ref={_hoursListElement}>{hours}</ul>
