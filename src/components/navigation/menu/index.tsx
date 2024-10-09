@@ -110,7 +110,7 @@ const SubMenu: React.FC<{
   );
 };
 
-const Menu: React.FC<Props> = ({ menu, variant = "vertical", ...attributes }) => {
+const Menu: React.FC<Props> = ({ data, variant = "vertical", ...attributes }) => {
   // refs
   let _className_li = useRef<string>("ar-menu-list-item").current;
 
@@ -129,7 +129,7 @@ const Menu: React.FC<Props> = ({ menu, variant = "vertical", ...attributes }) =>
   return (
     <nav className="ar-menu" {...attributes}>
       <ul className={handleClassName()}>
-        {menu.map((item, index) => {
+        {data.map((item, index) => {
           // refs
           let _className_groupTitle = useRef<string>("ar-menu-list-item-group-item-title").current;
 

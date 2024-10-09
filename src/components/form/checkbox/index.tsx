@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/form/checkbox/checkbox.css";
-import Utils from "../../../libs/Utils";
+import Utils from "../../../libs/infrastructure/shared/Utils";
 
 const Checkbox: React.FC<IProps> = ({
   label,

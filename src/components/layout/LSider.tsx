@@ -5,8 +5,8 @@ import { useLayout } from "../../libs/core/application/hooks";
 
 const LSider: React.FC = () => {
   // hooks
-  const { options } = useLayout();
-  const sider = options?.sider?.left;
+  const { config: options } = useLayout();
+  const sider = options.layout.sider.left;
 
   if (!sider?.active) return null;
 

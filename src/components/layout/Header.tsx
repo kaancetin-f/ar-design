@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import Menu from "../navigation/menu";
 import { IHeaderProps } from "./IProps";
+import Menu from "../navigation/menu";
 
 const Header: React.FC<IHeaderProps> = ({ logo, menu }) => {
   return (
@@ -11,7 +11,7 @@ const Header: React.FC<IHeaderProps> = ({ logo, menu }) => {
         {typeof logo === "string" ? <h1>{logo}</h1> : logo}
 
         {/* Yatay Menü */}
-        {<Menu menu={menu} variant="horizontal" />}
+        {<Menu data={menu} variant="horizontal" />}
       </div>
     </header>
   );

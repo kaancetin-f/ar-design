@@ -1,12 +1,9 @@
-"use client";
-
 import React from "react";
 import { IHeaderProps, ILayoutProps, IMainProps, ISectionProps } from "./IProps";
 import Footer from "./Footer";
 import "../../assets/css/components/layout/layout.css";
 import Header from "./Header";
 import Section from "./Section";
-import { LayoutProvider } from "../../libs/core/application/contexts/Layout";
 import Main from "./Main";
 import LSider from "./LSider";
 import RSider from "./RSider";
@@ -20,15 +17,13 @@ const Layout: React.FC<ILayoutProps> & {
   Footer: React.FC;
 } = ({ children }) => {
   return (
-    <LayoutProvider>
-      <div className="ar-layout">
-        {React.Children.map(children, (child) => {
-          if (!React.isValidElement(child)) return;
+    <div className="ar-layout">
+      {React.Children.map(children, (child) => {
+        if (!React.isValidElement(child)) return;
 
-          return child;
-        })}
-      </div>
-    </LayoutProvider>
+        return child;
+      })}
+    </div>
   );
 };
 

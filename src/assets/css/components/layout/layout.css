@@ -25,7 +25,6 @@
   background-color: var(--white);
   height: fit-content;
   margin: 2rem 0;
-  padding: 2rem;
   border-radius: var(--border-radius-lg);
 }
 .ar-layout > main:not(:has(> .ar-aside)) > section {

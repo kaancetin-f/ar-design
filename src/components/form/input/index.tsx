@@ -4,7 +4,7 @@ import React, { forwardRef } from "react";
 import "../../../assets/css/components/form/input/input.css";
 import Button from "../button";
 import IProps from "./IProps";
-import Utils from "../../../libs/Utils";
+import Utils from "../../../libs/infrastructure/shared/Utils";
 
 const Input = forwardRef<HTMLInputElement, IProps>(
   (

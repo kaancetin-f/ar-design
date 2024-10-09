@@ -6,6 +6,8 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
+    "./@service": "./dist/libs/core/service/index.js",
+    "./@config": "./dist/libs/core/application/contexts/Config.js",
     "./@hooks": "./dist/libs/core/application/hooks/index.js",
     "./@types": "./dist/libs/types/index.js",
     "./@styles": "./dist/assets/css/core/ar-core.css"

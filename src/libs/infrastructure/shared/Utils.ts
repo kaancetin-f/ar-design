@@ -1,4 +1,4 @@
-import { Border, Icon, Sizes, Status, Variants } from "./types";
+import { Border, Icon, Sizes, Status, Variants } from "../../types";
 
 class Utils {
   public GetClassName = (

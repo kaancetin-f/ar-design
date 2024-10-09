@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from "react";
 import "../../../assets/css/components/form/date-picker/date-picker.css";
 import Input from "../input";

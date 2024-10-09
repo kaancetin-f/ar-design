@@ -21,7 +21,7 @@ import SyntaxHighlighter from "./components/data-display/syntax-highlighter";
 import Alert from "./components/feedback/alert";
 
 // Navigation
-import Menu from "./components/navigation/menu";
+import MenuType from "./components/navigation/menu";
 
 // Layout
 import Grid from "./components/layout/grid-system";
@@ -50,7 +50,7 @@ export {
   Alert,
 
   // Navigation
-  Menu,
+  MenuType as Menu,
 
   // Layout
   Grid,

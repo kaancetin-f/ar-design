@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import "../../../assets/css/components/form/button/button.css";
 import IProps from "./IProps";
-import Utils from "../../../libs/Utils";
+import Utils from "../../../libs/infrastructure/shared/Utils";
 
 const Button: React.FC<IProps> = ({
   children,

@@ -1,4 +1,4 @@
-import { Status, Variants, Option } from "../../../libs/types";
+import { Variants, Option, Status } from "../../../libs/types";
 import { IGlobalProps } from "../../../libs/types/IGlobalProps";
 
 interface IMultiple {

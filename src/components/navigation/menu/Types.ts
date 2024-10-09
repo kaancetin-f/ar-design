@@ -2,6 +2,6 @@ import React from "react";
 import { MenuItemVariants, MenuProps } from "../../../libs/types";
 
 export type Props = {
-  menu: MenuProps[];
+  data: MenuProps[];
   variant?: MenuItemVariants;
 } & React.HTMLAttributes<HTMLElement>;

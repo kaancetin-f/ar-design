@@ -1,8 +1,15 @@
+"use client";
+
 import React, { useRef } from "react";
 import "../../../assets/css/components/form/switch/switch.css";
 import IProps from "./IProps";
 
-const Switch: React.FC<IProps> = ({ label, status = "primary", border, ...attributes }) => {
+const Switch: React.FC<IProps> = ({
+  label,
+  status = "primary",
+  border = { radius: "pill" },
+  ...attributes
+}) => {
   // refs
   let _switch = useRef<HTMLInputElement>(null);
 
@@ -16,8 +23,8 @@ const Switch: React.FC<IProps> = ({ label, status = "primary", border, ...attrib
 
   // border
   _switchClassName += ` border-style-solid`;
-  _switchClassName += ` border-radius-${border?.radius || "pill"}`;
-  _handleClassName += ` border-radius-${border?.radius || "pill"}`;
+  _switchClassName += ` border-radius-${border.radius}`;
+  _handleClassName += ` border-radius-${border.radius}`;
 
   return (
     <div className={_wrapperClassName}>

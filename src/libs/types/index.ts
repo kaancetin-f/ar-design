@@ -1,5 +1,4 @@
 export type Variants = "filled" | "outlined" | "dashed" | "borderless";
-
 export type Status =
   | "primary"
   | "secondary"
@@ -34,13 +33,11 @@ export type Sizes = "large" | "normal" | "small";
 export type Option = { value: string | number; text: string };
 
 // Menu Types
-export type MenuItemVariants = "vertical" | "horizontal";
-
-export type MenuItemType = "group" | "divider";
-
 export type MenuProps = {
   render?: string | React.JSX.Element;
   type?: MenuItemType;
   icon?: React.JSX.Element;
   submenu?: MenuProps[];
 };
+export type MenuItemVariants = "vertical" | "horizontal";
+export type MenuItemType = "group" | "divider";
