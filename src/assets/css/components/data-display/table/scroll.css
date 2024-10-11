@@ -6,18 +6,45 @@
   position: sticky;
   top: 0;
 }
-
+.ar-table > table th[class^="sticky-"] {
+  z-index: 2;
+}
 .ar-table > table .sticky-left {
   position: sticky;
   left: 0;
 }
+
 .ar-table > table .sticky-right {
   position: sticky;
   right: 0;
 }
-.ar-table > table th[class^="sticky-"] {
-  z-index: 2;
+
+.ar-table > table > thead > tr > th.sticky-left.sticky,
+.ar-table > table > thead > tr > th.sticky-left.active-sticky,
+.ar-table > table > thead > tr > th.sticky-right.sticky,
+.ar-table > table > thead > tr > th.sticky-right.active-sticky {
+  background-color: var(--gray-300);
+  color: var(--gray-600);
+  box-shadow: inset -1px 0 0 0 var(--gray-400);
 }
-.ar-table > table td[class^="sticky-"] {
-  z-index: 1;
+.ar-table > table > thead > tr > th.sticky-right.sticky,
+.ar-table > table > thead > tr > th.sticky-right.active-sticky {
+  box-shadow: inset 1px 0 0 0 var(--gray-400);
+}
+.ar-table > table > tbody > tr > td.sticky-left.sticky,
+.ar-table > table > tbody > tr > td.sticky-right.sticky {
+  background-color: var(--gray-100);
+  transition: background 250ms, box-shadow 250ms ease-in-out;
+  box-shadow: inset -1px 0 0 0 var(--gray-400);
+}
+.ar-table > table > tbody > tr > td.sticky-right.sticky {
+  box-shadow: inset 1px 0 0 0 var(--gray-400);
+}
+.ar-table > table .sticky-left.active-sticky,
+.ar-table > table .sticky-right.active-sticky {
+  background-color: var(--gray-100);
+  box-shadow: inset -1px 0 0 0 var(--gray-400);
+}
+.ar-table > table .sticky-right.active-sticky {
+  box-shadow: inset 1px 0 0 0 var(--gray-400);
 }

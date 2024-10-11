@@ -1,33 +1,25 @@
 .ar-table {
+  margin: 1rem;
+  border-radius: var(--border-radius-xl);
+  box-shadow: 0 0 0 1px var(--gray-400);
 }
 .ar-table > table {
   border-collapse: collapse;
-  border: solid 1px var(--gray-500);
   width: 100%;
 }
-.ar-table > table > thead,
-.ar-table > table > tbody {
-  position: relative;
-}
 .ar-table > table > thead > tr > th {
-  background-color: var(--gray-100);
+  background-color: var(--gray-200);
+  padding: 1rem 0.5rem;
+  color: var(--gray-600);
   z-index: 1;
 }
 .ar-table > table > tbody > tr > td {
   text-wrap: nowrap;
   z-index: 1;
 }
-.ar-table > table > tbody {
-}
 .ar-table > table > tbody > tr > td {
   background-color: var(--white);
-  border-bottom: 1px solid #ddd;
-}
-
-th,
-td {
-  /* padding: 5px; */
-  text-align: left;
+  padding: 0.5rem;
 }
 
 @import url("./scroll.css");

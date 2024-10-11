@@ -9,11 +9,13 @@ const Table = function <T>({ data, columns, config }: IProps<T>) {
   // className
   const _tableClassName: string[] = ["ar-table"];
 
-  if (Object.keys(config?.scroll || {})) {
-    _tableClassName.push("scroll");
+  _tableClassName.push("scroll");
 
-    if (_tableWrapper.current) {
-      _tableWrapper.current.style.maxHeight = `${config?.scroll?.maxHeight}rem`;
+  if (config && Object.keys(config.scroll || {}).length > 0) {
+    if (_tableWrapper.current && config.scroll) {
+      if (config.scroll.maxHeight) {
+        _tableWrapper.current.style.maxHeight = `${config?.scroll?.maxHeight}rem`;
+      }
     }
   }
 
@@ -34,14 +36,26 @@ const Table = function <T>({ data, columns, config }: IProps<T>) {
           .reverse();
 
         // #region Left
-        const leftPrevious = leftChildren.map((child) => {
+        const leftPrevious = leftChildren.map((child, index) => {
           const rect = child.getBoundingClientRect();
+
+          if (child.nodeName === "TD") child.style.zIndex = `${leftChildren.length - index - 1}`;
 
           return Math.abs(rect.right - (wrapperRect?.left || 0));
         });
 
         leftChildren.forEach((child, index) => {
-          if (index > 0) child.style.left = `${leftPrevious[index - 1]}px`;
+          if (index > 0) {
+            const x = leftChildren[index].getBoundingClientRect().left - Number(wrapperRect?.left);
+            const y = leftPrevious[index - 1];
+
+            if (x === y) child.classList.add("active-sticky");
+            else child.classList.remove("active-sticky");
+
+            child.style.left = `${y}px`;
+          } else {
+            child.classList.add("sticky");
+          }
         });
         // #endregion
 
@@ -53,7 +67,19 @@ const Table = function <T>({ data, columns, config }: IProps<T>) {
         });
 
         rightChildren.forEach((child, index) => {
-          if (index > 0) child.style.right = `${rightPrevious[index - 1] - 15}px`;
+          if (index > 0) {
+            const x = Math.abs(
+              rightChildren[index].getBoundingClientRect().right - Number(wrapperRect?.right)
+            );
+            const y = rightPrevious[index - 1];
+
+            if (x === y) child.classList.add("active-sticky");
+            else child.classList.remove("active-sticky");
+
+            child.style.right = `${y}px`;
+          } else {
+            child.classList.add("sticky");
+          }
         });
         // #endregion
       });
