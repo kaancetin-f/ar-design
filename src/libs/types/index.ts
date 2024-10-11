@@ -1,3 +1,5 @@
+import React from "react";
+
 export type Variants = "filled" | "outlined" | "dashed" | "borderless";
 export type Status =
   | "primary"
@@ -41,3 +43,13 @@ export type MenuProps = {
 };
 export type MenuItemVariants = "vertical" | "horizontal";
 export type MenuItemType = "group" | "divider";
+
+// Table Types
+export type Column<T> = {
+  title: string;
+  key?: keyof T;
+  render?: (item: T) => React.ReactNode;
+  config?: {
+    sticky?: "left" | "right";
+  };
+};

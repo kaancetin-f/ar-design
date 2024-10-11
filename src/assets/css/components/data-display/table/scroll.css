@@ -1,0 +1,23 @@
+.ar-table:is(.scroll) {
+  max-width: 100%;
+  overflow: auto;
+}
+.ar-table:is(.scroll) > table > thead > tr > th {
+  position: sticky;
+  top: 0;
+}
+
+.ar-table > table .sticky-left {
+  position: sticky;
+  left: 0;
+}
+.ar-table > table .sticky-right {
+  position: sticky;
+  right: 0;
+}
+.ar-table > table th[class^="sticky-"] {
+  z-index: 2;
+}
+.ar-table > table td[class^="sticky-"] {
+  z-index: 1;
+}

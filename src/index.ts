@@ -26,6 +26,7 @@ import MenuType from "./components/navigation/menu";
 // Layout
 import Grid from "./components/layout/grid-system";
 import Layout from "./components/layout";
+import Table from "./components/data-display/table";
 
 // Others
 
@@ -41,6 +42,7 @@ export {
   Radio,
 
   // Data Display
+  Table,
   Card,
   Chip,
   Typography,
