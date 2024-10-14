@@ -1,16 +1,19 @@
 .ar-table {
   margin: 1rem;
   border-radius: var(--border-radius-xl);
-  box-shadow: 0 0 0 1px var(--gray-400);
 }
 .ar-table > table {
   border-collapse: collapse;
   width: 100%;
 }
 .ar-table > table > thead > tr > th {
-  background-color: var(--gray-200);
+  position: relative;
+  background-color: var(--gray-100);
   padding: 1rem 0.5rem;
-  color: var(--gray-600);
+  color: var(--gray-700);
+  box-shadow: 0 2px 0 0 var(--gray-200);
+  transition: background 250ms, box-shadow 250ms ease-in-out;
+  text-align: left;
   z-index: 1;
 }
 .ar-table > table > tbody > tr > td {

@@ -2,6 +2,7 @@
   max-width: 100%;
   overflow: auto;
 }
+
 .ar-table:is(.scroll) > table > thead > tr > th {
   position: sticky;
   top: 0;
@@ -19,32 +20,43 @@
   right: 0;
 }
 
-.ar-table > table > thead > tr > th.sticky-left.sticky,
-.ar-table > table > thead > tr > th.sticky-left.active-sticky,
-.ar-table > table > thead > tr > th.sticky-right.sticky,
-.ar-table > table > thead > tr > th.sticky-right.active-sticky {
-  background-color: var(--gray-300);
-  color: var(--gray-600);
-  box-shadow: inset -1px 0 0 0 var(--gray-400);
+.ar-table > table > thead > tr > th.sticky-left.sticky::after,
+.ar-table > table > thead > tr > th.sticky-left.active-sticky::after,
+.ar-table > table > thead > tr > th.sticky-right.sticky::after,
+.ar-table > table > thead > tr > th.sticky-right.active-sticky::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+  content: "";
+  background-color: var(--gray-200);
+  width: 1px;
+  height: 50%;
 }
-.ar-table > table > thead > tr > th.sticky-right.sticky,
-.ar-table > table > thead > tr > th.sticky-right.active-sticky {
-  box-shadow: inset 1px 0 0 0 var(--gray-400);
+.ar-table > table > thead > tr > th.sticky-right.sticky::after,
+.ar-table > table > thead > tr > th.sticky-right.active-sticky::after {
+  left: 0;
+  right: auto;
 }
 .ar-table > table > tbody > tr > td.sticky-left.sticky,
 .ar-table > table > tbody > tr > td.sticky-right.sticky {
-  background-color: var(--gray-100);
-  transition: background 250ms, box-shadow 250ms ease-in-out;
-  box-shadow: inset -1px 0 0 0 var(--gray-400);
+  box-shadow: inset -1px 0 0 0 var(--gray-200);
 }
 .ar-table > table > tbody > tr > td.sticky-right.sticky {
-  box-shadow: inset 1px 0 0 0 var(--gray-400);
+  box-shadow: inset 1px 0 0 0 var(--gray-200);
 }
-.ar-table > table .sticky-left.active-sticky,
-.ar-table > table .sticky-right.active-sticky {
-  background-color: var(--gray-100);
-  box-shadow: inset -1px 0 0 0 var(--gray-400);
+.ar-table > table .sticky-left.active-sticky::after,
+.ar-table > table .sticky-right.active-sticky::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+  content: "";
+  background-color: var(--gray-200);
+  width: 1px;
+  height: 100%;
 }
-.ar-table > table .sticky-right.active-sticky {
-  box-shadow: inset 1px 0 0 0 var(--gray-400);
+.ar-table > table .sticky-right.active-sticky::after {
+  left: 0;
+  right: auto;
 }

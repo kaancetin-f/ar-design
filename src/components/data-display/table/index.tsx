@@ -7,9 +7,7 @@ const Table = function <T>({ data, columns, config }: IProps<T>) {
   const _tableWrapper = useRef<HTMLDivElement>(null);
   const _table = useRef<HTMLTableElement>(null);
   // className
-  const _tableClassName: string[] = ["ar-table"];
-
-  _tableClassName.push("scroll");
+  const _tableClassName: string[] = ["ar-table", "scroll"];
 
   if (config && Object.keys(config.scroll || {}).length > 0) {
     if (_tableWrapper.current && config.scroll) {

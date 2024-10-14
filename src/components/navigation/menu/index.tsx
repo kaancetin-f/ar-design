@@ -72,12 +72,13 @@ const SubMenu: React.FC<{
             _className_groupTitle += " ar-angle-down";
 
           // Eğer seçili olan menüyse "selected" sınıfını ekler.
-          if (selectedMenu.length > 0 && selectedMenu.includes(item) && item.type !== "group")
+          if (selectedMenu.length > 0 && selectedMenu.includes(item) && item.type !== "group") {
             _className_li += " selected";
+          }
         }
 
         // Eğer seçili olan menüyse "selected" sınıfını ekler.
-        if (selectedItem === item) _className_groupTitle += " selected";
+        // if (selectedItem === item) _className_groupTitle += " selected";
 
         return (
           <li
@@ -141,13 +142,13 @@ const Menu: React.FC<Props> = ({ data, variant = "vertical", ...attributes }) =>
           }
 
           // Eğer seçili olan menüyse "selected" sınıfını ekler.
-          if (
-            selectedMenu.length > 0 &&
-            selectedMenu.includes(item) &&
-            item.type !== "group" &&
-            variant !== "horizontal"
-          )
-            _className_li += " selected";
+          // if (
+          //   selectedMenu.length > 0 &&
+          //   selectedMenu.includes(item) &&
+          //   item.type !== "group" &&
+          //   variant !== "horizontal"
+          // )
+          //   _className_li += " selected";
 
           return (
             <li

@@ -25,6 +25,7 @@
 }
 .ar-menu .ar-menu-list-item-group-item-title a {
   color: var(--black);
+  text-decoration: none;
 }
 .ar-menu .ar-menu-list-item-group-item-title:not(.group) > * {
   display: flex;
