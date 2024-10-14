@@ -122,11 +122,13 @@ const Table = function <T>({ data, columns, config }: IProps<T>) {
               {columns.map((c, _c_index) => {
                 const render = c.render ? c.render(item) : item[c.key as keyof T];
 
+                let isTypeOfNumber = typeof render == "number" ? "type-of-number" : "";
+
                 return (
                   <td
                     key={c.key as string}
                     {...(c.config?.sticky && {
-                      className: `sticky-${c.config.sticky}`,
+                      className: `sticky-${c.config.sticky} ${isTypeOfNumber}`,
                       "data-sticky-position": c.config.sticky,
                     })}
                   >

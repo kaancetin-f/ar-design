@@ -1,0 +1,26 @@
+.ar-modal-wrapper > .ar-modal > .header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem 2rem;
+  border-bottom: solid 1px var(--gray-200);
+}
+.ar-modal-wrapper > .ar-modal > .header > .close {
+  display: inline-block;
+  background-color: rgba(var(--light-rgb), 0.25);
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--border-radius-lg);
+  color: rgba(var(--black-rgb), 0.5);
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.75rem;
+  cursor: pointer;
+  user-select: none;
+}
+.ar-modal-wrapper > .ar-modal > .header > .close:hover {
+  background-color: rgba(var(--danger-rgb), 0.1);
+  color: rgba(var(--danger-rgb), 0.75);
+}

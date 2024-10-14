@@ -1,3 +1,8 @@
+.ar-button-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
 .ar-button-group > .ar-button,
 .ar-button-group > .ar-button:is(.ar-button-shape) {
   border-radius: 0;

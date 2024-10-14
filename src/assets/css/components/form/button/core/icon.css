@@ -1,6 +1,17 @@
 .ar-button > .text {
   display: flex;
 }
+
+.ar-button:is(.no-content) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+  min-width: 2rem;
+  max-width: 2rem;
+  min-height: 2rem;
+  max-height: 2rem;
+}
 .ar-button:is(.icon) > .text {
   gap: 0 0.5rem;
 }

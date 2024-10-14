@@ -1,5 +1,4 @@
 .ar-typography-title {
-  margin-bottom: 1rem;
-  color: var(--gray-900);
+  color: var(--gray-700);
   font-family: var(--system);
 }

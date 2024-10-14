@@ -25,6 +25,8 @@ const Button: React.FC<IProps> = ({
     ...Utils.GetClassName(variant, status, border, size, icon, attributes.className)
   );
 
+  if (!children) _buttonClassName.push("no-content");
+
   if (shape) _buttonClassName.push(`ar-button-shape ${shape}`);
 
   if (position) {
@@ -60,11 +62,13 @@ const Button: React.FC<IProps> = ({
       <span className="text">
         {icon?.element}
 
-        {!shape
-          ? typeof children === "string" && upperCase
-            ? children.toLocaleUpperCase()
-            : children
-          : ""}
+        <span>
+          {!shape
+            ? typeof children === "string" && upperCase
+              ? children.toLocaleUpperCase()
+              : children
+            : ""}
+        </span>
       </span>
     </button>
   );

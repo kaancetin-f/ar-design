@@ -13,12 +13,15 @@ import Radio from "./components/form/radio";
 // Data Display
 import Card from "./components/data-display/card";
 import Chip from "./components/data-display/chip";
-import Typography from "./components/data-display/typography";
 import Divider from "./components/data-display/divider";
+import Paper from "./components/data-display/paper";
 import SyntaxHighlighter from "./components/data-display/syntax-highlighter";
+import Table from "./components/data-display/table";
+import Typography from "./components/data-display/typography";
 
 // Feedback
 import Alert from "./components/feedback/alert";
+import Modal from "./components/feedback/modal";
 
 // Navigation
 import MenuType from "./components/navigation/menu";
@@ -26,9 +29,6 @@ import MenuType from "./components/navigation/menu";
 // Layout
 import Grid from "./components/layout/grid-system";
 import Layout from "./components/layout";
-import Table from "./components/data-display/table";
-
-// Others
 
 export {
   // Form Elements
@@ -42,14 +42,17 @@ export {
   Radio,
 
   // Data Display
-  Table,
   Card,
   Chip,
-  Typography,
   Divider,
+  Paper,
+  SyntaxHighlighter,
+  Table,
+  Typography,
 
   // Feedback
   Alert,
+  Modal,
 
   // Navigation
   MenuType as Menu,
@@ -57,7 +60,4 @@ export {
   // Layout
   Grid,
   Layout,
-
-  // Others
-  SyntaxHighlighter,
 };

@@ -3,13 +3,14 @@
   color: var(--primary);
 }
 .borderless:not(.disabled).primary:hover {
-  background-color: rgba(var(--primary-rgb), 0.25);
+  background-color: rgba(var(--primary-rgb), 0.1);
 }
 input.borderless:not(.disabled).primary:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3.5px rgba(var(--primary-rgb), 0.25);
+  box-shadow: 0 0 0 3.5px rgba(var(--primary-rgb), 0.1);
 }
 .borderless:not(.disabled).primary.active {
+  background-color: transparent;
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-primary ease-in-out 750ms 0s 1 normal both;
 }
@@ -21,13 +22,14 @@ input.borderless:not(.disabled).primary:focus {
   color: var(--secondary);
 }
 .borderless:not(.disabled).secondary:hover {
-  background-color: rgba(var(--secondary-rgb), 0.25);
+  background-color: rgba(var(--secondary-rgb), 0.1);
 }
 input.borderless:not(.disabled).secondary:focus {
   border-color: var(--secondary);
-  box-shadow: 0 0 0 3.5px rgba(var(--secondary-rgb), 0.25);
+  box-shadow: 0 0 0 3.5px rgba(var(--secondary-rgb), 0.1);
 }
 .borderless:not(.disabled).secondary.active {
+  background-color: transparent;
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-secondary ease-in-out 750ms 0s 1 normal both;
 }
@@ -39,13 +41,14 @@ input.borderless:not(.disabled).secondary:focus {
   color: var(--success);
 }
 .borderless:not(.disabled).success:hover {
-  background-color: rgba(var(--success-rgb), 0.25);
+  background-color: rgba(var(--success-rgb), 0.1);
 }
 input.borderless:not(.disabled).success:focus {
   border-color: var(--success);
-  box-shadow: 0 0 0 3.5px rgba(var(--success-rgb), 0.25);
+  box-shadow: 0 0 0 3.5px rgba(var(--success-rgb), 0.1);
 }
 .borderless:not(.disabled).success.active {
+  background-color: transparent;
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-success ease-in-out 750ms 0s 1 normal both;
 }
@@ -57,13 +60,14 @@ input.borderless:not(.disabled).success:focus {
   color: var(--warning);
 }
 .borderless:not(.disabled).warning:hover {
-  background-color: rgba(var(--warning-rgb), 0.25);
+  background-color: rgba(var(--warning-rgb), 0.1);
 }
 input.borderless:not(.disabled).warning:focus {
   border-color: var(--warning);
-  box-shadow: 0 0 0 3.5px rgba(var(--warning-rgb), 0.25);
+  box-shadow: 0 0 0 3.5px rgba(var(--warning-rgb), 0.1);
 }
 .borderless:not(.disabled).warning.active {
+  background-color: transparent;
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-warning ease-in-out 750ms 0s 1 normal both;
 }
@@ -75,13 +79,14 @@ input.borderless:not(.disabled).warning:focus {
   color: var(--danger);
 }
 .borderless:not(.disabled).danger:hover {
-  background-color: rgba(var(--danger-rgb), 0.25);
+  background-color: rgba(var(--danger-rgb), 0.1);
 }
 input.borderless:not(.disabled).danger:focus {
   border-color: var(--danger);
-  box-shadow: 0 0 0 3.5px rgba(var(--danger-rgb), 0.25);
+  box-shadow: 0 0 0 3.5px rgba(var(--danger-rgb), 0.1);
 }
 .borderless:not(.disabled).danger.active {
+  background-color: transparent;
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-danger ease-in-out 750ms 0s 1 normal both;
 }
@@ -93,13 +98,14 @@ input.borderless:not(.disabled).danger:focus {
   color: var(--information);
 }
 .borderless:not(.disabled).information:hover {
-  background-color: rgba(var(--information-rgb), 0.25);
+  background-color: rgba(var(--information-rgb), 0.1);
 }
 input.borderless:not(.disabled).information:focus {
   border-color: var(--information);
-  box-shadow: 0 0 0 3.5px rgba(var(--information-rgb), 0.25);
+  box-shadow: 0 0 0 3.5px rgba(var(--information-rgb), 0.1);
 }
 .borderless:not(.disabled).information.active {
+  background-color: transparent;
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-information ease-in-out 750ms 0s 1 normal both;
 }
@@ -111,13 +117,14 @@ input.borderless:not(.disabled).information:focus {
   color: var(--dark);
 }
 .borderless:not(.disabled).dark:hover {
-  background-color: rgba(var(--dark-rgb), 0.25);
+  background-color: rgba(var(--dark-rgb), 0.1);
 }
 input.borderless:not(.disabled).dark:focus {
   border-color: var(--dark);
-  box-shadow: 0 0 0 3.5px rgba(var(--dark-rgb), 0.25);
+  box-shadow: 0 0 0 3.5px rgba(var(--dark-rgb), 0.1);
 }
 .borderless:not(.disabled).dark.active {
+  background-color: transparent;
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-dark ease-in-out 750ms 0s 1 normal both;
 }
@@ -129,13 +136,14 @@ input.borderless:not(.disabled).dark:focus {
   color: var(--dark);
 }
 .borderless:not(.disabled).light:hover {
-  background-color: rgba(var(--light-rgb), 0.25);
+  background-color: rgba(var(--light-rgb), 0.1);
 }
 input.borderless:not(.disabled).light:focus {
   border-color: var(--light);
-  box-shadow: 0 0 0 3.5px rgba(var(--light-rgb), 0.25);
+  box-shadow: 0 0 0 3.5px rgba(var(--light-rgb), 0.1);
 }
 .borderless:not(.disabled).light.active {
+  background-color: transparent;
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-light ease-in-out 750ms 0s 1 normal both;
 }

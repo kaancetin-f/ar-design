@@ -22,7 +22,6 @@
   min-width: 20%;
 }
 .ar-layout > main > section {
-  background-color: var(--white);
   height: fit-content;
   margin: 2rem 0;
   border-radius: var(--border-radius-lg);

@@ -1,0 +1,20 @@
+.ar-paper {
+  background-color: var(--white);
+  padding: 2rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 0 20px -15px rgba(var(--black-rgb), 0.25);
+}
+.ar-paper > .header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent;
+  margin-bottom: 2rem;
+}
+.ar-paper > .header > h3 {
+  color: var(--gray-700);
+}
+
+.ar-paper > .content {
+}

@@ -348,13 +348,14 @@ const _Variant_BorderlessCss = () => {
   color: var(--${customFontColor});
 }
 .borderless:not(.disabled).${color}:hover {
-  background-color: rgba(var(--${color}-rgb), 0.25);
+  background-color: rgba(var(--${color}-rgb), 0.1);
 }
 input.borderless:not(.disabled).${color}:focus {
   border-color: var(--${color});
-  box-shadow: 0 0 0 3.5px rgba(var(--${color}-rgb), 0.25);
+  box-shadow: 0 0 0 3.5px rgba(var(--${color}-rgb), 0.1);
 }
 .borderless:not(.disabled).${color}.active {
+  background-color: transparent;
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
 }
