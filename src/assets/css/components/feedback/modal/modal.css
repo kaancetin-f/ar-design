@@ -6,15 +6,38 @@
   z-index: 10;
 }
 
-.ar-modal-wrapper > .ar-modal {
-  background-color: var(--white);
-  border-radius: var(--border-radius-sm);
-  margin: 10rem auto;
+/* #region Open or Close */
+.ar-modal-wrapper:is(.opened) {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 250ms, opacity 250ms ease-in-out;
+}
+.ar-modal-wrapper:is(.opened) > .ar-modal {
+  top: 10%;
+  transform: translateX(-50%) scale(1);
+  transition: top 250ms, transform 250ms 300ms ease-in-out;
 }
 
-.ar-modal-wrapper > .ar-modal.full {
-  width: 100%;
+.ar-modal-wrapper:is(.closed) {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 250ms 300ms, opacity 250ms 300ms ease-in-out;
 }
+.ar-modal-wrapper:is(.closed) > .ar-modal {
+  top: -100%;
+  transform: translateX(-50%) scale(0.8);
+  transition: top 250ms 300ms, transform 250ms ease-in-out;
+}
+/* #endregion */
+/* Open or Close */
+
+.ar-modal-wrapper > .ar-modal {
+  position: absolute;
+  left: 50%;
+  background-color: var(--white);
+  border-radius: var(--border-radius-sm);
+}
+
 .ar-modal-wrapper > .ar-modal.large {
   width: 75%;
 }

@@ -61,9 +61,6 @@ export interface IGlobalProps {
    * İkonun kendisini, yönünü ve pozisyonunu tanımlamak için kullanılır.
    *
    * - `element`: İkon olarak kullanılacak React JSX elemanı.
-   * - `direction` (isteğe bağlı): İkonun ve metnin hizalanma yönünü belirtir.
-   *    - `row`: İkon ve metin yatay olarak hizalanır.
-   *    - `column`: İkon ve metin dikey olarak hizalanır.
    * - `position` (isteğe bağlı): İkonun metne göre konumunu belirtir.
    *    - `start`: İkon metnin başında yer alır.
    *    - `end`: İkon metnin sonunda yer alır.
@@ -100,7 +97,7 @@ export interface IGlobalProps {
    *
    * ```jsx
    * <Component border={{ radius: "sm" }} >
-   *  Test
+   *  Example
    * </Component>
    * ```
    */
@@ -120,4 +117,48 @@ export interface IGlobalProps {
   upperCase?: boolean;
 
   disabled?: boolean;
+}
+
+export interface IChildren {
+  /**
+   * Bileşenin içinde render edilecek içeriği belirtir.
+   * Bu içerik bir dize (string) veya bir React Elemanı olabilir.
+   *
+   * Örneğin;
+   * - Bir Dize: "Hello, World!"
+   * - Bir React Elemanı: <span>Hello, World!</span>
+   *
+   * ```jsx
+   * <Component>Hello, World!</Component>
+   *
+   * <Component>
+   *    <span>Hello, World!</span>
+   * </Component>
+   *
+   * <Component>
+   *    <span>Hello, World!</span>
+   *    <span>Hello, World!</span>
+   * </Component>
+   * ```
+   */
+  children?: React.ReactNode;
+}
+
+export interface ISizes {
+  /**
+   * Bileşenin boyutlarınu belirlemek için kullanılır.
+   *
+   * - `large`: Büyük boyut.
+   * - `normal (Varsayılan)`: Normal boyut.
+   * - `small`: Küçük boyut.
+   *
+   * Örneğin;
+   *
+   * ```jsx
+   * <Component size="large" >
+   *  Example
+   * </Component>
+   * ```
+   */
+  size?: Sizes;
 }

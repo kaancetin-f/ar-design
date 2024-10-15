@@ -16,6 +16,12 @@
   width: 100%;
 }
 
+.ar-button > .text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Core Css */
 @import url("./core/shape.css");
 @import url("./core/icon.css");

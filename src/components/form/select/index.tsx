@@ -58,6 +58,39 @@ const Select: React.FC<Props> = ({
     }
   };
 
+  const handleKeys = (event: KeyboardEvent) => {
+    const key = event.key;
+    const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
+
+    if (key === "ArrowUp" || key === "ArrowLeft") {
+      setNavigationIndex((prev) => {
+        let result: number = 0;
+
+        if (prev > 0) result = prev - 1;
+        if (prev === 0) result = optionItems.length - 1;
+
+        _navigationIndex.current = result;
+        return result;
+      });
+    } else if (key === "ArrowDown" || key === "ArrowRight") {
+      setNavigationIndex((prev) => {
+        let result: number = 0;
+
+        if (prev === optionItems.length - 1) result = 0;
+        if (prev < optionItems.length - 1) result = prev + 1;
+
+        _navigationIndex.current = result;
+        return result;
+      });
+    } else if (key === "Enter") {
+      if (_navigationIndex.current === -1) return;
+
+      optionItems[_navigationIndex.current]?.click();
+    } else if (key === "Escape") {
+      setOptionsOpen(false);
+    }
+  };
+
   const handleItemSelected = (option: Option, index: number) => {
     // Multiple
     if (multiple) {
@@ -97,39 +130,6 @@ const Select: React.FC<Props> = ({
       _selectedItemIndex.current = index;
       _optionItems.current.forEach((item) => item?.classList.remove("selectedItem"));
       _optionItems.current[index]?.classList.add("selectedItem");
-    }
-  };
-
-  const handleKeys = (event: KeyboardEvent) => {
-    const key = event.key;
-    const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
-
-    if (key === "ArrowUp" || key === "ArrowLeft") {
-      setNavigationIndex((prev) => {
-        let result: number = 0;
-
-        if (prev > 0) result = prev - 1;
-        if (prev === 0) result = optionItems.length - 1;
-
-        _navigationIndex.current = result;
-        return result;
-      });
-    } else if (key === "ArrowDown" || key === "ArrowRight") {
-      setNavigationIndex((prev) => {
-        let result: number = 0;
-
-        if (prev === optionItems.length - 1) result = 0;
-        if (prev < optionItems.length - 1) result = prev + 1;
-
-        _navigationIndex.current = result;
-        return result;
-      });
-    } else if (key === "Enter") {
-      if (_navigationIndex.current === -1) return;
-
-      optionItems[_navigationIndex.current]?.click();
-    } else if (key === "Escape") {
-      setOptionsOpen(false);
     }
   };
 

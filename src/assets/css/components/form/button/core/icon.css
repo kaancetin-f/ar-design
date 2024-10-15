@@ -1,7 +1,3 @@
-.ar-button > .text {
-  display: flex;
-}
-
 .ar-button:is(.no-content) {
   display: flex;
   justify-content: center;

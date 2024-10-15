@@ -45,7 +45,7 @@ export type MenuItemVariants = "vertical" | "horizontal";
 export type MenuItemType = "group" | "divider";
 
 // Table Types
-export type Column<T> = {
+export type TableColumnType<T> = {
   title: string;
   key?: keyof T;
   render?: (item: T) => React.ReactNode;

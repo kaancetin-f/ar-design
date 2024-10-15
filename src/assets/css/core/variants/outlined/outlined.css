@@ -161,8 +161,8 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).dar
   border-color: rgba(var(--light-rgb), 0.5);
 }
 input.outlined:not(.disabled).light:focus{
-  border-color: var(--light);
-  box-shadow: 0 0 0 3.5px rgba(var(--light-rgb), 0.25);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3.5px rgba(var(--primary-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).light{
   box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), 0.1);

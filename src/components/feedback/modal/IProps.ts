@@ -1,10 +1,23 @@
 import React from "react";
-import { Sizes } from "../../../libs/types";
+import { IChildren, ISizes } from "../../../libs/types/IGlobalProps";
 
-interface IProps {
-  children: React.ReactNode;
+interface IProps extends IChildren, ISizes {
+  /**
+   *
+   */
+  open: {
+    set: React.Dispatch<React.SetStateAction<boolean>>;
+    get: boolean;
+  };
+
+  /**
+   * ...
+   */
   title: string;
-  size?: Sizes | "full";
+
+  /**
+   * ...
+   */
   footer?: React.ReactNode;
 }
 

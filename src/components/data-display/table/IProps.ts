@@ -1,8 +1,8 @@
-import { Column } from "../../../libs/types";
+import { TableColumnType } from "../../../libs/types";
 
 interface IProps<T> {
   data: T[];
-  columns: Column<T>[];
+  columns: TableColumnType<T>[];
   config?: {
     scroll?: {
       maxHeight: number;

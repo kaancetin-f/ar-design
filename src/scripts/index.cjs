@@ -13,6 +13,7 @@ const colors = [
   "light",
 ];
 let customFontColor = "";
+let customFocusColor = "";
 
 const WriteCssFile = (filePath, content) => {
   try {
@@ -247,9 +248,11 @@ const _Variant_OutlinedCss = () => {
       switch (color) {
         case "light":
           customFontColor = "dark";
+          customFocusColor = "primary";
           break;
         default:
           customFontColor = color;
+          customFocusColor = color;
           break;
       }
 
@@ -262,8 +265,8 @@ const _Variant_OutlinedCss = () => {
   border-color: rgba(var(--${color}-rgb), 0.5);
 }
 input.outlined:not(.disabled).${color}:focus{
-  border-color: var(--${color});
-  box-shadow: 0 0 0 3.5px rgba(var(--${color}-rgb), 0.25);
+  border-color: var(--${customFocusColor});
+  box-shadow: 0 0 0 3.5px rgba(var(--${customFocusColor}-rgb), 0.25);
 }
 input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).${color}{
   box-shadow: 0 0 0 2.5px rgba(var(--${color}-rgb), 0.1);

@@ -4,7 +4,6 @@
   flex-wrap: nowrap;
   justify-content: flex-end;
   gap: 0 0.5rem;
-  margin-top: 1rem;
   padding: 1rem 2rem;
   border-top: solid 1px var(--gray-200);
 }
