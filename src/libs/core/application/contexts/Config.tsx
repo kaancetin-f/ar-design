@@ -9,6 +9,7 @@ type ConfigOptions = {
       right: { element: React.ReactNode | null; active: boolean };
     };
   };
+  perPage: number;
 };
 
 const defaultOptions: ConfigOptions = {
@@ -18,6 +19,7 @@ const defaultOptions: ConfigOptions = {
       right: { element: null, active: true },
     },
   },
+  perPage: 5,
 };
 
 type ConfigContextProps = {

@@ -50,6 +50,7 @@ export type TableColumnType<T> = {
   key?: keyof T;
   render?: (item: T) => React.ReactNode;
   config?: {
+    alignContent: "left" | "center" | "right";
     sticky?: "left" | "right";
   };
 };

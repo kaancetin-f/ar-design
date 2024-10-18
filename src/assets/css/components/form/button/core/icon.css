@@ -8,12 +8,15 @@
   min-height: 2rem;
   max-height: 2rem;
 }
-.ar-button:is(.icon) > .text {
+.ar-button:is(.no-content) > .text {
+  gap: 0 !important;
+}
+.ar-button:is(.icon):not(.no-content) > .text {
   gap: 0 0.5rem;
 }
-.ar-button:is(.icon-start) > .text {
+.ar-button:is(.icon-start):not(.no-content) > .text {
   flex-direction: row;
 }
-.ar-button:is(.icon-end) > .text {
+.ar-button:is(.icon-end):not(.no-content) > .text {
   flex-direction: row-reverse;
 }

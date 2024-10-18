@@ -1,27 +1,47 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/data-display/table/table.css";
+import Checkbox from "../../form/checkbox";
+import Actions from "./Actions";
+import Input from "../../form/input";
+import Pagination from "../../navigation/pagination";
 
-const Table = function <T>({ data, columns, config }: IProps<T>) {
+const Table = function <T extends object>({
+  children,
+  data,
+  columns,
+  selections,
+  config,
+}: IProps<T>) {
   // refs
+  let _dataLength = useRef<number>(0);
   const _tableWrapper = useRef<HTMLDivElement>(null);
+  const _tableContent = useRef<HTMLDivElement>(null);
   const _table = useRef<HTMLTableElement>(null);
+  const _checkboxItems = useRef<(HTMLInputElement | null)[]>([]);
   // className
   const _tableClassName: string[] = ["ar-table", "scroll"];
 
+  // states
+  const [selectAll, setSelectAll] = useState<boolean>(false);
+  const [selectionItems, setSelectionItems] = useState<T[]>([]);
+  const [searchedText, setSearchedText] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [perPage, setPerPage] = useState<number>(0);
+
   if (config && Object.keys(config.scroll || {}).length > 0) {
-    if (_tableWrapper.current && config.scroll) {
+    if (_tableContent.current && config.scroll) {
       if (config.scroll.maxHeight) {
-        _tableWrapper.current.style.maxHeight = `${config?.scroll?.maxHeight}rem`;
+        _tableContent.current.style.maxHeight = `${config?.scroll?.maxHeight}rem`;
       }
     }
   }
 
   // methods
   const handleOnScroll = () => {
-    if (!_table.current) return;
+    if (!_table.current || !_tableWrapper.current) return;
 
-    const wrapperRect = _tableWrapper.current?.getBoundingClientRect();
+    const wrapperRect = _tableWrapper.current.getBoundingClientRect();
 
     const updateStickyPositions = (elements: NodeListOf<HTMLTableRowElement>) => {
       elements.forEach((element) => {
@@ -33,51 +53,44 @@ const Table = function <T>({ data, columns, config }: IProps<T>) {
           .filter((child) => child.dataset.stickyPosition === "right")
           .reverse();
 
+        // Calculate positions and minimize `getBoundingClientRect` calls
+        const leftRects = leftChildren.map((child) => child.getBoundingClientRect());
+        const rightRects = rightChildren.map((child) => child.getBoundingClientRect());
+
+        const leftPrevious = leftRects.map((rect) => Math.abs(rect.right - wrapperRect.left));
+        const rightPrevious = rightRects.map((rect) => Math.abs(rect.left - wrapperRect.right));
+
         // #region Left
-        const leftPrevious = leftChildren.map((child, index) => {
-          const rect = child.getBoundingClientRect();
-
-          if (child.nodeName === "TD") child.style.zIndex = `${leftChildren.length - index - 1}`;
-
-          return Math.abs(rect.right - (wrapperRect?.left || 0));
-        });
-
         leftChildren.forEach((child, index) => {
+          const prevLeft = index > 0 ? leftPrevious[index - 1] : 0;
+
           if (index > 0) {
-            const x = leftChildren[index].getBoundingClientRect().left - Number(wrapperRect?.left);
-            const y = leftPrevious[index - 1];
+            const childLeft = leftRects[index].left - wrapperRect.left;
 
-            if (x === y) child.classList.add("active-sticky");
-            else child.classList.remove("active-sticky");
+            if (Math.floor(childLeft) === Math.floor(prevLeft)) {
+              if (!child.classList.contains("active-sticky")) child.classList.add("active-sticky");
+            } else child.classList.remove("active-sticky");
 
-            child.style.left = `${y}px`;
-          } else {
-            child.classList.add("sticky");
-          }
+            child.style.left = `${prevLeft}px`;
+          } else child.classList.add("sticky");
+
+          if (child.nodeName === "TD") child.style.zIndex = `${leftChildren.length - index}`;
         });
         // #endregion
 
         // #region Right
-        const rightPrevious = rightChildren.map((child) => {
-          const rect = child.getBoundingClientRect();
-
-          return Math.abs(rect.left - (wrapperRect?.right || 0));
-        });
-
         rightChildren.forEach((child, index) => {
+          const prevRight = index > 0 ? rightPrevious[index - 1] : 0;
+
           if (index > 0) {
-            const x = Math.abs(
-              rightChildren[index].getBoundingClientRect().right - Number(wrapperRect?.right)
-            );
-            const y = rightPrevious[index - 1];
+            const childRight = Math.abs(rightRects[index].right - wrapperRect.right);
 
-            if (x === y) child.classList.add("active-sticky");
-            else child.classList.remove("active-sticky");
+            if (Math.floor(childRight) === Math.floor(prevRight)) {
+              if (!child.classList.contains("active-sticky")) child.classList.add("active-sticky");
+            } else child.classList.remove("active-sticky");
 
-            child.style.right = `${y}px`;
-          } else {
-            child.classList.add("sticky");
-          }
+            child.style.right = `${prevRight}px`;
+          } else child.classList.add("sticky");
         });
         // #endregion
       });
@@ -86,62 +99,194 @@ const Table = function <T>({ data, columns, config }: IProps<T>) {
     const theadElements = _table.current.querySelectorAll<HTMLTableRowElement>("thead > tr");
     const tbodyElements = _table.current.querySelectorAll<HTMLTableRowElement>("tbody > tr");
 
-    updateStickyPositions(theadElements);
-    updateStickyPositions(tbodyElements);
+    requestAnimationFrame(() => {
+      updateStickyPositions(theadElements);
+      updateStickyPositions(tbodyElements);
+    });
   };
 
+  const getData = useCallback(() => {
+    let _data: T[] = [...data];
+    _dataLength.current = data.length;
+
+    const indexOfLastRow = currentPage * perPage;
+    const indexOfFirstRow = indexOfLastRow - perPage;
+
+    _data = data.slice(indexOfFirstRow, indexOfLastRow);
+
+    return searchedText
+      ? _data.filter((item) => {
+          // `some` kullanarak herhangi bir girişin arama koşulunu karşılayıp karşılamadığını kontrol ediyoruz.
+          return Object.entries(item).some(([_key, _value]) => {
+            if (typeof _value === "number" || typeof _value === "string") {
+              // Değeri string'e dönüştürüp, aranan metni içerip içermediğini kontrol ediyoruz (büyük-küçük harf duyarsız).
+              return _value.toString().toLowerCase().includes(searchedText.toLowerCase());
+            }
+
+            // Eğer değer bir nesne ise (bu mantığı ihtiyaçlarınıza göre özelleştirebilirsiniz).
+            if (typeof _value === "object" && _value !== null) {
+              // Örnek: Eğer nesne ise, bu alanı atla veya farklı şekilde ele al.
+              return false;
+            }
+
+            // Diğer türlerdeki (boolean, undefined vs.) değerleri atla.
+            return false;
+          });
+        })
+      : _data;
+  }, [data, searchedText, currentPage]);
+
   // useEffects
-  useEffect(handleOnScroll, [_table.current]);
+  useEffect(() => {
+    if (!selections || selectionItems.length === 0) return;
+
+    selections(selectionItems);
+  }, [selectionItems]);
+
+  useEffect(() => {
+    const allChecked = _checkboxItems.current.every((item) => item?.checked === true);
+
+    setSelectAll(allChecked);
+  }, [currentPage]);
 
   return (
-    <div
-      ref={_tableWrapper}
-      className={_tableClassName.map((c) => c).join(" ")}
-      onScroll={handleOnScroll}
-    >
-      <table ref={_table}>
-        <thead>
-          <tr>
-            {columns.map((c) => (
-              <th
-                key={c.key as string}
-                {...(c.config?.sticky && {
-                  className: `sticky-${c.config.sticky}`,
-                  "data-sticky-position": c.config.sticky,
-                })}
-              >
-                {c.title}
-              </th>
-            ))}
-          </tr>
-        </thead>
+    <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
+      <div className="header">
+        <div>
+          <Input
+            placeholder="Ara"
+            onChange={(event) => setSearchedText(event.target.value.toLowerCase())}
+          />
+        </div>
+        <div>{React.Children.map(children, (child) => child)}</div>
+      </div>
 
-        <tbody>
-          {data.map((item, index) => (
-            <tr key={index}>
-              {columns.map((c, _c_index) => {
-                const render = c.render ? c.render(item) : item[c.key as keyof T];
+      <div ref={_tableContent} className="content" onScroll={handleOnScroll}>
+        <table ref={_table}>
+          <thead>
+            <tr key="selection">
+              {selections && (
+                <th className="selection-col sticky-left" data-sticky-position="left">
+                  <Checkbox
+                    variant="filled"
+                    status="primary"
+                    checked={selectAll}
+                    onChange={(event) => {
+                      if (_checkboxItems.current.length > 0) {
+                        setSelectAll(event.target.checked);
 
-                let isTypeOfNumber = typeof render == "number" ? "type-of-number" : "";
+                        _checkboxItems.current.forEach((item) => {
+                          if (item) {
+                            if (item.checked !== event.target.checked) item.click();
+                          }
+                        });
+                      }
+                    }}
+                  />
+                </th>
+              )}
+
+              {columns.map((c, cIndex) => {
+                let _className: string[] = [];
+
+                if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
+                if (c.config?.alignContent) {
+                  _className.push(`align-content-${c.config.alignContent}`);
+                }
 
                 return (
-                  <td
-                    key={c.key as string}
+                  <th
+                    key={`column-${cIndex}`}
+                    {...(_className.length > 0 && {
+                      className: `${_className.map((c) => c).join(" ")}`,
+                    })}
                     {...(c.config?.sticky && {
-                      className: `sticky-${c.config.sticky} ${isTypeOfNumber}`,
                       "data-sticky-position": c.config.sticky,
                     })}
                   >
-                    {React.isValidElement(render) ? render : String(render)}
-                  </td>
+                    {c.title}
+                  </th>
                 );
               })}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {getData().length > 0 ? (
+              getData().map((item, index) => (
+                <tr key={`row-${index}`}>
+                  {selections && (
+                    <td
+                      key={`selection-${index}`}
+                      className="sticky-left"
+                      data-sticky-position="left"
+                    >
+                      <Checkbox
+                        ref={(element) => (_checkboxItems.current[index] = element)}
+                        status="primary"
+                        checked={selectionItems.some(
+                          (selectionItem) => JSON.stringify(selectionItem) === JSON.stringify(item)
+                        )}
+                        onChange={(event) => {
+                          if (event.target.checked) setSelectionItems((prev) => [...prev, item]);
+                          else setSelectionItems((prev) => prev.filter((_item) => _item !== item));
+                        }}
+                      />
+                    </td>
+                  )}
+
+                  {columns.map((c, cIndex) => {
+                    let _className: string[] = [];
+                    const render = c.render ? c.render(item) : item[c.key as keyof T];
+                    // const isTypeOfNumber = typeof render === "number" ? "type-of-number" : "";
+
+                    if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
+                    // if (isTypeOfNumber) _className.push(isTypeOfNumber);
+                    if (c.config?.alignContent) {
+                      _className.push(`align-content-${c.config.alignContent}`);
+                    }
+
+                    return (
+                      <td
+                        key={`cell-${index}-${cIndex}`}
+                        {...(_className.length > 0 && {
+                          className: `${_className.map((c) => c).join(" ")}`,
+                        })}
+                        {...(c.config?.sticky && {
+                          "data-sticky-position": c.config.sticky,
+                        })}
+                      >
+                        {React.isValidElement(render) ? render : String(render)}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={columns.length + 1}>Herhangi bir kayıt bulunamadı!</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {data.length > perPage && (
+        <div className="footer">
+          <Pagination
+            total={_dataLength.current}
+            perPage={config?.perPage}
+            onChange={(page, perPage) => {
+              setCurrentPage(page);
+              setPerPage(perPage);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
+
+Table.Action = Actions;
 
 export default Table;

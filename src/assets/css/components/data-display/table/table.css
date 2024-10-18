@@ -1,35 +1,89 @@
 .ar-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem 0;
+  max-width: 100%;
+}
+.ar-table > .header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.ar-table > .footer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+}
+
+.ar-table > .header > div:first-child > .ar-input-wrapper,
+.ar-table > .header > div:first-child > .ar-input-wrapper > .ar-input,
+.ar-table > .header > div:first-child > .ar-input-wrapper > .ar-input > input {
+  width: auto !important;
+}
+.ar-table > .header > div:last-child {
+  margin-left: auto;
+}
+
+.ar-table > .content {
   border-radius: var(--border-radius-sm);
 }
-.ar-table > table {
+.ar-table > .content > table {
   border-collapse: collapse;
   width: 100%;
 }
-.ar-table > table > thead > tr > th {
-  position: relative;
+
+.ar-table > .content > table > thead > tr > th {
   background-color: var(--gray-100);
-  padding: 1rem 0.5rem;
+  padding: 0 0.5rem;
   color: var(--gray-700);
   box-shadow: 0 2px 0 0 var(--gray-200);
   text-align: left;
   transition: background 250ms, box-shadow 250ms ease-in-out;
-  z-index: 1;
+  z-index: 2;
 }
-.ar-table > table > thead > tr > th.type-of-number {
+.ar-table > .content > table > thead > tr > th.selection-col {
+  width: 2rem;
+}
+.ar-table > .content > table > thead > tr > th.type-of-number {
   text-align: right;
 }
-.ar-table > table > tbody {
+.ar-table > .content > table > thead > tr > th.align-content-left {
+  text-align: left;
+}
+.ar-table > .content > table > thead > tr > th.align-content-center {
+  text-align: center;
+}
+.ar-table > .content > table > thead > tr > th.align-content-right {
+  text-align: right;
+}
+
+.ar-table > .content > table > tbody {
   box-shadow: 0 0 2px 2px var(--gray-200);
 }
-.ar-table > table > tbody > tr > td,
-.ar-table > table > tbody > tr > td {
+.ar-table > .content > table > tbody > tr {
+  border-bottom: solid 1px var(--gray-200);
+}
+.ar-table > .content > table > tbody > tr > td {
   background-color: var(--white);
   padding: 0.5rem;
   text-wrap: nowrap;
   z-index: 1;
 }
-.ar-table > table > tbody > tr > td.type-of-number {
+.ar-table > .content > table > tbody > tr > td.type-of-number {
   text-align: right;
+}
+.ar-table > .content > table > tbody > tr > td.align-content-left {
+  text-align: left;
+}
+.ar-table > .content > table > tbody > tr > td.align-content-center {
+  text-align: center;
+}
+.ar-table > .content > table > tbody > tr > td.align-content-right {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
 
 @import url("./scroll.css");

@@ -1,3 +1,6 @@
 .ar-modal-wrapper > .ar-modal > .content {
+  max-height: calc(100vh - (3.5rem + 7.5rem + 7.5rem));
   padding: 2rem;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
