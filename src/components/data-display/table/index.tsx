@@ -144,7 +144,11 @@ const Table = function <T extends object>({
   }, [selectionItems]);
 
   useEffect(() => {
-    const allChecked = _checkboxItems.current.every((item) => item?.checked === true);
+    let allChecked = false;
+
+    if (_checkboxItems.current.length > 0) {
+      allChecked = _checkboxItems.current.every((item) => item?.checked === true);
+    }
 
     setSelectAll(allChecked);
   }, [currentPage]);
