@@ -36,7 +36,7 @@
 
 .ar-table > .content > table > thead > tr > th {
   background-color: var(--gray-100);
-  padding: 0 0.5rem;
+  padding: 1rem 0.5rem;
   color: var(--gray-700);
   box-shadow: 0 2px 0 0 var(--gray-200);
   text-align: left;
@@ -63,7 +63,7 @@
   box-shadow: 0 0 2px 2px var(--gray-200);
 }
 .ar-table > .content > table > tbody > tr {
-  border-bottom: solid 1px var(--gray-200);
+  border-bottom: solid 2px var(--gray-100);
 }
 .ar-table > .content > table > tbody > tr > td {
   background-color: var(--white);

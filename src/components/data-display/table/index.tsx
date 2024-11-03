@@ -105,6 +105,26 @@ const Table = function <T extends object>({
     });
   };
 
+  // Derinlemesine arama yapmak için özyinelemeli bir fonksiyon tanımlayalım.
+  const deepSearch = (value: any, searchedTexts: string[]): boolean => {
+    if (value === null || value === undefined) return false;
+
+    // Eğer değer bir sayı veya string ise, aranan metinle eşleşip eşleşmediğini kontrol ediyoruz.
+    if (typeof value === "number" || typeof value === "string") {
+      return searchedTexts.some((_searchedText) =>
+        value.toString().toLowerCase().includes(_searchedText)
+      );
+    }
+
+    // Eğer değer bir nesne veya dizi ise, içindeki her bir değeri yine deepSearch fonksiyonuyla kontrol ediyoruz.
+    if (typeof value === "object") {
+      return Object.values(value).some((innerValue) => deepSearch(innerValue, searchedTexts));
+    }
+
+    // Diğer türlerdeki değerleri atla.
+    return false;
+  };
+
   const getData = useCallback(() => {
     let _data: T[] = [...data];
     _dataLength.current = data.length;
@@ -117,21 +137,12 @@ const Table = function <T extends object>({
     return searchedText
       ? _data.filter((item) => {
           // `some` kullanarak herhangi bir girişin arama koşulunu karşılayıp karşılamadığını kontrol ediyoruz.
-          return Object.entries(item).some(([_key, _value]) => {
-            if (typeof _value === "number" || typeof _value === "string") {
-              // Değeri string'e dönüştürüp, aranan metni içerip içermediğini kontrol ediyoruz (büyük-küçük harf duyarsız).
-              return _value.toString().toLowerCase().includes(searchedText.toLowerCase());
-            }
-
-            // Eğer değer bir nesne ise (bu mantığı ihtiyaçlarınıza göre özelleştirebilirsiniz).
-            if (typeof _value === "object" && _value !== null) {
-              // Örnek: Eğer nesne ise, bu alanı atla veya farklı şekilde ele al.
-              return false;
-            }
-
-            // Diğer türlerdeki (boolean, undefined vs.) değerleri atla.
-            return false;
-          });
+          return Object.entries(item).some(([_key, _value]) =>
+            deepSearch(
+              _value,
+              searchedText.split(",").map((text) => text.trim().toLowerCase())
+            )
+          );
         })
       : _data;
   }, [data, searchedText, currentPage]);
@@ -241,11 +252,33 @@ const Table = function <T extends object>({
 
                   {columns.map((c, cIndex) => {
                     let _className: string[] = [];
-                    const render = c.render ? c.render(item) : item[c.key as keyof T];
+                    let render: any; // TODO: Generic yapmak için çalışma yap. (Daha Sonra)
+
+                    // `c.key` bir string ise
+                    if (typeof c.key !== "object") {
+                      render = c.render ? c.render(item) : item[c.key as keyof T];
+                    }
+                    // `c.key` bir nesne ise ve `nestedKey` mevcutsa
+                    else if (typeof c.key === "object") {
+                      const _item = item[c.key.field as keyof T];
+
+                      if (_item && typeof _item === "object") {
+                        render = c.render
+                          ? c.render(item)
+                          : _item[c.key.nestedKey as keyof typeof _item];
+                      }
+                    }
+                    // Diğer durumlarda `null` döndür
+                    else {
+                      render = null;
+                    }
+
                     // const isTypeOfNumber = typeof render === "number" ? "type-of-number" : "";
 
-                    if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
                     // if (isTypeOfNumber) _className.push(isTypeOfNumber);
+
+                    if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
+
                     if (c.config?.alignContent) {
                       _className.push(`align-content-${c.config.alignContent}`);
                     }

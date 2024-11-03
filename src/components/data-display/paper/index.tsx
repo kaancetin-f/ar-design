@@ -11,15 +11,17 @@ const Paper: React.FC<{ children: React.ReactNode; title?: string; action?: Reac
 }) => {
   return (
     <div className="ar-paper">
-      <div className="header">
-        {title && (
-          <Title Level="h3" upperCase>
-            {title}
-          </Title>
-        )}
+      {(title || action) && (
+        <div className="header">
+          {title && (
+            <Title Level="h3" upperCase>
+              {title}
+            </Title>
+          )}
 
-        {action && <div className="actions-field">{action}</div>}
-      </div>
+          {action && <div className="actions-field">{action}</div>}
+        </div>
+      )}
 
       <div className="content">{children}</div>
     </div>

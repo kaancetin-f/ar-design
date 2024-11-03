@@ -314,13 +314,17 @@ const Select: React.FC<Props> = ({
 
         <span
           className={`angel-down ${optionsOpen ? "opened" : "closed"}`}
-          onClick={() => setOptionsOpen((x) => !x)}
+          onClick={(event) => {
+            event.stopPropagation();
+
+            setOptionsOpen((x) => !x);
+          }}
         ></span>
       </div>
       {/* :End: Select and Multiple Select Field */}
 
       {/* :Begin: Options Field */}
-      <div ref={_options} className={optionsClassName.map((className) => className).join(" ")}>
+      <div ref={_options} className={optionsClassName.map((c) => c).join(" ")}>
         {/* Eğer çoklu seçim olarak kullanılıyorsa bu arama kısmı açılıyor... */}
         {multiple && (
           <div className="search-field">

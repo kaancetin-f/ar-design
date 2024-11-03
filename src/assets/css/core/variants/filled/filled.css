@@ -1,7 +1,7 @@
 /* #region PRIMARY */
 .filled:not(.disabled).primary {
   background-color: var(--primary);
-  color: var(--primary)
+  color: var(--white)
 }
 input.filled:not(.disabled).primary:hover {
   background-color: var(--primary-active);
@@ -30,7 +30,7 @@ button.filled:not(.disabled).primary:focus {
 /* #region SECONDARY */
 .filled:not(.disabled).secondary {
   background-color: var(--secondary);
-  color: var(--secondary)
+  color: var(--white)
 }
 input.filled:not(.disabled).secondary:hover {
   background-color: var(--secondary-active);
@@ -59,7 +59,7 @@ button.filled:not(.disabled).secondary:focus {
 /* #region SUCCESS */
 .filled:not(.disabled).success {
   background-color: var(--success);
-  color: var(--success)
+  color: var(--white)
 }
 input.filled:not(.disabled).success:hover {
   background-color: var(--success-active);
@@ -88,7 +88,7 @@ button.filled:not(.disabled).success:focus {
 /* #region WARNING */
 .filled:not(.disabled).warning {
   background-color: var(--warning);
-  color: var(--warning)
+  color: var(--dark)
 }
 input.filled:not(.disabled).warning:hover {
   background-color: var(--warning-active);
@@ -117,7 +117,7 @@ button.filled:not(.disabled).warning:focus {
 /* #region DANGER */
 .filled:not(.disabled).danger {
   background-color: var(--danger);
-  color: var(--danger)
+  color: var(--white)
 }
 input.filled:not(.disabled).danger:hover {
   background-color: var(--danger-active);
@@ -146,7 +146,7 @@ button.filled:not(.disabled).danger:focus {
 /* #region INFORMATION */
 .filled:not(.disabled).information {
   background-color: var(--information);
-  color: var(--information)
+  color: var(--white)
 }
 input.filled:not(.disabled).information:hover {
   background-color: var(--information-active);
@@ -175,7 +175,7 @@ button.filled:not(.disabled).information:focus {
 /* #region DARK */
 .filled:not(.disabled).dark {
   background-color: var(--dark);
-  color: var(--dark)
+  color: var(--white)
 }
 input.filled:not(.disabled).dark:hover {
   background-color: var(--dark-active);
@@ -204,7 +204,7 @@ button.filled:not(.disabled).dark:focus {
 /* #region LIGHT */
 .filled:not(.disabled).light {
   background-color: var(--light);
-  color: var(--light)
+  color: var(--dark)
 }
 input.filled:not(.disabled).light:hover {
   background-color: var(--light-active);

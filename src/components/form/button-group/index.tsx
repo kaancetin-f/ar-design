@@ -14,11 +14,11 @@ const ButtonGroup: React.FC<{
   useEffect(() => {
     try {
       // Çocuk elemanların sadece `Button` bileşenleri olduğundan emin olun
-      React.Children.forEach(children, (child) => {
-        if (!React.isValidElement(child) || child.type !== Button) {
-          throw new Error("ButtonGroup can only have Button elements as children.");
-        }
-      });
+      // React.Children.forEach(children, (child) => {
+      //   if (!React.isValidElement(child) || child.type !== Button) {
+      //     throw new Error("ButtonGroup can only have Button elements as children.");
+      //   }
+      // });
 
       // Hata yoksa, error'u temizle
       setError(null);

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import "../../../assets/css/components/data-display/chip/chip.css";
 import IProps from "./IProps";
+import Utils from "../../../libs/infrastructure/shared/Utils";
 
 const Chip: React.FC<IProps> = ({
   variant = "outlined",
@@ -10,17 +11,13 @@ const Chip: React.FC<IProps> = ({
   border = { radius: "sm" },
   text,
 }) => {
-  let _className = useRef<string>("ar-chip").current;
+  let _chipClassName: string[] = ["ar-chip"];
 
-  // input className
-  if (variant) _className += ` ${variant}`;
-  if (status) _className += ` ${status}`;
+  _chipClassName.push(
+    ...Utils.GetClassName(variant, status, border, undefined, undefined, undefined)
+  );
 
-  // border
-  _className += ` border-style-solid`;
-  _className += ` border-radius-${border.radius}`;
-
-  return <span className={_className}>{text}</span>;
+  return <span className={_chipClassName.map((c) => c).join(" ")}>{text}</span>;
 };
 
 export default Chip;

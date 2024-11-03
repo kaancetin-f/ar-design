@@ -40,4 +40,4 @@ const ConfigProvider = ({ children }: ConfigProviderProps) => {
   return <ConfigContext.Provider value={{ config, setConfig }}>{children}</ConfigContext.Provider>;
 };
 
-export default ConfigProvider;
+export { ConfigProvider };

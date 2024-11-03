@@ -201,7 +201,7 @@ const _Variant_FilledCss = () => {
       return `/* #region ${color.toUpperCase()} */
 .filled:not(.disabled).${color} {
   background-color: var(--${color});
-  color: var(--${color})
+  color: var(--${customFontColor})
 }
 input.filled:not(.disabled).${color}:hover {
   background-color: var(--${color}-active);

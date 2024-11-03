@@ -5,8 +5,8 @@ interface ILayoutProps
   extends Omit<IGlobalProps, "variant" | "status" | "icon" | "border" | "size" | "upperCase"> {}
 
 interface IHeaderProps {
-  logo: string | React.JSX.Element;
-  menu: MenuProps[];
+  logo?: string | React.JSX.Element;
+  menu?: MenuProps[];
 }
 
 interface IMainProps

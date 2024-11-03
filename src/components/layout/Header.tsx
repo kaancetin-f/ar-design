@@ -11,7 +11,7 @@ const Header: React.FC<IHeaderProps> = ({ logo, menu }) => {
         {typeof logo === "string" ? <h1>{logo}</h1> : logo}
 
         {/* Yatay Menü */}
-        {<Menu data={menu} variant="horizontal" />}
+        {menu && menu.length > 0 && <Menu data={menu} variant="horizontal" />}
       </div>
     </header>
   );

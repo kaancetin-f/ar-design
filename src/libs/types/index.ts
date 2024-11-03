@@ -47,7 +47,7 @@ export type MenuItemType = "group" | "divider";
 // Table Types
 export type TableColumnType<T> = {
   title: string;
-  key?: keyof T;
+  key?: keyof T | { field: keyof T; nestedKey: string };
   render?: (item: T) => React.ReactNode;
   config?: {
     alignContent?: "left" | "center" | "right";
