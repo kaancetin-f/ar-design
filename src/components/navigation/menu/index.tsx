@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Props } from "./Types";
 import "../../../assets/css/components/navigation/menu/menu.css";
 import Divider from "../../data-display/divider";
-import { MenuItemType, MenuItemVariants, MenuProps } from "../../../libs/types";
+import { MenuItemVariants, MenuProps } from "../../../libs/types";
 
 const handleOnClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
   event.stopPropagation();
@@ -32,33 +32,22 @@ const handleOnClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
 const SubMenu: React.FC<{
   items: MenuProps[];
   variant: MenuItemVariants;
-  type?: MenuItemType;
   setSelectedMenu: React.Dispatch<React.SetStateAction<MenuProps[]>>;
   selectedMenu: MenuProps[];
   setSelectedItem: React.Dispatch<React.SetStateAction<MenuProps | null>>;
   selectedItem: MenuProps | null;
-}> = ({ items, variant, type, setSelectedMenu, selectedMenu, setSelectedItem, selectedItem }) => {
+}> = ({ items, variant, setSelectedMenu, selectedMenu, setSelectedItem, selectedItem }) => {
   if (!items) return null;
 
   let className: string[] = ["list"];
 
-  if (variant === "vertical" && type === "group") className.push("opened");
-
   return (
     <ul className={className.map((c) => c).join(" ")}>
       {items.map((item, index) => {
-        let className_li: string[] = ["item"];
-
-        if (item.submenu && item.submenu.length > 0) {
-          if (variant === "horizontal" || item.type !== "group")
-            if (selectedMenu.length > 0 && selectedMenu.includes(item) && item.type !== "group") {
-              // Eğer seçili olan menüyse "selected" sınıfını ekler.
-              className_li.push("selected");
-            }
-        }
+        if (item.type === "group") className.push("opened");
 
         return (
-          <li key={index} className={className_li.map((c) => c).join(" ")} onClick={handleOnClick}>
+          <li key={index} className="item" onClick={handleOnClick}>
             {item.render}
 
             {/* Alt menü öğeleri */}
@@ -66,7 +55,6 @@ const SubMenu: React.FC<{
               <SubMenu
                 items={item.submenu}
                 variant={variant}
-                type={item.type}
                 setSelectedMenu={setSelectedMenu}
                 selectedMenu={selectedMenu}
                 setSelectedItem={setSelectedItem}
@@ -92,6 +80,8 @@ const Menu: React.FC<Props> = ({ data, variant = "vertical", ...attributes }) =>
     <nav className="ar-menu" {...attributes}>
       <ul className={"list"}>
         {data.map((item, index) => {
+          if (item.type === "group") _className_li.push("opened");
+
           return (
             <li
               key={index}
@@ -105,7 +95,6 @@ const Menu: React.FC<Props> = ({ data, variant = "vertical", ...attributes }) =>
                 <SubMenu
                   items={item.submenu}
                   variant={variant}
-                  type={item.type}
                   setSelectedMenu={setSelectedMenu}
                   selectedMenu={selectedMenu}
                   setSelectedItem={setSelectedItem}
