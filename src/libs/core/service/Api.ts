@@ -7,8 +7,8 @@ class Api {
     this._core = values.core || "";
   }
 
-  async Get<T>(values: { input?: RequestInfo | undefined; headers?: HeadersInit }): Promise<T> {
-    const request = await this.CustomFetch(
+  async Get(values: { input?: RequestInfo | undefined; headers?: HeadersInit }): Promise<Response> {
+    const response = await this.CustomFetch(
       `${this._host}/${this._core ? this._core + "/" : ""}${values.input}`,
       {
         headers: {
@@ -19,11 +19,11 @@ class Api {
       }
     );
 
-    return await request.json();
+    return response;
   }
 
-  async Post<T>(values: { input?: RequestInfo; data: any; headers?: HeadersInit }): Promise<T> {
-    const request = await this.CustomFetch(
+  async Post(values: { input?: RequestInfo; data: any; headers?: HeadersInit }): Promise<Response> {
+    const response = await this.CustomFetch(
       `${this._host}/${this._core ? this._core + "/" : ""}${values.input}`,
       {
         headers: { ...this.HeaderProperties, ...values.headers },
@@ -32,11 +32,11 @@ class Api {
       }
     );
 
-    return await request.json();
+    return response;
   }
 
-  async Put<T>(values: { input?: RequestInfo; data?: any; headers?: HeadersInit }): Promise<T> {
-    const request = await this.CustomFetch(
+  async Put(values: { input?: RequestInfo; data?: any; headers?: HeadersInit }): Promise<Response> {
+    const response = await this.CustomFetch(
       `${this._host}/${this._core ? this._core + "/" : ""}${values.input}`,
       {
         headers: {
@@ -48,11 +48,11 @@ class Api {
       }
     );
 
-    return await request.json();
+    return response;
   }
 
-  async Delete<T>(values: { input?: RequestInfo; headers?: HeadersInit }): Promise<T> {
-    const request = await this.CustomFetch(
+  async Delete(values: { input?: RequestInfo; headers?: HeadersInit }): Promise<Response> {
+    const response = await this.CustomFetch(
       `${this._host}/${this._core ? this._core + "/" : ""}${values.input}`,
       {
         headers: {
@@ -63,7 +63,7 @@ class Api {
       }
     );
 
-    return await request.json();
+    return response;
   }
 
   /**

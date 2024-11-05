@@ -1,12 +1,15 @@
-import { MenuProps } from "../../libs/types";
+import React from "react";
 import { IGlobalProps } from "../../libs/types/IGlobalProps";
 
 interface ILayoutProps
   extends Omit<IGlobalProps, "variant" | "status" | "icon" | "border" | "size" | "upperCase"> {}
 
 interface IHeaderProps {
-  logo?: string | React.JSX.Element;
-  menu?: MenuProps[];
+  logoWrapper?: {
+    image?: React.ReactElement<SVGElement | HTMLImageElement>;
+    text?: string | React.JSX.Element;
+  };
+  actions?: React.ReactNode[];
 }
 
 interface IMainProps

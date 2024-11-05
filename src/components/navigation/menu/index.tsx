@@ -1,36 +1,23 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Props } from "./Types";
 import "../../../assets/css/components/navigation/menu/menu.css";
 import Divider from "../../data-display/divider";
 import { MenuItemType, MenuItemVariants, MenuProps } from "../../../libs/types";
 
-const handleOnClick = (
-  event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-  item: MenuProps,
-  variant: MenuItemVariants,
-  setSelectedItem: React.Dispatch<React.SetStateAction<MenuProps | null>> | null,
-  setSelectedMenu?: React.Dispatch<React.SetStateAction<MenuProps[]>> | null
-) => {
+const handleOnClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
   event.stopPropagation();
 
-  if (variant === "vertical" && item.type === "group") return;
+  const target = event.currentTarget as HTMLLIElement;
+  const ul = Array.from(target.childNodes).filter((child) => child instanceof HTMLUListElement);
 
-  const _current = event.target as HTMLDivElement;
-  const ulElement = _current.nextElementSibling as HTMLUListElement;
-
-  if (_current && item.submenu && item.submenu.length > 0) {
-    _current.classList.toggle("ar-angle-down");
-    _current.classList.toggle("ar-angle-up");
-  }
-
-  if (ulElement) ulElement.classList.toggle("opened");
-
-  // Birden fazla menü açılmışsa...
-  if (setSelectedMenu) setSelectedMenu((prevSelectedMenu) => [...prevSelectedMenu, item]);
+  if (ul.length > 0) ul[0].classList.toggle("opened");
   else {
-    if (setSelectedItem) setSelectedItem(item);
+    const selectedItems = document.querySelectorAll(".selected");
+    selectedItems.forEach((item) => item.classList.remove("selected"));
+
+    target.classList.add("selected");
   }
 };
 
@@ -53,44 +40,26 @@ const SubMenu: React.FC<{
 }> = ({ items, variant, type, setSelectedMenu, selectedMenu, setSelectedItem, selectedItem }) => {
   if (!items) return null;
 
-  // refs
-  let _className_ul = useRef<string>("ar-menu-list-item-groups").current;
+  let className: string[] = ["list"];
 
-  if (variant === "vertical" && type === "group") _className_ul += " opened";
+  if (variant === "vertical" && type === "group") className.push("opened");
 
   return (
-    <ul className={_className_ul}>
+    <ul className={className.map((c) => c).join(" ")}>
       {items.map((item, index) => {
-        // refs
-        let _className_li = useRef<string>("ar-menu-list-item-group-item").current;
-        let _className_groupTitle = useRef<string>("ar-menu-list-item-group-item-title").current;
-
-        if (variant === "vertical" && item.type === "group") _className_groupTitle += " group";
+        let className_li: string[] = ["item"];
 
         if (item.submenu && item.submenu.length > 0) {
           if (variant === "horizontal" || item.type !== "group")
-            _className_groupTitle += " ar-angle-down";
-
-          // Eğer seçili olan menüyse "selected" sınıfını ekler.
-          if (selectedMenu.length > 0 && selectedMenu.includes(item) && item.type !== "group") {
-            _className_li += " selected";
-          }
+            if (selectedMenu.length > 0 && selectedMenu.includes(item) && item.type !== "group") {
+              // Eğer seçili olan menüyse "selected" sınıfını ekler.
+              className_li.push("selected");
+            }
         }
 
-        // Eğer seçili olan menüyse "selected" sınıfını ekler.
-        // if (selectedItem === item) _className_groupTitle += " selected";
-
         return (
-          <li
-            key={index}
-            className={_className_li}
-            onClick={(event) => {
-              if (item.submenu && item.submenu.length > 0)
-                handleOnClick(event, item, variant, null, setSelectedMenu);
-              else handleOnClick(event, item, variant, setSelectedItem, null);
-            }}
-          >
-            <div className={_className_groupTitle}>{item.render}</div>
+          <li key={index} className={className_li.map((c) => c).join(" ")} onClick={handleOnClick}>
+            {item.render}
 
             {/* Alt menü öğeleri */}
             {item.submenu && (
@@ -113,54 +82,23 @@ const SubMenu: React.FC<{
 
 const Menu: React.FC<Props> = ({ data, variant = "vertical", ...attributes }) => {
   // refs
-  let _className_li = useRef<string>("ar-menu-list-item").current;
+  let _className_li: string[] = ["item"];
 
   // states
   const [selectedMenu, setSelectedMenu] = useState<MenuProps[]>([]);
   const [selectedItem, setSelectedItem] = useState<MenuProps | null>(null);
 
-  const handleClassName = () => {
-    let className: string = "ar-menu-list";
-
-    if (variant) className += ` ${variant}`;
-
-    return className;
-  };
-
   return (
     <nav className="ar-menu" {...attributes}>
-      <ul className={handleClassName()}>
+      <ul className={"list"}>
         {data.map((item, index) => {
-          // refs
-          let _className_groupTitle = useRef<string>("ar-menu-list-item-group-item-title").current;
-
-          if (variant === "vertical" && item.type === "group") _className_groupTitle += " group";
-
-          if (item.submenu && item.submenu.length > 0) {
-            if (variant === "horizontal" || item.type !== "group")
-              _className_groupTitle += " ar-angle-down";
-          }
-
-          // Eğer seçili olan menüyse "selected" sınıfını ekler.
-          // if (
-          //   selectedMenu.length > 0 &&
-          //   selectedMenu.includes(item) &&
-          //   item.type !== "group" &&
-          //   variant !== "horizontal"
-          // )
-          //   _className_li += " selected";
-
           return (
             <li
               key={index}
-              className={_className_li}
-              onClick={(event) => handleOnClick(event, item, variant, null, setSelectedMenu)}
+              className={_className_li.map((c) => c).join(" ")}
+              onClick={handleOnClick}
             >
-              {item.type === "divider" ? (
-                <Divider />
-              ) : (
-                <div className={_className_groupTitle}>{item.render}</div>
-              )}
+              {item.type === "divider" ? <Divider /> : item.render}
 
               {/* Alt menü öğeleri */}
               {item.submenu && (

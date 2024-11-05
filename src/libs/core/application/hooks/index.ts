@@ -23,11 +23,11 @@ export const useNotification = () => {
     status,
   }: {
     title: string;
-    message: string;
+    message?: string;
     status: Status;
   }) => {
     setTitle && setTitle(title);
-    setMessage && setMessage(message);
+    setMessage && setMessage(message ?? "");
     setStatus && setStatus(status);
     setTrigger && setTrigger((trigger) => !trigger);
   };

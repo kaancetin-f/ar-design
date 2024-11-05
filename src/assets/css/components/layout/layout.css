@@ -5,25 +5,25 @@
 .ar-layout > main {
   display: flex;
   flex-direction: row;
-  gap: 0 2.5%;
   width: 1280px;
-  margin: 0 auto;
+  margin: 2.5rem auto 0 auto;
 }
 .ar-layout > main > aside.ar-aside {
   position: sticky;
-  top: 5.75rem;
+  top: 5rem;
   height: 100%;
-  margin: 2rem 0;
 }
 .ar-layout > main > aside.ar-aside.left {
   min-width: 20%;
+  min-height: calc(100vh - 7.5rem);
+  border-right: solid 1px var(--gray-200);
 }
 .ar-layout > main > aside.ar-aside.right {
   min-width: 20%;
 }
 .ar-layout > main > section {
   height: fit-content;
-  margin: 2rem 0;
+  padding: 0 2rem;
   border-radius: var(--border-radius-lg);
 }
 .ar-layout > main:not(:has(> .ar-aside)) > section {

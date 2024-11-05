@@ -1,5 +1,11 @@
 import Api from "./Api";
 
+type Result = {
+  __ok__: boolean;
+  __statusCode__: number;
+  __statusText__: string;
+};
+
 class Service {
   private _api: Api;
   private _endPoint: string;
@@ -9,58 +15,112 @@ class Service {
     this._endPoint = values.endPoint;
   }
 
-  async Get<T>(values?: { input?: string; headers?: HeadersInit | undefined }): Promise<T> {
-    let endPoint: string = `${this._endPoint}`;
+  async Get<TResponse>(values?: {
+    input?: string;
+    headers?: HeadersInit | undefined;
+  }): Promise<TResponse & Result> {
+    try {
+      let endPoint: string = `${this._endPoint}`;
 
-    if (values?.input) endPoint += `/${values.input}`;
+      if (values?.input) endPoint += `/${values.input}`;
 
-    return await this._api.Get<T>({
-      input: endPoint,
-      headers: values?.headers,
-    });
+      const response = await this._api.Get({
+        input: endPoint,
+        headers: values?.headers,
+      });
+      const text = (await response.text()).trim();
+
+      return {
+        ...(text.length > 0 ? await response.json() : {}),
+        __ok__: response.ok,
+        __statusCode__: response.status,
+        __statusText__: response.statusText,
+      };
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : "Beklenmeyen bir hata oluştu.");
+    }
   }
 
-  async Post<T, TData>(values?: {
+  async Post<TResponse, TData>(values?: {
     input?: RequestInfo;
     data: TData;
     headers?: HeadersInit;
-  }): Promise<T> {
-    let endPoint: string = `${this._endPoint}`;
+  }): Promise<TResponse & Result> {
+    try {
+      let endPoint: string = `${this._endPoint}`;
 
-    if (values?.input) endPoint += `/${values.input}`;
+      if (values?.input) endPoint += `/${values.input}`;
 
-    return await this._api.Post<T>({
-      input: endPoint,
-      data: values?.data,
-      headers: values?.headers,
-    });
+      const response = await this._api.Post({
+        input: endPoint,
+        data: values?.data,
+        headers: values?.headers,
+      });
+      const text = (await response.text()).trim();
+
+      return {
+        ...(text.length > 0 ? await response.json() : {}),
+        __ok__: response.ok,
+        __statusCode__: response.status,
+        __statusText__: response.statusText,
+      };
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : "Beklenmeyen bir hata oluştu.");
+    }
   }
 
-  async Put<T, TData>(values?: {
+  async Put<TResponse, TData>(values?: {
     input?: RequestInfo;
     data?: TData;
     headers?: HeadersInit;
-  }): Promise<T> {
-    let endPoint: string = `${this._endPoint}`;
+  }): Promise<TResponse & Result> {
+    try {
+      let endPoint: string = `${this._endPoint}`;
 
-    if (values?.input) endPoint += `/${values.input}`;
+      if (values?.input) endPoint += `/${values.input}`;
 
-    return await this._api.Put<T>({
-      input: endPoint,
-      data: values?.data,
-      headers: values?.headers,
-    });
+      const response = await this._api.Put({
+        input: endPoint,
+        data: values?.data,
+        headers: values?.headers,
+      });
+      const text = (await response.text()).trim();
+
+      return {
+        ...(text.length > 0 ? await response.json() : {}),
+        __ok__: response.ok,
+        __statusCode__: response.status,
+        __statusText__: response.statusText,
+      };
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : "Beklenmeyen bir hata oluştu.");
+    }
   }
 
-  async Delete<T>(values?: { input?: RequestInfo; headers?: HeadersInit }): Promise<T> {
-    let endPoint: string = `${this._endPoint}`;
+  async Delete<TResponse>(values?: {
+    input?: RequestInfo;
+    headers?: HeadersInit;
+  }): Promise<TResponse & Result> {
+    try {
+      let endPoint: string = `${this._endPoint}`;
 
-    if (values?.input) endPoint += `/${values.input}`;
+      if (values?.input) endPoint += `/${values.input}`;
 
-    return await this._api.Delete<T>({
-      input: endPoint,
-      headers: values?.headers,
-    });
+      const response = await this._api.Delete({
+        input: endPoint,
+        headers: values?.headers,
+      });
+      const text = (await response.text()).trim();
+
+      return {
+        ...(text.length > 0 ? await response.json() : {}),
+        __ok__: response.ok,
+        __statusCode__: response.status,
+        __statusText__: response.statusText,
+      };
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : "Beklenmeyen bir hata oluştu.");
+    }
   }
 }
 

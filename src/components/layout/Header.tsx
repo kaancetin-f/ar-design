@@ -2,16 +2,18 @@
 
 import React from "react";
 import { IHeaderProps } from "./IProps";
-import Menu from "../navigation/menu";
 
-const Header: React.FC<IHeaderProps> = ({ logo, menu }) => {
+const Header: React.FC<IHeaderProps> = ({ logoWrapper, actions }) => {
   return (
     <header>
       <div className="ar-header-with-wrap">
-        {typeof logo === "string" ? <h1>{logo}</h1> : logo}
+        <div className="logo-wrapper">
+          {logoWrapper?.image && logoWrapper.image}
+          {logoWrapper?.text && <h1>{logoWrapper.text}</h1>}
+        </div>
 
         {/* Yatay Menü */}
-        {menu && menu.length > 0 && <Menu data={menu} variant="horizontal" />}
+        {actions && actions}
       </div>
     </header>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/data-display/table/table.css";

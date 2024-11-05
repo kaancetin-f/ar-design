@@ -7,53 +7,21 @@
   padding: 0;
   list-style: none;
 }
-.ar-menu ul li:last-child {
-  padding-bottom: 0;
+.ar-menu ul li a {
+  color: inherit;
+  text-decoration: none;
+  letter-spacing: 1px;
 }
 .ar-menu ul li ul {
-  margin-left: 0.5rem;
-  padding-left: 0.5rem;
+  margin-left: 1rem;
 }
-.ar-menu > .ar-menu-list {
-  display: flex;
-}
-.ar-menu .ar-menu-list-item-group-item-title {
-  display: flex;
-  align-items: center;
-  height: 2.5rem;
-  user-select: none;
-}
-.ar-menu .ar-menu-list-item-group-item-title a {
-  color: var(--black);
-  text-decoration: none;
-}
-.ar-menu .ar-menu-list-item-group-item-title:not(.group) > * {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  padding: 0 1rem;
-}
-.ar-menu .ar-menu-list-item-group-item-title:not(.group):hover {
-  background-color: var(--gray-200);
-  border-radius: var(--border-radius-lg);
-}
-.ar-menu .ar-menu-list-item-group-item-title.selection-item {
-  background-color: red;
-}
-.ar-menu .ar-menu-list-item-group-item-title.group {
-  display: flex;
-  /* margin-left: 1rem; */
-  padding-left: 0;
-  border-radius: 0;
-  border-bottom: solid 1px var(--gray-100);
-  color: var(--gray-500);
-  font-size: 0.85rem;
+.ar-menu ul li.selected {
+  color: var(--primary);
 }
 
 /* Core Css */
-@import url("./core/selected.css");
+/* @import url("./core/selected.css"); */
 @import url("./core/open-or-close.css");
 
 /* Variant Css */
-@import url("./variant/vertical.css");
+/* @import url("./variant/vertical.css"); */

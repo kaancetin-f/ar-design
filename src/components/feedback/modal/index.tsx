@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/feedback/modal/modal.css";
