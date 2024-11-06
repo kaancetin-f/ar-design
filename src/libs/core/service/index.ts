@@ -31,7 +31,7 @@ class Service {
       const text = (await response.text()).trim();
 
       return {
-        ...(text.length > 0 ? await response.json() : {}),
+        ...(text.length > 0 ? JSON.parse(text) : {}),
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,
@@ -59,7 +59,7 @@ class Service {
       const text = (await response.text()).trim();
 
       return {
-        ...(text.length > 0 ? await response.json() : {}),
+        ...(text.length > 0 ? JSON.parse(text) : {}),
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,
@@ -87,7 +87,7 @@ class Service {
       const text = (await response.text()).trim();
 
       return {
-        ...(text.length > 0 ? await response.json() : {}),
+        ...(text.length > 0 ? JSON.parse(text) : {}),
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,
@@ -113,7 +113,7 @@ class Service {
       const text = (await response.text()).trim();
 
       return {
-        ...(text.length > 0 ? await response.json() : {}),
+        ...(text.length > 0 ? JSON.parse(text) : {}),
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,

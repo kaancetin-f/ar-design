@@ -35,13 +35,26 @@
 }
 
 .ar-table > .content > table > thead > tr > th {
+  position: relative;
   background-color: var(--gray-100);
-  padding: 1rem 0.5rem;
-  color: var(--gray-700);
-  box-shadow: 0 2px 0 0 var(--gray-200);
+  padding: 0.5rem;
+  color: var(--gray-600);
   text-align: left;
   transition: background 250ms, box-shadow 250ms ease-in-out;
   z-index: 2;
+}
+.ar-table > .content > table > thead > tr > th::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+  content: "";
+  background-color: var(--gray-200);
+  width: 1px;
+  height: 50%;
+}
+.ar-table > .content > table > thead > tr > th:last-child:after {
+  display: none;
 }
 .ar-table > .content > table > thead > tr > th.selection-col {
   width: 2rem;

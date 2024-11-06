@@ -48,6 +48,7 @@ const SubMenu: React.FC<{
 
         return (
           <li key={index} className="item" onClick={handleOnClick}>
+            <span>{item.icon && item.icon}</span>
             {item.render}
 
             {/* Alt menü öğeleri */}
@@ -69,25 +70,25 @@ const SubMenu: React.FC<{
 };
 
 const Menu: React.FC<Props> = ({ data, variant = "vertical", ...attributes }) => {
-  // refs
-  let _className_li: string[] = ["item"];
-
   // states
   const [selectedMenu, setSelectedMenu] = useState<MenuProps[]>([]);
   const [selectedItem, setSelectedItem] = useState<MenuProps | null>(null);
 
   return (
     <nav className="ar-menu" {...attributes}>
-      <ul className={"list"}>
+      <ul className="list">
         {data.map((item, index) => {
-          if (item.type === "group") _className_li.push("opened");
+          let className_li: string[] = ["item"];
+
+          if (item.type === "group") className_li.push("opened");
 
           return (
             <li
               key={index}
-              className={_className_li.map((c) => c).join(" ")}
+              className={className_li.map((c) => c).join(" ")}
               onClick={handleOnClick}
             >
+              <span>{item.icon && item.icon}</span>
               {item.type === "divider" ? <Divider /> : item.render}
 
               {/* Alt menü öğeleri */}

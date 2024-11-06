@@ -9,7 +9,7 @@ const Header: React.FC<IHeaderProps> = ({ logoWrapper, actions }) => {
       <div className="ar-header-with-wrap">
         <div className="logo-wrapper">
           {logoWrapper?.image && logoWrapper.image}
-          {logoWrapper?.text && <h1>{logoWrapper.text}</h1>}
+          {logoWrapper?.text && <h3>{logoWrapper.text}</h3>}
         </div>
 
         {/* Yatay Menü */}
