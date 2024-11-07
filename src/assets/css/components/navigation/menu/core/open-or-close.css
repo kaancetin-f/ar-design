@@ -1,7 +1,6 @@
 .ar-menu ul li ul {
   opacity: 0;
   max-height: 0;
-  overflow: hidden;
 }
 
 .ar-menu ul li ul.opened {

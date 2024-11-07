@@ -5,7 +5,7 @@ import IProps from "./IProps";
 import "../../../assets/css/components/navigation/pagination/pagination.css";
 import { ConfigContext } from "../../../libs/core/application/contexts/Config";
 
-const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, perPage, total, onChange }) => {
+const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPage, onChange }) => {
   // context
   const { config } = useContext(ConfigContext);
 
@@ -15,9 +15,9 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, perPage, total, onCh
 
   // useEffect
   useEffect(() => {
-    if (total === 0) return;
+    if (totalRecords === 0) return;
 
-    const totalPages = Math.ceil(total / (perPage || config.perPage));
+    const totalPages = Math.ceil(totalRecords / (perPage ?? config.perPage));
     const liItems = [];
 
     // Başlangıç ve bitiş aralığını hesapla.
@@ -72,8 +72,8 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, perPage, total, onCh
     }
 
     setPages(liItems);
-    onChange(currentPage, perPage || config.perPage);
-  }, [total, currentPage]);
+    onChange(currentPage);
+  }, [totalRecords, currentPage]);
 
   return (
     <div className="ar-pagination">
@@ -106,13 +106,13 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, perPage, total, onCh
 
         <li
           className={
-            Math.ceil(total / (perPage || config.perPage)) === currentPage ? "passive" : ""
+            Math.ceil(totalRecords / (perPage || config.perPage)) === currentPage ? "passive" : ""
           }
           onClick={() => {
-            if (Math.ceil(total / (perPage || config.perPage)) === currentPage) return;
+            if (Math.ceil(totalRecords / (perPage || config.perPage)) === currentPage) return;
 
             setCurrentPage((prev) => {
-              if (prev === Math.ceil(total / (perPage || config.perPage))) return prev;
+              if (prev === Math.ceil(totalRecords / (perPage || config.perPage))) return prev;
               return (prev += 1);
             });
           }}
@@ -121,12 +121,12 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, perPage, total, onCh
         </li>
         <li
           className={
-            Math.ceil(total / (perPage || config.perPage)) === currentPage ? "passive" : ""
+            Math.ceil(totalRecords / (perPage || config.perPage)) === currentPage ? "passive" : ""
           }
           onClick={() => {
-            if (Math.ceil(total / (perPage || config.perPage)) === currentPage) return;
+            if (Math.ceil(totalRecords / (perPage || config.perPage)) === currentPage) return;
 
-            setCurrentPage(Math.ceil(total / (perPage || config.perPage)));
+            setCurrentPage(Math.ceil(totalRecords / (perPage || config.perPage)));
           }}
         >
           <span>{"»"}</span>

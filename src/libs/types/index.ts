@@ -38,7 +38,7 @@ export type Option = { value: string | number; text: string };
 export type MenuProps = {
   render?: string | React.JSX.Element;
   type?: MenuItemType;
-  icon?: React.JSX.Element;
+  icon?: React.ReactElement<SVGElement | HTMLImageElement>;
   submenu?: MenuProps[];
 };
 export type MenuItemVariants = "vertical" | "horizontal";

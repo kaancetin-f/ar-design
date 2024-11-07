@@ -13,6 +13,7 @@ const Table = function <T extends object>({
   data,
   columns,
   selections,
+  pagination,
   config,
 }: IProps<T>) {
   // refs
@@ -29,7 +30,6 @@ const Table = function <T extends object>({
   const [selectionItems, setSelectionItems] = useState<T[]>([]);
   const [searchedText, setSearchedText] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [perPage, setPerPage] = useState<number>(0);
 
   if (config && Object.keys(config.scroll || {}).length > 0) {
     if (_tableContent.current && config.scroll) {
@@ -131,10 +131,10 @@ const Table = function <T extends object>({
     let _data: T[] = [...data];
     _dataLength.current = data.length;
 
-    const indexOfLastRow = currentPage * perPage;
-    const indexOfFirstRow = indexOfLastRow - perPage;
+    const indexOfLastRow = currentPage * pagination.perPage;
+    const indexOfFirstRow = indexOfLastRow - pagination.perPage;
 
-    _data = data.slice(indexOfFirstRow, indexOfLastRow);
+    if (!config?.isServer) _data = data.slice(indexOfFirstRow, indexOfLastRow);
 
     return searchedText
       ? _data.filter((item) => {
@@ -310,14 +310,16 @@ const Table = function <T extends object>({
         </table>
       </div>
 
-      {data.length > perPage && (
+      {pagination.totalRecords > pagination.perPage && (
         <div className="footer">
           <Pagination
-            total={_dataLength.current}
-            perPage={config?.perPage}
-            onChange={(page, perPage) => {
-              setCurrentPage(page);
-              setPerPage(perPage);
+            totalRecords={pagination.totalRecords}
+            perPage={pagination.perPage}
+            onChange={(currentPage) => {
+              setCurrentPage(currentPage);
+
+              // Table tarafında yapılan sayfalamayı dışarı aktarmak için kullanılan callback.
+              pagination.onChange(currentPage);
             }}
           />
         </div>

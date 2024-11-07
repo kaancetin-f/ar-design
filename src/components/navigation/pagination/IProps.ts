@@ -1,8 +1,8 @@
 interface IProps {
   defaultCurrent?: number;
+  totalRecords: number;
   perPage?: number;
-  total: number;
-  onChange: (page: number, perPage: number) => void;
+  onChange: (currentPage: number) => void;
 }
 
 export default IProps;

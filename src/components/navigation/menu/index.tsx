@@ -48,8 +48,10 @@ const SubMenu: React.FC<{
 
         return (
           <li key={index} className="item" onClick={handleOnClick}>
-            <span>{item.icon && item.icon}</span>
-            {item.render}
+            <div className="item-render">
+              <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
+              {item.render}
+            </div>
 
             {/* Alt menü öğeleri */}
             {item.submenu && (
@@ -88,8 +90,10 @@ const Menu: React.FC<Props> = ({ data, variant = "vertical", ...attributes }) =>
               className={className_li.map((c) => c).join(" ")}
               onClick={handleOnClick}
             >
-              <span>{item.icon && item.icon}</span>
-              {item.type === "divider" ? <Divider /> : item.render}
+              <div className="item-render">
+                <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
+                {item.type === "divider" ? <Divider /> : item.render}
+              </div>
 
               {/* Alt menü öğeleri */}
               {item.submenu && (
