@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import IProps from "./IProps";
 
 const Paragraph: React.FC<IProps> = ({
@@ -10,15 +10,14 @@ const Paragraph: React.FC<IProps> = ({
   size,
   upperCase = false,
 }) => {
-  // refs
-  let _className = useRef<string>("ar-typography-paragraph").current;
+  let _className: string[] = ["ar-typography-paragraph"];
 
-  if (align) _className += ` ${align}`;
-  if (color) _className += ` ${color}`;
-  if (size) _className += ` ${size}`;
+  if (align) _className.push(align);
+  if (color) _className.push(color);
+  if (size) _className.push(size);
 
   return (
-    <p className={_className}>
+    <p className={_className.map((c) => c).join(" ")}>
       {typeof children === "string" && upperCase ? children.toLocaleUpperCase() : children}
     </p>
   );

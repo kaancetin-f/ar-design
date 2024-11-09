@@ -6,7 +6,6 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 150ms, border 150ms, color 150ms ease-in-out;
-  overflow: hidden;
 }
 .ar-button.disabled {
   cursor: no-drop;

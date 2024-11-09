@@ -54,3 +54,9 @@ export type TableColumnType<T> = {
     sticky?: "left" | "right";
   };
 };
+
+// Step Types
+export type StepProps = {
+  title: string;
+  content: React.ReactNode;
+};

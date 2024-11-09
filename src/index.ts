@@ -21,10 +21,12 @@ import Typography from "./components/data-display/typography";
 
 // Feedback
 import Alert from "./components/feedback/alert";
+import Confirm from "./components/feedback/confirm";
 import Modal from "./components/feedback/modal";
 
 // Navigation
-import MenuType from "./components/navigation/menu";
+import Menu from "./components/navigation/menu";
+import Steps from "./components/navigation/steps";
 
 // Layout
 import Grid from "./components/layout/grid-system";
@@ -52,10 +54,12 @@ export {
 
   // Feedback
   Alert,
+  Confirm,
   Modal,
 
   // Navigation
-  MenuType as Menu,
+  Menu,
+  Steps,
 
   // Layout
   Grid,

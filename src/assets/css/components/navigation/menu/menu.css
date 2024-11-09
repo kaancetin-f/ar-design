@@ -11,23 +11,28 @@
   padding: 0;
   list-style: none;
 }
-
+.ar-menu ul li {
+  letter-spacing: 1px;
+}
 .ar-menu ul li .item-render {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 .ar-menu ul li .item-render > a {
+  display: block;
+  width: 100%;
+  height: 2rem;
   color: inherit;
   text-decoration: none;
-  letter-spacing: 1px;
+  line-height: 2rem;
 }
 .ar-menu ul li .item-render > span {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2rem;
-  height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
   margin-right: 0.75rem;
   border-radius: var(--border-radius-pill);
 }

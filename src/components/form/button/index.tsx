@@ -35,42 +35,44 @@ const Button: React.FC<IProps> = ({
   }
 
   return (
-    <button
-      ref={_button}
-      {...attributes}
-      className={_buttonClassName.map((c) => c).join(" ")}
-      onClick={(event) => {
-        // Disabled gelmesi durumunda işlem yapmasına izin verme...
-        if (attributes.disabled) return;
+    <React.Fragment>
+      <button
+        ref={_button}
+        {...attributes}
+        className={_buttonClassName.map((c) => c).join(" ")}
+        onClick={(event) => {
+          // Disabled gelmesi durumunda işlem yapmasına izin verme...
+          if (attributes.disabled) return;
 
-        (() => {
-          const _current = _button.current;
-          const addClass = "active";
+          (() => {
+            const _current = _button.current;
+            const addClass = "active";
 
-          if (_current && !_current.classList.contains(addClass)) {
-            // Sınıf ekleniyor...
-            _current.classList.add(addClass);
+            if (_current && !_current.classList.contains(addClass)) {
+              // Sınıf ekleniyor...
+              _current.classList.add(addClass);
 
-            // Sınıf 500 milisaniye sonra kaldırlacak.
-            setTimeout(() => _current.classList.remove(addClass), 750);
-          }
-        })();
+              // Sınıf 500 milisaniye sonra kaldırlacak.
+              setTimeout(() => _current.classList.remove(addClass), 750);
+            }
+          })();
 
-        (() => attributes.onClick && attributes.onClick(event))();
-      }}
-    >
-      <span className="text">
-        {icon?.element}
+          (() => attributes.onClick && attributes.onClick(event))();
+        }}
+      >
+        <span className="text">
+          {icon?.element}
 
-        <span>
-          {!shape
-            ? typeof children === "string" && upperCase
-              ? children.toLocaleUpperCase()
-              : children
-            : ""}
+          <span>
+            {!shape
+              ? typeof children === "string" && upperCase
+                ? children.toLocaleUpperCase()
+                : children
+              : ""}
+          </span>
         </span>
-      </span>
-    </button>
+      </button>
+    </React.Fragment>
   );
 };
 
