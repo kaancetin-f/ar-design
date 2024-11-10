@@ -1,0 +1,39 @@
+.ar-button-action {
+  position: relative;
+}
+.ar-button-action > .list {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(var(--white-rgb), 0.75);
+  backdrop-filter: blur(10px);
+  border: solid 1px var(--gray-200);
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 0 15px -2.5px rgba(var(--black-rgb), 0.1);
+}
+.ar-button-action > .list::after {
+  position: absolute;
+  top: 0.5rem;
+  left: 100%;
+  content: "";
+  border: solid 10px transparent;
+  border-left-color: var(--gray-200);
+}
+
+/* #region Open or Close */
+.ar-button-action > .list:is(.opened) {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+  transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;
+  z-index: 100;
+}
+.ar-button-action > .list:is(.closed) {
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;
+  z-index: 99;
+}
+/* #endregion */
+/* Open or Close */

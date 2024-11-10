@@ -5,29 +5,6 @@ import { Border, Icon, Sizes, Status, Variants } from ".";
  */
 export interface IGlobalProps {
   /**
-   * Bileşenin içinde render edilecek içeriği belirtir.
-   * Bu içerik bir dize (string) veya bir React Elemanı olabilir.
-   *
-   * Örneğin;
-   * - Bir Dize: "Hello, World!"
-   * - Bir React Elemanı: <span>Hello, World!</span>
-   *
-   * ```jsx
-   * <Component>Hello, World!</Component>
-   *
-   * <Component>
-   *    <span>Hello, World!</span>
-   * </Component>
-   *
-   * <Component>
-   *    <span>Hello, World!</span>
-   *    <span>Hello, World!</span>
-   * </Component>
-   * ```
-   */
-  children?: React.ReactNode;
-
-  /**
    * Bileşenin stil varyantını belirtir.
    *
    * - `filled`: Dolu arka plan rengi ile stilize edilmiş bir varyant.

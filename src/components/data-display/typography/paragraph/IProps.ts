@@ -1,7 +1,7 @@
 import { ParagraphColors, Status } from "../../../../libs/types";
-import { IGlobalProps } from "../../../../libs/types/IGlobalProps";
+import { IChildren, IGlobalProps } from "../../../../libs/types/IGlobalProps";
 
-interface IProps extends Omit<IGlobalProps, "status"> {
+interface IProps extends Omit<IGlobalProps, "status">, IChildren {
   color?: ParagraphColors | Status;
   align?: "left" | "center" | "right";
 }

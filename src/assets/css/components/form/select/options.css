@@ -55,6 +55,7 @@
   visibility: hidden;
   opacity: 0;
   transform: scaleY(0.8);
+  height: 0;
 }
 
 .ar-select-wrapper > .options.top:is(.opened, .closed),

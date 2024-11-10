@@ -25,4 +25,4 @@ export type Props = {
   options: Option[];
   placeholder?: string;
 } & (IMultiple | ISingle) &
-  Omit<IGlobalProps, "children" | "status">;
+  Omit<IGlobalProps, "status">;

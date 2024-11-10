@@ -13,7 +13,7 @@
   z-index: 100;
 }
 .ar-modal-wrapper:is(.opened) > .ar-modal {
-  top: 7.5rem;
+  top: 4.5rem;
   transform: translateX(-50%) scale(1);
   transition: top 250ms, transform 250ms 300ms ease-in-out;
 }
@@ -43,7 +43,7 @@
   width: 75%;
 }
 .ar-modal-wrapper > .ar-modal.normal {
-  width: 50%;
+  width: 520px;
 }
 .ar-modal-wrapper > .ar-modal.small {
   width: 25%;

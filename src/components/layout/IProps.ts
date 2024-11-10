@@ -1,8 +1,9 @@
 import React from "react";
-import { IGlobalProps } from "../../libs/types/IGlobalProps";
+import { IChildren, IGlobalProps } from "../../libs/types/IGlobalProps";
 
 interface ILayoutProps
-  extends Omit<IGlobalProps, "variant" | "status" | "icon" | "border" | "size" | "upperCase"> {}
+  extends Omit<IGlobalProps, "variant" | "status" | "icon" | "border" | "size" | "upperCase">,
+    IChildren {}
 
 interface IHeaderProps {
   logoWrapper?: {
@@ -13,9 +14,11 @@ interface IHeaderProps {
 }
 
 interface IMainProps
-  extends Omit<IGlobalProps, "variant" | "status" | "icon" | "border" | "size" | "upperCase"> {}
+  extends Omit<IGlobalProps, "variant" | "status" | "icon" | "border" | "size" | "upperCase">,
+    IChildren {}
 
 interface ISectionProps
-  extends Omit<IGlobalProps, "variant" | "status" | "icon" | "border" | "size" | "upperCase"> {}
+  extends Omit<IGlobalProps, "variant" | "status" | "icon" | "border" | "size" | "upperCase">,
+    IChildren {}
 
 export { ILayoutProps, IHeaderProps, IMainProps, ISectionProps };

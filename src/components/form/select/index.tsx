@@ -137,7 +137,6 @@ const Select: React.FC<Props> = ({
   useEffect(() => setFilteredOptions(options), [options]);
 
   useEffect(() => {
-    const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
     const screenCenter = window.innerHeight / 2 + 100;
     const rect = _singleInput.current
       ? _singleInput.current.getBoundingClientRect()
@@ -153,15 +152,22 @@ const Select: React.FC<Props> = ({
       }, 250);
 
       if (!multiple) {
+        const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
+
+        // Scroll ile kaydırma işlemi
+        if (_options.current) {
+          const list = _options.current.querySelector("ul") as HTMLUListElement;
+
+          list.scrollTo({
+            top: optionItems[_selectedItemIndex.current].offsetTop,
+            behavior: "smooth",
+          });
+        }
+
         if (_singleInput.current) {
           _singleInput.current.value = "";
           _singleInput.current.placeholder = selection?.text || attributes.placeholder || "";
         }
-
-        optionItems[_selectedItemIndex.current]?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
       }
 
       setOptionsClassName((prev) => [...prev, direction, "opened"]);
