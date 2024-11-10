@@ -25,7 +25,7 @@ const months = [
   { value: 11, text: "Aralık" },
 ];
 
-const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
+const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
   // refs
   const _arCalendar = useRef<HTMLDivElement>(null);
   const _currentDate = useRef<Date>(new Date()).current;
@@ -46,7 +46,6 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
 
   // states
   const [calendarOpen, setCalendarOpen] = useState<boolean>(false);
-  const [clockOpen, setClockOpen] = useState<boolean>(false);
   const [calendar, setCalendar] = useState<React.ReactNode[]>([]);
   const [years, setYears] = useState<Option[]>([]);
   const [hours, setHours] = useState<React.ReactNode>();
@@ -111,8 +110,8 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
         now.getFullYear(),
         now.getMonth(),
         now.getDate(),
-        !clockOpen ? 0 : now.getHours(),
-        !clockOpen ? 0 : now.getMinutes(),
+        !isClock ? 0 : now.getHours(),
+        !isClock ? 0 : now.getMinutes(),
         0
       )
     );
@@ -166,8 +165,8 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
               _year.current,
               _month.current,
               _day.current,
-              !clockOpen ? 0 : _hours.current,
-              !clockOpen ? 0 : _minutes.current,
+              !isClock ? 0 : _hours.current,
+              !isClock ? 0 : _minutes.current,
               0
             )
           );
@@ -329,7 +328,7 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
     // Input güncelleniyor...
     updateDateInput(_year.current, _month.current, _day.current, _hours.current, _minutes.current);
 
-    if (!clockOpen) return;
+    if (!isClock) return;
 
     // Seçim sonrasında en yukarı getirme işlemi için aşağıda yer alan kodlar yazılmıştır
     const hourLiElement = _hoursLiElements.current[_hours.current];
@@ -348,13 +347,14 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
         behavior: "smooth",
       });
     }
-  }, [timeTrigger, calendarOpen, clockOpen]);
+  }, [timeTrigger, calendarOpen, isClock]);
 
   return (
     <div className="ar-date-picker">
       <Input
         ref={_beginDate}
-        type={clockOpen ? "datetime-local" : "date"}
+        value={attributes.value?.toString().slice(0, isClock ? 16 : 10)}
+        type={isClock ? "datetime-local" : "date"}
         onKeyDown={(event) => event.code == "Space" && event.preventDefault()}
         onChange={(event) => {
           // Disabled gelmesi durumunda işlem yapmasına izin verme...
@@ -501,24 +501,24 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
               Şimdi
             </Button>
 
-            <Button
+            {/* <Button
               variant="borderless"
-              status={!clockOpen ? "primary" : "danger"}
+              status={!isClock ? "primary" : "danger"}
               onClick={() => {
                 _clockOpen.current = !_clockOpen.current;
                 setClockOpen((prev) => !prev);
               }}
             >
               Saat
-            </Button>
+            </Button> */}
           </div>
 
-          <div>{!clockOpen && okayButton()}</div>
+          <div>{!isClock && okayButton()}</div>
         </div>
         {/* :End: Calendar */}
 
         {/* :Begin: Clock */}
-        <div className={`clock ${clockOpen ? "active" : "passive"}`}>
+        <div className={`clock ${isClock ? "active" : "passive"}`}>
           <div className="header">
             {_hours.current.toString().padStart(2, "0")}
             {" : "}
@@ -528,7 +528,7 @@ const DatePicker: React.FC<Props> = ({ onChange, ...attributes }) => {
             <ul ref={_hoursListElement}>{hours}</ul>
             <ul ref={_minutesListElement}>{minutes}</ul>
           </div>
-          {clockOpen && <div className="footer">{okayButton()}</div>}
+          {isClock && <div className="footer">{okayButton()}</div>}
         </div>
         {/* :End: Clock */}
       </div>

@@ -23,11 +23,13 @@
   transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;
 }
 .ar-date-picker > .calendar-wrapper:is(.opened) {
+  display: block;
   visibility: visible;
   opacity: 1;
   transform: scaleY(1);
 }
 .ar-date-picker > .calendar-wrapper:is(.closed) {
+  display: none;
   visibility: hidden;
   opacity: 0;
   transform: scaleY(0.8);
