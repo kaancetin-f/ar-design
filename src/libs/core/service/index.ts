@@ -1,6 +1,7 @@
 import Api from "./Api";
 
-type Result = {
+type Result<TResponse> = {
+  data: TResponse;
   __ok__: boolean;
   __statusCode__: number;
   __statusText__: string;
@@ -15,10 +16,7 @@ class Service {
     this._endPoint = values.endPoint;
   }
 
-  async Get<TResponse>(values?: {
-    input?: string;
-    headers?: HeadersInit | undefined;
-  }): Promise<TResponse & Result> {
+  async Get<TResponse>(values?: { input?: string; headers?: HeadersInit | undefined }): Promise<Result<TResponse>> {
     try {
       let endPoint: string = `${this._endPoint}`;
 
@@ -31,7 +29,7 @@ class Service {
       const text = (await response.text()).trim();
 
       return {
-        ...(text.length > 0 ? JSON.parse(text) : {}),
+        data: text.length > 0 ? JSON.parse(text) : null,
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,
@@ -45,7 +43,7 @@ class Service {
     input?: RequestInfo;
     data: TData;
     headers?: HeadersInit;
-  }): Promise<TResponse & Result> {
+  }): Promise<Result<TResponse>> {
     try {
       let endPoint: string = `${this._endPoint}`;
 
@@ -59,7 +57,8 @@ class Service {
       const text = (await response.text()).trim();
 
       return {
-        ...(text.length > 0 ? JSON.parse(text) : {}),
+        // ...(text.length > 0 ? JSON.parse(text) : {}),
+        data: text.length > 0 ? JSON.parse(text) : null,
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,
@@ -73,7 +72,7 @@ class Service {
     input?: RequestInfo;
     data?: TData;
     headers?: HeadersInit;
-  }): Promise<TResponse & Result> {
+  }): Promise<Result<TResponse>> {
     try {
       let endPoint: string = `${this._endPoint}`;
 
@@ -87,7 +86,8 @@ class Service {
       const text = (await response.text()).trim();
 
       return {
-        ...(text.length > 0 ? JSON.parse(text) : {}),
+        // ...(text.length > 0 ? JSON.parse(text) : {}),
+        data: text.length > 0 ? JSON.parse(text) : null,
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,
@@ -97,10 +97,7 @@ class Service {
     }
   }
 
-  async Delete<TResponse>(values?: {
-    input?: RequestInfo;
-    headers?: HeadersInit;
-  }): Promise<TResponse & Result> {
+  async Delete<TResponse>(values?: { input?: RequestInfo; headers?: HeadersInit }): Promise<Result<TResponse>> {
     try {
       let endPoint: string = `${this._endPoint}`;
 
@@ -113,7 +110,8 @@ class Service {
       const text = (await response.text()).trim();
 
       return {
-        ...(text.length > 0 ? JSON.parse(text) : {}),
+        // ...(text.length > 0 ? JSON.parse(text) : {}),
+        data: text.length > 0 ? JSON.parse(text) : null,
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,

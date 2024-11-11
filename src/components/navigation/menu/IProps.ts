@@ -1,7 +1,9 @@
 import React from "react";
 import { MenuItemVariants, MenuProps } from "../../../libs/types";
 
-export type Props = {
+interface IProps extends React.HTMLAttributes<HTMLElement> {
   data: MenuProps[];
   variant?: MenuItemVariants;
-} & React.HTMLAttributes<HTMLElement>;
+}
+
+export default IProps;

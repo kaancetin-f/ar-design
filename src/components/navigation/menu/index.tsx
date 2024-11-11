@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { Props } from "./Types";
 import "../../../assets/css/components/navigation/menu/menu.css";
 import Divider from "../../data-display/divider";
 import { MenuItemVariants, MenuProps } from "../../../libs/types";
+import IProps from "./IProps";
 
 const handleOnClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
   event.stopPropagation();
@@ -71,7 +71,7 @@ const SubMenu: React.FC<{
   );
 };
 
-const Menu: React.FC<Props> = ({ data, variant = "vertical", ...attributes }) => {
+const Menu: React.FC<IProps> = ({ data, variant = "vertical", ...attributes }) => {
   // states
   const [selectedMenu, setSelectedMenu] = useState<MenuProps[]>([]);
   const [selectedItem, setSelectedItem] = useState<MenuProps | null>(null);
@@ -85,11 +85,7 @@ const Menu: React.FC<Props> = ({ data, variant = "vertical", ...attributes }) =>
           if (item.type === "group") className_li.push("opened");
 
           return (
-            <li
-              key={index}
-              className={className_li.map((c) => c).join(" ")}
-              onClick={handleOnClick}
-            >
+            <li key={index} className={className_li.map((c) => c).join(" ")} onClick={handleOnClick}>
               <div className="item-render">
                 <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
                 {item.type === "divider" ? <Divider /> : item.render}

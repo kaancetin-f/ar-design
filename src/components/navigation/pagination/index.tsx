@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/navigation/pagination/pagination.css";
 import { ConfigContext } from "../../../libs/core/application/contexts/Config";
@@ -8,6 +8,9 @@ import { ConfigContext } from "../../../libs/core/application/contexts/Config";
 const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPage, onChange }) => {
   // context
   const { config } = useContext(ConfigContext);
+
+  // refs
+  const _totalPageCount = useRef<number>(Math.ceil(totalRecords / (perPage ?? config.perPage))).current;
 
   // states
   const [pages, setPages] = useState<React.JSX.Element[]>([]);
@@ -17,12 +20,11 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
   useEffect(() => {
     if (totalRecords === 0) return;
 
-    const totalPages = Math.ceil(totalRecords / (perPage ?? config.perPage));
     const liItems = [];
 
     // Başlangıç ve bitiş aralığını hesapla.
     const startPage = Math.max(1, currentPage - 1);
-    const endPage = Math.min(totalPages, currentPage + 1);
+    const endPage = Math.min(_totalPageCount, currentPage + 1);
 
     // İlk sayfa ve ... eklemek.
     if (startPage > 1) {
@@ -44,19 +46,15 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
     // Sayfa aralığını eklemek.
     for (let i = startPage; i <= endPage; i++) {
       liItems.push(
-        <li
-          key={i}
-          className={i === currentPage ? "selection-page" : ""}
-          onClick={() => setCurrentPage(i)}
-        >
+        <li key={i} className={i === currentPage ? "selection-page" : ""} onClick={() => setCurrentPage(i)}>
           {i}
         </li>
       );
     }
 
     // Son sayfa ve ... eklemek.
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
+    if (endPage < _totalPageCount) {
+      if (endPage < _totalPageCount - 1) {
         liItems.push(
           <li key="end-ellipsis" className="end-ellipsis">
             ...
@@ -65,8 +63,8 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
       }
 
       liItems.push(
-        <li key={totalPages} onClick={() => setCurrentPage(totalPages)}>
-          {totalPages}
+        <li key={_totalPageCount} onClick={() => setCurrentPage(_totalPageCount)}>
+          {_totalPageCount}
         </li>
       );
     }
@@ -105,14 +103,12 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
         {pages}
 
         <li
-          className={
-            Math.ceil(totalRecords / (perPage || config.perPage)) === currentPage ? "passive" : ""
-          }
+          className={_totalPageCount === currentPage ? "passive" : ""}
           onClick={() => {
-            if (Math.ceil(totalRecords / (perPage || config.perPage)) === currentPage) return;
+            if (_totalPageCount === currentPage) return;
 
             setCurrentPage((prev) => {
-              if (prev === Math.ceil(totalRecords / (perPage || config.perPage))) return prev;
+              if (prev === _totalPageCount) return prev;
               return (prev += 1);
             });
           }}
@@ -120,13 +116,11 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
           <span>{"›"}</span>
         </li>
         <li
-          className={
-            Math.ceil(totalRecords / (perPage || config.perPage)) === currentPage ? "passive" : ""
-          }
+          className={_totalPageCount === currentPage ? "passive" : ""}
           onClick={() => {
-            if (Math.ceil(totalRecords / (perPage || config.perPage)) === currentPage) return;
+            if (_totalPageCount === currentPage) return;
 
-            setCurrentPage(Math.ceil(totalRecords / (perPage || config.perPage)));
+            setCurrentPage(_totalPageCount);
           }}
         >
           <span>{"»"}</span>
