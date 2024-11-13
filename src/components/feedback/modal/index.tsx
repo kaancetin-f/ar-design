@@ -17,11 +17,11 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
   else _modalWrapperClassName.push("closed");
 
   // methods
-  const handleClickOutSide = (event: MouseEvent) => {
-    const target = event.target as HTMLElement;
+  // const handleClickOutSide = (event: MouseEvent) => {
+  //   const target = event.target as HTMLElement;
 
-    if (_arModal.current && !_arModal.current.contains(target)) open.set(false);
-  };
+  //   if (_arModal.current && !_arModal.current.contains(target)) open.set(false);
+  // };
 
   const handleKeys = (event: KeyboardEvent) => {
     const key = event.key;
@@ -32,12 +32,12 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
   // useEffects
   useEffect(() => {
     if (open.get) {
-      document.addEventListener("click", handleClickOutSide);
+      // document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
 
       // Dinleyicileri kaldır.
       return () => {
-        document.removeEventListener("click", handleClickOutSide);
+        // document.removeEventListener("click", handleClickOutSide);
         document.removeEventListener("keydown", handleKeys);
       };
     }
@@ -45,6 +45,16 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
 
   return (
     <div className={_modalWrapperClassName.map((c) => c).join(" ")}>
+      <div
+        className="ar-modal-bg"
+        onMouseDown={(event) => {
+          event.stopPropagation();
+
+          const target = event.target as HTMLElement;
+          if (_arModal.current && !_arModal.current.contains(target)) open.set(false);
+        }}
+      ></div>
+
       <div ref={_arModal} className={_modalClassName.map((c) => c).join(" ")} role="dialog">
         <div className="header">
           <Title Level="h3">{title}</Title>

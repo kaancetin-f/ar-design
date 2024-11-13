@@ -266,9 +266,7 @@ const Select: React.FC<Props> = ({
                   />
                 ))
               ) : (
-                <span className={`placeholder ${status?.color || "light"}`}>
-                  {attributes.placeholder}
-                </span>
+                <span className={`placeholder ${status?.color || "light"}`}>{attributes.placeholder}</span>
               )}
             </div>
           </div>
@@ -292,31 +290,34 @@ const Select: React.FC<Props> = ({
           />
         )}
 
-        {!attributes.disabled &&
-          (Object.keys(selection || {}).length > 0 || (multiple && selections.length > 0)) && (
-            <span
-              className="button-clear"
-              onClick={() => {
-                // Multiple
-                if (multiple) {
-                  if (_searchField.current) _searchField.current.value = "";
+        <span
+          className={`button-clear ${
+            !attributes.disabled && (Object.keys(selection || {}).length > 0 || (multiple && selections.length > 0))
+              ? "opened"
+              : "closed"
+          }`}
+          onClick={(event) => {
+            event.stopPropagation();
 
-                  setSelections([]);
-                  onChange([]);
-                }
+            // Multiple
+            if (multiple) {
+              if (_searchField.current) _searchField.current.value = "";
 
-                // Single
-                if (!multiple) {
-                  if (_singleInput.current) {
-                    _singleInput.current.value = "";
-                  }
+              setSelections([]);
+              onChange([]);
+            }
 
-                  setSelection(undefined);
-                  onChange(undefined);
-                }
-              }}
-            ></span>
-          )}
+            // Single
+            if (!multiple) {
+              if (_singleInput.current) {
+                _singleInput.current.value = "";
+              }
+
+              setSelection(undefined);
+              onChange(undefined);
+            }
+          }}
+        ></span>
 
         <span
           className={`angel-down ${optionsOpen ? "opened" : "closed"}`}

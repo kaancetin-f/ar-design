@@ -56,6 +56,14 @@
   line-height: 0.7rem;
   cursor: pointer;
 }
+.ar-select-wrapper > .ar-select > .button-clear:is(.opened) {
+  visibility: visible;
+  opacity: 1;
+}
+.ar-select-wrapper > .ar-select > .button-clear:is(.closed) {
+  visibility: hidden;
+  opacity: 0;
+}
 .ar-select-wrapper > .ar-select > .button-clear::before {
   content: "x";
   color: var(--white);

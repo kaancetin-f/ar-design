@@ -8,14 +8,7 @@ import Actions from "./Actions";
 import Input from "../../form/input";
 import Pagination from "../../navigation/pagination";
 
-const Table = function <T extends object>({
-  children,
-  data,
-  columns,
-  selections,
-  pagination,
-  config,
-}: IProps<T>) {
+const Table = function <T extends object>({ children, data, columns, selections, pagination, config }: IProps<T>) {
   // refs
   let _dataLength = useRef<number>(0);
   const _tableWrapper = useRef<HTMLDivElement>(null);
@@ -113,9 +106,7 @@ const Table = function <T extends object>({
 
     // Eğer değer bir sayı veya string ise, aranan metinle eşleşip eşleşmediğini kontrol ediyoruz.
     if (typeof value === "number" || typeof value === "string") {
-      return searchedTexts.some((_searchedText) =>
-        value.toString().toLowerCase().includes(_searchedText)
-      );
+      return searchedTexts.some((_searchedText) => value.toString().toLowerCase().includes(_searchedText));
     }
 
     // Eğer değer bir nesne veya dizi ise, içindeki her bir değeri yine deepSearch fonksiyonuyla kontrol ediyoruz.
@@ -170,10 +161,7 @@ const Table = function <T extends object>({
     <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
       <div className="header">
         <div>
-          <Input
-            placeholder="Ara"
-            onChange={(event) => setSearchedText(event.target.value.toLowerCase())}
-          />
+          <Input placeholder="Ara" onChange={(event) => setSearchedText(event.target.value.toLowerCase())} />
         </div>
         <div>{React.Children.map(children, (child) => child)}</div>
       </div>
@@ -233,11 +221,7 @@ const Table = function <T extends object>({
               getData().map((item, index) => (
                 <tr key={`row-${index}`}>
                   {selections && (
-                    <td
-                      key={`selection-${index}`}
-                      className="sticky-left"
-                      data-sticky-position="left"
-                    >
+                    <td key={`selection-${index}`} className="sticky-left" data-sticky-position="left">
                       <Checkbox
                         ref={(element) => (_checkboxItems.current[index] = element)}
                         status="primary"
@@ -265,9 +249,7 @@ const Table = function <T extends object>({
                       const _item = item[c.key.field as keyof T];
 
                       if (_item && typeof _item === "object") {
-                        render = c.render
-                          ? c.render(item)
-                          : _item[c.key.nestedKey as keyof typeof _item];
+                        render = c.render ? c.render(item) : _item[c.key.nestedKey as keyof typeof _item];
                       }
                     }
                     // Diğer durumlarda `null` döndür

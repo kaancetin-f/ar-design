@@ -16,6 +16,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
       border = { radius: "sm" },
       button,
       addon,
+      validation,
       ...attributes
     },
     ref
@@ -27,7 +28,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     const _inputClassName: string[] = [];
 
     _inputClassName.push(
-      ...Utils.GetClassName(variant, status, border, size, icon, attributes.className)
+      ...Utils.GetClassName(variant, validation?.text ? "danger" : status, border, size, icon, attributes.className)
     );
 
     // addon className
@@ -47,9 +48,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     return (
       <div className={_wrapperClassName.map((c) => c).join(" ")}>
         {/* Addon Before */}
-        {addon?.before && (
-          <span className={_addonBeforeClassName.map((c) => c).join(" ")}>{addon?.before}</span>
-        )}
+        {addon?.before && <span className={_addonBeforeClassName.map((c) => c).join(" ")}>{addon?.before}</span>}
 
         <div className="ar-input">
           {/* Icon */}
@@ -81,21 +80,16 @@ const Input = forwardRef<HTMLInputElement, IProps>(
               })();
             }}
           />
+
+          {validation?.text && <span className="validation">{validation.text}</span>}
         </div>
 
         {/* Addon Afrer */}
-        {addon?.after && (
-          <span className={_addonAfterClassName.map((c) => c).join(" ")}>{addon?.after}</span>
-        )}
+        {addon?.after && <span className={_addonAfterClassName.map((c) => c).join(" ")}>{addon?.after}</span>}
 
         {/* Button */}
         {button && (
-          <Button
-            {...button}
-            status={status}
-            border={{ radius: border.radius }}
-            disabled={attributes.disabled}
-          />
+          <Button {...button} status={status} border={{ radius: border.radius }} disabled={attributes.disabled} />
         )}
       </div>
     );

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/navigation/pagination/pagination.css";
 import { ConfigContext } from "../../../libs/core/application/contexts/Config";
@@ -9,18 +9,18 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
   // context
   const { config } = useContext(ConfigContext);
 
-  // refs
-  const _totalPageCount = useRef<number>(Math.ceil(totalRecords / (perPage ?? config.perPage))).current;
-
   // states
   const [pages, setPages] = useState<React.JSX.Element[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(defaultCurrent);
+  const [totalPageCount, setTotalPageCount] = useState<number>(0);
 
   // useEffect
   useEffect(() => {
     if (totalRecords === 0) return;
 
     const liItems = [];
+    const _totalPageCount = Math.ceil(totalRecords / (perPage ?? config.perPage));
+    setTotalPageCount(_totalPageCount);
 
     // Başlangıç ve bitiş aralığını hesapla.
     const startPage = Math.max(1, currentPage - 1);
@@ -103,12 +103,12 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
         {pages}
 
         <li
-          className={_totalPageCount === currentPage ? "passive" : ""}
+          className={totalPageCount === currentPage ? "passive" : ""}
           onClick={() => {
-            if (_totalPageCount === currentPage) return;
+            if (totalPageCount === currentPage) return;
 
             setCurrentPage((prev) => {
-              if (prev === _totalPageCount) return prev;
+              if (prev === totalPageCount) return prev;
               return (prev += 1);
             });
           }}
@@ -116,11 +116,11 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
           <span>{"›"}</span>
         </li>
         <li
-          className={_totalPageCount === currentPage ? "passive" : ""}
+          className={totalPageCount === currentPage ? "passive" : ""}
           onClick={() => {
-            if (_totalPageCount === currentPage) return;
+            if (totalPageCount === currentPage) return;
 
-            setCurrentPage(_totalPageCount);
+            setCurrentPage(totalPageCount);
           }}
         >
           <span>{"»"}</span>

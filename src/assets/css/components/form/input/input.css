@@ -20,6 +20,11 @@
   box-sizing: border-box;
   transition: background 250ms, border 250ms, box-shadow 250ms ease-in-out;
 }
+.ar-input-wrapper > .ar-input > .validation {
+  color: var(--danger);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
 
 /* Core Css */
 @import url("./core/icon.css");

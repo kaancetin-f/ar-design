@@ -8,6 +8,10 @@ interface IProps
     Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "size"> {
   button?: IButtonProps;
   addon?: { variant?: Variants; before?: string | number; after?: string | number };
+  validation?: {
+    text: string | string[] | React.JSX.Element[] | null;
+    scrollTo?: boolean;
+  };
 }
 
 export default IProps;

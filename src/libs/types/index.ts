@@ -1,15 +1,7 @@
 import React from "react";
 
 export type Variants = "filled" | "outlined" | "dashed" | "borderless";
-export type Status =
-  | "primary"
-  | "secondary"
-  | "success"
-  | "danger"
-  | "warning"
-  | "information"
-  | "dark"
-  | "light";
+export type Status = "primary" | "secondary" | "success" | "danger" | "warning" | "information" | "dark" | "light";
 
 export type ParagraphColors =
   | "gray-100"
@@ -59,4 +51,14 @@ export type TableColumnType<T> = {
 export type StepProps = {
   title: string;
   content: React.ReactNode;
+};
+
+// Validation Types
+export type ValidationProperties<T> = {
+  key: keyof T;
+  shape?: {
+    type: "required" | "minimum" | "maximum" | "email";
+    value?: string | number;
+    message: string;
+  }[];
 };
