@@ -18,8 +18,7 @@
 }
 .ar-modal-wrapper:is(.opened) > .ar-modal {
   top: 4.5rem;
-  transform: translateX(-50%) scale(1);
-  transition: top 250ms, transform 250ms 300ms ease-in-out;
+  transition: top 250ms ease-in-out;
 }
 
 .ar-modal-wrapper:is(.closed) {
@@ -30,15 +29,14 @@
 }
 .ar-modal-wrapper:is(.closed) > .ar-modal {
   top: -100%;
-  transform: translateX(-50%) scale(0.8);
-  transition: top 250ms 300ms, transform 250ms ease-in-out;
+  transition: top 250ms 300ms ease-in-out;
 }
 /* #endregion */
 /* Open or Close */
 
 .ar-modal-wrapper > .ar-modal {
-  position: absolute;
-  left: 50%;
+  position: relative;
+  margin: 0 auto;
   background-color: var(--white);
   border-radius: var(--border-radius-sm);
 }

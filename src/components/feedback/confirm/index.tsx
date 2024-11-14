@@ -6,7 +6,7 @@ import { IChildren } from "../../../libs/types/IGlobalProps";
 import Button from "../../form/button";
 import Typography from "../../data-display/typography";
 
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 
 const Confirm: React.FC<
   {
@@ -38,20 +38,18 @@ const Confirm: React.FC<
   };
 
   const handleResizeEvent = () => {
-    if (_arConfirmWrapper.current && _arConfirm.current) {
-      const wrapperRect = _arConfirmWrapper.current.getBoundingClientRect();
-      const confirm = _arConfirm.current.getBoundingClientRect();
-
-      setCoordinatX(wrapperRect.left - 260);
-      setCoordinatY(wrapperRect.top - confirm.height / 2);
-    }
+    setOpen(false);
+    // if (_arConfirmWrapper.current && _arConfirm.current) {
+    //   const wrapperRect = _arConfirmWrapper.current.getBoundingClientRect();
+    //   const confirm = _arConfirm.current.getBoundingClientRect();
+    //   setCoordinatX(wrapperRect.left - 260);
+    //   setCoordinatY(wrapperRect.top - confirm.height / 2);
+    // }
   };
 
   // useEffects
   useEffect(() => {
     if (open) {
-      handleResizeEvent();
-
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
 
@@ -76,7 +74,8 @@ const Confirm: React.FC<
         style={{ top: coordinateY, left: coordinateX }}
       >
         <Title Level="h4">{title}</Title>
-        <Paragraph size="small">{message}</Paragraph>
+        <p className="message">{message}</p>
+
         <div className="footer">
           <Button
             status="success"
@@ -88,8 +87,8 @@ const Confirm: React.FC<
           >
             Evet
           </Button>
+
           <Button
-            variant="outlined"
             status="light"
             size="small"
             onClick={() => {
@@ -102,7 +101,21 @@ const Confirm: React.FC<
         </div>
       </div>
 
-      <div onClick={() => setOpen((prev) => !prev)}>{children}</div>
+      <div
+        onClick={() => {
+          if (!_arConfirmWrapper.current || !_arConfirm.current) return;
+
+          const wrapper = _arConfirmWrapper.current.getBoundingClientRect();
+          const confirm = _arConfirm.current.getBoundingClientRect();
+
+          setCoordinatX(wrapper.left - confirm.width - 60);
+          setCoordinatY(wrapper.top - confirm.height / 2 + 2.5);
+
+          setOpen((prev) => !prev);
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 };
