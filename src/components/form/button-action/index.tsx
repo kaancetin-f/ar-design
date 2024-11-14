@@ -28,21 +28,11 @@ const ButtonAction: React.FC<IProps> = ({ buttons }) => {
     if (key === "Escape") setOpen(false);
   };
 
-  const handleResizeEvent = () => {
-    if (_arButtonAction.current && _list.current) {
-      const buttonAction = _arButtonAction.current.getBoundingClientRect();
-      const list = _list.current.getBoundingClientRect();
-
-      setCoordinatX(buttonAction.left - list.width - 30);
-      setCoordinatY(buttonAction.top);
-    }
-  };
+  const handleResizeEvent = () => setOpen(false);
 
   // useEffects
   useEffect(() => {
     if (open) {
-      handleResizeEvent();
-
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
 
@@ -66,7 +56,17 @@ const ButtonAction: React.FC<IProps> = ({ buttons }) => {
         status="information"
         border={{ radius: "none" }}
         icon={{ element: <span className="dotted"></span> }}
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={() => {
+          if (!_arButtonAction.current || !_list.current) return;
+
+          const wrapper = _arButtonAction.current.getBoundingClientRect();
+          const confirm = _list.current.getBoundingClientRect();
+
+          setCoordinatX(wrapper.left - confirm.width - 60);
+          setCoordinatY(wrapper.top);
+
+          setOpen((prev) => !prev);
+        }}
       />
 
       <span

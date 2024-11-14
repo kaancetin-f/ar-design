@@ -37,15 +37,7 @@ const Confirm: React.FC<
     if (key === "Escape") setOpen(false);
   };
 
-  const handleResizeEvent = () => {
-    setOpen(false);
-    // if (_arConfirmWrapper.current && _arConfirm.current) {
-    //   const wrapperRect = _arConfirmWrapper.current.getBoundingClientRect();
-    //   const confirm = _arConfirm.current.getBoundingClientRect();
-    //   setCoordinatX(wrapperRect.left - 260);
-    //   setCoordinatY(wrapperRect.top - confirm.height / 2);
-    // }
-  };
+  const handleResizeEvent = () => setOpen(false);
 
   // useEffects
   useEffect(() => {
