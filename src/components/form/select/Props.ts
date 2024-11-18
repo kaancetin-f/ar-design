@@ -10,6 +10,7 @@ interface IMultiple {
     };
   };
   defaultValueIndex?: number[];
+  value: Option[];
   onChange: (option: Option[]) => void;
   multiple: true;
 }
@@ -17,6 +18,7 @@ interface IMultiple {
 interface ISingle {
   status?: Status;
   defaultValueIndex?: number;
+  value: Option | undefined;
   onChange: (option: Option | undefined) => void;
   multiple?: false;
 }

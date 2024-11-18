@@ -122,10 +122,12 @@ const Table = function <T extends object>({ children, data, columns, selections,
     let _data: T[] = [...data];
     _dataLength.current = data.length;
 
-    const indexOfLastRow = currentPage * pagination.perPage;
-    const indexOfFirstRow = indexOfLastRow - pagination.perPage;
+    if (pagination) {
+      const indexOfLastRow = currentPage * pagination.perPage;
+      const indexOfFirstRow = indexOfLastRow - pagination.perPage;
 
-    if (!config?.isServer) _data = data.slice(indexOfFirstRow, indexOfLastRow);
+      if (!config?.isServer) _data = data.slice(indexOfFirstRow, indexOfLastRow);
+    }
 
     return searchedText
       ? _data.filter((item) => {
@@ -292,7 +294,7 @@ const Table = function <T extends object>({ children, data, columns, selections,
         </table>
       </div>
 
-      {pagination.totalRecords > pagination.perPage && (
+      {pagination && pagination.totalRecords > pagination.perPage && (
         <div className="footer">
           <Pagination
             totalRecords={pagination.totalRecords}

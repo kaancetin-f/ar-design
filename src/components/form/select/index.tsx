@@ -14,6 +14,7 @@ const Select: React.FC<Props> = ({
   status,
   border = { radius: "sm" },
   options,
+  value,
   onChange,
   multiple,
   defaultValueIndex,
@@ -37,8 +38,6 @@ const Select: React.FC<Props> = ({
   let [optionsClassName, setOptionsClassName] = useState<string[]>(["options", "closed"]);
   const [filteredOptions, setFilteredOptions] = useState<Option[]>([]);
   const [searchText, setSearchText] = useState<string>("");
-  const [selection, setSelection] = useState<Option | undefined>(undefined);
-  const [selections, setSelections] = useState<Option[]>([]);
   const [navigationIndex, setNavigationIndex] = useState<number>(0);
 
   // selection className
@@ -94,37 +93,23 @@ const Select: React.FC<Props> = ({
   const handleItemSelected = (option: Option, index: number) => {
     // Multiple
     if (multiple) {
-      const isSelectionItem = selections.some((selection) => selection.value === option.value);
+      const isSelectionItem = value.some((selection) => selection.value === option.value);
 
       if (isSelectionItem) {
-        const filtered = selections.filter((selection) => selection.value !== option.value);
+        const filtered = value.filter((selection) => selection.value !== option.value);
 
         onChange(filtered);
-        setSelections(filtered);
-      } else {
-        onChange([...selections, option]);
-        setSelections((prev) => [
-          ...prev,
-          {
-            value: option.value,
-            text: option.text,
-          },
-        ]);
-      }
+      } else onChange([...value, option]);
 
       // Selected Items
       _optionItems.current[index]?.classList.toggle("selectedItem");
       // Temizleme işlemi...
       setSearchText("");
       if (_searchField.current) _searchField.current.value = "";
-    }
-
-    // Signle
-    if (!multiple) {
+    } else {
       if (_singleInput.current) _singleInput.current.value = option.text;
 
       onChange(option);
-      setSelection(option);
       setOptionsOpen(false);
 
       _selectedItemIndex.current = index;
@@ -134,6 +119,16 @@ const Select: React.FC<Props> = ({
   };
 
   // effects
+  useEffect(() => {
+    if (multiple) {
+    } else {
+      if (value === undefined) {
+        if (_singleInput.current) _singleInput.current.value = "";
+        onChange(undefined);
+      }
+    }
+  }, [value]);
+
   useEffect(() => setFilteredOptions(options), [options]);
 
   useEffect(() => {
@@ -155,7 +150,7 @@ const Select: React.FC<Props> = ({
         const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
 
         // Scroll ile kaydırma işlemi
-        if (_options.current) {
+        if (_options.current && optionItems.length > 0) {
           const list = _options.current.querySelector("ul") as HTMLUListElement;
 
           list.scrollTo({
@@ -166,7 +161,7 @@ const Select: React.FC<Props> = ({
 
         if (_singleInput.current) {
           _singleInput.current.value = "";
-          _singleInput.current.placeholder = selection?.text || attributes.placeholder || "";
+          _singleInput.current.placeholder = value?.text || attributes.placeholder || "";
         }
       }
 
@@ -193,7 +188,7 @@ const Select: React.FC<Props> = ({
         if (_searchField.current) _searchField.current.value = "";
       } else {
         if (_singleInput.current) {
-          _singleInput.current.value = selection?.text || "";
+          _singleInput.current.value = value?.text || "";
           _singleInput.current.placeholder = attributes.placeholder || "";
         }
       }
@@ -256,8 +251,8 @@ const Select: React.FC<Props> = ({
         {multiple ? (
           <div className={_selectionClassName} onClick={() => setOptionsOpen((x) => !x)}>
             <div className="items">
-              {selections.length > 0 ? (
-                selections.map((selection, index) => (
+              {value.length > 0 ? (
+                value.map((selection, index) => (
                   <Chip
                     key={index}
                     variant={status?.selected?.variant || "filled"}
@@ -292,7 +287,7 @@ const Select: React.FC<Props> = ({
 
         <span
           className={`button-clear ${
-            !attributes.disabled && (Object.keys(selection || {}).length > 0 || (multiple && selections.length > 0))
+            !attributes.disabled && (Object.keys(value || {}).length > 0 || (multiple && value.length > 0))
               ? "opened"
               : "closed"
           }`}
@@ -303,17 +298,10 @@ const Select: React.FC<Props> = ({
             if (multiple) {
               if (_searchField.current) _searchField.current.value = "";
 
-              setSelections([]);
               onChange([]);
-            }
+            } else {
+              if (_singleInput.current) _singleInput.current.value = "";
 
-            // Single
-            if (!multiple) {
-              if (_singleInput.current) {
-                _singleInput.current.value = "";
-              }
-
-              setSelection(undefined);
               onChange(undefined);
             }
           }}
@@ -351,7 +339,9 @@ const Select: React.FC<Props> = ({
         {filteredOptions?.length > 0 ? (
           <ul>
             {filteredOptions?.map((option, index) => {
-              const isItem = selections.some((selection) => selection.value === option.value);
+              const isItem = multiple
+                ? value.some((selection) => selection.value === option.value)
+                : value?.value === option.value;
 
               return (
                 <li
@@ -377,9 +367,6 @@ const Select: React.FC<Props> = ({
           </Paragraph>
         )}
       </div>
-      {/* {options.length > 0 && (
-        
-      )} */}
       {/* :End: Options Field */}
     </div>
   );
