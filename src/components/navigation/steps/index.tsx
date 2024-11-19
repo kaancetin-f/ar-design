@@ -31,7 +31,7 @@ const Steps: React.FC<IProps> = ({ steps = [], onChange }) => {
 
             return (
               <div
-                key={step.title}
+                key={step.title || index}
                 className="item"
                 onClick={() => {
                   setCurrentStep(index);
@@ -52,9 +52,7 @@ const Steps: React.FC<IProps> = ({ steps = [], onChange }) => {
 
       <Divider />
 
-      <div className="content">
-        {steps.map((step, index) => currentStep === index && step.content)}
-      </div>
+      <div className="content">{steps.map((step, index) => currentStep === index && step.content)}</div>
     </div>
   );
 };
