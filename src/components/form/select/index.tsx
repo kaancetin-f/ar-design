@@ -16,6 +16,7 @@ const Select: React.FC<Props> = ({
   options,
   value,
   onChange,
+  onCreate,
   multiple,
   defaultValueIndex,
   ...attributes
@@ -37,8 +38,7 @@ const Select: React.FC<Props> = ({
   let [optionsClassName, setOptionsClassName] = useState<string[]>(["options", "closed"]);
   const [filteredOptions, setFilteredOptions] = useState<Option[]>([]);
   const [searchText, setSearchText] = useState<string>("");
-  const [selection, setSelection] = useState<Option | undefined>(undefined);
-  const [selections, setSelections] = useState<Option[]>([]);
+  const [singleInputText, setSingleInputText] = useState<string>("");
   const [navigationIndex, setNavigationIndex] = useState<number>(0);
 
   // selection className
@@ -88,63 +88,45 @@ const Select: React.FC<Props> = ({
       optionItems[_navigationIndex.current]?.click();
     } else if (key === "Escape") {
       setOptionsOpen(false);
+      setSingleInputText("");
     }
   };
 
   const handleItemSelected = (option: Option) => {
-    // Multiple
     if (multiple) {
-      const isSelectionItem = selections.some((selection) => selection.value === option.value);
+      const hasItem = value.some((item) => item.value === option.value && item.text === option.text);
 
-      if (isSelectionItem) {
-        const filtered = selections.filter((selection) => selection.value !== option.value);
-
-        onChange(filtered);
-        setSelections(filtered);
-      } else {
-        onChange([...selections, option]);
-        setSelections((prev) => [
-          ...prev,
-          {
-            value: option.value,
-            text: option.text,
-          },
-        ]);
-      }
-
-      // Temizleme işlemi...
-      setSearchText("");
-      if (_searchField.current) _searchField.current.value = "";
-    }
-
-    // Signle
-    if (!multiple) {
-      if (_singleInput.current) _singleInput.current.value = option.text;
-
+      if (hasItem) onChange(value.filter((v) => !(v.value === option.value && v.text === option.text)));
+      else onChange([...value, option]);
+    } else {
       onChange(option);
-      setSelection(option);
       setOptionsOpen(false);
     }
   };
 
   const handleCleanSelection = () => {
-    // Multiple
     if (multiple) {
       if (_searchField.current) _searchField.current.value = "";
-
-      setSelections([]);
       onChange([]);
     } else {
-      if (_singleInput.current) {
-        _singleInput.current.value = "";
-      }
-
-      setSelection(undefined);
+      if (_singleInput.current) _singleInput.current.value = "";
       onChange(undefined);
     }
   };
 
-  // effects
+  // useEffects
+  useEffect(() => {
+    if (multiple) {
+      setSearchText("");
+      if (_searchField.current) _searchField.current.value = "";
+    } else {
+      if (!_singleInput.current) return;
+
+      if (value) _singleInput.current.value = value.text;
+      else _singleInput.current.value = "";
+    }
+  }, [value]);
+
   useEffect(() => setFilteredOptions(options), [options]);
 
   useEffect(() => {
@@ -172,7 +154,7 @@ const Select: React.FC<Props> = ({
 
         if (_singleInput.current) {
           _singleInput.current.value = "";
-          _singleInput.current.placeholder = selection?.text || attributes.placeholder || "";
+          _singleInput.current.placeholder = value?.text || attributes.placeholder || "";
         }
       }
 
@@ -204,8 +186,8 @@ const Select: React.FC<Props> = ({
         if (_searchField.current) _searchField.current.value = "";
       } else {
         if (_singleInput.current) {
-          _singleInput.current.value = selection?.text || "";
-          _singleInput.current.placeholder = attributes.placeholder || "";
+          _singleInput.current.value = value?.text ?? "";
+          _singleInput.current.placeholder = attributes.placeholder ?? "";
         }
       }
 
@@ -250,51 +232,44 @@ const Select: React.FC<Props> = ({
       });
   }, [navigationIndex]);
 
-  useEffect(() => {
-    if (!value) {
-      handleCleanSelection();
-      return;
-    }
-
-    if (multiple) setSelections(value);
-    else handleItemSelected(value);
-  }, [value]);
-
   return (
     <div ref={_arSelect} className="ar-select-wrapper">
       {/* :Begin: Select and Multiple Select Field */}
       <div ref={_multipleInput} className="ar-select">
-        {/* Multiple */}
         {multiple ? (
           <div className={_selectionClassName} onClick={() => setOptionsOpen((x) => !x)}>
             <div className="items">
-              {selections.length > 0 ? (
-                selections.map((selection, index) => (
+              {value.length > 0 ? (
+                value.map((_value, index) => (
                   <Chip
                     key={index}
                     variant={status?.selected?.variant || "filled"}
                     status={status?.selected?.color || status?.color}
-                    text={selection.text}
+                    text={_value.text}
                   />
                 ))
               ) : (
-                <span className={`placeholder ${status?.color || "light"}`}>{attributes.placeholder}</span>
+                <span>{attributes.placeholder}</span>
               )}
             </div>
           </div>
         ) : (
-          // Single
           <Input
             ref={_singleInput}
             variant={variant}
             status={status || "light"}
             border={{ radius: border.radius }}
-            onClick={() => setOptionsOpen((prev) => !prev)}
-            onChange={() => !optionsOpen && setOptionsOpen(true)}
+            onClick={() => {
+              setOptionsOpen((prev) => !prev);
+              setSingleInputText("");
+            }}
+            onChange={(event) => {
+              !optionsOpen && setOptionsOpen(true);
+              setSingleInputText(event.target.value);
+            }}
             onKeyUp={(event) => {
               if (event.key === "Enter") return;
 
-              // Arama yapmak için kullanılan state bu kısımda dolduruluyor.
               setSearchText(event.currentTarget.value);
             }}
             placeholder={attributes.placeholder}
@@ -304,13 +279,10 @@ const Select: React.FC<Props> = ({
 
         <span
           className={`button-clear ${
-            !attributes.disabled && (Object.keys(selection || {}).length > 0 || (multiple && selections.length > 0))
-              ? "opened"
-              : "closed"
+            !attributes.disabled && (multiple ? value.length > 0 : value) ? "opened" : "closed"
           }`}
           onClick={(event) => {
             event.stopPropagation();
-
             handleCleanSelection();
           }}
         ></span>
@@ -319,7 +291,6 @@ const Select: React.FC<Props> = ({
           className={`angel-down ${optionsOpen ? "opened" : "closed"}`}
           onClick={(event) => {
             event.stopPropagation();
-
             setOptionsOpen((x) => !x);
           }}
         ></span>
@@ -328,7 +299,6 @@ const Select: React.FC<Props> = ({
 
       {/* :Begin: Options Field */}
       <div ref={_options} className={optionsClassName.map((c) => c).join(" ")}>
-        {/* Eğer çoklu seçim olarak kullanılıyorsa bu arama kısmı açılıyor... */}
         {multiple && (
           <div className="search-field">
             <Input
@@ -337,17 +307,16 @@ const Select: React.FC<Props> = ({
               status="light"
               placeholder="Search..."
               onKeyUp={(event) => {
-                // Arama yapmak için kullanılan state bu kısımda dolduruluyor.
                 setSearchText(event.currentTarget.value);
               }}
             />
           </div>
         )}
 
-        {filteredOptions?.length > 0 ? (
+        {filteredOptions.length > 0 ? (
           <ul>
-            {filteredOptions?.map((option, index) => {
-              const isItem = selections.some((selection) => selection.value === option.value);
+            {filteredOptions.map((option, index) => {
+              const isItem = multiple && value.some((_value) => _value.value === option.value);
 
               return (
                 <li
@@ -356,22 +325,28 @@ const Select: React.FC<Props> = ({
                   className={option === value ? "selectedItem" : ""}
                   onClick={() => handleItemSelected(option)}
                 >
-                  {multiple && (
-                    <Checkbox
-                      checked={isItem}
-                      status={isItem ? status?.selected?.color || status?.color : "light"}
-                      disabled
-                    />
-                  )}
+                  {multiple && <Checkbox checked={isItem} status={isItem ? "primary" : "light"} disabled />}
                   <span>{option.text}</span>
                 </li>
               );
             })}
           </ul>
-        ) : (
+        ) : !onCreate ? (
           <Paragraph color="gray-500" align="center">
-            Het hangi bir kayıt bulunumadı!
+            Herhangi bir kayıt bulunumadı!
           </Paragraph>
+        ) : (
+          <span
+            style={{ padding: "1rem", cursor: "pointer" }}
+            onClick={() => {
+              onCreate({ value: "", text: singleInputText });
+              // handleItemSelected({ value: "", text: singleInputText });
+            }}
+          >
+            {options.length === 0 && singleInputText.length === 0
+              ? "Herhangi bir kayıt bulunumadı!"
+              : `${singleInputText} Ekle`}
+          </span>
         )}
       </div>
       {/* :End: Options Field */}

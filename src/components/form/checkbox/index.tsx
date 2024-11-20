@@ -22,9 +22,7 @@ const Checkbox = forwardRef<HTMLInputElement, IProps>(
     const _checkbox = useRef<HTMLInputElement>(null);
     const _checkboxClassName: string[] = ["ar-checkbox"];
 
-    _checkboxClassName.push(
-      ...Utils.GetClassName(variant, undefined, border, size, undefined, attributes.className)
-    );
+    _checkboxClassName.push(...Utils.GetClassName(variant, status, border, size, undefined, attributes.className));
 
     return (
       <div className="ar-checkbox-wrapper">
