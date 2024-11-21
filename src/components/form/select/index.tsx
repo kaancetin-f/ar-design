@@ -254,7 +254,7 @@ const Select: React.FC<Props> = ({
                   />
                 ))
               ) : (
-                <span>{placeholder}</span>
+                <span className="placeholder">{placeholder}</span>
               )}
             </div>
           </div>
