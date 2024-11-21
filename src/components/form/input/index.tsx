@@ -28,7 +28,14 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     const _inputClassName: string[] = [];
 
     _inputClassName.push(
-      ...Utils.GetClassName(variant, validation?.text ? "danger" : status, border, size, icon, attributes.className)
+      ...Utils.GetClassName(
+        variant,
+        !Utils.IsNullOrEmpty(validation?.text) ? "danger" : status,
+        border,
+        size,
+        icon,
+        attributes.className
+      )
     );
 
     // addon className

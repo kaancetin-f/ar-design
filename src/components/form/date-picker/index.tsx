@@ -52,10 +52,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
   const [minutes, setMinutes] = useState<React.ReactNode>();
   const [dateTrigger, setDateTrigger] = useState<boolean>(false);
   const [timeTrigger, setTimeTrigger] = useState<boolean>(false);
-  let [calendarClassName, setCalendarClassName] = useState<string[]>([
-    "calendar-wrapper",
-    "closed",
-  ]);
+  let [calendarClassName, setCalendarClassName] = useState<string[]>(["calendar-wrapper", "closed"]);
   // states => Selected Date
   const [currentYear, setCurrentYear] = useState<number>(_currentDate.getFullYear());
   const [currentMonth, setCurrentMonth] = useState<number>(_currentDate.getMonth());
@@ -93,13 +90,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
     _minutes.current = now.getMinutes();
 
     // Input güncelleniyor...
-    updateDateInput(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      now.getHours(),
-      now.getMinutes()
-    );
+    updateDateInput(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
 
     // Takvim kapatılıyor...
     setCalendarOpen(false);
@@ -145,13 +136,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
         status="success"
         onClick={() => {
           // Input güncelleniyor...
-          updateDateInput(
-            _year.current,
-            _month.current,
-            _day.current,
-            _hours.current,
-            _minutes.current
-          );
+          updateDateInput(_year.current, _month.current, _day.current, _hours.current, _minutes.current);
 
           // Stateler güncelleniyor...
           setCurrentYear(_year.current);
@@ -288,17 +273,11 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
   }, [dateTrigger, calendarOpen]);
 
   useEffect(() => {
-    const generateList = (
-      count: number,
-      current: number,
-      setFunc: React.Dispatch<React.SetStateAction<any>>
-    ) => {
+    const generateList = (count: number, current: number, setFunc: React.Dispatch<React.SetStateAction<any>>) => {
       const items = Array.from({ length: count }, (_, i) => (
         <li
           ref={(element) =>
-            count === 24
-              ? (_hoursLiElements.current[i] = element)
-              : (_minutesLiElements.current[i] = element)
+            count === 24 ? (_hoursLiElements.current[i] = element) : (_minutesLiElements.current[i] = element)
           }
           key={i}
           {...(current === i ? { className: "selection-time" } : {})}
@@ -419,8 +398,8 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
 
             <div className="selects">
               <Select
-                defaultValueIndex={months.findIndex((month) => month.value == _month.current)}
                 variant="borderless"
+                value={{ value: _month.current, text: String(_month.current) }}
                 options={months}
                 onChange={(option) => {
                   _month.current = option?.value as number;
@@ -433,7 +412,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
 
               <Select
                 variant="borderless"
-                defaultValueIndex={years.findIndex((year) => year.value == _year.current)}
+                value={{ value: _year.current, text: String(_year.current) }}
                 options={years}
                 onChange={(option) => {
                   _year.current = option?.value as number;

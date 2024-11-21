@@ -10,7 +10,8 @@
 
 .ar-select-wrapper > .ar-select > .angel-down {
   position: absolute;
-  top: 50%;
+  top: calc(var(--input-height) / 2);
+  transform: translateY(-50%);
   right: 0.5rem;
   width: 0.75rem;
   height: 0.75rem;
@@ -44,7 +45,7 @@
 
 .ar-select-wrapper > .ar-select > .button-clear {
   position: absolute;
-  top: 50%;
+  top: calc(var(--input-height) / 2);
   transform: translateY(-50%);
   right: 2rem;
   background-color: rgba(var(--black-rgb), 0.25);
@@ -98,6 +99,12 @@
   padding: 0 0.5rem;
   border: solid 1px var(--gray-200);
   border-radius: var(--border-radius-sm);
+}
+
+.ar-select-wrapper > .ar-select > .validation {
+  color: var(--danger);
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 @import url("./options.css");

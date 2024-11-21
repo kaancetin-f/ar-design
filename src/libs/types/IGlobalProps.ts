@@ -139,3 +139,10 @@ export interface ISizes {
    */
   size?: Sizes;
 }
+
+export interface IValidation {
+  validation?: {
+    text: string | undefined;
+    scrollTo?: boolean;
+  };
+}

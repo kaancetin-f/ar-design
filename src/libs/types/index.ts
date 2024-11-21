@@ -61,4 +61,5 @@ export type ValidationProperties<T> = {
     value?: string | number;
     message: string;
   }[];
+  where?: (param: T) => boolean;
 };

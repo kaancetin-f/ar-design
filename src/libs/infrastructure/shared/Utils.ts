@@ -32,6 +32,15 @@ class Utils {
       return typeof args[index] !== "undefined" ? args[index] : match;
     });
   };
+
+  public IsNullOrEmpty = (value: unknown): boolean => {
+    if (value === null || value === undefined) return true;
+    if (typeof value === "string" && value.trim() === "") return true;
+    if (typeof value === "object" && value !== null && Object.keys(value).length === 0) return true;
+    if (Array.isArray(value) && value.length === 0) return true;
+
+    return false;
+  };
 }
 
 export default new Utils();

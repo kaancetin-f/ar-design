@@ -29,79 +29,67 @@ export const useNotification = () => {
   return { notification };
 };
 
-type Error = { [key: string]: string; type: string }[];
-
 export const useValidation = function <TData extends object>(data: TData, params: ValidationProperties<TData>[]) {
-  // useStates
-  const [submit, setSubmit] = useState<boolean>(false);
-  const [success, setSuccess] = useState<boolean>(true);
-  const [message, setMessage] = useState<string | null>(null);
-  const [errors, setErrors] = useState<Error>([]);
+  // states
+  const [errors, setErrors] = useState<Partial<{ [key in keyof TData]: string }>>({});
+  const [trigger, setTrigger] = useState<boolean>(false);
 
   // methods
-  const showErrors = (errors: Error, field: string) => {
-    const _errors = errors.filter((error) => error[field]);
+  const onSubmit = (callback: (result: boolean) => void): void => {
+    setTrigger(true);
 
-    if (_errors.length === 0) return null;
+    let result: boolean = true;
 
-    return _errors.map((error) => error[field]);
+    if (!data || Object.keys(data).length === 0 || params.length === 0) result = false;
+    else if (Object.keys(errors).length > 0) result = false;
+    else setTrigger(false);
+
+    callback(result);
   };
 
   // useEffects
   useEffect(() => {
-    if (!data || Object.keys(data).length === 0 || params.length === 0) return;
+    if (!trigger) return;
 
-    setErrors([]);
+    setErrors({});
 
     params.forEach((param) => {
       const value = data[param.key as keyof typeof data] as string;
 
       param.shape?.forEach((s) => {
-        if (s.type === "required") {
-          !value ? setErrors((errors) => [...errors, { [param.key]: s.message, type: s.type }]) : null;
-        }
+        if (param.where) {
+          if (s.type === "required" && param.where(data)) {
+            Utils.IsNullOrEmpty(value) ? setErrors((prev) => ({ ...prev, [param.key]: s.message })) : null;
+          }
+        } else {
+          if (s.type === "required") {
+            Utils.IsNullOrEmpty(value) ? setErrors((prev) => ({ ...prev, [param.key]: s.message })) : null;
+          }
 
-        if (s.type === "minimum") {
-          value && value.length < (s.value as number)
-            ? setErrors((errors) => [
-                ...errors,
-                {
-                  [param.key]: Utils.StringFormat(s.message, s.value, 4),
-                  type: s.type,
-                },
-              ])
-            : null;
-        }
+          if (s.type === "minimum") {
+            value && value.length < (s.value as number)
+              ? setErrors((prev) => ({ ...prev, [param.key]: Utils.StringFormat(s.message, s.value, 4) }))
+              : null;
+          }
 
-        if (s.type === "maximum") {
-          value && value.length > (s.value as number)
-            ? setErrors((errors) => [
-                ...errors,
-                {
-                  [param.key]: Utils.StringFormat(s.message, s.value),
-                  type: s.type,
-                },
-              ])
-            : null;
-        }
+          if (s.type === "maximum") {
+            value && value.length > (s.value as number)
+              ? setErrors((prev) => ({ ...prev, [param.key]: Utils.StringFormat(s.message, s.value) }))
+              : null;
+          }
 
-        if (s.type === "email") {
-          const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
+          if (s.type === "email") {
+            const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
 
-          !regex && value ? setErrors((errors) => [...errors, { [param.key]: s.message, type: s.type }]) : null;
+            !regex && Utils.IsNullOrEmpty(value) ? setErrors((prev) => ({ ...prev, [param.key]: s.message })) : null;
+          }
         }
       });
     });
-  }, [data]);
+  }, [trigger, data]);
 
   return {
-    submit,
-    setSubmit,
-    success,
-    setSuccess,
-    message,
-    setMessage,
+    onSubmit,
     errors,
-    showErrors,
   };
 };

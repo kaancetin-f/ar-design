@@ -8,6 +8,7 @@ import Chip from "../../data-display/chip";
 import Checkbox from "../checkbox";
 import Paragraph from "../../data-display/typography/paragraph/Paragraph";
 import { Option } from "../../../libs/types/index";
+import Utils from "../../../libs/infrastructure/shared/Utils";
 
 const Select: React.FC<Props> = ({
   variant = "outlined",
@@ -18,12 +19,13 @@ const Select: React.FC<Props> = ({
   onChange,
   onCreate,
   multiple,
-  defaultValueIndex,
-  ...attributes
+  placeholder,
+  disabled,
+  validation,
 }) => {
-  // refs
-  let _selectionClassName = "selections";
+  const _selectionClassName: string[] = ["selections"];
 
+  // refs
   const _arSelect = useRef<HTMLDivElement>(null);
   const _singleInput = useRef<HTMLInputElement>(null);
   const _multipleInput = useRef<HTMLDivElement>(null);
@@ -41,13 +43,16 @@ const Select: React.FC<Props> = ({
   const [singleInputText, setSingleInputText] = useState<string>("");
   const [navigationIndex, setNavigationIndex] = useState<number>(0);
 
-  // selection className
-  if (variant) _selectionClassName += ` ${variant}`;
-  _selectionClassName += multiple ? ` ${status?.color || "light"}` : status || "light";
-
-  // border
-  _selectionClassName += ` border-radius-${border.radius}`;
-  _selectionClassName += ` border-style-solid}`;
+  _selectionClassName.push(
+    ...Utils.GetClassName(
+      variant,
+      !Utils.IsNullOrEmpty(validation?.text) ? "danger" : "light",
+      border,
+      undefined,
+      undefined,
+      undefined
+    )
+  );
 
   // methods
   const handleClickOutSide = (event: MouseEvent) => {
@@ -154,7 +159,7 @@ const Select: React.FC<Props> = ({
 
         if (_singleInput.current) {
           _singleInput.current.value = "";
-          _singleInput.current.placeholder = value?.text || attributes.placeholder || "";
+          _singleInput.current.placeholder = value?.text || placeholder || "";
         }
       }
 
@@ -187,7 +192,7 @@ const Select: React.FC<Props> = ({
       } else {
         if (_singleInput.current) {
           _singleInput.current.value = value?.text ?? "";
-          _singleInput.current.placeholder = attributes.placeholder ?? "";
+          _singleInput.current.placeholder = placeholder ?? "";
         }
       }
 
@@ -237,7 +242,7 @@ const Select: React.FC<Props> = ({
       {/* :Begin: Select and Multiple Select Field */}
       <div ref={_multipleInput} className="ar-select">
         {multiple ? (
-          <div className={_selectionClassName} onClick={() => setOptionsOpen((x) => !x)}>
+          <div className={_selectionClassName.map((c) => c).join(" ")} onClick={() => setOptionsOpen((x) => !x)}>
             <div className="items">
               {value.length > 0 ? (
                 value.map((_value, index) => (
@@ -249,7 +254,7 @@ const Select: React.FC<Props> = ({
                   />
                 ))
               ) : (
-                <span>{attributes.placeholder}</span>
+                <span>{placeholder}</span>
               )}
             </div>
           </div>
@@ -257,7 +262,7 @@ const Select: React.FC<Props> = ({
           <Input
             ref={_singleInput}
             variant={variant}
-            status={status || "light"}
+            status={!Utils.IsNullOrEmpty(validation?.text) ? "danger" : status}
             border={{ radius: border.radius }}
             onClick={() => {
               setOptionsOpen((prev) => !prev);
@@ -272,16 +277,16 @@ const Select: React.FC<Props> = ({
 
               setSearchText(event.currentTarget.value);
             }}
-            placeholder={attributes.placeholder}
-            disabled={attributes.disabled}
+            placeholder={placeholder}
+            disabled={disabled}
           />
         )}
 
         <span
-          className={`button-clear ${
-            !attributes.disabled && (multiple ? value.length > 0 : value) ? "opened" : "closed"
-          }`}
+          className={`button-clear ${!disabled && (multiple ? value.length > 0 : value) ? "opened" : "closed"}`}
           onClick={(event) => {
+            if (disabled) return;
+
             event.stopPropagation();
             handleCleanSelection();
           }}
@@ -294,6 +299,8 @@ const Select: React.FC<Props> = ({
             setOptionsOpen((x) => !x);
           }}
         ></span>
+
+        {validation?.text && <span className="validation">{validation.text}</span>}
       </div>
       {/* :End: Select and Multiple Select Field */}
 
@@ -340,7 +347,7 @@ const Select: React.FC<Props> = ({
             style={{ padding: "1rem", cursor: "pointer" }}
             onClick={() => {
               onCreate({ value: "", text: singleInputText });
-              // handleItemSelected({ value: "", text: singleInputText });
+              handleItemSelected({ value: "", text: singleInputText });
             }}
           >
             {options.length === 0 && singleInputText.length === 0
