@@ -2,16 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const borderTypes = ["sm", "lg", "xl", "xxl", "pill"];
-const colors = [
-  "primary",
-  "secondary",
-  "success",
-  "warning",
-  "danger",
-  "information",
-  "dark",
-  "light",
-];
+const colors = ["primary", "secondary", "success", "warning", "danger", "information", "dark", "light"];
 let customFontColor = "";
 let customFocusColor = "";
 
@@ -26,16 +17,7 @@ const WriteCssFile = (filePath, content) => {
 };
 
 const _Input_BorderCss = async () => {
-  const file = path.join(
-    __dirname,
-    "../assets",
-    "css",
-    "components",
-    "form",
-    "input",
-    "core",
-    "border.css"
-  );
+  const file = path.join(__dirname, "../assets", "css", "components", "form", "input", "core", "border.css");
 
   const content = borderTypes
     .map(
@@ -68,16 +50,7 @@ const _Input_BorderCss = async () => {
 };
 
 const _Input_ButtonCss = () => {
-  const file = path.join(
-    __dirname,
-    "../assets",
-    "css",
-    "components",
-    "form",
-    "input",
-    "core",
-    "button.css"
-  );
+  const file = path.join(__dirname, "../assets", "css", "components", "form", "input", "core", "button.css");
 
   const content = borderTypes
     .map(
@@ -94,16 +67,7 @@ const _Input_ButtonCss = () => {
 };
 
 const _Input_CheckboxCss = () => {
-  const file = path.join(
-    __dirname,
-    "../assets",
-    "css",
-    "components",
-    "form",
-    "checkbox",
-    "core",
-    "border.css"
-  );
+  const file = path.join(__dirname, "../assets", "css", "components", "form", "checkbox", "core", "border.css");
 
   const content = colors
     .map((color) => {
@@ -141,16 +105,7 @@ const _Input_CheckboxCss = () => {
 };
 
 const _Input_SwitchCss = () => {
-  const file = path.join(
-    __dirname,
-    "../assets",
-    "css",
-    "components",
-    "form",
-    "switch",
-    "core",
-    "border.css"
-  );
+  const file = path.join(__dirname, "../assets", "css", "components", "form", "switch", "core", "border.css");
 
   const content = colors
     .map((color) => {
@@ -233,15 +188,7 @@ button.filled:not(.disabled).${color}:focus {
 };
 
 const _Variant_OutlinedCss = () => {
-  const file = path.join(
-    __dirname,
-    "../assets",
-    "css",
-    "core",
-    "variants",
-    "outlined",
-    "outlined.css"
-  );
+  const file = path.join(__dirname, "../assets", "css", "core", "variants", "outlined", "outlined.css");
 
   const content = colors
     .map((color) => {
@@ -259,7 +206,7 @@ const _Variant_OutlinedCss = () => {
       return `/* #region ${color.toUpperCase()} */
 .outlined:not(.disabled).${color} {
   border-color: var(--${color});
-  color: var(--${customFontColor});
+  /* color: var(--${customFontColor}); */
 }
 .outlined:not(.disabled).${color}:hover {
   border-color: rgba(var(--${color}-rgb), 0.5);
@@ -325,15 +272,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).${col
 };
 
 const _Variant_BorderlessCss = () => {
-  const file = path.join(
-    __dirname,
-    "../assets",
-    "css",
-    "core",
-    "variants",
-    "borderless",
-    "borderless.css"
-  );
+  const file = path.join(__dirname, "../assets", "css", "core", "variants", "borderless", "borderless.css");
 
   const content = colors
     .map((color) => {

@@ -162,9 +162,11 @@ const Table = function <T extends object>({ children, data, columns, selections,
   return (
     <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
       <div className="header">
-        <div>
-          <Input placeholder="Ara" onChange={(event) => setSearchedText(event.target.value.toLowerCase())} />
-        </div>
+        {config?.isSearchable && (
+          <div>
+            <Input placeholder="Ara" onChange={(event) => setSearchedText(event.target.value.toLowerCase())} />
+          </div>
+        )}
         <div>{React.Children.map(children, (child) => child)}</div>
       </div>
 

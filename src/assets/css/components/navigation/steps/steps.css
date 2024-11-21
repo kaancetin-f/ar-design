@@ -4,6 +4,9 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  margin-bottom: 2.5rem;
+  padding-bottom: 2.5rem;
+  border-bottom: solid 4px var(--gray-100);
 }
 .ar-steps > .steps > .item {
   position: relative;

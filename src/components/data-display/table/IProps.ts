@@ -11,7 +11,8 @@ interface IProps<T> extends IChildren {
     onChange: (currentPage: number) => void;
   };
   config?: {
-    isServer: boolean;
+    isServer?: boolean;
+    isSearchable?: boolean;
     scroll?: {
       maxHeight: number;
     };

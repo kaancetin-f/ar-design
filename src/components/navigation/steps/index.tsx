@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/navigation/steps/steps.css";
 import Typography from "../../data-display/typography";
-import Divider from "../../data-display/divider";
 
 const { Title } = Typography;
 
@@ -49,8 +48,6 @@ const Steps: React.FC<IProps> = ({ steps = [], onChange }) => {
             );
           })}
       </div>
-
-      <Divider />
 
       <div className="content">{steps.map((step, index) => currentStep === index && step.content)}</div>
     </div>

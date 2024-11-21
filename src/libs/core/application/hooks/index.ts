@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ConfigContext } from "../contexts/Config";
 import { NotificationContext, Status } from "../contexts/Notification";
 import Utils from "../../../infrastructure/shared/Utils";
@@ -30,28 +30,38 @@ export const useNotification = () => {
 };
 
 export const useValidation = function <TData extends object>(data: TData, params: ValidationProperties<TData>[]) {
+  // refs
+  const _errors = useRef<Partial<{ [key in keyof TData]: string }>>({});
+
   // states
   const [errors, setErrors] = useState<Partial<{ [key in keyof TData]: string }>>({});
-  const [trigger, setTrigger] = useState<boolean>(false);
+  const [submit, setSubmit] = useState<boolean>(false);
 
   // methods
   const onSubmit = (callback: (result: boolean) => void): void => {
-    setTrigger(true);
+    setSubmit(true);
 
-    let result: boolean = true;
+    setTimeout(() => {
+      let result: boolean = true;
 
-    if (!data || Object.keys(data).length === 0 || params.length === 0) result = false;
-    else if (Object.keys(errors).length > 0) result = false;
-    else setTrigger(false);
+      if (!data || Object.keys(data).length === 0 || params.length === 0) result = false;
+      if (Object.keys(_errors.current).length > 0) result = false;
 
-    callback(result);
+      callback(result);
+    }, 0);
+  };
+
+  const setError = (key: keyof TData, message: string) => {
+    setErrors((prev) => ({ ...prev, [key]: message }));
+    _errors.current = { ..._errors.current, [key]: message };
   };
 
   // useEffects
   useEffect(() => {
-    if (!trigger) return;
+    if (!submit) return;
 
     setErrors({});
+    _errors.current = {};
 
     params.forEach((param) => {
       const value = data[param.key as keyof typeof data] as string;
@@ -59,37 +69,38 @@ export const useValidation = function <TData extends object>(data: TData, params
       param.shape?.forEach((s) => {
         if (param.where) {
           if (s.type === "required" && param.where(data)) {
-            Utils.IsNullOrEmpty(value) ? setErrors((prev) => ({ ...prev, [param.key]: s.message })) : null;
+            Utils.IsNullOrEmpty(value) ? setError(param.key, s.message) : null;
           }
         } else {
           if (s.type === "required") {
-            Utils.IsNullOrEmpty(value) ? setErrors((prev) => ({ ...prev, [param.key]: s.message })) : null;
+            Utils.IsNullOrEmpty(value) ? setError(param.key, s.message) : null;
           }
 
           if (s.type === "minimum") {
             value && value.length < (s.value as number)
-              ? setErrors((prev) => ({ ...prev, [param.key]: Utils.StringFormat(s.message, s.value, 4) }))
+              ? setError(param.key, Utils.StringFormat(s.message, s.value))
               : null;
           }
 
           if (s.type === "maximum") {
             value && value.length > (s.value as number)
-              ? setErrors((prev) => ({ ...prev, [param.key]: Utils.StringFormat(s.message, s.value) }))
+              ? setError(param.key, Utils.StringFormat(s.message, s.value))
               : null;
           }
 
           if (s.type === "email") {
             const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
 
-            !regex && Utils.IsNullOrEmpty(value) ? setErrors((prev) => ({ ...prev, [param.key]: s.message })) : null;
+            !regex && Utils.IsNullOrEmpty(value) ? setError(param.key, s.message) : null;
           }
         }
       });
     });
-  }, [trigger, data]);
+  }, [submit, data]);
 
   return {
     onSubmit,
+    setSubmit,
     errors,
   };
 };

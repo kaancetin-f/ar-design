@@ -1,7 +1,7 @@
 /* #region PRIMARY */
 .outlined:not(.disabled).primary {
   border-color: var(--primary);
-  color: var(--primary);
+  /* color: var(--primary); */
 }
 .outlined:not(.disabled).primary:hover {
   border-color: rgba(var(--primary-rgb), 0.5);
@@ -23,7 +23,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).pri
 /* #region SECONDARY */
 .outlined:not(.disabled).secondary {
   border-color: var(--secondary);
-  color: var(--secondary);
+  /* color: var(--secondary); */
 }
 .outlined:not(.disabled).secondary:hover {
   border-color: rgba(var(--secondary-rgb), 0.5);
@@ -45,7 +45,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).sec
 /* #region SUCCESS */
 .outlined:not(.disabled).success {
   border-color: var(--success);
-  color: var(--success);
+  /* color: var(--success); */
 }
 .outlined:not(.disabled).success:hover {
   border-color: rgba(var(--success-rgb), 0.5);
@@ -67,7 +67,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).suc
 /* #region WARNING */
 .outlined:not(.disabled).warning {
   border-color: var(--warning);
-  color: var(--warning);
+  /* color: var(--warning); */
 }
 .outlined:not(.disabled).warning:hover {
   border-color: rgba(var(--warning-rgb), 0.5);
@@ -89,7 +89,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).war
 /* #region DANGER */
 .outlined:not(.disabled).danger {
   border-color: var(--danger);
-  color: var(--danger);
+  /* color: var(--danger); */
 }
 .outlined:not(.disabled).danger:hover {
   border-color: rgba(var(--danger-rgb), 0.5);
@@ -111,7 +111,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).dan
 /* #region INFORMATION */
 .outlined:not(.disabled).information {
   border-color: var(--information);
-  color: var(--information);
+  /* color: var(--information); */
 }
 .outlined:not(.disabled).information:hover {
   border-color: rgba(var(--information-rgb), 0.5);
@@ -133,7 +133,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).inf
 /* #region DARK */
 .outlined:not(.disabled).dark {
   border-color: var(--dark);
-  color: var(--dark);
+  /* color: var(--dark); */
 }
 .outlined:not(.disabled).dark:hover {
   border-color: rgba(var(--dark-rgb), 0.5);
@@ -155,7 +155,7 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).dar
 /* #region LIGHT */
 .outlined:not(.disabled).light {
   border-color: var(--light);
-  color: var(--dark);
+  /* color: var(--dark); */
 }
 .outlined:not(.disabled).light:hover {
   border-color: rgba(var(--light-rgb), 0.5);
