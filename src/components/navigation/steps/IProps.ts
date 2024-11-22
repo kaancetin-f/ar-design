@@ -1,9 +1,10 @@
 import { StepProps } from "../../../libs/types";
+import { IChildren } from "../../../libs/types/IGlobalProps";
 
 /**
  * Stepper component props
  */
-interface IProps {
+interface IProps extends IChildren {
   /**
    * Step'leri temsil eden dizisi.
    * Her bir `Step` için gerekli özellikler `StepProps` tipinde olmalıdır.

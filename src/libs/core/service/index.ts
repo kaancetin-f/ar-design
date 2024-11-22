@@ -57,8 +57,7 @@ class Service {
       const text = (await response.text()).trim();
 
       return {
-        // ...(text.length > 0 ? JSON.parse(text) : {}),
-        data: text.length > 0 ? JSON.parse(text) : null,
+        data: text.length > 0 ? (typeof text !== "string" ? JSON.parse(text) : text) : null,
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,

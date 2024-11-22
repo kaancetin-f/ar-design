@@ -11,10 +11,11 @@ const { Title } = Typography;
 const Confirm: React.FC<
   {
     title: string;
-    message: string;
+    message?: string;
+    content?: React.JSX.Element;
     onConfirm: (confirm: boolean) => void;
   } & IChildren
-> = ({ children, title, message, onConfirm }) => {
+> = ({ children, title, message, content, onConfirm }) => {
   // refs
   const _arConfirmWrapper = useRef<HTMLDivElement>(null);
   const _arConfirm = useRef<HTMLDivElement>(null);
@@ -66,7 +67,8 @@ const Confirm: React.FC<
         style={{ top: coordinateY, left: coordinateX }}
       >
         <Title Level="h4">{title}</Title>
-        <p className="message">{message}</p>
+        {message && <p className="message">{message}</p>}
+        {content && <div className="content">{content}</div>}
 
         <div className="footer">
           <Button
