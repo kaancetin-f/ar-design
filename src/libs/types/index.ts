@@ -52,6 +52,10 @@ export type StepProps = {
   title: string;
   content: React.ReactNode;
 };
+export type TabProps = {
+  title: string;
+  content: React.ReactNode;
+};
 
 // Validation Types
 export type ValidationProperties<T> = {

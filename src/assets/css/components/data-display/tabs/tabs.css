@@ -1,0 +1,43 @@
+.ar-tabs > .tabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  height: var(--input-height);
+  margin-bottom: 1.5rem;
+  border-bottom: solid 2px var(--gray-200);
+  user-select: none;
+}
+.ar-tabs > .tabs > .item {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 0.75rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+.ar-tabs > .tabs > .item.selection::before {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  content: "";
+  background-color: var(--primary);
+  height: 2px;
+  border-radius: var(--border-radius-pill);
+}
+.ar-tabs > .tabs > .item:not(:last-child)::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+  content: "";
+  background-color: var(--gray-200);
+  width: 2px;
+  height: 12.5px;
+  border-radius: var(--border-radius-pill);
+}
+.ar-tabs > .tabs > .item.selection {
+  color: var(--primary);
+}

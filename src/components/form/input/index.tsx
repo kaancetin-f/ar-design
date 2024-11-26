@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef } from "react";
+import React, { forwardRef, useState } from "react";
 import "../../../assets/css/components/form/input/input.css";
 import Button from "../button";
 import IProps from "./IProps";
@@ -21,6 +21,9 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     },
     ref
   ) => {
+    // states
+    const [value, setValue] = useState<string | undefined>(undefined);
+
     // variables
     const _wrapperClassName: string[] = ["ar-input-wrapper"];
     const _addonBeforeClassName: string[] = ["addon-before"];
@@ -61,6 +64,8 @@ const Input = forwardRef<HTMLInputElement, IProps>(
           {/* Icon */}
           {icon?.element && <span className="icon-element">{icon.element}</span>}
 
+          {attributes.placeholder && <label className={value ? "visible" : "hidden"}>{attributes.placeholder}</label>}
+
           {/* Input */}
           <input
             ref={ref}
@@ -72,12 +77,16 @@ const Input = forwardRef<HTMLInputElement, IProps>(
               if (attributes.disabled) return;
 
               (() => {
+                setValue(event.target.value);
+              })();
+
+              (() => {
                 if (attributes.onChange) {
                   // Mevcut değeri alın
                   const currentValue = event.target.value;
 
                   // Yeni değeri oluşturun ve onChange fonksiyonunu çağırın
-                  const newValue = `${addon?.before || ""}${currentValue}${addon?.after || ""}`;
+                  const newValue = `${addon?.before ?? ""}${currentValue}${addon?.after ?? ""}`;
 
                   attributes.onChange({
                     ...event,

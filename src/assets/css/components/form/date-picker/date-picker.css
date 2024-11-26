@@ -13,7 +13,7 @@
   position: absolute;
   left: 0;
   top: calc(var(--input-height) + 0.5rem);
-  background-color: rgba(var(--white-rgb), 0.25);
+  background-color: rgba(var(--white-rgb), 0.75);
   backdrop-filter: blur(10px);
   width: 20rem;
   border: solid 1px var(--gray-200);

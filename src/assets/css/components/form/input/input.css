@@ -9,6 +9,25 @@
   position: relative;
   width: 100%;
 }
+.ar-input-wrapper > .ar-input > label {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 0.5rem;
+  left: 0.55rem;
+  color: var(--gray-600);
+  letter-spacing: 1px;
+  transition: top 250ms ease-in-out;
+}
+.ar-input-wrapper > .ar-input > label.visible {
+  visibility: visible;
+  opacity: 1;
+  top: -0.5rem;
+  left: 0.55rem;
+  background-color: var(--white);
+  padding: 0 0.5rem;
+  font-size: 0.75rem;
+}
 .ar-input-wrapper > .ar-input > input {
   background-color: transparent;
   width: 100%;

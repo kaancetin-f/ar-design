@@ -18,6 +18,7 @@ import Divider from "./components/data-display/divider";
 import Paper from "./components/data-display/paper";
 import SyntaxHighlighter from "./components/data-display/syntax-highlighter";
 import Table from "./components/data-display/table";
+import Tabs from "./components/data-display/tabs";
 import Typography from "./components/data-display/typography";
 
 // Feedback
@@ -52,6 +53,7 @@ export {
   Paper,
   SyntaxHighlighter,
   Table,
+  Tabs,
   Typography,
 
   // Feedback
