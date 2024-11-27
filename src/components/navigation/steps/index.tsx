@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/navigation/steps/steps.css";
 import Typography from "../../data-display/typography";
@@ -19,6 +19,9 @@ const Steps: React.FC<IProps> = ({ children, steps = [], onChange }) => {
     else if (currentStep > index) return "completed";
     else return "";
   };
+
+  // useEffects
+  useEffect(() => onChange(0), []);
 
   return (
     <div className="ar-steps">

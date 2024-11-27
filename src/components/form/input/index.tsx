@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import "../../../assets/css/components/form/input/input.css";
 import Button from "../button";
 import IProps from "./IProps";
@@ -22,7 +22,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     ref
   ) => {
     // states
-    const [value, setValue] = useState<string | undefined>(undefined);
+    const [value, setValue] = useState<string | number | readonly string[] | undefined>(undefined);
 
     // variables
     const _wrapperClassName: string[] = ["ar-input-wrapper"];
@@ -54,6 +54,9 @@ const Input = forwardRef<HTMLInputElement, IProps>(
       _addonBeforeClassName.push(`border-radius-${border.radius}`);
       _addonAfterClassName.push(`border-radius-${border.radius}`);
     }
+
+    // useEffects
+    useEffect(() => setValue(attributes.value), [attributes.value]);
 
     return (
       <div className={_wrapperClassName.map((c) => c).join(" ")}>

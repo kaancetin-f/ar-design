@@ -1,7 +1,7 @@
 import Api from "./Api";
 
 type Result<TResponse> = {
-  data: TResponse;
+  response: TResponse;
   __ok__: boolean;
   __statusCode__: number;
   __statusText__: string;
@@ -29,7 +29,7 @@ class Service {
       const text = (await response.text()).trim();
 
       return {
-        data: text.length > 0 ? JSON.parse(text) : null,
+        response: text.length > 0 ? JSON.parse(text) : null,
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,
@@ -57,7 +57,7 @@ class Service {
       const text = (await response.text()).trim();
 
       return {
-        data: text.length > 0 ? (typeof text !== "string" ? JSON.parse(text) : text) : null,
+        response: text.length > 0 ? (typeof text !== "string" ? JSON.parse(text) : text) : null,
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,
@@ -85,8 +85,7 @@ class Service {
       const text = (await response.text()).trim();
 
       return {
-        // ...(text.length > 0 ? JSON.parse(text) : {}),
-        data: text.length > 0 ? JSON.parse(text) : null,
+        response: text.length > 0 ? (typeof text !== "string" ? JSON.parse(text) : text) : null,
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,
@@ -109,8 +108,7 @@ class Service {
       const text = (await response.text()).trim();
 
       return {
-        // ...(text.length > 0 ? JSON.parse(text) : {}),
-        data: text.length > 0 ? JSON.parse(text) : null,
+        response: text.length > 0 ? (typeof text !== "string" ? JSON.parse(text) : text) : null,
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,

@@ -332,7 +332,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
     <div className="ar-date-picker">
       <Input
         ref={_beginDate}
-        value={attributes.value?.toString().slice(0, isClock ? 16 : 10)}
+        value={attributes.value ? new Date(attributes.value as string).toISOString().slice(0, isClock ? 16 : 10) : ""}
         type={isClock ? "datetime-local" : "date"}
         onKeyDown={(event) => event.code == "Space" && event.preventDefault()}
         onChange={(event) => {
@@ -364,8 +364,8 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
           setCalendarOpen(true);
         }}
         autoComplete="off"
+        placeholder={attributes.placeholder}
       />
-
       <div ref={_arCalendar} className={calendarClassName.map((className) => className).join(" ")}>
         {/* :Begin: Calendar */}
         <div className="header">
