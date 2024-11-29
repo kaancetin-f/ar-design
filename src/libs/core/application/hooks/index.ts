@@ -3,6 +3,7 @@ import { ConfigContext } from "../contexts/Config";
 import { NotificationContext, Status } from "../contexts/Notification";
 import Utils from "../../../infrastructure/shared/Utils";
 import { ValidationProperties } from "../../../types";
+import { TranslationContext } from "../contexts/Translation";
 
 export const useLayout = () => {
   const context = useContext(ConfigContext);
@@ -104,3 +105,6 @@ export const useValidation = function <TData extends object>(data: TData, params
     errors,
   };
 };
+
+// Custom hook for easier usage of context
+export const useTranslation = () => useContext(TranslationContext);

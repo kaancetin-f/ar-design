@@ -163,6 +163,12 @@ const Select: React.FC<Props> = ({
         }
       }
 
+      if (_options.current) {
+        _options.current.style.top = `${rect?.bottom}px`;
+        _options.current.style.left = `${rect?.left}px`;
+        _options.current.style.width = `${rect?.width}px`;
+      }
+
       // Options açıldıktan 100ms sonra arama kutusuna otomatik olarak focus oluyor.
       _otoFocus = setTimeout(() => {
         if (_searchField.current) _searchField.current.focus();

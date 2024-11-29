@@ -1,10 +1,7 @@
 import React from "react";
-import IProps from "../../form/button/IProps";
 
 const Actions: React.FC<{
-  children: React.ReactElement<{
-    children: React.ReactElement<IProps> | React.ReactElement<IProps>[];
-  }>;
-}> = ({ children }) => children;
+  children: React.ReactElement | React.ReactElement[];
+}> = ({ children }) => <div style={{ display: "flex", flexDirection: "row", gap: "0 .5rem" }}>{children}</div>;
 
 export default Actions;

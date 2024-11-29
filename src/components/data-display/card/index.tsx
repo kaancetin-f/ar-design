@@ -5,12 +5,16 @@ import IProps from "./IProps";
 
 const { Title } = Typography;
 
-const Card: React.FC<IProps> = ({ children, title = "" }) => {
+const Card: React.FC<IProps> = ({ children, title = "", actions }) => {
   return (
     <div className="ar-card">
-      <div className="title">
-        <Title Level="h4">{title}</Title>
-      </div>
+      {title && (
+        <div className="title">
+          <Title Level="h4">{title}</Title>
+
+          <div>{actions}</div>
+        </div>
+      )}
       <div className="content">{children}</div>
     </div>
   );

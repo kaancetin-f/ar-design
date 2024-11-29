@@ -1,6 +1,5 @@
 .ar-select-wrapper > .options {
-  position: absolute;
-  inset: auto 0 auto 0;
+  position: fixed;
   background-color: var(--white);
   border: solid 1px var(--gray-200);
   border-radius: var(--border-radius-lg);
@@ -9,11 +8,11 @@
   transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;
 }
 .ar-select-wrapper > .options.top {
-  inset: 100% 0 auto 0;
+  /* inset: 100% 0 auto 0; */
   box-shadow: 0 5px 15px -2.5px rgba(var(--black-rgb), 0.1);
 }
 .ar-select-wrapper > .options.bottom {
-  inset: auto 0 100% 0;
+  /* inset: auto 0 100% 0; */
   box-shadow: 0 -5px 15px -2.5px rgba(var(--black-rgb), 0.1);
 }
 

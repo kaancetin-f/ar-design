@@ -2,20 +2,13 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import "../../../assets/css/components/feedback/confirm/confirm.css";
-import { IChildren } from "../../../libs/types/IGlobalProps";
 import Button from "../../form/button";
 import Typography from "../../data-display/typography";
+import IProps from "./IProps";
 
 const { Title } = Typography;
 
-const Confirm: React.FC<
-  {
-    title: string;
-    message?: string;
-    content?: React.JSX.Element;
-    onConfirm: (confirm: boolean) => void;
-  } & IChildren
-> = ({ children, title, message, content, onConfirm }) => {
+const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfirm }) => {
   // refs
   const _arConfirmWrapper = useRef<HTMLDivElement>(null);
   const _arConfirm = useRef<HTMLDivElement>(null);
@@ -66,33 +59,35 @@ const Confirm: React.FC<
         className={`ar-confirm ${open ? "opened" : "closed"}`}
         style={{ top: coordinateY, left: coordinateX }}
       >
-        <Title Level="h4">{title}</Title>
+        {title && <Title Level="h4">{title}</Title>}
         {message && <p className="message">{message}</p>}
         {content && <div className="content">{content}</div>}
 
-        <div className="footer">
-          <Button
-            status="success"
-            size="small"
-            onClick={() => {
-              onConfirm(true);
-              setOpen(false);
-            }}
-          >
-            Evet
-          </Button>
+        {onConfirm && (
+          <div className="footer">
+            <Button
+              status="success"
+              size="small"
+              onClick={() => {
+                onConfirm(true);
+                setOpen(false);
+              }}
+            >
+              Evet
+            </Button>
 
-          <Button
-            status="light"
-            size="small"
-            onClick={() => {
-              onConfirm(false);
-              setOpen(false);
-            }}
-          >
-            Hayır
-          </Button>
-        </div>
+            <Button
+              status="light"
+              size="small"
+              onClick={() => {
+                onConfirm(false);
+                setOpen(false);
+              }}
+            >
+              Hayır
+            </Button>
+          </div>
+        )}
       </div>
 
       <div
@@ -102,8 +97,8 @@ const Confirm: React.FC<
           const wrapper = _arConfirmWrapper.current.getBoundingClientRect();
           const confirm = _arConfirm.current.getBoundingClientRect();
 
-          setCoordinatX(wrapper.left - confirm.width - 60);
-          setCoordinatY(wrapper.top - confirm.height / 2 + 2.5);
+          setCoordinatX(wrapper.left - confirm.width - 10);
+          setCoordinatY(wrapper.top);
 
           setOpen((prev) => !prev);
         }}
