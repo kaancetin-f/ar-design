@@ -15,6 +15,7 @@ import Radio from "./components/form/radio";
 import Card from "./components/data-display/card";
 import Chip from "./components/data-display/chip";
 import Divider from "./components/data-display/divider";
+import DnD from "./components/data-display/dnd";
 import Paper from "./components/data-display/paper";
 import SyntaxHighlighter from "./components/data-display/syntax-highlighter";
 import Table from "./components/data-display/table";
@@ -50,6 +51,7 @@ export {
   Card,
   Chip,
   Divider,
+  DnD,
   Paper,
   SyntaxHighlighter,
   Table,

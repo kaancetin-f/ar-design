@@ -3,7 +3,6 @@ import { ConfigContext } from "../contexts/Config";
 import { NotificationContext, Status } from "../contexts/Notification";
 import Utils from "../../../infrastructure/shared/Utils";
 import { ValidationProperties } from "../../../types";
-import { TranslationContext } from "../contexts/Translation";
 
 export const useLayout = () => {
   const context = useContext(ConfigContext);
@@ -107,4 +106,20 @@ export const useValidation = function <TData extends object>(data: TData, params
 };
 
 // Custom hook for easier usage of context
-export const useTranslation = () => useContext(TranslationContext);
+export const useTranslation = function <TBaseLocale>(translations: { [key: string]: any }) {
+  const t = (key: keyof TBaseLocale, ...args: any[]) => {
+    return Utils.StringFormat(
+      translations[localStorage.getItem("ar-language-value") as keyof typeof translations][key],
+      args
+    );
+  };
+
+  const changeLanguage = (language: string) => {
+    if (typeof window === undefined) return;
+
+    localStorage.setItem("ar-language-value", language);
+    window.location.reload();
+  };
+
+  return { t, changeLanguage };
+};

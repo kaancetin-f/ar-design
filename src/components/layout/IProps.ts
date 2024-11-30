@@ -10,7 +10,7 @@ interface IHeaderProps {
     image?: React.ReactElement<SVGElement | HTMLImageElement>;
     text?: string | React.JSX.Element;
   };
-  actions?: React.ReactNode[];
+  actions?: React.ReactNode;
 }
 
 interface IMainProps
