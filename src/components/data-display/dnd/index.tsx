@@ -58,7 +58,7 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
     });
 
     _arDnD.current.ondragover = (event) => event.preventDefault();
-  }, []);
+  }, [data]);
 
   return (
     <div ref={_arDnD} className="ar-dnd">
