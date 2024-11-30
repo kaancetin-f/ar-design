@@ -9,7 +9,7 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
   const _dragItem = useRef<HTMLElement>();
 
   useEffect(() => {
-    if (!_arDnD.current) return;
+    if (!_arDnD.current || data.length === 0) return;
 
     _arDnD.current.childNodes.forEach((item) => {
       const targetItem = item as HTMLElement;
