@@ -63,8 +63,6 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
   return (
     <div ref={_arDnD} className="ar-dnd">
       {data.map((item, index) => renderItem(item, index))}
-
-      {/* {children} */}
     </div>
   );
 };
