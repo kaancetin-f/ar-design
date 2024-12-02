@@ -3,65 +3,53 @@ class Api {
   private _core?: string;
 
   constructor(values: { host?: string; core?: string }) {
-    this._host = values.host || window.location.origin;
+    this._host = values.host || typeof window !== "undefined" ? window.location.origin : "";
     this._core = values.core || "";
   }
 
   async Get(values: { input?: RequestInfo | undefined; headers?: HeadersInit }): Promise<Response> {
-    const response = await this.CustomFetch(
-      `${this._host}/${this._core ? this._core + "/" : ""}${values.input}`,
-      {
-        headers: {
-          ...this.HeaderProperties,
-          ...values.headers,
-        },
-        method: "GET",
-      }
-    );
+    const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
+      headers: {
+        ...this.HeaderProperties,
+        ...values.headers,
+      },
+      method: "GET",
+    });
 
     return response;
   }
 
   async Post(values: { input?: RequestInfo; data: any; headers?: HeadersInit }): Promise<Response> {
-    const response = await this.CustomFetch(
-      `${this._host}/${this._core ? this._core + "/" : ""}${values.input}`,
-      {
-        headers: { ...this.HeaderProperties, ...values.headers },
-        method: "POST",
-        body: JSON.stringify(values.data),
-      }
-    );
+    const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
+      headers: { ...this.HeaderProperties, ...values.headers },
+      method: "POST",
+      body: JSON.stringify(values.data),
+    });
 
     return response;
   }
 
   async Put(values: { input?: RequestInfo; data?: any; headers?: HeadersInit }): Promise<Response> {
-    const response = await this.CustomFetch(
-      `${this._host}/${this._core ? this._core + "/" : ""}${values.input}`,
-      {
-        headers: {
-          ...this.HeaderProperties,
-          ...values.headers,
-        },
-        method: "PUT",
-        body: JSON.stringify(values.data),
-      }
-    );
+    const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
+      headers: {
+        ...this.HeaderProperties,
+        ...values.headers,
+      },
+      method: "PUT",
+      body: JSON.stringify(values.data),
+    });
 
     return response;
   }
 
   async Delete(values: { input?: RequestInfo; headers?: HeadersInit }): Promise<Response> {
-    const response = await this.CustomFetch(
-      `${this._host}/${this._core ? this._core + "/" : ""}${values.input}`,
-      {
-        headers: {
-          ...this.HeaderProperties,
-          ...values.headers,
-        },
-        method: "DELETE",
-      }
-    );
+    const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
+      headers: {
+        ...this.HeaderProperties,
+        ...values.headers,
+      },
+      method: "DELETE",
+    });
 
     return response;
   }

@@ -1,3 +1,5 @@
+"use client";
+
 import { useContext, useEffect, useRef, useState } from "react";
 import { ConfigContext } from "../contexts/Config";
 import { NotificationContext, Status } from "../contexts/Notification";
@@ -105,14 +107,13 @@ export const useValidation = function <TData extends object>(data: TData, params
   };
 };
 
-// Custom hook for easier usage of context
 export const useTranslation = function <TBaseLocale>(translations: { [key: string]: any }) {
   const t = (key: keyof TBaseLocale, ...args: any[]) => {
     if (typeof window !== "undefined") {
-      return Utils.StringFormat(
-        translations[localStorage.getItem("ar-language-value") as keyof typeof translations][key],
-        args
-      );
+      const getLanguage = localStorage.getItem("ar-language-value");
+
+      if (getLanguage) return Utils.StringFormat(translations[getLanguage][key], args);
+      else localStorage.setItem("ar-language-value", "tr");
     }
 
     return "";
@@ -125,5 +126,7 @@ export const useTranslation = function <TBaseLocale>(translations: { [key: strin
     }
   };
 
-  return { t, changeLanguage };
+  const currentLanguage = typeof window !== "undefined" ? localStorage.getItem("ar-language-value") : null;
+
+  return { t, changeLanguage, currentLanguage };
 };
