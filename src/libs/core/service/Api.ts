@@ -3,7 +3,7 @@ class Api {
   private _core?: string;
 
   constructor(values: { host?: string; core?: string }) {
-    this._host = values.host || typeof window !== "undefined" ? window.location.origin : "";
+    this._host = values.host || (typeof window !== "undefined" ? window.location.origin : "");
     this._core = values.core || "";
   }
 
