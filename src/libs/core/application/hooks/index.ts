@@ -108,17 +108,21 @@ export const useValidation = function <TData extends object>(data: TData, params
 // Custom hook for easier usage of context
 export const useTranslation = function <TBaseLocale>(translations: { [key: string]: any }) {
   const t = (key: keyof TBaseLocale, ...args: any[]) => {
-    return Utils.StringFormat(
-      translations[localStorage.getItem("ar-language-value") as keyof typeof translations][key],
-      args
-    );
+    if (typeof window !== "undefined") {
+      return Utils.StringFormat(
+        translations[localStorage.getItem("ar-language-value") as keyof typeof translations][key],
+        args
+      );
+    }
+
+    return "";
   };
 
   const changeLanguage = (language: string) => {
-    if (typeof window === undefined) return;
-
-    localStorage.setItem("ar-language-value", language);
-    window.location.reload();
+    if (typeof window !== "undefined") {
+      localStorage.setItem("ar-language-value", language);
+      window.location.reload();
+    }
   };
 
   return { t, changeLanguage };
