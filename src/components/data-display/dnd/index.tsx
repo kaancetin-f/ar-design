@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import IProps from "./IProps";
+import "../../../assets/css/components/data-display/dnd/dnd.css";
 
 const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
   // refs
@@ -13,21 +14,52 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
 
     _arDnD.current.childNodes.forEach((item) => {
       const targetItem = item as HTMLElement;
-      targetItem.draggable = true;
-      targetItem.style.cursor = "move";
 
+      // Events
       targetItem.ondragstart = (event) => {
         const dragItem = event.currentTarget as HTMLElement;
 
-        // Drag olan öğeyi yakalanıyor.
         _dragItem.current = dragItem;
-        dragItem.style.opacity = "0.5";
+        dragItem.classList.add("drag-item");
+
+        // Korumaya başla
+        if (_arDnD.current) {
+          _arDnD.current.childNodes.forEach((item) => {
+            const firewall = document.createElement("div");
+            firewall.setAttribute("data-id", "ar-firewall");
+            firewall.style.position = "absolute";
+            firewall.style.inset = "0";
+
+            item.appendChild(firewall);
+          });
+        }
+      };
+
+      targetItem.ondragover = (event) => {
+        event.preventDefault();
+
+        const overItem = event.currentTarget as HTMLElement;
+
+        if (!overItem.classList.contains("over-item")) {
+          overItem.classList.add("over-item");
+        }
+      };
+
+      targetItem.ondragleave = (event) => {
+        const leaveItem = event.currentTarget as HTMLElement;
+        leaveItem.classList.remove("over-item");
       };
 
       targetItem.ondrop = (event) => {
         event.preventDefault();
 
         const dropItem = event.currentTarget as HTMLElement;
+
+        // Cleaner...
+        dropItem.classList.remove("over-item");
+
+        const nodes = document.querySelectorAll("[data-id='ar-firewall']");
+        nodes.forEach((node) => node.remove());
 
         if (_dragItem.current !== dropItem) {
           if (_arDnD.current && _dragItem.current) {
@@ -52,8 +84,11 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
 
       targetItem.ondragend = (event) => {
         const item = event.currentTarget as HTMLElement;
+        item.classList.remove("drag-item");
 
-        item.style.opacity = "1";
+        item.classList.add("end-item");
+
+        setTimeout(() => item.classList.remove("end-item"), 1000);
       };
     });
 
@@ -62,7 +97,16 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
 
   return (
     <div ref={_arDnD} className="ar-dnd">
-      {data.map((item, index) => renderItem(item, index))}
+      {data.map((item, index) => (
+        <div draggable>
+          <div className="move">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div className="content">{renderItem(item, index)}</div>
+        </div>
+      ))}
     </div>
   );
 };

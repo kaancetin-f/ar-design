@@ -1,0 +1,55 @@
+.ar-dnd {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem 0;
+}
+.ar-dnd > div {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0 0.5rem;
+  width: 100%;
+  border-radius: var(--border-radius-lg);
+  cursor: move;
+  overflow: hidden;
+}
+.ar-dnd > div.drag-item {
+  opacity: 0.5;
+}
+.ar-dnd > div.over-item {
+  box-shadow: 0 0 0 1.5px rgba(var(--success-rgb), 0.25), 0 0 0 5px rgba(var(--success-rgb), 0.15);
+  transition: box-shadow 250ms ease-in-out;
+}
+.ar-dnd > div.end-item {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: endItem ease-in-out 1000ms 0s 1 normal both;
+}
+
+.ar-dnd > div > .move {
+  flex: 1rem;
+  width: 100%;
+  height: 1.5rem;
+  border-right: transparent;
+}
+.ar-dnd > div > .move {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem 0;
+  cursor: move;
+}
+.ar-dnd > div > .move > span {
+  display: block;
+  background-color: var(--gray-500);
+  width: 90%;
+  height: 2px;
+  border-radius: var(--border-radius-pill);
+}
+
+.ar-dnd > div > .content {
+  flex: 100%;
+}
+
+@import url("./animations.css");
