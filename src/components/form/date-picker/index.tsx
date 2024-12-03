@@ -372,6 +372,10 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
 
   return (
     <div className="ar-date-picker">
+      {attributes.placeholder && (
+        <label className={attributes.value ? "visible" : "hidden"}>{attributes.placeholder}</label>
+      )}
+
       <Input
         ref={_beginDate}
         type={isClock ? "datetime-local" : "date"}
@@ -406,8 +410,8 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
           setCalendarOpen(true);
         }}
         autoComplete="off"
-        placeholder={attributes.placeholder}
       />
+
       <div ref={_arCalendar} className={calendarClassName.map((className) => className).join(" ")}>
         {/* :Begin: Calendar */}
         <div className="header">
@@ -521,17 +525,6 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
             <Button variant="borderless" onClick={() => setNow()}>
               Şimdi
             </Button>
-
-            {/* <Button
-              variant="borderless"
-              status={!isClock ? "primary" : "danger"}
-              onClick={() => {
-                _clockOpen.current = !_clockOpen.current;
-                setClockOpen((prev) => !prev);
-              }}
-            >
-              Saat
-            </Button> */}
           </div>
 
           <div>{!isClock && okayButton()}</div>

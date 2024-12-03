@@ -36,6 +36,27 @@
   transform-origin: bottom;
 }
 
+.ar-date-picker > label {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 0.5rem;
+  left: 0.55rem;
+  color: var(--gray-600);
+  letter-spacing: 1px;
+  transition: top 250ms ease-in-out;
+  z-index: 1;
+}
+.ar-date-picker > label.visible {
+  visibility: visible;
+  opacity: 1;
+  top: -0.5rem;
+  left: 0.55rem;
+  background-color: var(--white);
+  padding: 0 0.5rem;
+  font-size: 0.75rem;
+}
+
 @import url("./calendar/header.css");
 @import url("./calendar/content.css");
 @import url("./calendar/footer.css");
