@@ -73,6 +73,32 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
     if (key === "Escape") cancelProgress();
   };
 
+  const handleScroll = () => {
+    if (_arCalendar.current && _beginDate.current) {
+      const rect = _beginDate.current.getBoundingClientRect();
+
+      _arCalendar.current.style.top = `${rect?.bottom}px`;
+      _arCalendar.current.style.left = `${rect?.left}px`;
+    }
+  };
+
+  const handleParse = (data: string) => {
+    const [date, time] = data.split("T");
+    const [year, month, day] = date.split("-").map(Number);
+    const hours = time ? time.split(".")[0].split(":").map(Number)[0] : 0;
+    const minutes = time ? time.split(".")[0].split(":").map(Number)[1] : 0;
+
+    return {
+      date: date,
+      time: time,
+      year: year,
+      month: month,
+      day: day,
+      hours: hours,
+      minutes: minutes,
+    };
+  };
+
   const setNow = () => {
     const now = new Date();
 
@@ -167,13 +193,13 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
   };
 
   const cancelProgress = () => {
-    updateDateInput(currentYear, currentMonth, currentDay, currentHours, currentMinutes);
+    const dateParse = handleParse(String(attributes.value));
 
-    _year.current = currentYear;
-    _month.current = currentMonth;
-    _day.current = currentDay;
-    _hours.current = currentHours;
-    _minutes.current = currentMinutes;
+    _year.current = attributes.value ? dateParse.year : currentYear;
+    _month.current = attributes.value ? dateParse.month - 1 : currentMonth;
+    _day.current = attributes.value ? dateParse.day : currentDay;
+    _hours.current = attributes.value ? dateParse.hours : currentHours;
+    _minutes.current = attributes.value ? dateParse.minutes : currentMinutes;
 
     setCalendarOpen(false);
   };
@@ -198,6 +224,23 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
   }, []);
 
   useEffect(() => {
+    if (attributes.value && _beginDate.current) {
+      const dateParse = handleParse(String(attributes.value));
+
+      _year.current = dateParse.year;
+      _month.current = dateParse.month - 1;
+      _day.current = dateParse.day;
+
+      if (hours || minutes) {
+        _hours.current = dateParse.hours;
+        _minutes.current = dateParse.minutes;
+      }
+
+      updateDateInput(dateParse.year, dateParse.month - 1, dateParse.day, dateParse.hours, dateParse.minutes);
+    }
+  }, [attributes.value]);
+
+  useEffect(() => {
     // Sıfırlama işlemi...
     setCalendarClassName(["calendar-wrapper"]);
 
@@ -206,6 +249,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
     const direction = rect && rect.top > screenCenter ? "bottom" : "top";
 
     if (calendarOpen) {
+      handleScroll();
       setCalendarClassName((prev) => [...prev, direction, "opened"]);
 
       const calendar = [];
@@ -242,7 +286,6 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
             {...(isSelected ? { className: "selection-day" } : {})}
             onClick={() => {
               _day.current = i;
-              updateDateInput(_year.current, _month.current, _day.current);
               setDateTrigger((prev) => !prev);
             }}
           >
@@ -261,11 +304,13 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
       // Takvim paneli için olay dinleyileri ekleniyor.
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
+      document.addEventListener("scroll", handleScroll);
 
       // Dinleyicileri kaldır ve zamanlayıcıyı temizle.
       return () => {
         document.removeEventListener("click", handleClickOutSide);
         document.removeEventListener("keydown", handleKeys);
+        document.removeEventListener("scroll", handleScroll);
       };
     } else {
       setCalendarClassName((prev) => [...prev, direction, "closed"]);
@@ -304,9 +349,6 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
     generateList(24, _hours.current, setHours);
     generateList(60, _minutes.current, setMinutes);
 
-    // Input güncelleniyor...
-    updateDateInput(_year.current, _month.current, _day.current, _hours.current, _minutes.current);
-
     if (!isClock) return;
 
     // Seçim sonrasında en yukarı getirme işlemi için aşağıda yer alan kodlar yazılmıştır
@@ -332,7 +374,6 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
     <div className="ar-date-picker">
       <Input
         ref={_beginDate}
-        value={attributes.value ? new Date(attributes.value as string).toISOString().slice(0, isClock ? 16 : 10) : ""}
         type={isClock ? "datetime-local" : "date"}
         onKeyDown={(event) => event.code == "Space" && event.preventDefault()}
         onChange={(event) => {
@@ -350,6 +391,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
             _year.current = year;
             _month.current = month - 1;
             _day.current = day;
+
             if (hours || minutes) {
               _hours.current = hours;
               _minutes.current = minutes;
@@ -399,7 +441,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
             <div className="selects">
               <Select
                 variant="borderless"
-                value={{ value: _month.current, text: String(_month.current) }}
+                value={months.find((month) => month.value === _month.current)}
                 options={months}
                 onChange={(option) => {
                   _month.current = option?.value as number;
@@ -412,7 +454,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
 
               <Select
                 variant="borderless"
-                value={{ value: _year.current, text: String(_year.current) }}
+                value={years.find((years) => years.value === _year.current)}
                 options={years}
                 onChange={(option) => {
                   _year.current = option?.value as number;

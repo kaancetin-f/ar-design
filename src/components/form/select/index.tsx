@@ -97,6 +97,18 @@ const Select: React.FC<Props> = ({
     }
   };
 
+  const handleScroll = () => {
+    if (_options.current) {
+      const rect = _singleInput.current
+        ? _singleInput.current.getBoundingClientRect()
+        : _multipleInput.current?.getBoundingClientRect();
+
+      _options.current.style.top = `${rect?.bottom}px`;
+      _options.current.style.left = `${rect?.left}px`;
+      _options.current.style.width = `${rect?.width}px`;
+    }
+  };
+
   const handleItemSelected = (option: Option) => {
     if (multiple) {
       const hasItem = value.some((item) => item.value === option.value && item.text === option.text);
@@ -144,6 +156,8 @@ const Select: React.FC<Props> = ({
     setOptionsClassName(["options"]);
 
     if (optionsOpen) {
+      handleScroll();
+
       if (!multiple) {
         // const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
 
@@ -163,12 +177,6 @@ const Select: React.FC<Props> = ({
         }
       }
 
-      if (_options.current) {
-        _options.current.style.top = `${rect?.bottom}px`;
-        _options.current.style.left = `${rect?.left}px`;
-        _options.current.style.width = `${rect?.width}px`;
-      }
-
       // Options açıldıktan 100ms sonra arama kutusuna otomatik olarak focus oluyor.
       _otoFocus = setTimeout(() => {
         if (_searchField.current) _searchField.current.focus();
@@ -179,12 +187,14 @@ const Select: React.FC<Props> = ({
       // Options paneli için olay dinleyileri ekleniyor.
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
+      document.addEventListener("scroll", handleScroll);
 
       // Dinleyicileri kaldır ve zamanlayıcıyı temizle.
       return () => {
         clearTimeout(_otoFocus);
         document.removeEventListener("click", handleClickOutSide);
         document.removeEventListener("keydown", handleKeys);
+        document.removeEventListener("scroll", handleScroll);
       };
     } else {
       // Options paneli kapanma süresi 250ms.

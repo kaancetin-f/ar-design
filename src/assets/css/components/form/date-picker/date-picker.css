@@ -10,27 +10,22 @@
   flex-direction: row;
 }
 .ar-date-picker > .calendar-wrapper {
-  position: absolute;
-  left: 0;
-  top: calc(var(--input-height) + 0.5rem);
-  background-color: rgba(var(--white-rgb), 0.75);
-  backdrop-filter: blur(10px);
+  position: fixed;
+  background-color: var(--white);
   width: 20rem;
   border: solid 1px var(--gray-200);
   border-radius: var(--border-radius-lg);
   box-shadow: 0 0 10px -5px rgba(var(--black-rgb), 0.25);
-  z-index: 5;
-  transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;
+  z-index: 15;
+  transition: visibility 250ms, opacity 250ms ease-in-out;
 }
 .ar-date-picker > .calendar-wrapper:is(.opened) {
   visibility: visible;
   opacity: 1;
-  transform: scaleY(1);
 }
 .ar-date-picker > .calendar-wrapper:is(.closed) {
   visibility: hidden;
   opacity: 0;
-  transform: scaleY(0.8);
 }
 .ar-date-picker > .calendar-wrapper.top:is(.opened, .closed),
 .ar-date-picker > .calendar-wrapper.top:is(.opened, .closed) {
