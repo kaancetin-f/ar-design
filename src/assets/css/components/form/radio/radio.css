@@ -1,0 +1,37 @@
+.ar-radio-wrapper {
+  display: flex;
+  align-items: center;
+  height: var(--input-height);
+}
+.ar-radio-wrapper > label > :is(input[type="radio"]) {
+  display: none;
+}
+.ar-radio-wrapper > label > span {
+  display: flex;
+  align-items: center;
+  gap: 0 0.5rem;
+  user-select: none;
+}
+.ar-radio-wrapper > label > span > .ar-radio {
+  position: relative;
+  display: inline-block;
+  min-width: 1rem;
+  min-height: 1rem;
+}
+.ar-radio-wrapper > label > :is(input[type="radio"]):checked + span > .ar-radio {
+  background-color: var(--primary);
+  box-shadow: 0 0 0 3.5px rgba(var(--primary-rgb), 0.25);
+}
+.ar-radio-wrapper > label > :is(input[type="radio"]):checked + span > .ar-radio::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  display: inline-block;
+  content: "";
+  width: 0.25rem;
+  height: 0.5rem;
+  border: solid 1px transparent;
+  border-right-color: var(--white);
+  border-bottom-color: var(--white);
+}
