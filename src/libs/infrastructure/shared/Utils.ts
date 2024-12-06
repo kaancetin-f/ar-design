@@ -23,6 +23,17 @@ class Utils {
     return classNames;
   };
 
+  public GetCookie = (name: string) => {
+    if (typeof window === "undefined") return null;
+
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+
+    if (parts.length === 2) return parts.pop()?.split(";").shift();
+
+    return null;
+  };
+
   public StringFormat = (value: string, ...args: any[]): string => {
     if (args[0].length === 0) return value;
 

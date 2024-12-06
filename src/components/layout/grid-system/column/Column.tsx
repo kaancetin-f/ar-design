@@ -1,24 +1,24 @@
 "use client";
 
-import React, { useRef } from "react";
-import { Props } from "./Types";
+import React from "react";
+import IProps from "./IProps";
 
-const Column: React.FC<Props> = ({ children, size, align }) => {
+const Column: React.FC<IProps> = ({ children, size, align }) => {
   // refs
-  let _className = useRef<string>("").current;
+  let _className: string[] = [];
 
   // className
-  if (size) {
-    _className = Object.entries(size)
-      .map(([key, value]) => `col-${key}-${value}`)
-      .join(" ");
-  } else {
-    _className = "col";
+  if (typeof size === "object") {
+    Object.entries(size).map(([key, value]) => _className.push(`col-${key}-${value}`));
+  } else if (typeof size === "number") {
+    ["xl", "lg", "md", "sm", "xs"].map((col) => _className.push(`col-${col}-${size}`));
+  } else if (typeof size === "undefined") {
+    _className.push("col");
   }
 
-  if (align) _className += ` ${align}`;
+  if (align) _className.push(align);
 
-  return <div className={_className}>{children}</div>;
+  return <div className={_className.map((c) => c).join(" ")}>{children}</div>;
 };
 
 export default Column;

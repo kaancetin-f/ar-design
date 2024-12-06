@@ -22,13 +22,3 @@
   max-width: 100%;
   min-height: 1px;
 }
-.row > [class*="col"].left {
-  text-align: left;
-}
-.row > [class*="col"].center {
-  text-align: center;
-}
-.row > [class*="col"].right {
-  display: flex;
-  justify-content: flex-end;
-}

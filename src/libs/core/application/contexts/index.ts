@@ -1,4 +1,5 @@
 import { ConfigProvider } from "./Config";
 import { NotificationProvider } from "./Notification";
+import { LanguageProvider } from "./Language";
 
-export { ConfigProvider, NotificationProvider };
+export { ConfigProvider, LanguageProvider, NotificationProvider };

@@ -1,13 +1,22 @@
-"use client";
-
 import { useContext, useEffect, useRef, useState } from "react";
 import { ConfigContext } from "../contexts/Config";
 import { NotificationContext, Status } from "../contexts/Notification";
 import Utils from "../../../infrastructure/shared/Utils";
 import { ValidationProperties } from "../../../types";
+import { LanguageContext } from "../contexts/Language";
 
 export const useLayout = () => {
   const context = useContext(ConfigContext);
+
+  if (!context) {
+    throw new Error("useLayout must be used within a LayoutProvider");
+  }
+
+  return context;
+};
+
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
 
   if (!context) {
     throw new Error("useLayout must be used within a LayoutProvider");
@@ -107,26 +116,13 @@ export const useValidation = function <TData extends object>(data: TData, params
   };
 };
 
-export const useTranslation = function <TBaseLocale>(translations: { [key: string]: any }) {
+export const useTranslation = function <TBaseLocale>(
+  currentLanguage: string | undefined,
+  translations: { [key: string]: any }
+) {
   const t = (key: keyof TBaseLocale, ...args: any[]) => {
-    if (typeof window !== "undefined") {
-      const getLanguage = localStorage.getItem("ar-language-value");
-
-      if (getLanguage) return Utils.StringFormat(translations[getLanguage][key], args);
-      else localStorage.setItem("ar-language-value", "tr");
-    }
-
-    return "";
+    return Utils.StringFormat(translations[currentLanguage ?? "tr"][key], args) ?? "";
   };
 
-  const changeLanguage = (language: string) => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("ar-language-value", language);
-      window.location.reload();
-    }
-  };
-
-  const currentLanguage = typeof window !== "undefined" ? localStorage.getItem("ar-language-value") : null;
-
-  return { t, changeLanguage, currentLanguage };
+  return { t, currentLanguage };
 };

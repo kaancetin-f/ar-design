@@ -18,8 +18,21 @@
   opacity: 0.5;
 }
 .ar-dnd > div.over-item {
-  box-shadow: 0 0 0 1.5px rgba(var(--success-rgb), 0.25), 0 0 0 5px rgba(var(--success-rgb), 0.15);
-  transition: box-shadow 250ms ease-in-out;
+  position: relative;
+  /* padding-bottom: 1rem; */
+  /* border-bottom: solid 2px var(--gray-500); */
+  /* box-shadow: 0 0 0 1.5px rgba(var(--success-rgb), 0.25), 0 0 0 5px rgba(var(--success-rgb), 0.15); */
+  /* transition: box-shadow 250ms ease-in-out; */
+}
+.ar-dnd > div.over-item::after {
+  position: absolute;
+  content: "";
+  background-color: var(--success);
+  left: 1rem;
+  right: 1rem;
+  bottom: 0;
+  height: 5px;
+  border-radius: var(--border-radius-pill);
 }
 .ar-dnd > div.end-item {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
