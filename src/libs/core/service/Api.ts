@@ -19,11 +19,17 @@ class Api {
     return response;
   }
 
-  async Post(values: { input?: RequestInfo; data: any; headers?: HeadersInit }): Promise<Response> {
+  async Post(values: {
+    input?: RequestInfo;
+    data: any;
+    headers?: HeadersInit;
+    init?: RequestInit | undefined;
+  }): Promise<Response> {
     const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
       headers: { ...this.HeaderProperties, ...values.headers },
       method: "POST",
       body: JSON.stringify(values.data),
+      ...values.init,
     });
 
     return response;
@@ -75,7 +81,7 @@ class Api {
             console.error("400");
             break;
           case 401:
-            console.error("401");
+            // console.error("401");
             break;
           case 404:
             console.error("404");

@@ -31,23 +31,28 @@ const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfir
     if (key === "Escape") setOpen(false);
   };
 
-  const handleResizeEvent = () => setOpen(false);
+  const handleScroll = () => {
+    if (!_arConfirmWrapper.current || !_arConfirm.current) return;
+
+    const wrapper = _arConfirmWrapper.current.getBoundingClientRect();
+    const confirm = _arConfirm.current.getBoundingClientRect();
+
+    setCoordinatX(wrapper.left - confirm.width - 10);
+    setCoordinatY(wrapper.top);
+  };
 
   // useEffects
   useEffect(() => {
     if (open) {
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
-
-      // Sayfa boyutu değiştirilmesi söz konusu olursa eğer bu kısım çalışacaktır.
-      window.addEventListener("resize", handleResizeEvent);
+      document.addEventListener("scroll", handleScroll);
 
       // Dinleyicileri kaldır.
       return () => {
         document.removeEventListener("click", handleClickOutSide);
         document.removeEventListener("keydown", handleKeys);
-
-        window.removeEventListener("resize", handleResizeEvent);
+        document.removeEventListener("scroll", handleScroll);
       };
     }
   }, [open]);
@@ -92,14 +97,7 @@ const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfir
 
       <div
         onClick={() => {
-          if (!_arConfirmWrapper.current || !_arConfirm.current) return;
-
-          const wrapper = _arConfirmWrapper.current.getBoundingClientRect();
-          const confirm = _arConfirm.current.getBoundingClientRect();
-
-          setCoordinatX(wrapper.left - confirm.width - 10);
-          setCoordinatY(wrapper.top);
-
+          handleScroll();
           setOpen((prev) => !prev);
         }}
       >

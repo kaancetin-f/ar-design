@@ -1,8 +1,8 @@
 .ar-paper {
-  /* background-color: var(--white); */
-  /* padding: 2rem; */
-  /* border-radius: var(--border-radius-sm); */
-  /* box-shadow: 0 0 20px -15px rgba(var(--black-rgb), 0.25); */
+  background-color: var(--white);
+  padding: 2rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 0 20px 0 rgba(var(--black-rgb), 0.02);
 }
 .ar-paper > .header {
   display: flex;

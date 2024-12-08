@@ -14,26 +14,26 @@
   height: 100%;
 }
 .ar-layout > main > aside.ar-aside.left {
-  min-width: 20%;
+  flex: 2;
   min-height: calc(100vh - 7.5rem);
   border-right: solid 1px var(--gray-200);
 }
 .ar-layout > main > aside.ar-aside.right {
-  min-width: 20%;
+  flex: 2;
 }
 .ar-layout > main > section {
+  flex: 8;
   height: fit-content;
-  padding: 0 2rem;
   border-radius: var(--border-radius-lg);
 }
 .ar-layout > main:not(:has(> .ar-aside)) > section {
   min-width: 100%;
 }
-.ar-layout > main:has(> .ar-aside) > section {
-  min-width: calc(80% - 2.5%);
+.ar-layout > main:has(> .ar-aside.left) > section {
+  padding-left: 2rem;
 }
-.ar-layout > main:has(> .ar-aside) > section:has(~ .ar-aside) {
-  min-width: calc(60% - 5%);
+.ar-layout > main:has(> .ar-aside.left) > section:has(~ .ar-aside.right) {
+  padding: 0 2rem;
 }
 
 @import url("./header.css");

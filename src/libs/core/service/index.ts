@@ -43,6 +43,7 @@ class Service {
     input?: RequestInfo;
     data: TData;
     headers?: HeadersInit;
+    init?: RequestInit | undefined;
   }): Promise<Result<TResponse>> {
     try {
       let endPoint: string = `${this._endPoint}`;
@@ -53,6 +54,7 @@ class Service {
         input: endPoint,
         data: values?.data,
         headers: values?.headers,
+        init: values?.init,
       });
       const text = (await response.text()).trim();
 
