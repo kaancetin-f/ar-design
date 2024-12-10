@@ -27,14 +27,6 @@
   visibility: hidden;
   opacity: 0;
 }
-.ar-date-picker > .calendar-wrapper.top:is(.opened, .closed),
-.ar-date-picker > .calendar-wrapper.top:is(.opened, .closed) {
-  transform-origin: top;
-}
-.ar-date-picker > .calendar-wrapper.bottom:is(.opened, .closed),
-.ar-date-picker > .calendar-wrapper.bottom:is(.opened, .closed) {
-  transform-origin: bottom;
-}
 
 .ar-date-picker > label {
   visibility: hidden;

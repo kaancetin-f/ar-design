@@ -12,6 +12,7 @@ const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfir
   // refs
   const _arConfirmWrapper = useRef<HTMLDivElement>(null);
   const _arConfirm = useRef<HTMLDivElement>(null);
+  const _arConfirmElement = useRef<HTMLDivElement>(null);
 
   // states
   const [open, setOpen] = useState<boolean>(false);
@@ -32,13 +33,15 @@ const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfir
   };
 
   const handleScroll = () => {
-    if (!_arConfirmWrapper.current || !_arConfirm.current) return;
+    if (!_arConfirmWrapper.current || !_arConfirm.current || !_arConfirmElement.current) return;
 
     const wrapper = _arConfirmWrapper.current.getBoundingClientRect();
     const confirm = _arConfirm.current.getBoundingClientRect();
+    const element = _arConfirmElement.current.getBoundingClientRect();
+    const screenVCenter = window.innerHeight / 2;
 
     setCoordinatX(wrapper.left - confirm.width - 10);
-    setCoordinatY(wrapper.top);
+    setCoordinatY(element.top > screenVCenter ? wrapper.bottom - confirm.height : wrapper.top);
   };
 
   // useEffects
@@ -96,6 +99,7 @@ const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfir
       </div>
 
       <div
+        ref={_arConfirmElement}
         onClick={() => {
           handleScroll();
           setOpen((prev) => !prev);

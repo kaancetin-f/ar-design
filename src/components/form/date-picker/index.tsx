@@ -76,8 +76,12 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
   const handleScroll = () => {
     if (_arCalendar.current && _beginDate.current) {
       const rect = _beginDate.current.getBoundingClientRect();
+      const arCalendarRect = _arCalendar.current.getBoundingClientRect();
+      const screenVCenter = window.innerHeight / 2;
 
-      _arCalendar.current.style.top = `${rect?.bottom}px`;
+      _arCalendar.current.style.top = `${
+        rect.top > screenVCenter ? rect.bottom - arCalendarRect.height - 45 : rect.bottom
+      }px`;
       _arCalendar.current.style.left = `${rect?.left}px`;
     }
   };
@@ -244,13 +248,8 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
     // Sıfırlama işlemi...
     setCalendarClassName(["calendar-wrapper"]);
 
-    const screenCenter = window.innerHeight / 2 + 100;
-    const rect = _beginDate.current?.getBoundingClientRect();
-    const direction = rect && rect.top > screenCenter ? "bottom" : "top";
-
     if (calendarOpen) {
-      handleScroll();
-      setCalendarClassName((prev) => [...prev, direction, "opened"]);
+      setCalendarClassName((prev) => [...prev, "opened"]);
 
       const calendar = [];
       const beginDateValue = _beginDate.current?.value || "";
@@ -301,6 +300,9 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
       // Takvim nesneleri ekleniyor.
       setCalendar(calendar);
 
+      // Konumu Ayarlanıyor.
+      setTimeout(handleScroll, 0);
+
       // Takvim paneli için olay dinleyileri ekleniyor.
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
@@ -313,7 +315,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
         document.removeEventListener("scroll", handleScroll);
       };
     } else {
-      setCalendarClassName((prev) => [...prev, direction, "closed"]);
+      setCalendarClassName((prev) => [...prev, "closed"]);
     }
   }, [dateTrigger, calendarOpen]);
 

@@ -64,7 +64,7 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
       setItems((items) => items.slice(0, -1));
 
       clearTimeout(_interval.current);
-    }, 2500);
+    }, 3000);
   }, [items]);
 
   return (

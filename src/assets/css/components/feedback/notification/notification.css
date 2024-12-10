@@ -113,10 +113,9 @@
   color: var(--white);
 }
 .notification > .item > .content > .title {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
 }
 .notification > .item > .content > .message {
-  font-size: 0.8rem;
 }
 
 .notification > .item > .close {
