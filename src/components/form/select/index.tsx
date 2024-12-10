@@ -363,7 +363,7 @@ const Select: React.FC<Props> = ({
             style={{ padding: "1rem", cursor: "pointer" }}
             onClick={() => {
               onCreate({ value: "", text: singleInputText });
-              handleItemSelected({ value: "", text: singleInputText });
+              setOptionsOpen(false);
             }}
           >
             {options.length === 0 && singleInputText.length === 0
