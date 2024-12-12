@@ -1,8 +1,9 @@
 import React from "react";
-import { IGlobalProps } from "../../../libs/types/IGlobalProps";
+import { IGlobalProps, ISizes } from "../../../libs/types/IGlobalProps";
 
 interface IProps
   extends Omit<IGlobalProps, "children">,
+    ISizes,
     Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "size"> {
   label?: string;
 }

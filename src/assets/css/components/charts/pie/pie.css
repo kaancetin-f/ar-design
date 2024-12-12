@@ -1,0 +1,54 @@
+.ar-pie-chart-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem 0;
+}
+.ar-pie-chart-wrapper > .ar-pie-chart {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: var(--border-radius-pill);
+  user-select: none;
+}
+.ar-pie-chart-wrapper > .ar-pie-chart > article {
+  position: absolute;
+  inset: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--white);
+  border-radius: var(--border-radius-pill);
+  box-shadow: inset 0 0 0 5px rgba(var(--black-rgb), 0.1);
+  color: var(--gray-700);
+}
+
+.ar-pie-chart-wrapper > .information-field {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0.5rem 0;
+  width: 100%;
+}
+.ar-pie-chart-wrapper > .information-field > article {
+  display: flex;
+  flex-direction: row;
+  flex: 2;
+  align-items: center;
+  gap: 0 0.5rem;
+}
+.ar-pie-chart-wrapper > .information-field > article > span:first-child {
+  min-width: 1.75rem;
+  min-height: 1rem;
+  border-radius: var(--border-radius-sm);
+  color: var(--white);
+  font-size: 0.6rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1rem;
+}
+.ar-pie-chart-wrapper > .information-field > article > span:last-child {
+  font-size: 0.75rem;
+}

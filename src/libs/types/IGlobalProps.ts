@@ -80,8 +80,6 @@ export interface IGlobalProps {
    */
   border?: Border;
 
-  size?: Sizes;
-
   /**
    * Bileşendeki metni büyük harflere dönüştürüp dönüştürmeyeceğini belirtir.
    * Boolean (true/false) değeri alır.

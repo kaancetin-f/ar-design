@@ -67,3 +67,7 @@ export type ValidationProperties<T> = {
   }[];
   where?: (param: T) => boolean;
 };
+
+// Charts
+// Pie
+export type PieChartDataType = { value: number; text: string };
