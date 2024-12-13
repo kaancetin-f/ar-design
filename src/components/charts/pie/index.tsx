@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/charts/pie/pie.css";
 
-const Pie: React.FC<IProps> = ({ data }) => {
+const Pie: React.FC<IProps> = ({ title, data, size }) => {
   // refs
   const _arPieChart = useRef<HTMLDivElement>(null);
   // const _randomIndex = useRef<number[]>([]);
@@ -14,8 +14,8 @@ const Pie: React.FC<IProps> = ({ data }) => {
   const conicColors = [
     ["#fff35e", "#000"], // Sarı
     ["#ffc752", "#000"], // Açık Sarı
-    ["#ff9151", "#000"], // Turuncu
-    ["#ee544e", "#000"], // Kırmızı
+    ["#ff9151", "#fff"], // Turuncu
+    ["#ee544e", "#fff"], // Kırmızı
     ["#e52b66", "#fff"], // Pembemsi Kırmızı
     ["#3c1d43", "#fff"], // Koyu Mor
     ["#582d62", "#fff"], // Mor
@@ -54,19 +54,29 @@ const Pie: React.FC<IProps> = ({ data }) => {
 
   return (
     <div className="ar-pie-chart-wrapper">
-      <div ref={_arPieChart} className="ar-pie-chart" style={{ background: `conic-gradient(${conic.join(", ")})` }}>
-        <article>{/* Grafik yüzdesi burada olabilir */}</article>
+      <div className="title">
+        <span>{title}</span>
       </div>
 
-      <div className="information-field">
-        {data.map((item, index) => (
-          <article key={index}>
-            <span style={{ backgroundColor: conicColors[index][0] }}>
-              <span style={{ color: conicColors[index][1] }}>{item.value}</span>
-            </span>
-            <span>{item.text}</span>
-          </article>
-        ))}
+      <div>
+        <div
+          ref={_arPieChart}
+          className="ar-pie-chart"
+          style={{ background: `conic-gradient(${conic.join(", ")})`, width: size, height: size }}
+        >
+          <article>{/* Grafik yüzdesi burada olabilir */}</article>
+        </div>
+
+        <div className="information-field">
+          {data.map((item, index) => (
+            <article key={index}>
+              <span style={{ backgroundColor: conicColors[index][0] }}>
+                <span style={{ color: conicColors[index][1] }}>{item.value}</span>
+              </span>
+              <span>{item.text}</span>
+            </article>
+          ))}
+        </div>
       </div>
     </div>
   );

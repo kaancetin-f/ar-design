@@ -26,7 +26,7 @@
 }
 
 .ar-notification-item {
-  position: absolute;
+  position: fixed;
   left: 2rem;
   display: flex;
   flex-direction: row;
