@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, useRef, useState } from "react";
+import React, { forwardRef, useRef } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/form/radio/radio.css";
 import Utils from "../../../libs/infrastructure/shared/Utils";
@@ -10,9 +10,6 @@ const Radio = forwardRef<HTMLInputElement, IProps>(
     // refs
     const _checkbox = useRef<HTMLInputElement>(null);
     const _checkboxClassName: string[] = ["ar-radio"];
-
-    // states
-    const [checked, setChecked] = useState<boolean>(false);
 
     _checkboxClassName.push(...Utils.GetClassName("filled", undefined, border, size, undefined, attributes.className));
 
@@ -28,13 +25,6 @@ const Radio = forwardRef<HTMLInputElement, IProps>(
               (() => {
                 const _current = _checkbox.current;
                 if (!_current) return;
-
-                // 'checked' durumunun false olup olmadığını kontrol et
-                if (event.target.checked === false) {
-                  console.log("Radio button is unchecked");
-                }
-
-                setChecked(event.target.checked);
               })();
 
               (() => attributes.onChange && attributes.onChange(event))();

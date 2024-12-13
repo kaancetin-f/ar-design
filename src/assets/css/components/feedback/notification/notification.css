@@ -1,4 +1,5 @@
 .notification {
+  background-color: var(--danger);
   position: fixed;
   display: flex;
   flex-direction: column-reverse;
@@ -24,120 +25,124 @@
   right: 1rem;
 }
 
-.notification > .item {
+.ar-notification-item {
+  position: absolute;
+  left: 2rem;
   display: flex;
   flex-direction: row;
   gap: 0 0.5rem;
-  width: 100%;
-  height: 5rem;
+  background-color: rgba(var(--white-rgb), 0.5);
+  backdrop-filter: blur(5px);
+  width: 350px;
+  height: 7.5rem;
   border-radius: var(--border-radius-xl);
+  box-shadow: 0 5px 15px -5px rgba(var(--black-rgb), 0.25);
+  transition: all 250ms ease-in-out;
   overflow: hidden;
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: openSnackbar ease-in-out 500ms 0s 1 normal both;
 }
 
-.notification > .item.success {
-  background-color: var(--success);
-}
-.notification > .item.warning {
-  background-color: var(--warning);
-}
-.notification > .item.information {
-  background-color: var(--info);
-}
-.notification > .item.error {
-  background-color: var(--danger);
-}
-
-.notification > .item > .icon {
+.ar-notification-item > .icon {
   position: relative;
   min-width: 3rem;
   border-top-left-radius: var(--border-radius-xl);
   border-bottom-left-radius: var(--border-radius-xl);
   overflow: hidden;
 }
-.notification > .item > .icon > span {
+.ar-notification-item > .icon > span {
   position: absolute;
   border-radius: var(--border-radius-pill);
 }
-/* .notification > .item > .icon > span:nth-child(1) {
+.ar-notification-item > .icon > span:nth-child(1) {
   top: 0.5rem;
   left: 0.5rem;
   width: 0.25rem;
   height: 0.25rem;
 }
-.notification > .item > .icon > span:nth-child(2) {
+.ar-notification-item > .icon > span:nth-child(2) {
   top: 1.5rem;
   left: 0.5rem;
   width: 0.5rem;
   height: 0.5rem;
 }
-.notification > .item > .icon > span:nth-child(3) {
+.ar-notification-item > .icon > span:nth-child(3) {
   top: 2rem;
   left: 1.75rem;
   width: 1rem;
   height: 1rem;
 }
-.notification > .item > .icon > span:nth-child(4) {
+.ar-notification-item > .icon > span:nth-child(4) {
   bottom: -1.5rem;
   left: -0.5rem;
   width: 3rem;
   height: 3rem;
 }
-.notification > .item > .icon > span:nth-child(5) {
+.ar-notification-item > .icon > span:nth-child(5) {
   bottom: 1.15rem;
   left: 1rem;
   width: 0.55rem;
   height: 0.55rem;
-} */
-.notification > .item > .icon > span.success {
+}
+.ar-notification-item > .icon > span.success {
   background-color: var(--success);
 }
-.notification > .item > .icon > span.warning {
+.ar-notification-item > .icon > span.warning {
   background-color: var(--warning);
 }
-.notification > .item > .icon > span.information {
+.ar-notification-item > .icon > span.information {
   background-color: var(--info);
 }
-.notification > .item > .icon > span.error {
+.ar-notification-item > .icon > span.error {
   background-color: var(--danger);
 }
 
-.notification > .item > .content {
+.ar-notification-item > .content {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.25rem 0;
+  gap: 0.75rem 0;
   width: 100%;
   padding: 0 1rem;
-  color: var(--white);
+  color: var(--gray-700);
 }
-.notification > .item > .content > .title {
-  font-size: 1.3rem;
+.ar-notification-item > .content > .title {
+  font-size: 1.2rem;
 }
-.notification > .item > .content > .message {
+.ar-notification-item > .content > .message {
+  color: var(--gray-600);
 }
 
-.notification > .item > .close {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.ar-notification-item > .close {
   min-width: 2.5rem;
-  background-color: rgba(var(--black-rgb), 0.1);
-  color: rgba(var(--white-rgb), 0.75);
+}
+.ar-notification-item > .close::before,
+.ar-notification-item > .close::after {
+  position: absolute;
+  top: 0.75rem;
+  right: 1.25rem;
+  content: "";
+  width: 2px;
+  height: 15px;
+  background-color: var(--gray-500);
+  transform-origin: center;
+  transform: rotate(45deg);
+}
+.ar-notification-item > .close::after {
+  transform: rotate(-45deg);
 }
 
 @media only screen and (max-width: 480px) {
-  .notification.top-left {
+  .ar-notification.top-left {
     inset: 1rem 1rem auto 1rem;
   }
-  .notification.top-right {
+  .ar-notification.top-right {
     inset: 1rem 1rem auto 1rem;
   }
-  .notification.bottom-left {
+  .ar-notification.bottom-left {
     inset: auto 1rem 1rem 1rem;
   }
-  .notification.bottom-right {
+  .ar-notification.bottom-right {
     inset: auto 1rem 1rem 1rem;
   }
 }
