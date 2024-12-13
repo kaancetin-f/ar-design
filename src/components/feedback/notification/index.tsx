@@ -41,18 +41,20 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
   return items.map((item, index) => {
     let bottom: number = 0;
 
+    // Önceki öğenin yüksekliğini dikkate alarak `bottom` hesaplanıyor.
     if (_notificationItems.current[index - 1] && index > 0) {
-      const rect = _notificationItems.current[index - 1]!.getBoundingClientRect();
-      console.log(rect);
-
-      bottom = rect.height;
+      bottom = _notificationItems.current.slice(0, index).reduce((acc, el) => {
+        const rect = el!.getBoundingClientRect();
+        return acc + rect.height + 20; // Önceki öğelerin yüksekliğini topluyoruz.
+      }, 0);
     }
 
     return (
       <div
+        key={index}
         ref={(element) => (_notificationItems.current[index] = element)}
         className="ar-notification-item"
-        style={{ bottom: `${items.length >= 3 ? index * 10.5 : bottom}px` }}
+        style={{ bottom: `${items.length > 5 ? index * 10.5 : bottom}px` }}
       >
         <div className="icon">
           <span className={item.status}></span>
@@ -67,14 +69,7 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
           <span className="message">{item.message}</span>
         </div>
 
-        <div
-          className="close"
-          // data-index={index}
-          onClick={(event) => {
-            // const target = event.currentTarget as HTMLDivElement;
-            // setItems((item) => item.filter((x) => x.index !== Number(target.dataset.index)));
-          }}
-        ></div>
+        <div className="close" onClick={() => setItems((items) => items.filter((_, _index) => _index !== index))}></div>
       </div>
     );
   });
