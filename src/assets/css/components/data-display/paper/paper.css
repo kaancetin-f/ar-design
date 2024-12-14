@@ -1,4 +1,5 @@
 .ar-paper {
+  position: relative;
   background-color: var(--white);
   padding: 2rem;
   border-radius: var(--border-radius-lg);
