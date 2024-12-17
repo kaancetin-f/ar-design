@@ -10,8 +10,8 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
   const _firstLoad = useRef<boolean>(false);
   const _notificationItems = useRef<(HTMLDivElement | null)[]>([]);
   const _interval = useRef<NodeJS.Timeout>();
-  const _automaticRemoveInterval = useRef<NodeJS.Timeout>();
-  const _closedInterval = useRef<NodeJS.Timeout>();
+  // const _automaticRemoveInterval = useRef<NodeJS.Timeout>();
+  // const _closedInterval = useRef<NodeJS.Timeout>();
   const _i = useRef<number>(0);
 
   const [items, setItems] = useState<
@@ -30,23 +30,30 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
   useEffect(() => {
     if (items.length === 0) return;
 
-    const firstNotification = _notificationItems.current[0];
+    // const firstNotification = _notificationItems.current[0];
 
-    _automaticRemoveInterval.current = setTimeout(() => {
-      if (firstNotification) firstNotification.classList.add("closed");
+    // _automaticRemoveInterval.current = setTimeout(() => {
+    //   if (firstNotification) firstNotification.classList.add("closed");
 
-      _interval.current = setTimeout(() => {
-        setItems((prevItems) => prevItems.slice(1));
-        if (firstNotification) firstNotification.classList.remove("closed");
+    //   _interval.current = setTimeout(() => {
+    //     setItems((prevItems) => prevItems.slice(1));
+    //     if (firstNotification) firstNotification.classList.remove("closed");
 
-        clearTimeout(_interval.current);
-      }, 500);
+    //     clearTimeout(_interval.current);
+    //   }, 500);
 
-      clearTimeout(_automaticRemoveInterval.current);
+    //   clearTimeout(_automaticRemoveInterval.current);
+    // }, 3000);
+
+    _interval.current = setTimeout(() => {
+      setItems((prevItems) => prevItems.slice(1));
+      // if (firstNotification) firstNotification.classList.remove("closed");
+
+      clearTimeout(_interval.current);
     }, 3000);
 
     return () => {
-      clearTimeout(_automaticRemoveInterval.current);
+      // clearTimeout(_automaticRemoveInterval.current);
       clearTimeout(_interval.current);
     };
   }, [items]);
@@ -100,18 +107,20 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
         <div
           className="close"
           onClick={() => {
-            clearTimeout(_automaticRemoveInterval.current);
+            // clearTimeout(_automaticRemoveInterval.current);
             clearTimeout(_interval.current);
 
-            if (_notificationItems.current[index]) _notificationItems.current[index]!.classList.add("closed");
+            setItems((prev) => prev.filter((_item) => _item.id !== item.id));
 
-            _closedInterval.current = setTimeout(() => {
-              setItems((prev) => prev.filter((_item) => _item.id !== item.id));
+            // if (_notificationItems.current[index]) _notificationItems.current[index]!.classList.add("closed");
 
-              if (_notificationItems.current[index]) _notificationItems.current[index]!.classList.remove("closed");
+            // _closedInterval.current = setTimeout(() => {
+            //   setItems((prev) => prev.filter((_item) => _item.id !== item.id));
 
-              clearTimeout(_closedInterval.current);
-            }, 500);
+            //   if (_notificationItems.current[index]) _notificationItems.current[index]!.classList.remove("closed");
+
+            //   clearTimeout(_closedInterval.current);
+            // }, 500);
           }}
         ></div>
       </div>
