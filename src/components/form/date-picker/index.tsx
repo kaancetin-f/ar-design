@@ -153,7 +153,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
       if (isNaN(inputDate.getTime())) return;
 
       const [date, time] = inputDate.toISOString().split("T");
-      const [clock, ms] = time.split(".");
+      const [clock, _] = time.split(".");
 
       _beginDate.current.value = !_clockOpen.current ? date : `${date}T${clock}`;
     }
@@ -307,14 +307,12 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
       document.addEventListener("scroll", handleScroll);
-
-      // Dinleyicileri kaldır ve zamanlayıcıyı temizle.
-      return () => {
-        document.removeEventListener("click", handleClickOutSide);
-        document.removeEventListener("keydown", handleKeys);
-        document.removeEventListener("scroll", handleScroll);
-      };
     } else {
+      // Dinleyicileri kaldır ve zamanlayıcıyı temizle.
+      document.removeEventListener("click", handleClickOutSide);
+      document.removeEventListener("keydown", handleKeys);
+      document.removeEventListener("scroll", handleScroll);
+
       setCalendarClassName((prev) => [...prev, "closed"]);
     }
   }, [dateTrigger, calendarOpen]);

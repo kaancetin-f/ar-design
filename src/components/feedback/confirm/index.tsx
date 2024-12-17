@@ -50,13 +50,11 @@ const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfir
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
       document.addEventListener("scroll", handleScroll);
-
+    } else {
       // Dinleyicileri kaldır.
-      return () => {
-        document.removeEventListener("click", handleClickOutSide);
-        document.removeEventListener("keydown", handleKeys);
-        document.removeEventListener("scroll", handleScroll);
-      };
+      document.removeEventListener("click", handleClickOutSide);
+      document.removeEventListener("keydown", handleKeys);
+      document.removeEventListener("scroll", handleScroll);
     }
   }, [open]);
 

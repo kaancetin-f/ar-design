@@ -35,17 +35,12 @@ const ButtonAction: React.FC<IProps> = ({ buttons }) => {
     if (open) {
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
-
-      // Sayfa boyutu değiştirilmesi söz konusu olursa eğer bu kısım çalışacaktır.
       window.addEventListener("resize", handleResizeEvent);
-
+    } else {
       // Dinleyicileri kaldır.
-      return () => {
-        document.removeEventListener("click", handleClickOutSide);
-        document.removeEventListener("keydown", handleKeys);
-
-        window.removeEventListener("resize", handleResizeEvent);
-      };
+      document.removeEventListener("click", handleClickOutSide);
+      document.removeEventListener("keydown", handleKeys);
+      window.removeEventListener("resize", handleResizeEvent);
     }
   }, [open]);
 

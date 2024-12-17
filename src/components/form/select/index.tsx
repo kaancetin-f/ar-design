@@ -188,15 +188,13 @@ const Select: React.FC<Props> = ({
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
       document.addEventListener("scroll", handleScroll);
-
-      // Dinleyicileri kaldır ve zamanlayıcıyı temizle.
-      return () => {
-        clearTimeout(_otoFocus);
-        document.removeEventListener("click", handleClickOutSide);
-        document.removeEventListener("keydown", handleKeys);
-        document.removeEventListener("scroll", handleScroll);
-      };
     } else {
+      // Dinleyicileri kaldır ve zamanlayıcıyı temizle.
+      clearTimeout(_otoFocus);
+      document.removeEventListener("click", handleClickOutSide);
+      document.removeEventListener("keydown", handleKeys);
+      document.removeEventListener("scroll", handleScroll);
+
       // Options paneli kapanma süresi 250ms.
       // 300ms sonra temizlenmesinin sebebi kapanırken birder veriler gerliyor ve panel yüksekliği artıyor.
       setTimeout(() => {
