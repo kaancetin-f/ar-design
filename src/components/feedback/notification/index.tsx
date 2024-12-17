@@ -7,54 +7,82 @@ import "../../../assets/css/components/feedback/notification/notification.css";
 import { Direction } from "../../../libs/core/application/contexts/Notification";
 
 const Notification = ({ title, message, status, direction = "bottom-left", trigger }: IProps) => {
-  // useRefs
   const _firstLoad = useRef<boolean>(false);
-  // const _index = useRef<number>(0);
   const _notificationItems = useRef<(HTMLDivElement | null)[]>([]);
   const _interval = useRef<NodeJS.Timeout>();
+  const _automaticRemoveInterval = useRef<NodeJS.Timeout>();
+  const _closedInterval = useRef<NodeJS.Timeout>();
+  const _i = useRef<number>(0);
 
-  // useStates
-  const [items, setItems] = useState<{ title: string; message?: string; status: string; direction: Direction }[]>([]);
+  const [items, setItems] = useState<
+    { id: number; title: string; message?: string; status: string; direction: Direction }[]
+  >([]);
 
-  // useEffects
   useEffect(() => {
     if (!_firstLoad.current) {
       _firstLoad.current = true;
-
       return;
     }
 
-    setItems((items) => [...items, { title, message, status, direction }]);
+    setItems((prevItems) => [...prevItems, { id: _i.current++, title, message, status, direction }]);
   }, [trigger]);
 
   useEffect(() => {
     if (items.length === 0) return;
 
-    // Ekleme işlemi bittikten bir süre sonra tekrar kaldırma işlemi yapılmaktadır.
-    _interval.current = setTimeout(() => {
-      setItems((items) => items.slice(1));
+    const firstNotification = _notificationItems.current[0];
 
-      clearTimeout(_interval.current);
+    _automaticRemoveInterval.current = setTimeout(() => {
+      if (firstNotification) firstNotification.classList.add("closed");
+
+      _interval.current = setTimeout(() => {
+        setItems((prevItems) => prevItems.slice(1));
+        if (firstNotification) firstNotification.classList.remove("closed");
+
+        clearTimeout(_interval.current);
+      }, 500);
+
+      clearTimeout(_automaticRemoveInterval.current);
     }, 3000);
+
+    return () => {
+      clearTimeout(_automaticRemoveInterval.current);
+      clearTimeout(_interval.current);
+    };
   }, [items]);
 
-  return items.map((item, index) => {
-    let bottom: number = 0;
+  const getBottomPosition = (index: number): number => {
+    let bottom: number = 30; // Başlangıçta 30px'lik bir boşluk ekliyoruz.
 
-    // Önceki öğenin yüksekliğini dikkate alarak `bottom` hesaplanıyor.
-    if (_notificationItems.current[index - 1] && index > 0) {
+    // Önceki öğenin yüksekliğini dikkate alarak bottom hesaplanıyor.
+    if (_notificationItems.current[index - 1]) {
       bottom = _notificationItems.current.slice(0, index).reduce((acc, el) => {
         const rect = el!.getBoundingClientRect();
-        return acc + rect.height + 20; // Önceki öğelerin yüksekliğini topluyoruz.
-      }, 0);
+
+        return acc + rect.height + 20; // +20 değeri ara boşluğu artıyor.
+      }, 30); // 30px'lik boşluğu başlangıçta ekliyoruz.
     }
+
+    return bottom;
+  };
+
+  return items.map((item, index) => {
+    const bottom = getBottomPosition(index);
 
     return (
       <div
         key={index}
         ref={(element) => (_notificationItems.current[index] = element)}
         className="ar-notification-item"
-        style={{ bottom: `${items.length > 5 ? index * 10.5 : bottom}px` }}
+        style={
+          items.length > 5
+            ? {
+                backgroundColor: `rgba(var(--white-rgb), ${index === items.length - 1 ? 1 : 0.1})`,
+                backdropFilter: "blur(10px)",
+                bottom: (index === 0 ? 30 : 10) * (index + 1),
+              }
+            : { bottom }
+        }
       >
         <div className="icon">
           <span className={item.status}></span>
@@ -69,7 +97,23 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
           <span className="message">{item.message}</span>
         </div>
 
-        <div className="close" onClick={() => setItems((items) => items.filter((_, _index) => _index !== index))}></div>
+        <div
+          className="close"
+          onClick={() => {
+            clearTimeout(_automaticRemoveInterval.current);
+            clearTimeout(_interval.current);
+
+            if (_notificationItems.current[index]) _notificationItems.current[index]!.classList.add("closed");
+
+            _closedInterval.current = setTimeout(() => {
+              setItems((prev) => prev.filter((_item) => _item.id !== item.id));
+
+              if (_notificationItems.current[index]) _notificationItems.current[index]!.classList.remove("closed");
+
+              clearTimeout(_closedInterval.current);
+            }, 500);
+          }}
+        ></div>
       </div>
     );
   });

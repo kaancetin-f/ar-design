@@ -1,38 +1,11 @@
-.notification {
-  background-color: var(--danger);
-  position: fixed;
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 1.25rem 0;
-  user-select: none;
-  z-index: 1051;
-}
-
-.notification.top-left {
-  top: 1rem;
-  left: 1rem;
-}
-.notification.top-right {
-  top: 1rem;
-  right: 1rem;
-}
-.notification.bottom-left {
-  bottom: 1rem;
-  left: 1rem;
-}
-.notification.bottom-right {
-  bottom: 1rem;
-  right: 1rem;
-}
-
 .ar-notification-item {
+  opacity: 1;
   position: fixed;
   left: 2rem;
   display: flex;
   flex-direction: row;
   gap: 0 0.5rem;
-  background-color: rgba(var(--white-rgb), 0.5);
-  backdrop-filter: blur(5px);
+  background-color: var(--white);
   width: 350px;
   height: 7.5rem;
   border-radius: var(--border-radius-xl);
@@ -40,7 +13,16 @@
   transition: all 250ms ease-in-out;
   overflow: hidden;
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: openSnackbar ease-in-out 500ms 0s 1 normal both;
+  animation: openedSnackbar ease-in-out 500ms 0s 1 normal both;
+  z-index: 1051;
+}
+.ar-notification-item.previous {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: previousSnackbar ease-in-out 500ms 0s 1 normal both;
+}
+.ar-notification-item.closed {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: closedSnackbar ease-in-out 500ms 0s 1 normal both;
 }
 
 .ar-notification-item > .icon {
@@ -147,7 +129,7 @@
   }
 }
 
-@keyframes openSnackbar {
+@keyframes openedSnackbar {
   0% {
     transform: translateX(-500px);
   }
@@ -156,7 +138,16 @@
   }
 }
 
-@keyframes removeSnackbar {
+@keyframes previousSnackbar {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    transform: translateX(0) translateY(120px);
+  }
+}
+
+@keyframes closedSnackbar {
   0% {
     transform: translateX(0);
   }

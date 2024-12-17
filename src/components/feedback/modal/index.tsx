@@ -32,14 +32,13 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
   // useEffects
   useEffect(() => {
     if (open.get) {
+      document.body.style.overflow = "hidden";
       // document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
-
-      // Dinleyicileri kaldır.
-      return () => {
-        // document.removeEventListener("click", handleClickOutSide);
-        document.removeEventListener("keydown", handleKeys);
-      };
+    } else {
+      document.body.style.removeProperty("overflow");
+      // document.removeEventListener("click", handleClickOutSide);
+      document.removeEventListener("keydown", handleKeys);
     }
   }, [open.get]);
 

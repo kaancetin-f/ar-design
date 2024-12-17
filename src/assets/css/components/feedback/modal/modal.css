@@ -6,7 +6,6 @@
   position: fixed;
   inset: 0;
   background-color: rgba(var(--black-rgb), 0.5);
-  backdrop-filter: blur(10px);
 }
 
 /* #region Open or Close */
@@ -17,19 +16,19 @@
   z-index: 100;
 }
 .ar-modal-wrapper:is(.opened) > .ar-modal {
-  top: 4.5rem;
+  top: 1.75rem;
   transition: top 250ms ease-in-out;
 }
 
 .ar-modal-wrapper:is(.closed) {
   visibility: hidden;
   opacity: 0;
-  transition: visibility 250ms 300ms, opacity 250ms 300ms ease-in-out;
+  transition: visibility 250ms, opacity 250ms ease-in-out;
   z-index: 99;
 }
 .ar-modal-wrapper:is(.closed) > .ar-modal {
   top: -100%;
-  transition: top 250ms 300ms ease-in-out;
+  transition: top 250ms ease-in-out;
 }
 /* #endregion */
 /* Open or Close */

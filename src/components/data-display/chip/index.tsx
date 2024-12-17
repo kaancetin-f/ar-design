@@ -10,14 +10,18 @@ const Chip: React.FC<IProps> = ({
   status = "primary",
   border = { radius: "sm" },
   text,
+  icon,
 }) => {
   let _chipClassName: string[] = ["ar-chip"];
 
-  _chipClassName.push(
-    ...Utils.GetClassName(variant, status, border, undefined, undefined, undefined)
-  );
+  _chipClassName.push(...Utils.GetClassName(variant, status, border, undefined, undefined, undefined));
 
-  return <span className={_chipClassName.map((c) => c).join(" ")}>{text}</span>;
+  return (
+    <div className={_chipClassName.map((c) => c).join(" ")}>
+      {icon?.element && <span>{icon?.element}</span>}
+      <span>{text}</span>
+    </div>
+  );
 };
 
 export default Chip;
