@@ -81,7 +81,6 @@
 .ar-table > .content > table > tbody > tr > td {
   background-color: var(--white);
   padding: 0.5rem;
-  text-wrap: nowrap;
   z-index: 1;
 }
 .ar-table > .content > table > tbody > tr > td.type-of-number {
@@ -98,6 +97,13 @@
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
+}
+
+.ar-table > .content > table > tbody > tr > td.text-wrap {
+  text-wrap: wrap;
+}
+.ar-table > .content > table > tbody > tr > td.text-nowrap {
+  text-wrap: nowrap;
 }
 
 @import url("./scroll.css");

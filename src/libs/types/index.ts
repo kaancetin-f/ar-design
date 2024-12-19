@@ -42,8 +42,10 @@ export type TableColumnType<T> = {
   key?: keyof T | { field: keyof T; nestedKey: string };
   render?: (item: T) => React.ReactNode;
   config?: {
+    width?: number;
     alignContent?: "left" | "center" | "right";
     sticky?: "left" | "right";
+    textWrap?: "wrap" | "nowrap";
   };
 };
 

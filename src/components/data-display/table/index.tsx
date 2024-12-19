@@ -266,14 +266,15 @@ const Table = function <T extends object>({ children, data, columns, selections,
                     // if (isTypeOfNumber) _className.push(isTypeOfNumber);
 
                     if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
-
-                    if (c.config?.alignContent) {
-                      _className.push(`align-content-${c.config.alignContent}`);
-                    }
+                    if (c.config?.alignContent) _className.push(`align-content-${c.config.alignContent}`);
+                    if (c.config?.textWrap) _className.push(`text-${c.config.textWrap}`);
 
                     return (
                       <td
                         key={`cell-${index}-${cIndex}`}
+                        {...(c.config?.width && {
+                          style: { width: c.config.width },
+                        })}
                         {...(_className.length > 0 && {
                           className: `${_className.map((c) => c).join(" ")}`,
                         })}
