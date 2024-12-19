@@ -86,14 +86,21 @@ const Input = forwardRef<HTMLInputElement, IProps>(
               (() => {
                 if (attributes.onChange) {
                   // Mevcut değeri alın
-                  const currentValue = event.target.value;
+                  const _target = event.target;
+                  const currentValue = _target.value;
 
                   // Yeni değeri oluşturun ve onChange fonksiyonunu çağırın
                   const newValue = `${addon?.before ?? ""}${currentValue}${addon?.after ?? ""}`;
 
                   attributes.onChange({
                     ...event,
-                    target: { ...event.target, value: newValue },
+                    target: {
+                      ...event.target,
+                      id: event.target.id,
+                      name: event.target.name,
+                      value: newValue,
+                      type: event.target.type,
+                    },
                   });
                 }
               })();

@@ -1,4 +1,4 @@
-.ar-date-picker > .calendar-wrapper > .clock {
+.ar-date-calendar > .clock {
   position: absolute;
   top: -1px;
   display: flex;
@@ -13,18 +13,17 @@
   z-index: 5;
   user-select: none;
 }
-.ar-date-picker > .calendar-wrapper > .clock.active {
+.ar-date-calendar > .clock.active {
   visibility: visible;
   opacity: 1;
   right: -8rem;
   transform: scale(1);
   transition: visibility 250ms, opacity 250ms, right 250ms, transform 150ms 300ms ease-in-out;
 }
-.ar-date-picker > .calendar-wrapper > .clock.passive {
+.ar-date-calendar > .clock.passive {
   visibility: hidden;
   opacity: 0;
   right: -5rem;
   transform: scale(0.8);
-  transition: visibility 250ms 200ms, opacity 250ms 200ms, right 250ms 200ms,
-    transform 150ms ease-in-out;
+  transition: visibility 250ms 200ms, opacity 250ms 200ms, right 250ms 200ms, transform 150ms ease-in-out;
 }

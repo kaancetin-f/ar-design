@@ -1,17 +1,17 @@
-.ar-date-picker > .calendar-wrapper > .header {
+.ar-date-calendar > .header {
   display: flex;
   align-items: center;
   min-height: 2.75rem;
   border-bottom: solid 1px var(--gray-200);
 }
-.ar-date-picker > .calendar-wrapper > .header > .select-field {
+.ar-date-calendar > .header > .select-field {
   display: flex;
   flex-direction: row;
   justify-content: stretch;
   gap: 0 0.75rem;
   padding: 0 0.5rem;
 }
-.ar-date-picker > .calendar-wrapper > .header > .select-field > .selects {
+.ar-date-calendar > .header > .select-field > .selects {
   display: flex;
   flex-direction: row;
   justify-content: stretch;
@@ -19,8 +19,8 @@
 }
 
 /* #region Prev and Next Buttons */
-.ar-date-picker > .calendar-wrapper > .header > .select-field > .prev,
-.ar-date-picker > .calendar-wrapper > .header > .select-field > .next {
+.ar-date-calendar > .header > .select-field > .prev,
+.ar-date-calendar > .header > .select-field > .next {
   display: flex;
   justify-content: center;
   align-items: center;

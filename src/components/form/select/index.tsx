@@ -9,6 +9,7 @@ import Checkbox from "../checkbox";
 import Paragraph from "../../data-display/typography/paragraph/Paragraph";
 import { Option } from "../../../libs/types/index";
 import Utils from "../../../libs/infrastructure/shared/Utils";
+import ReactDOM from "react-dom";
 
 const Select: React.FC<Props> = ({
   variant = "outlined",
@@ -20,8 +21,8 @@ const Select: React.FC<Props> = ({
   onCreate,
   multiple,
   placeholder,
-  disabled,
   validation,
+  disabled,
 }) => {
   const _selectionClassName: string[] = ["selections"];
 
@@ -37,7 +38,6 @@ const Select: React.FC<Props> = ({
 
   // states
   const [optionsOpen, setOptionsOpen] = useState<boolean>(false);
-  let [optionsClassName, setOptionsClassName] = useState<string[]>(["options", "closed"]);
   const [filteredOptions, setFilteredOptions] = useState<Option[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [singleInputText, setSingleInputText] = useState<string>("");
@@ -97,15 +97,24 @@ const Select: React.FC<Props> = ({
     }
   };
 
-  const handleScroll = () => {
+  const handlePosition = () => {
     if (_options.current) {
-      const rect = _singleInput.current
+      const optionRect = _options.current.getBoundingClientRect();
+      const InpuRect = _singleInput.current
         ? _singleInput.current.getBoundingClientRect()
         : _multipleInput.current?.getBoundingClientRect();
 
-      _options.current.style.top = `${rect?.bottom}px`;
-      _options.current.style.left = `${rect?.left}px`;
-      _options.current.style.width = `${rect?.width}px`;
+      if (InpuRect) {
+        const screenCenter = window.innerHeight / 2;
+        const sx = window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft;
+        const sy = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+
+        _options.current.style.top = `${
+          (InpuRect.top > screenCenter ? InpuRect.top - optionRect.height : InpuRect.top + InpuRect.height) + sy
+        }px`;
+        _options.current.style.left = `${InpuRect.left + sx}px`;
+        _options.current.style.width = `${InpuRect.width}px`;
+      }
     }
   };
 
@@ -124,9 +133,14 @@ const Select: React.FC<Props> = ({
   const handleCleanSelection = () => {
     if (multiple) {
       if (_searchField.current) _searchField.current.value = "";
+
       onChange([]);
     } else {
-      if (_singleInput.current) _singleInput.current.value = "";
+      if (_singleInput.current) {
+        _singleInput.current.value = "";
+        _singleInput.current.placeholder = placeholder ?? "";
+      }
+
       onChange(undefined);
     }
   };
@@ -147,16 +161,8 @@ const Select: React.FC<Props> = ({
   useEffect(() => setFilteredOptions(options), [options]);
 
   useEffect(() => {
-    const screenCenter = window.innerHeight / 2 + 100;
-    const rect = _singleInput.current
-      ? _singleInput.current.getBoundingClientRect()
-      : _multipleInput.current?.getBoundingClientRect();
-    const direction = rect && rect.top > screenCenter ? "bottom" : "top";
-
-    setOptionsClassName(["options"]);
-
     if (optionsOpen) {
-      handleScroll();
+      handlePosition();
 
       if (!multiple) {
         // const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
@@ -182,24 +188,21 @@ const Select: React.FC<Props> = ({
         if (_searchField.current) _searchField.current.focus();
       }, 250);
 
-      setOptionsClassName((prev) => [...prev, direction, "opened"]);
-
       // Options paneli için olay dinleyileri ekleniyor.
+      window.addEventListener("blur", () => setOptionsOpen(false));
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
-      document.addEventListener("scroll", handleScroll);
     } else {
       // Dinleyicileri kaldır ve zamanlayıcıyı temizle.
       clearTimeout(_otoFocus);
+
+      window.removeEventListener("blur", () => setOptionsOpen(false));
       document.removeEventListener("click", handleClickOutSide);
       document.removeEventListener("keydown", handleKeys);
-      document.removeEventListener("scroll", handleScroll);
 
       // Options paneli kapanma süresi 250ms.
       // 300ms sonra temizlenmesinin sebebi kapanırken birder veriler gerliyor ve panel yüksekliği artıyor.
-      setTimeout(() => {
-        setSearchText("");
-      }, 300);
+      setTimeout(() => setSearchText(""), 300);
 
       if (multiple) {
         if (_searchField.current) _searchField.current.value = "";
@@ -209,9 +212,15 @@ const Select: React.FC<Props> = ({
           _singleInput.current.placeholder = placeholder ?? "";
         }
       }
-
-      setOptionsClassName((prev) => [...prev, direction, "closed"]);
     }
+
+    return () => {
+      clearTimeout(_otoFocus);
+
+      window.removeEventListener("blur", () => setOptionsOpen(false));
+      document.removeEventListener("click", handleClickOutSide);
+      document.removeEventListener("keydown", handleKeys);
+    };
   }, [optionsOpen]);
 
   useEffect(() => {
@@ -278,6 +287,7 @@ const Select: React.FC<Props> = ({
             variant={variant}
             status={!Utils.IsNullOrEmpty(validation?.text) ? "danger" : status}
             border={{ radius: border.radius }}
+            value={value?.text}
             onClick={() => {
               setOptionsOpen((prev) => !prev);
               setSingleInputText("");
@@ -319,57 +329,59 @@ const Select: React.FC<Props> = ({
       {/* :End: Select and Multiple Select Field */}
 
       {/* :Begin: Options Field */}
-      <div ref={_options} className={optionsClassName.map((c) => c).join(" ")}>
-        {multiple && (
-          <div className="search-field">
-            <Input
-              ref={_searchField}
-              variant="outlined"
-              status="light"
-              placeholder="Search..."
-              onKeyUp={(event) => {
-                setSearchText(event.currentTarget.value);
-              }}
-            />
-          </div>
-        )}
+      {optionsOpen &&
+        ReactDOM.createPortal(
+          <div ref={_options} className="ar-select-options">
+            {multiple && (
+              <div className="search-field">
+                <Input
+                  ref={_searchField}
+                  variant="outlined"
+                  status="light"
+                  placeholder="Search..."
+                  onKeyUp={(event) => setSearchText(event.currentTarget.value)}
+                />
+              </div>
+            )}
 
-        {filteredOptions.length > 0 ? (
-          <ul>
-            {filteredOptions.map((option, index) => {
-              const isItem = multiple && value.some((_value) => _value.value === option.value);
+            {filteredOptions.length > 0 ? (
+              <ul>
+                {filteredOptions.map((option, index) => {
+                  const isItem = multiple && value.some((_value) => _value.value === option.value);
 
-              return (
-                <li
-                  key={index}
-                  ref={(element) => (_optionItems.current[index] = element)}
-                  className={option === value ? "selectedItem" : ""}
-                  onClick={() => handleItemSelected(option)}
-                >
-                  {multiple && <Checkbox checked={isItem} status={isItem ? "primary" : "light"} disabled />}
-                  <span>{option.text}</span>
-                </li>
-              );
-            })}
-          </ul>
-        ) : !onCreate ? (
-          <Paragraph color="gray-500" align="center">
-            Herhangi bir kayıt bulunumadı!
-          </Paragraph>
-        ) : (
-          <span
-            style={{ padding: "1rem", cursor: "pointer" }}
-            onClick={() => {
-              onCreate({ value: "", text: singleInputText });
-              setOptionsOpen(false);
-            }}
-          >
-            {options.length === 0 && singleInputText.length === 0
-              ? "Herhangi bir kayıt bulunumadı!"
-              : `${singleInputText} Ekle`}
-          </span>
+                  return (
+                    <li
+                      key={index}
+                      ref={(element) => (_optionItems.current[index] = element)}
+                      className={option === value ? "selectedItem" : ""}
+                      onClick={() => handleItemSelected(option)}
+                    >
+                      {multiple && <Checkbox checked={isItem} status={isItem ? "primary" : "light"} disabled />}
+                      <span>{option.text}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : !onCreate ? (
+              <Paragraph color="gray-500" align="center">
+                Herhangi bir kayıt bulunumadı!
+              </Paragraph>
+            ) : (
+              <span
+                style={{ padding: "1rem", cursor: "pointer" }}
+                onClick={() => {
+                  onCreate({ value: "", text: singleInputText });
+                  setOptionsOpen(false);
+                }}
+              >
+                {options.length === 0 && singleInputText.length === 0
+                  ? "Herhangi bir kayıt bulunumadı!"
+                  : `${singleInputText} Ekle`}
+              </span>
+            )}
+          </div>,
+          document.body
         )}
-      </div>
       {/* :End: Options Field */}
     </div>
   );

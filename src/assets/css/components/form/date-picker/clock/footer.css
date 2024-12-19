@@ -1,4 +1,4 @@
-.ar-date-picker > .calendar-wrapper > .clock > .footer {
+.ar-date-calendar > .clock > .footer {
   display: flex;
   justify-content: center;
   align-items: center;

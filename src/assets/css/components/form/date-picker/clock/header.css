@@ -1,4 +1,4 @@
-.ar-date-picker > .calendar-wrapper > .clock > .header {
+.ar-date-calendar > .clock > .header {
   height: var(--header-height);
   border-bottom: solid 1px var(--gray-200);
   text-align: center;

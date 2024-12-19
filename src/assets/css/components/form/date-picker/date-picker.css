@@ -9,46 +9,20 @@
   flex-wrap: nowrap;
   flex-direction: row;
 }
-.ar-date-picker > .calendar-wrapper {
-  position: fixed;
-  background-color: var(--white);
-  width: 20rem;
-  border: solid 1px var(--gray-200);
-  border-radius: var(--border-radius-lg);
-  box-shadow: 0 0 10px -5px rgba(var(--black-rgb), 0.25);
-  z-index: 15;
-  transition: visibility 250ms, opacity 250ms ease-in-out;
-}
-.ar-date-picker > .calendar-wrapper:is(.opened) {
-  visibility: visible;
-  opacity: 1;
-}
-.ar-date-picker > .calendar-wrapper:is(.closed) {
-  visibility: hidden;
-  opacity: 0;
-}
-
 .ar-date-picker > label {
-  visibility: hidden;
-  opacity: 0;
+  background-color: var(--white);
   position: absolute;
-  top: 0.5rem;
+  top: -0.5rem;
   left: 0.55rem;
+  padding: 0 0.5rem;
   color: var(--gray-600);
+  font-size: 0.75rem;
   letter-spacing: 1px;
   transition: top 250ms ease-in-out;
   z-index: 1;
 }
-.ar-date-picker > label.visible {
-  visibility: visible;
-  opacity: 1;
-  top: -0.5rem;
-  left: 0.55rem;
-  background-color: var(--white);
-  padding: 0 0.5rem;
-  font-size: 0.75rem;
-}
 
+@import url("./calendar/calendar.css");
 @import url("./calendar/header.css");
 @import url("./calendar/content.css");
 @import url("./calendar/footer.css");

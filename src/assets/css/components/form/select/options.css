@@ -1,31 +1,31 @@
-.ar-select-wrapper > .options {
-  position: fixed;
+.ar-select-options {
+  position: absolute;
   background-color: var(--white);
   border: solid 1px var(--gray-200);
   border-radius: var(--border-radius-lg);
   overflow: hidden;
-  z-index: 5;
+  z-index: 15;
   transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;
 }
-.ar-select-wrapper > .options.top {
+.ar-select-options.top {
   box-shadow: 0 5px 15px -2.5px rgba(var(--black-rgb), 0.1);
 }
-.ar-select-wrapper > .options.bottom {
+.ar-select-options.bottom {
   box-shadow: 0 -5px 15px -2.5px rgba(var(--black-rgb), 0.1);
 }
 
-.ar-select-wrapper > .options > .search-field {
+.ar-select-options > .search-field {
   padding: 0.5rem;
   border-bottom: solid 1px var(--gray-200);
 }
 
-.ar-select-wrapper > .options > ul {
+.ar-select-options > ul {
   width: 100%;
   max-height: calc(var(--input-height) * 5);
   overflow-x: hidden;
   overflow-y: auto;
 }
-.ar-select-wrapper > .options > ul > li {
+.ar-select-options > ul > li {
   display: flex;
   align-items: center;
   gap: 0 0.5rem;
@@ -33,33 +33,33 @@
   height: var(--input-height);
   cursor: pointer;
 }
-.ar-select-wrapper > .options > ul > li:hover {
+.ar-select-options > ul > li:hover {
   background-color: var(--gray-200);
 }
-.ar-select-wrapper > .options > ul > li.selectedItem {
+.ar-select-options > ul > li.selectedItem {
   /* background-color: rgba(var(--success-rgb), 0.1); */
 }
-.ar-select-wrapper > .options > ul > li.navigate-with-arrow-keys {
+.ar-select-options > ul > li.navigate-with-arrow-keys {
   background-color: var(--gray-100);
 }
 
-.ar-select-wrapper > .options:is(.opened) {
+/* .ar-select-options:is(.opened) {
   visibility: visible;
   opacity: 1;
   transform: scaleY(1);
 }
-.ar-select-wrapper > .options:is(.closed) {
+.ar-select-options:is(.closed) {
   visibility: hidden;
   opacity: 0;
   transform: scaleY(0.8);
   height: 0;
 }
 
-.ar-select-wrapper > .options.top:is(.opened, .closed),
-.ar-select-wrapper > .options.top:is(.opened, .closed) {
+.ar-select-options.top:is(.opened, .closed),
+.ar-select-options.top:is(.opened, .closed) {
   transform-origin: top;
 }
-.ar-select-wrapper > .options.bottom:is(.opened, .closed),
-.ar-select-wrapper > .options.bottom:is(.opened, .closed) {
+.ar-select-options.bottom:is(.opened, .closed),
+.ar-select-options.bottom:is(.opened, .closed) {
   transform-origin: bottom;
-}
+} */

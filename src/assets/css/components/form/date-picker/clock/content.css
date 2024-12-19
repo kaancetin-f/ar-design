@@ -1,28 +1,28 @@
-.ar-date-picker > .calendar-wrapper > .clock > .content {
+.ar-date-calendar > .clock > .content {
   display: flex;
   justify-content: space-between;
   height: calc(100% - 5.5rem);
 }
-.ar-date-picker > .calendar-wrapper > .clock > .content > ul {
+.ar-date-calendar > .clock > .content > ul {
   width: 50%;
   padding-bottom: calc(var(--input-height) * 6.5);
   overflow-y: auto;
   scrollbar-width: none;
 }
-.ar-date-picker > .calendar-wrapper > .clock > .content > ul:nth-child(2) {
+.ar-date-calendar > .clock > .content > ul:nth-child(2) {
   border-left: solid 1px var(--gray-200);
 }
-.ar-date-picker > .calendar-wrapper > .clock > .content > ul::-webkit-scrollbar {
+.ar-date-calendar > .clock > .content > ul::-webkit-scrollbar {
   display: none;
 }
-.ar-date-picker > .calendar-wrapper > .clock > .content > ul > li {
+.ar-date-calendar > .clock > .content > ul > li {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: var(--input-height);
   cursor: pointer;
 }
-.ar-date-picker > .calendar-wrapper > .clock > .content > ul > li > span {
+.ar-date-calendar > .clock > .content > ul > li > span {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,7 +30,7 @@
   height: var(--input-height);
   cursor: pointer;
 }
-.ar-date-picker > .calendar-wrapper > .clock > .content > ul > li > span > span {
+.ar-date-calendar > .clock > .content > ul > li > span > span {
   display: grid;
   justify-content: center;
   align-content: center;
@@ -38,18 +38,11 @@
   height: 75%;
   border-radius: var(--border-radius-sm);
 }
-.ar-date-picker
-  > .calendar-wrapper
-  > .clock
-  > .content
-  > ul
-  > li:not(.selection-time)
-  > span
-  > span:hover {
+.ar-date-picker > .calendar-wrapper > .clock > .content > ul > li:not(.selection-time) > span > span:hover {
   background-color: var(--gray-200);
   color: var(--gray-700);
 }
-.ar-date-picker > .calendar-wrapper > .clock > .content > ul > li.selection-time > span > span {
+.ar-date-calendar > .clock > .content > ul > li.selection-time > span > span {
   background-color: var(--success);
   color: var(--white);
   box-shadow: 0 0 0 2px var(--white), 0 0 0 4px var(--success);

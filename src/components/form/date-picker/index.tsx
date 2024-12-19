@@ -8,6 +8,7 @@ import { Option } from "../../../libs/types";
 import Button from "../button";
 import Alert from "../../feedback/alert";
 import Props from "./Props";
+import ReactDOM from "react-dom";
 
 const weekdays = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
 const months = [
@@ -52,7 +53,6 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
   const [minutes, setMinutes] = useState<React.ReactNode>();
   const [dateTrigger, setDateTrigger] = useState<boolean>(false);
   const [timeTrigger, setTimeTrigger] = useState<boolean>(false);
-  let [calendarClassName, setCalendarClassName] = useState<string[]>(["calendar-wrapper", "closed"]);
   // states => Selected Date
   const [currentYear, setCurrentYear] = useState<number>(_currentDate.getFullYear());
   const [currentMonth, setCurrentMonth] = useState<number>(_currentDate.getMonth());
@@ -73,16 +73,21 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
     if (key === "Escape") cancelProgress();
   };
 
-  const handleScroll = () => {
+  const handlePosition = () => {
     if (_arCalendar.current && _beginDate.current) {
-      const rect = _beginDate.current.getBoundingClientRect();
       const arCalendarRect = _arCalendar.current.getBoundingClientRect();
-      const screenVCenter = window.innerHeight / 2;
+      const InpuRect = _beginDate.current?.getBoundingClientRect();
 
-      _arCalendar.current.style.top = `${
-        rect.top > screenVCenter ? rect.bottom - arCalendarRect.height - 45 : rect.bottom
-      }px`;
-      _arCalendar.current.style.left = `${rect?.left}px`;
+      if (InpuRect) {
+        const screenCenter = window.innerHeight / 2;
+        const sx = window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft;
+        const sy = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+
+        _arCalendar.current.style.top = `${
+          (InpuRect.top > screenCenter ? InpuRect.top - arCalendarRect.height : InpuRect.top + InpuRect.height) + sy
+        }px`;
+        _arCalendar.current.style.left = `${InpuRect.left + sx}px`;
+      }
     }
   };
 
@@ -245,12 +250,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
   }, [attributes.value]);
 
   useEffect(() => {
-    // Sıfırlama işlemi...
-    setCalendarClassName(["calendar-wrapper"]);
-
     if (calendarOpen) {
-      setCalendarClassName((prev) => [...prev, "opened"]);
-
       const calendar = [];
       const beginDateValue = _beginDate.current?.value || "";
       const date = {
@@ -301,20 +301,22 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
       setCalendar(calendar);
 
       // Konumu Ayarlanıyor.
-      setTimeout(handleScroll, 0);
+      setTimeout(handlePosition, 0);
 
-      // Takvim paneli için olay dinleyileri ekleniyor.
+      window.addEventListener("blur", () => setCalendarOpen(false));
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
-      document.addEventListener("scroll", handleScroll);
     } else {
-      // Dinleyicileri kaldır ve zamanlayıcıyı temizle.
+      window.removeEventListener("blur", () => setCalendarOpen(false));
       document.removeEventListener("click", handleClickOutSide);
       document.removeEventListener("keydown", handleKeys);
-      document.removeEventListener("scroll", handleScroll);
-
-      setCalendarClassName((prev) => [...prev, "closed"]);
     }
+
+    return () => {
+      window.removeEventListener("blur", () => setCalendarOpen(false));
+      document.removeEventListener("click", handleClickOutSide);
+      document.removeEventListener("keydown", handleKeys);
+    };
   }, [dateTrigger, calendarOpen]);
 
   useEffect(() => {
@@ -372,9 +374,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
 
   return (
     <div className="ar-date-picker">
-      {attributes.placeholder && (
-        <label className={attributes.value ? "visible" : "hidden"}>{attributes.placeholder}</label>
-      )}
+      {attributes.placeholder && attributes.placeholder.length > 0 && <label>{attributes.placeholder}</label>}
 
       <Input
         ref={_beginDate}
@@ -407,145 +407,149 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
         }}
         onClick={(event) => {
           event.preventDefault();
-          setCalendarOpen(true);
+          setCalendarOpen((prev) => !prev);
         }}
         autoComplete="off"
       />
 
-      <div ref={_arCalendar} className={calendarClassName.map((className) => className).join(" ")}>
-        {/* :Begin: Calendar */}
-        <div className="header">
-          <div className="select-field">
-            <div className="prev">
-              <span
-                onClick={() => {
-                  _year.current -= 1;
-                  setDateTrigger((prev) => !prev);
-                }}
-              >
-                {"«"}
-              </span>
-              <span
-                onClick={() => {
-                  if (_month.current <= 0) {
-                    _year.current -= 1;
-                    _month.current = 12;
-                  }
+      {calendarOpen &&
+        ReactDOM.createPortal(
+          <div ref={_arCalendar} className="ar-date-calendar">
+            {/* :Begin: Calendar */}
+            <div className="header">
+              <div className="select-field">
+                <div className="prev">
+                  <span
+                    onClick={() => {
+                      _year.current -= 1;
+                      setDateTrigger((prev) => !prev);
+                    }}
+                  >
+                    {"«"}
+                  </span>
+                  <span
+                    onClick={() => {
+                      if (_month.current <= 0) {
+                        _year.current -= 1;
+                        _month.current = 12;
+                      }
 
-                  _month.current -= 1;
+                      _month.current -= 1;
 
-                  updateDateInput(_year.current, _month.current, _day.current);
-                  setDateTrigger((prev) => !prev);
-                }}
-              >
-                {"‹"}
-              </span>
-            </div>
+                      updateDateInput(_year.current, _month.current, _day.current);
+                      setDateTrigger((prev) => !prev);
+                    }}
+                  >
+                    {"‹"}
+                  </span>
+                </div>
 
-            <div className="selects">
-              <Select
-                variant="borderless"
-                value={months.find((month) => month.value === _month.current)}
-                options={months}
-                onChange={(option) => {
-                  _month.current = option?.value as number;
+                <div className="selects">
+                  <Select
+                    variant="borderless"
+                    value={months.find((month) => month.value === _month.current)}
+                    options={months}
+                    onChange={(option) => {
+                      _month.current = option?.value as number;
 
-                  updateDateInput(_year.current, _month.current, _day.current);
-                  setDateTrigger((prev) => !prev);
-                }}
-                placeholder="Ay"
-              />
+                      updateDateInput(_year.current, _month.current, _day.current);
+                      setDateTrigger((prev) => !prev);
+                    }}
+                    placeholder="Ay"
+                  />
 
-              <Select
-                variant="borderless"
-                value={years.find((years) => years.value === _year.current)}
-                options={years}
-                onChange={(option) => {
-                  _year.current = option?.value as number;
+                  <Select
+                    variant="borderless"
+                    value={years.find((years) => years.value === _year.current)}
+                    options={years}
+                    onChange={(option) => {
+                      _year.current = option?.value as number;
 
-                  updateDateInput(_year.current, _month.current, _day.current);
-                  setDateTrigger((prev) => !prev);
-                }}
-                placeholder="Yıl"
-              />
-            </div>
+                      updateDateInput(_year.current, _month.current, _day.current);
+                      setDateTrigger((prev) => !prev);
+                    }}
+                    placeholder="Yıl"
+                  />
+                </div>
 
-            <div className="next">
-              <span
-                onClick={() => {
-                  if (_month.current >= 11) {
-                    _year.current += 1;
-                    _month.current = -1;
-                  }
+                <div className="next">
+                  <span
+                    onClick={() => {
+                      if (_month.current >= 11) {
+                        _year.current += 1;
+                        _month.current = -1;
+                      }
 
-                  _month.current += 1;
+                      _month.current += 1;
 
-                  updateDateInput(_year.current, _month.current, _day.current);
-                  setDateTrigger((prev) => !prev);
-                }}
-              >
-                {"›"}
-              </span>
-              <span
-                onClick={() => {
-                  _year.current += 1;
+                      updateDateInput(_year.current, _month.current, _day.current);
+                      setDateTrigger((prev) => !prev);
+                    }}
+                  >
+                    {"›"}
+                  </span>
+                  <span
+                    onClick={() => {
+                      _year.current += 1;
 
-                  updateDateInput(_year.current, _month.current, _day.current);
-                  setDateTrigger((prev) => !prev);
-                }}
-              >
-                {"»"}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="content">
-          {!isNaN(_month.current) && !isNaN(_year.current) ? (
-            <div className="calendar">
-              {/* :Begin: Weekdays */}
-              <div className="weekdays">
-                {weekdays.map((weekday, index) => (
-                  <span key={index}>{weekday}</span>
-                ))}
+                      updateDateInput(_year.current, _month.current, _day.current);
+                      setDateTrigger((prev) => !prev);
+                    }}
+                  >
+                    {"»"}
+                  </span>
+                </div>
               </div>
-              {/* :End: Weekdays */}
-
-              {/* :Begin: Days */}
-              <div className="days">{calendar}</div>
-              {/* :End: Days */}
             </div>
-          ) : (
-            <Alert status="warning">Ay veya yıl seçimi yapmanız gerekmektedir.</Alert>
-          )}
-        </div>
 
-        <div className="footer">
-          <div>
-            <Button variant="borderless" onClick={() => setNow()}>
-              Şimdi
-            </Button>
-          </div>
+            <div className="content">
+              {!isNaN(_month.current) && !isNaN(_year.current) ? (
+                <div className="calendar">
+                  {/* :Begin: Weekdays */}
+                  <div className="weekdays">
+                    {weekdays.map((weekday, index) => (
+                      <span key={index}>{weekday}</span>
+                    ))}
+                  </div>
+                  {/* :End: Weekdays */}
 
-          <div>{!isClock && okayButton()}</div>
-        </div>
-        {/* :End: Calendar */}
+                  {/* :Begin: Days */}
+                  <div className="days">{calendar}</div>
+                  {/* :End: Days */}
+                </div>
+              ) : (
+                <Alert status="warning">Ay veya yıl seçimi yapmanız gerekmektedir.</Alert>
+              )}
+            </div>
 
-        {/* :Begin: Clock */}
-        <div className={`clock ${isClock ? "active" : "passive"}`}>
-          <div className="header">
-            {_hours.current.toString().padStart(2, "0")}
-            {" : "}
-            {_minutes.current.toString().padStart(2, "0")}
-          </div>
-          <div className="content">
-            <ul ref={_hoursListElement}>{hours}</ul>
-            <ul ref={_minutesListElement}>{minutes}</ul>
-          </div>
-          {isClock && <div className="footer">{okayButton()}</div>}
-        </div>
-        {/* :End: Clock */}
-      </div>
+            <div className="footer">
+              <div>
+                <Button variant="borderless" onClick={() => setNow()}>
+                  Şimdi
+                </Button>
+              </div>
+
+              <div>{!isClock && okayButton()}</div>
+            </div>
+            {/* :End: Calendar */}
+
+            {/* :Begin: Clock */}
+            <div className={`clock ${isClock ? "active" : "passive"}`}>
+              <div className="header">
+                {_hours.current.toString().padStart(2, "0")}
+                {" : "}
+                {_minutes.current.toString().padStart(2, "0")}
+              </div>
+              <div className="content">
+                <ul ref={_hoursListElement}>{hours}</ul>
+                <ul ref={_minutesListElement}>{minutes}</ul>
+              </div>
+              {isClock && <div className="footer">{okayButton()}</div>}
+            </div>
+            {/* :End: Clock */}
+          </div>,
+          document.body
+        )}
     </div>
   );
 };

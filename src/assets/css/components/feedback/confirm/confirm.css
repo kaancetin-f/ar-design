@@ -1,8 +1,9 @@
 .ar-confirm-wrapper {
   position: relative;
 }
-.ar-confirm-wrapper > .ar-confirm {
-  position: fixed;
+
+.ar-confirm {
+  position: absolute;
   display: flex;
   flex-direction: column;
   gap: 1rem 0;
@@ -14,34 +15,18 @@
   z-index: 5;
 }
 
-/* #region Open or Close */
-.ar-confirm-wrapper > .ar-confirm:is(.opened) {
-  visibility: visible;
-  opacity: 1;
-  transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;
-  z-index: 100;
-}
-.ar-confirm-wrapper > .ar-confirm:is(.closed) {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;
-  z-index: 99;
-}
-/* #endregion */
-/* Open or Close */
-
-.ar-confirm-wrapper > .ar-confirm > .content {
+.ar-confirm > .content {
   max-height: 200px;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-.ar-confirm-wrapper > .ar-confirm > .message {
+.ar-confirm > .message {
   font-size: 0.85rem;
   text-wrap: wrap;
 }
 
-.ar-confirm-wrapper > .ar-confirm > .footer {
+.ar-confirm > .footer {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;

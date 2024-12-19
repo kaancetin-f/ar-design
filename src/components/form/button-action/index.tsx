@@ -42,6 +42,13 @@ const ButtonAction: React.FC<IProps> = ({ buttons }) => {
       document.removeEventListener("keydown", handleKeys);
       window.removeEventListener("resize", handleResizeEvent);
     }
+
+    return () => {
+      // Dinleyicileri kaldır.
+      document.removeEventListener("click", handleClickOutSide);
+      document.removeEventListener("keydown", handleKeys);
+      window.removeEventListener("resize", handleResizeEvent);
+    };
   }, [open]);
 
   return (
