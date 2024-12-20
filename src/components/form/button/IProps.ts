@@ -21,6 +21,11 @@ interface IProps
    */
   shape?: "circle" | "square";
 
+  tooltip?: {
+    text: string;
+    direction: "top" | "right" | "left" | "bottom";
+  };
+
   position?: {
     type: "fixed" | "absolute";
     inset: ("top" | "right" | "bottom" | "left")[];

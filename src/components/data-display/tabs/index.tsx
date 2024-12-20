@@ -19,7 +19,7 @@ const Tabs: React.FC<IProps> = ({ tabs = [] }) => {
 
             return (
               <div
-                key={tab.title || index}
+                key={tab.title ?? index}
                 className={className.map((c) => c).join(" ")}
                 onClick={() => setCurrentTab(index)}
               >
