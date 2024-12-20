@@ -4,7 +4,7 @@
   border: solid 1px var(--gray-200);
   border-radius: var(--border-radius-lg);
   overflow: hidden;
-  z-index: 15;
+  z-index: 101;
   transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;
 }
 .ar-select-options.top {

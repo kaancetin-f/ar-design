@@ -1,7 +1,7 @@
 .ar-date-calendar > .header {
   display: flex;
   align-items: center;
-  min-height: 2.75rem;
+  min-height: 3.75rem;
   border-bottom: solid 1px var(--gray-200);
 }
 .ar-date-calendar > .header > .select-field {
