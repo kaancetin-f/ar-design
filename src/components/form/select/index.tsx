@@ -89,10 +89,7 @@ const Select: React.FC<Props> = ({
       if (_navigationIndex.current === -1) return;
 
       optionItems[_navigationIndex.current]?.click();
-    } else if (key === "Escape") {
-      setOptionsOpen(false);
-      setSingleInputText("");
-    }
+    } else if (key === "Escape") setOptionsOpen(false);
   };
 
   const handlePosition = () => {
@@ -130,12 +127,12 @@ const Select: React.FC<Props> = ({
 
   const handleCleanSelection = () => {
     if (multiple) {
-      if (_searchField.current) _searchField.current.value = "";
+      if (_searchField.current) setSearchText("");
 
       onChange([]);
     } else {
       if (_singleInput.current) {
-        _singleInput.current.value = "";
+        setSingleInputText("");
         _singleInput.current.placeholder = placeholder ?? "";
       }
 
@@ -144,17 +141,10 @@ const Select: React.FC<Props> = ({
   };
 
   // useEffects
-  // useEffect(() => {
-  //   if (multiple) {
-  //     setSearchText("");
-  //     if (_searchField.current) _searchField.current.value = "";
-  //   } else {
-  //     if (!_singleInput.current) return;
-
-  //     if (value) _singleInput.current.value = value.text;
-  //     else _singleInput.current.value = "";
-  //   }
-  // }, [value]);
+  useEffect(() => {
+    if (multiple) setSearchText("");
+    else setSingleInputText(value?.text ?? "");
+  }, [value]);
 
   useEffect(() => setFilteredOptions(options), [options]);
 
@@ -176,7 +166,7 @@ const Select: React.FC<Props> = ({
         // }
 
         if (_singleInput.current) {
-          _singleInput.current.value = "";
+          setSingleInputText("");
           _singleInput.current.placeholder = value?.text || placeholder || "";
         }
       }
@@ -199,7 +189,7 @@ const Select: React.FC<Props> = ({
         if (_searchField.current) _searchField.current.value = "";
       } else {
         if (_singleInput.current) {
-          _singleInput.current.value = value?.text ?? "";
+          setSingleInputText(value?.text ?? "");
           _singleInput.current.placeholder = placeholder ?? "";
         }
       }
@@ -278,10 +268,10 @@ const Select: React.FC<Props> = ({
             variant={variant}
             status={!Utils.IsNullOrEmpty(validation?.text) ? "danger" : status}
             border={{ radius: border.radius }}
-            value={value?.text}
+            value={singleInputText}
             onClick={() => {
               setOptionsOpen((prev) => !prev);
-              setSingleInputText("");
+              // setSingleInputText("");
             }}
             onChange={(event) => {
               !optionsOpen && setOptionsOpen(true);
@@ -330,7 +320,8 @@ const Select: React.FC<Props> = ({
                   variant="outlined"
                   status="light"
                   placeholder="Search..."
-                  onKeyUp={(event) => setSearchText(event.currentTarget.value)}
+                  value={searchText}
+                  onChange={(event) => setSearchText(event.currentTarget.value)}
                 />
               </div>
             )}

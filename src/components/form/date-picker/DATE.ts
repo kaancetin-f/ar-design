@@ -16,9 +16,10 @@ class DATE {
       minutes: mm,
     };
   };
+
   public ParseValue = (value: string, isCloack: boolean = false) => {
     const [date, time] = value.split("T");
-    const [clock, _] = isCloack ? time.split(".") : "00:00";
+    const [clock, _] = isCloack && time ? time.split(".") : "00:00";
 
     return !isCloack ? date : `${date}T${clock}`;
   };
