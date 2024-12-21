@@ -58,9 +58,7 @@ const Select: React.FC<Props> = ({
   const handleClickOutSide = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
 
-    if (_arSelect.current && !_arSelect.current.contains(target)) {
-      setOptionsOpen(false);
-    }
+    if (_arSelect.current && !_arSelect.current.contains(target)) setOptionsOpen(false);
   };
 
   const handleKeys = (event: KeyboardEvent) => {
@@ -146,17 +144,17 @@ const Select: React.FC<Props> = ({
   };
 
   // useEffects
-  useEffect(() => {
-    if (multiple) {
-      setSearchText("");
-      if (_searchField.current) _searchField.current.value = "";
-    } else {
-      if (!_singleInput.current) return;
+  // useEffect(() => {
+  //   if (multiple) {
+  //     setSearchText("");
+  //     if (_searchField.current) _searchField.current.value = "";
+  //   } else {
+  //     if (!_singleInput.current) return;
 
-      if (value) _singleInput.current.value = value.text;
-      else _singleInput.current.value = "";
-    }
-  }, [value]);
+  //     if (value) _singleInput.current.value = value.text;
+  //     else _singleInput.current.value = "";
+  //   }
+  // }, [value]);
 
   useEffect(() => setFilteredOptions(options), [options]);
 
@@ -193,13 +191,6 @@ const Select: React.FC<Props> = ({
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
     } else {
-      // Dinleyicileri kaldır ve zamanlayıcıyı temizle.
-      clearTimeout(_otoFocus);
-
-      window.removeEventListener("blur", () => setOptionsOpen(false));
-      document.removeEventListener("click", handleClickOutSide);
-      document.removeEventListener("keydown", handleKeys);
-
       // Options paneli kapanma süresi 250ms.
       // 300ms sonra temizlenmesinin sebebi kapanırken birder veriler gerliyor ve panel yüksekliği artıyor.
       setTimeout(() => setSearchText(""), 300);

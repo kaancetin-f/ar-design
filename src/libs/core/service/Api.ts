@@ -81,7 +81,7 @@ class Api {
             console.error("400");
             break;
           case 401:
-            // console.error("401");
+            console.error("401");
             break;
           case 404:
             console.error("404");

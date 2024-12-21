@@ -26,6 +26,7 @@ import Typography from "./components/data-display/typography";
 import Alert from "./components/feedback/alert";
 import Confirm from "./components/feedback/confirm";
 import Modal from "./components/feedback/modal";
+import Progress from "./components/feedback/progress";
 
 // Navigation
 import Menu from "./components/navigation/menu";
@@ -62,6 +63,7 @@ export {
   Alert,
   Confirm,
   Modal,
+  Progress,
 
   // Navigation
   Menu,

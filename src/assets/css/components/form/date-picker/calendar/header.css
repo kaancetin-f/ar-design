@@ -2,32 +2,103 @@
   display: flex;
   align-items: center;
   min-height: 3.75rem;
+  padding: 0 1rem;
   border-bottom: solid 1px var(--gray-200);
 }
 .ar-date-calendar > .header > .select-field {
+  position: relative;
   display: flex;
   flex-direction: row;
-  justify-content: stretch;
+  justify-content: space-between;
+  align-items: center;
   gap: 0 0.75rem;
+  width: 100%;
   padding: 0 0.5rem;
 }
+
 .ar-date-calendar > .header > .select-field > .selects {
   display: flex;
   flex-direction: row;
   justify-content: stretch;
+  align-items: center;
+  gap: 0 1rem;
   height: var(--input-height);
+}
+.ar-date-calendar > .header > .select-field > .selects > div > span {
+  color: var(--black);
+  user-select: none;
 }
 
 /* #region Prev and Next Buttons */
 .ar-date-calendar > .header > .select-field > .prev,
 .ar-date-calendar > .header > .select-field > .next {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0 0.5rem;
-  color: var(--gray-600);
-  cursor: pointer;
   user-select: none;
+}
+.ar-date-calendar > .header > .select-field > .prev > span,
+.ar-date-calendar > .header > .select-field > .next > span {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+.ar-date-calendar > .header > .select-field > .next > span {
+  left: auto;
+  right: 0;
+}
+.ar-date-calendar > .header > .select-field > .prev > span:last-child {
+  left: 1.5rem;
+}
+.ar-date-calendar > .header > .select-field > .next > span:first-child {
+  right: 1.5rem;
+}
+.ar-date-calendar > .header > .select-field > .prev > span:first-child::before,
+.ar-date-calendar > .header > .select-field > .prev > span:first-child::after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-top: solid 2px var(--gray-600);
+  border-left: solid 2px var(--gray-600);
+  transform: rotate(-45deg);
+}
+.ar-date-calendar > .header > .select-field > .next > span:last-child::before,
+.ar-date-calendar > .header > .select-field > .next > span:last-child::after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-top: solid 2px var(--gray-600);
+  border-left: solid 2px var(--gray-600);
+  transform: rotate(135deg);
+}
+.ar-date-calendar > .header > .select-field > .prev > span:first-child::after {
+  left: 0.35rem;
+  opacity: 0.25;
+}
+.ar-date-calendar > .header > .select-field > .next > span:last-child::after {
+  left: 0.35rem;
+  opacity: 0.25;
+}
+.ar-date-calendar > .header > .select-field > .prev > span:last-child::before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-top: solid 2px var(--gray-600);
+  border-left: solid 2px var(--gray-600);
+  transform: rotate(-45deg);
+}
+.ar-date-calendar > .header > .select-field > .next > span:first-child::before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-top: solid 2px var(--gray-600);
+  border-left: solid 2px var(--gray-600);
+  transform: rotate(135deg);
 }
 /* #endregion Prev and Next Buttons */
 /* Prev and Next Buttons */

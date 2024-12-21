@@ -61,10 +61,6 @@ const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfir
       window.addEventListener("blur", () => setOpen(false));
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
-    } else {
-      window.removeEventListener("blur", () => setOpen(false));
-      document.removeEventListener("click", handleClickOutSide);
-      document.removeEventListener("keydown", handleKeys);
     }
 
     return () => {

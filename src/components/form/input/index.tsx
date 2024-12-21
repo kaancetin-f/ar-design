@@ -22,9 +22,9 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     ref
   ) => {
     // states
-    const [value, setValue] = useState<string | number | readonly string[] | undefined>(undefined);
+    const [value, setValue] = useState<string | number | readonly string[] | undefined>("");
 
-    // variables
+    // variable/s
     const _wrapperClassName: string[] = ["ar-input-wrapper"];
     const _addonBeforeClassName: string[] = ["addon-before"];
     const _addonAfterClassName: string[] = ["addon-after"];
@@ -56,7 +56,9 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     }
 
     // useEffects
-    useEffect(() => setValue(attributes.value), [attributes.value]);
+    useEffect(() => {
+      if (attributes.value !== undefined) setValue(value);
+    }, [attributes.value]);
 
     return (
       <div className={_wrapperClassName.map((c) => c).join(" ")}>
@@ -73,6 +75,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
           <input
             ref={ref}
             {...attributes}
+            value={attributes.value !== undefined ? attributes.value : value} // `value` varsa onu kullan, yoksa `internalValue`'yu kullan
             size={20}
             className={_inputClassName.map((c) => c).join(" ")}
             onChange={(event) => {

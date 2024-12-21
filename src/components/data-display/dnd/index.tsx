@@ -98,7 +98,7 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
   return (
     <div ref={_arDnD} className="ar-dnd">
       {data.map((item, index) => (
-        <div draggable>
+        <div key={index} draggable>
           <div className="move">
             <span></span>
             <span></span>

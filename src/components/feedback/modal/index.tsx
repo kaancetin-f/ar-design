@@ -35,10 +35,6 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
       document.body.style.overflow = "hidden";
       // document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
-    } else {
-      document.body.style.removeProperty("overflow");
-      // document.removeEventListener("click", handleClickOutSide);
-      document.removeEventListener("keydown", handleKeys);
     }
 
     return () => {

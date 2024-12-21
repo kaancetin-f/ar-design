@@ -4,6 +4,7 @@ import { NotificationContext, Status } from "../contexts/Notification";
 import Utils from "../../../infrastructure/shared/Utils";
 import { ValidationProperties } from "../../../types";
 import { LanguageContext } from "../contexts/Language";
+import { LoadingContext } from "../contexts/Loading";
 
 export const useLayout = () => {
   const context = useContext(ConfigContext);
@@ -18,9 +19,9 @@ export const useLayout = () => {
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
 
-  if (!context) {
-    throw new Error("useLayout must be used within a LayoutProvider");
-  }
+  // if (!context) {
+  //   throw new Error("useLayout must be used within a LayoutProvider");
+  // }
 
   return context;
 };
@@ -125,4 +126,14 @@ export const useTranslation = function <TBaseLocale>(
   };
 
   return { t, currentLanguage };
+};
+
+export const useLoading = () => {
+  const context = useContext(LoadingContext);
+
+  // if (!context) {
+  //   throw new Error("useLayout must be used within a LayoutProvider");
+  // }
+
+  return context;
 };
