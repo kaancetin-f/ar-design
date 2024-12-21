@@ -269,10 +269,7 @@ const Select: React.FC<Props> = ({
             status={!Utils.IsNullOrEmpty(validation?.text) ? "danger" : status}
             border={{ radius: border.radius }}
             value={singleInputText}
-            onClick={() => {
-              setOptionsOpen((prev) => !prev);
-              // setSingleInputText("");
-            }}
+            onClick={() => setOptionsOpen((prev) => !prev)}
             onChange={(event) => {
               !optionsOpen && setOptionsOpen(true);
               setSingleInputText(event.target.value);
