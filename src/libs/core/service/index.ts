@@ -28,8 +28,18 @@ class Service {
       });
       const text = (await response.text()).trim();
 
+      // JSON formatına dönüştürmeye çalış
+      let data;
+      try {
+        data = JSON.parse(text); // Gelen veriyi JSON'a dönüştür
+      } catch (error) {
+        // JSON parse hatası durumunda, gelen veriyi başka şekilde işleyin
+        console.error("Gelen veri JSON formatında değil:", text);
+        data = null; // JSON geçerli değilse, data null olabilir veya başka bir işlem yapılabilir
+      }
+
       return {
-        response: text.length > 0 ? JSON.parse(text) : null,
+        response: data,
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,
@@ -41,7 +51,7 @@ class Service {
 
   async Post<TResponse, TData>(values?: {
     input?: RequestInfo;
-    data: TData;
+    data?: TData;
     headers?: HeadersInit;
     init?: RequestInit | undefined;
   }): Promise<Result<TResponse>> {
@@ -60,6 +70,46 @@ class Service {
 
       return {
         response: text.length > 0 ? JSON.parse(text) : null,
+        __ok__: response.ok,
+        __statusCode__: response.status,
+        __statusText__: response.statusText,
+      };
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : "Beklenmeyen bir hata oluştu.");
+    }
+  }
+
+  async PostWithFormData<TResponse, TData>(values?: {
+    input?: RequestInfo;
+    data?: TData;
+    headers?: HeadersInit;
+    init?: RequestInit | undefined;
+  }): Promise<Result<TResponse>> {
+    try {
+      let endPoint: string = `${this._endPoint}`;
+
+      if (values?.input) endPoint += `/${values.input}`;
+
+      const response = await this._api.PostWithFormData({
+        input: endPoint,
+        data: values?.data,
+        headers: values?.headers,
+        init: values?.init,
+      });
+      const text = (await response.text()).trim();
+
+      // JSON formatına dönüştürmeye çalış
+      let data;
+      try {
+        data = JSON.parse(text); // Gelen veriyi JSON'a dönüştür
+      } catch (error) {
+        // JSON parse hatası durumunda, gelen veriyi başka şekilde işleyin
+        console.error("Gelen veri JSON formatında değil:", text);
+        data = null; // JSON geçerli değilse, data null olabilir veya başka bir işlem yapılabilir
+      }
+
+      return {
+        response: data,
         __ok__: response.ok,
         __statusCode__: response.status,
         __statusText__: response.statusText,

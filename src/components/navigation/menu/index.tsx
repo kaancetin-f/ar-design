@@ -39,15 +39,11 @@ const SubMenu: React.FC<{
 }> = ({ items, variant, setSelectedMenu, selectedMenu, setSelectedItem, selectedItem }) => {
   if (!items) return null;
 
-  let className: string[] = ["list"];
-
   return (
-    <ul className={className.map((c) => c).join(" ")}>
+    <ul>
       {items.map((item, index) => {
-        if (item.type === "group") className.push("opened");
-
         return (
-          <li key={index} className="item" onClick={handleOnClick}>
+          <li key={index} onClick={handleOnClick}>
             <div className="item-render">
               <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
               {item.render}
@@ -78,14 +74,14 @@ const Menu: React.FC<IProps> = ({ data, variant = "vertical", ...attributes }) =
 
   return (
     <nav className="ar-menu" {...attributes}>
-      <ul className="list">
+      <ul>
         {data.map((item, index) => {
-          let className_li: string[] = ["item"];
+          // let className_li: string[] = ["item"];
 
-          if (item.type === "group") className_li.push("opened");
+          // if (item.type === "group") className_li.push("opened");
 
           return (
-            <li key={index} className={className_li.map((c) => c).join(" ")} onClick={handleOnClick}>
+            <li key={index} onClick={handleOnClick}>
               <div className="item-render">
                 <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
                 {item.type === "divider" ? <Divider /> : item.render}

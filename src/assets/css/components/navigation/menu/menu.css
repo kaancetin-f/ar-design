@@ -1,9 +1,9 @@
-.ar-menu {
+.ar-menu > {
   padding: 0 0.25rem;
   font-family: var(--system);
 }
-.ar-menu ul,
-.ar-menu ul li ul {
+.ar-menu > ul,
+.ar-menu > ul li ul {
   display: flex;
   flex-direction: column;
   gap: 0.5rem 0;
@@ -11,15 +11,15 @@
   padding: 0;
   list-style: none;
 }
-.ar-menu ul li {
+.ar-menu > ul li {
   letter-spacing: 1px;
 }
-.ar-menu ul li .item-render {
+.ar-menu > ul li .item-render {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-.ar-menu ul li .item-render > a {
+.ar-menu > ul li .item-render > a {
   display: block;
   width: 100%;
   height: 2rem;
@@ -27,7 +27,7 @@
   text-decoration: none;
   line-height: 2rem;
 }
-.ar-menu ul li .item-render > span {
+.ar-menu > ul li .item-render > span {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,10 +36,10 @@
   margin-right: 0.75rem;
   border-radius: var(--border-radius-pill);
 }
-.ar-menu ul li .item-render > span svg {
+.ar-menu > ul li .item-render > span svg {
   color: var(--light);
 }
-.ar-menu ul li .item-render > span > .no-icon::before {
+.ar-menu > ul li .item-render > span > .no-icon::before {
   display: inline-block;
   content: "";
   width: 0.75rem;
@@ -53,17 +53,17 @@
   transform: rotate(45deg);
 }
 
-.ar-menu ul li.selected {
+.ar-menu > ul li.selected {
   color: var(--primary);
 }
-.ar-menu ul li.selected .item-render > span {
+.ar-menu > ul li.selected .item-render > span {
   background-color: var(--primary);
   box-shadow: 0 0 0 5px rgba(var(--primary-rgb), 0.1);
 }
-.ar-menu ul li.selected .item-render > span svg {
+.ar-menu > ul li.selected .item-render > span svg {
   color: var(--white);
 }
-.ar-menu ul li.selected .item-render > span > .no-icon::before {
+.ar-menu > ul li.selected .item-render > span > .no-icon::before {
   display: inline-block;
   content: "";
   width: 0.75rem;

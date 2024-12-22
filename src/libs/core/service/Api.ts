@@ -9,11 +9,11 @@ class Api {
 
   async Get(values: { input?: RequestInfo | undefined; headers?: HeadersInit }): Promise<Response> {
     const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
+      method: "GET",
       headers: {
         ...this.HeaderProperties,
         ...values.headers,
       },
-      method: "GET",
     });
 
     return response;
@@ -21,7 +21,7 @@ class Api {
 
   async Post(values: {
     input?: RequestInfo;
-    data: any;
+    data?: any;
     headers?: HeadersInit;
     init?: RequestInit | undefined;
   }): Promise<Response> {
@@ -35,13 +35,29 @@ class Api {
     return response;
   }
 
+  async PostWithFormData(values: {
+    input?: RequestInfo;
+    data?: any;
+    headers?: HeadersInit;
+    init?: RequestInit | undefined;
+  }): Promise<Response> {
+    const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
+      method: "POST",
+      headers: { ...values.headers },
+      body: values.data,
+      ...values.init,
+    });
+
+    return response;
+  }
+
   async Put(values: { input?: RequestInfo; data?: any; headers?: HeadersInit }): Promise<Response> {
     const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
+      method: "PUT",
       headers: {
         ...this.HeaderProperties,
         ...values.headers,
       },
-      method: "PUT",
       body: JSON.stringify(values.data),
     });
 
@@ -50,11 +66,11 @@ class Api {
 
   async Delete(values: { input?: RequestInfo; headers?: HeadersInit }): Promise<Response> {
     const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
+      method: "DELETE",
       headers: {
         ...this.HeaderProperties,
         ...values.headers,
       },
-      method: "DELETE",
     });
 
     return response;

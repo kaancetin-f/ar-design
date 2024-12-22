@@ -4,7 +4,7 @@ import Utils from "../../../libs/infrastructure/shared/Utils";
 import { Status } from "../../../libs/types";
 import "../../../assets/css/components/feedback/progress/progress.css";
 
-const Progress: React.FC<IProps> = ({ value, reverse }) => {
+const Progress: React.FC<IProps> = ({ value, reverse, isVisibleValue = false }) => {
   // variable/s
   let _status: Status | undefined = undefined;
   const _arProgressClassName: string[] = [];
@@ -27,7 +27,7 @@ const Progress: React.FC<IProps> = ({ value, reverse }) => {
           width: `${value}%`,
         }}
       >
-        <span>%{value}</span>
+        {!isVisibleValue && <span>%{value}</span>}
       </div>
     </div>
   );
