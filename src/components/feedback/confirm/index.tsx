@@ -41,8 +41,6 @@ const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfir
         const sx = window.scrollX || document.documentElement.scrollLeft;
         const sy = window.scrollY || document.documentElement.scrollTop;
 
-        console.log(screenCenter, elementRect.top);
-
         _arConfirm.current.style.top = `${
           (elementRect.top > screenCenter
             ? elementRect.top - confirmRect.height + elementRect.height

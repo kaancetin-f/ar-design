@@ -1,0 +1,94 @@
+.ar-upload {
+  position: relative;
+  width: 8.5rem;
+}
+.ar-upload > input {
+  display: none;
+}
+
+.ar-upload > .ar-upload-button > .count {
+  position: absolute;
+  top: 8px;
+  left: 42.5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--white);
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--border-radius-pill);
+  box-shadow: 0 0 0 2.5px rgba(var(--black-rgb), 0.1);
+  color: var(--success);
+  font-size: 0.75rem;
+  -webkit-text-stroke: 1px var(--success);
+  user-select: none;
+}
+.ar-upload > .ar-upload-button > .count.changed {
+  animation: count cubic-bezier(0.23, 1, 0.32, 1) 250ms 0s 1 normal both;
+}
+.ar-upload > .ar-upload-button > button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem 0;
+  background-color: rgba(var(--success-rgb), 0.1);
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: dashed 2px rgba(var(--success-rgb), 0.5);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  color: var(--success);
+  box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), 0.1);
+}
+
+.ar-upload > .ar-upload-button .selected-files {
+  list-style: none;
+}
+.ar-upload > .ar-upload-button .selected-files > li {
+  display: flex;
+  flex-direction: row;
+  gap: 0 0.5rem;
+}
+.ar-upload > .ar-upload-button .selected-files > li > span:first-child {
+  font-size: 0.15rem;
+}
+
+.ar-upload-files {
+  position: absolute;
+  background-color: var(--white);
+  width: 250px;
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 0 15px -2.5px rgba(var(--black-rgb), 0.1);
+  z-index: 5;
+  transition: top 250ms ease-in-out;
+}
+.ar-upload-files > ul {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+}
+.ar-upload-files > ul > li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: solid 1px var(--gray-200);
+}
+.ar-upload-files > ul > li:last-child {
+  border-bottom: none;
+}
+.ar-upload-files > ul > li > span:first-child {
+  width: 90%;
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ar-upload-files > ul > li > span:last-child {
+  cursor: pointer;
+}
+
+@import url("./animations.css");

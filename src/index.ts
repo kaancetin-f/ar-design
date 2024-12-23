@@ -9,6 +9,7 @@ import DatePicker from "./components/form/date-picker";
 import Select from "./components/form/select";
 import Checkbox from "./components/form/checkbox";
 import Switch from "./components/form/switch";
+import Upload from "./components/form/upload";
 import Radio from "./components/form/radio";
 
 // Data Display
@@ -45,6 +46,7 @@ export {
   DatePicker,
   Select,
   Switch,
+  Upload,
   Checkbox,
   Radio,
 
