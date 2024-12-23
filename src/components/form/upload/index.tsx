@@ -4,7 +4,7 @@ import "../../../assets/css/components/form/upload/styles.css";
 import Icons from "../../../libs/infrastructure/shared/Icons";
 import ReactDOM from "react-dom";
 
-const Upload: React.FC<Props> = ({ files, onChange, multiple, validation, disabled }) => {
+const Upload: React.FC<Props> = ({ files, onChange, multiple }) => {
   // refs
   const _input = useRef<HTMLInputElement>(null);
   const _arUplaod = useRef<HTMLDivElement>(null);
