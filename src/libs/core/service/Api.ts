@@ -1,17 +1,23 @@
 class Api {
   private _host?: string;
   private _core?: string;
+  private _token?: string;
+  private _url: string;
 
-  constructor(values: { host?: string; core?: string }) {
+  constructor(values: { host?: string; core?: string; token?: string }) {
     this._host = values.host || (typeof window !== "undefined" ? window.location.origin : "");
     this._core = values.core || "";
+    this._token = values.token;
+
+    // Url
+    this._url = `${this._host}/${this._core ? this._core + "/" : ""}`;
   }
 
   async Get(values: { input?: RequestInfo | undefined; headers?: HeadersInit }): Promise<Response> {
-    const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
+    const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "GET",
       headers: {
-        ...this.HeaderProperties,
+        ...this.HeaderProperties(),
         ...values.headers,
       },
     });
@@ -23,11 +29,11 @@ class Api {
     input?: RequestInfo;
     data?: any;
     headers?: HeadersInit;
-    init?: RequestInit | undefined;
+    init?: Omit<RequestInit | undefined, "body">;
   }): Promise<Response> {
-    const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
-      headers: { ...this.HeaderProperties, ...values.headers },
+    const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "POST",
+      headers: { ...this.HeaderProperties(), ...values.headers },
       body: JSON.stringify(values.data),
       ...values.init,
     });
@@ -37,11 +43,11 @@ class Api {
 
   async PostWithFormData(values: {
     input?: RequestInfo;
-    data?: any;
+    data?: FormData;
     headers?: HeadersInit;
-    init?: RequestInit | undefined;
+    init?: Omit<RequestInit | undefined, "body">;
   }): Promise<Response> {
-    const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
+    const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "POST",
       headers: { ...values.headers },
       body: values.data,
@@ -51,24 +57,30 @@ class Api {
     return response;
   }
 
-  async Put(values: { input?: RequestInfo; data?: any; headers?: HeadersInit }): Promise<Response> {
-    const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
+  async Put(values: {
+    input?: RequestInfo;
+    data?: any;
+    headers?: HeadersInit;
+    init?: Omit<RequestInit | undefined, "body">;
+  }): Promise<Response> {
+    const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "PUT",
       headers: {
-        ...this.HeaderProperties,
+        ...this.HeaderProperties(),
         ...values.headers,
       },
       body: JSON.stringify(values.data),
+      ...values.init,
     });
 
     return response;
   }
 
   async Delete(values: { input?: RequestInfo; headers?: HeadersInit }): Promise<Response> {
-    const response = await this.CustomFetch(`${this._host}/${this._core ? this._core + "/" : ""}${values.input}`, {
+    const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "DELETE",
       headers: {
-        ...this.HeaderProperties,
+        ...this.HeaderProperties(),
         ...values.headers,
       },
     });
@@ -114,9 +126,12 @@ class Api {
     }
   }
 
-  private HeaderProperties: HeadersInit = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
+  private HeaderProperties = (): HeadersInit => {
+    return {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      ...(this._token && { Authorization: `Bearer ${this._token}` }),
+    };
   };
 }
 
