@@ -1,14 +1,14 @@
 import { IValidation } from "../../../libs/types/IGlobalProps";
 
 interface IMultiple {
-  files: FormData[];
+  file: FormData[];
   onChange: (files: FormData) => void;
   multiple: true;
 }
 
 interface ISingle {
-  files: FormData | undefined;
-  onChange: (files: FormData | undefined) => void;
+  file: FormData | undefined;
+  onChange: (file: FormData | undefined) => void;
   multiple?: false;
 }
 

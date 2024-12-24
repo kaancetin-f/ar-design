@@ -4,7 +4,7 @@ import "../../../assets/css/components/form/upload/styles.css";
 import Icons from "../../../libs/infrastructure/shared/Icons";
 import ReactDOM from "react-dom";
 
-const Upload: React.FC<Props> = ({ files, onChange, multiple }) => {
+const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
   // refs
   const _input = useRef<HTMLInputElement>(null);
   const _arUplaod = useRef<HTMLDivElement>(null);
@@ -37,9 +37,13 @@ const Upload: React.FC<Props> = ({ files, onChange, multiple }) => {
       const sx = window.scrollX || document.documentElement.scrollLeft;
       const sy = window.scrollY || document.documentElement.scrollTop;
 
-      _arUplaodFiles.current.style.top = `${
-        (wRect.top > screenCenter ? wRect.top - ufRect.height + wRect.height : wRect.top) + sy
-      }px`;
+      if (multiple) {
+        _arUplaodFiles.current.style.top = `${
+          (wRect.top > screenCenter ? wRect.top - ufRect.height + wRect.height : wRect.top) + sy
+        }px`;
+      } else {
+        _arUplaodFiles.current.style.top = `${wRect.top + sy}px`;
+      }
       _arUplaodFiles.current.style.left = `${wRect.left - ufRect.width + sx - 10}px`;
     }
   };
@@ -95,13 +99,13 @@ const Upload: React.FC<Props> = ({ files, onChange, multiple }) => {
       const dataTransfer = new DataTransfer();
       _input.current.files = dataTransfer.files;
     }
-  }, [files]);
+  }, [file]);
 
   useEffect(() => {
     if (open) {
       handlePosition();
 
-      window.addEventListener("blur", () => setOpen(false));
+      //   window.addEventListener("blur", () => setOpen(false));
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
     }

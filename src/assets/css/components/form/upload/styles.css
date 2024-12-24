@@ -64,6 +64,14 @@
   z-index: 5;
   transition: top 250ms ease-in-out;
 }
+.ar-upload-files::after {
+  position: absolute;
+  top: 10px;
+  left: 100%;
+  content: "";
+  border: solid 5px transparent;
+  border-left-color: var(--white);
+}
 .ar-upload-files > ul {
   display: flex;
   flex-direction: column;
