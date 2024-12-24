@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import Props from "./Props";
 import "../../../assets/css/components/form/upload/styles.css";
-import Icons from "../../../libs/infrastructure/shared/Icons";
 import ReactDOM from "react-dom";
+import ARIcon from "../../icons";
 
 const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
   // refs
@@ -57,10 +57,10 @@ const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
 
       if (multiple) {
         filesArray.forEach((file) => formData.append("file", file));
-        onChange(formData);
+        onChange(formData, filesArray);
       } else {
         formData.append("file", filesArray[0]);
-        onChange(formData);
+        onChange(formData, filesArray[0]);
       }
     }
   };
@@ -131,7 +131,7 @@ const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
             if (_input.current) _input.current.click();
           }}
         >
-          {Icons.Upload}
+          <ARIcon variant="bulk" icon="Upload" fill="var(--success)" />
           <span>Dosya Yükle</span>
         </button>
       </div>
@@ -150,7 +150,7 @@ const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
                       handleFileRemove(selectedFile);
                     }}
                   >
-                    {Icons.CrudProcesses.Trash}
+                    <ARIcon variant="bulk" icon="Trash" fill="var(--danger)" size={16} />
                   </span>
                 </li>
               ))}
