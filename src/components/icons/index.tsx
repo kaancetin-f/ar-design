@@ -2,7 +2,7 @@ import React from "react";
 import Svg from "./Svg";
 import Icon from "./Compiler";
 
-const ARIcon: React.FC<{
+export const ARIcon: React.FC<{
   size?: string | number | undefined;
   variant?: "linear" | "bulk";
   icon: "CloseSquare" | "Drive" | "Folder" | "Trash" | "Upload" | "Image";
@@ -19,5 +19,3 @@ const ARIcon: React.FC<{
     </Svg>
   );
 };
-
-export default ARIcon;
