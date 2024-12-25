@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Props from "./Props";
 import "../../../assets/css/components/form/upload/styles.css";
 import ReactDOM from "react-dom";
-import ARIcon from "../../icons";
+import { ARIcon } from "../../icons";
 
 const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
   // refs
