@@ -88,6 +88,29 @@ class Api {
     return response;
   }
 
+  private HeaderProperties = (): HeadersInit => {
+    return {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      ...(this._token && { Authorization: `Bearer ${this.Cookies(this._token)}` }),
+    };
+  };
+
+  private Cookies = (name: string) => {
+    // Eğer window mevcutsa
+    if (typeof window === "undefined") return undefined;
+
+    const cookieObject: { key: string; value: string }[] = [];
+    const cookies = document.cookie.split("; ");
+
+    cookies.forEach((cookie) => {
+      const [key, value] = cookie.split("=");
+      cookieObject.push({ key: key, value: value });
+    });
+
+    return decodeURIComponent(cookieObject.find((x) => x.key === name)?.value ?? "");
+  };
+
   /**
    * Burada bir fetch işlemi gerçekleştirilmekte fakat farklı olarak burayı `interceptor` olarak kullanmaktayız.
    * @param input
@@ -115,7 +138,7 @@ class Api {
             console.error("404");
             break;
           default:
-            break;
+            console.error(`Unexpected Error: ${request.status}`);
         }
       }
 
@@ -125,14 +148,6 @@ class Api {
       throw error;
     }
   }
-
-  private HeaderProperties = (): HeadersInit => {
-    return {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...(this._token && { Authorization: `Bearer ${this._token}` }),
-    };
-  };
 }
 
 export default Api;
