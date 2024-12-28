@@ -15,6 +15,7 @@ const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
   // states
   const [open, setOpen] = useState<boolean>(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
 
   // methods
   const handleClickOutSide = (event: MouseEvent) => {
@@ -96,8 +97,7 @@ const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
 
   useEffect(() => {
     if (_input.current) {
-      const dataTransfer = new DataTransfer();
-      _input.current.files = dataTransfer.files;
+      multiple ? setSelectedFiles(file) : setSelectedFile(file);
     }
   }, [file]);
 
@@ -105,7 +105,7 @@ const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
     if (open) {
       handlePosition();
 
-      //   window.addEventListener("blur", () => setOpen(false));
+      window.addEventListener("blur", () => setOpen(false));
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
     }
@@ -123,7 +123,7 @@ const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
 
       <div className="ar-upload-button">
         <span ref={_count} className="count" onClick={() => setOpen((prev) => !prev)}>
-          {selectedFiles.length}
+          {selectedFiles.length === 0 ? (selectedFile ? 1 : 0) : selectedFiles.length}
         </span>
 
         <button
@@ -136,8 +136,7 @@ const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
         </button>
       </div>
 
-      {open &&
-        selectedFiles.length > 0 &&
+      {open && selectedFiles.length > 0 ? (
         ReactDOM.createPortal(
           <div ref={_arUplaodFiles} className="ar-upload-files">
             <ul>
@@ -157,7 +156,10 @@ const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
             </ul>
           </div>,
           document.body
-        )}
+        )
+      ) : (
+        <span>{selectedFile?.name}</span>
+      )}
     </div>
   );
 };
