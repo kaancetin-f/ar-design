@@ -97,11 +97,10 @@ class Api {
   };
 
   private Cookies = (name: string) => {
-    // Eğer window mevcutsa
     if (typeof window === "undefined") return undefined;
 
-    const cookieObject: { key: string; value: string }[] = [];
     const cookies = document.cookie.split("; ");
+    const cookieObject: { key: string; value: string }[] = [];
 
     cookies.forEach((cookie) => {
       const [key, value] = cookie.split("=");
@@ -117,7 +116,7 @@ class Api {
    * @param init
    * @returns
    */
-  private async CustomFetch(input: RequestInfo, init?: RequestInit | undefined): Promise<Response> {
+  private async CustomFetch(input: RequestInfo, init: RequestInit | undefined): Promise<Response> {
     try {
       // # Request Interceptor
 
