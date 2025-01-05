@@ -25,6 +25,7 @@ export type Props = {
   options: Option[];
   onCreate?: (option: Option) => void;
   placeholder?: string;
+  upperCase?: boolean;
   disabled?: boolean;
 } & (IMultiple | ISingle) &
   Omit<IGlobalProps, "status"> &

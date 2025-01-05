@@ -18,10 +18,11 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
-.ar-steps > .steps > .item:not(:last-child) > .item-icon:has(.pending)::after,
-.ar-steps > .steps > .item:not(:last-child) > .item-icon:has(.in-progress)::after,
-.ar-steps > .steps > .item > .item-icon:has(.completed)::after {
+.ar-steps > .steps > .item:not(:last-child) > .item-icon.pending::after,
+.ar-steps > .steps > .item:not(:last-child) > .item-icon.in-progress::after,
+.ar-steps > .steps > .item > .item-icon.completed::after {
   position: absolute;
   left: calc(50% + 1.25rem);
   transform: translateX(-50%);
@@ -30,15 +31,15 @@
   height: 4px;
   border-radius: var(--border-radius-pill);
 }
-.ar-steps > .steps > .item:not(:last-child) > .item-icon:has(.pending)::after {
+.ar-steps > .steps > .item:not(:last-child) > .item-icon.pending::after {
   background-color: var(--gray-300);
 }
-.ar-steps > .steps > .item:not(:last-child) > .item-icon:has(.in-progress)::after {
+.ar-steps > .steps > .item:not(:last-child) > .item-icon.in-progress::after {
   background: var(--gray-300);
   background: linear-gradient(90deg, var(--primary) 50%, var(--gray-300) 50%);
   background-color: var(--primary);
 }
-.ar-steps > .steps > .item > .item-icon:has(.completed)::after {
+.ar-steps > .steps > .item > .item-icon.completed::after {
   background-color: var(--success);
 }
 
@@ -118,6 +119,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 0.5rem 0;
+  cursor: pointer;
 }
 .ar-steps > .steps > .item > .item-informations > .step {
   color: var(--gray-500);

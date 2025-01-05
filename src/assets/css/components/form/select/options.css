@@ -1,8 +1,9 @@
 .ar-select-options {
   position: absolute;
   background-color: var(--white);
-  border: solid 1px var(--gray-200);
-  border-radius: var(--border-radius-lg);
+  /* border: solid 1px var(--gray-200); */
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 0 15px -2.5px rgba(var(--black-rgb), 0.1);
   overflow: hidden;
   z-index: 101;
   transition: visibility 250ms, opacity 250ms, transform 250ms ease-in-out;
@@ -12,6 +13,45 @@
 }
 .ar-select-options.bottom {
   box-shadow: 0 -5px 15px -2.5px rgba(var(--black-rgb), 0.1);
+}
+
+.ar-select-options > .no-options-field {
+  padding: 0.5rem 1rem;
+}
+.ar-select-options > .no-options-field > .text {
+  color: var(--gray-500);
+}
+.ar-select-options > .no-options-field > .add-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: rgba(var(--primary-rgb), 0.05);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius-sm);
+  border-left: solid 2px var(--primary);
+  color: var(--primary);
+  cursor: pointer;
+}
+.ar-select-options > .no-options-field > .add-item::before {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  content: "";
+  border: solid 5px transparent;
+  border-left-color: var(--primary);
+}
+.ar-select-options > .no-options-field > .add-item > .plus {
+  display: inline-block;
+  position: relative;
+  background-color: var(--primary);
+  min-width: 1rem;
+  height: 1rem;
+  margin-right: 0.25rem;
+  border-radius: var(--border-radius-pill);
+  color: var(--white);
+  text-align: center;
+  line-height: 1rem;
 }
 
 .ar-select-options > .search-field {

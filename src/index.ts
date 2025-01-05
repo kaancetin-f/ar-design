@@ -30,6 +30,7 @@ import Modal from "./components/feedback/modal";
 import Progress from "./components/feedback/progress";
 
 // Navigation
+import Breadcrumb from "./components/navigation/breadcrumb";
 import Menu from "./components/navigation/menu";
 import Steps from "./components/navigation/steps";
 
@@ -68,6 +69,7 @@ export {
   Progress,
 
   // Navigation
+  Breadcrumb,
   Menu,
   Steps,
 

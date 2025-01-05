@@ -57,7 +57,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
 
     // useEffects
     useEffect(() => {
-      if (attributes.value !== undefined) setValue(value);
+      if (attributes.value !== undefined) setValue(attributes.value);
     }, [attributes.value]);
 
     return (

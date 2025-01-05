@@ -6,7 +6,6 @@ import Input from "../input";
 import "../../../assets/css/components/form/select/select.css";
 import Chip from "../../data-display/chip";
 import Checkbox from "../checkbox";
-import Paragraph from "../../data-display/typography/paragraph/Paragraph";
 import { Option } from "../../../libs/types/index";
 import Utils from "../../../libs/infrastructure/shared/Utils";
 import ReactDOM from "react-dom";
@@ -22,6 +21,7 @@ const Select: React.FC<Props> = ({
   multiple,
   placeholder,
   validation,
+  upperCase,
   disabled,
 }) => {
   const _selectionClassName: string[] = ["selections"];
@@ -138,6 +138,24 @@ const Select: React.FC<Props> = ({
 
       onChange(undefined);
     }
+  };
+
+  // Özel büyük harfe dönüştürme işlevi.
+  const convertToUpperCase = (str: string) => {
+    return str
+      .replace(/ş/g, "S")
+      .replace(/Ş/g, "S")
+      .replace(/ı/g, "I")
+      .replace(/I/g, "I")
+      .replace(/ç/g, "C")
+      .replace(/Ç/g, "C")
+      .replace(/ğ/g, "G")
+      .replace(/Ğ/g, "G")
+      .replace(/ö/g, "O")
+      .replace(/Ö/g, "O")
+      .replace(/ü/g, "U")
+      .replace(/Ü/g, "U")
+      .replace(/[a-z]/g, (match) => match.toUpperCase());
   };
 
   // useEffects
@@ -272,6 +290,9 @@ const Select: React.FC<Props> = ({
             onClick={() => setOptionsOpen((prev) => !prev)}
             onChange={(event) => {
               !optionsOpen && setOptionsOpen(true);
+
+              if (upperCase) event.target.value = convertToUpperCase(event.target.value);
+
               setSingleInputText(event.target.value);
             }}
             onKeyUp={(event) => {
@@ -342,21 +363,26 @@ const Select: React.FC<Props> = ({
                 })}
               </ul>
             ) : !onCreate ? (
-              <Paragraph color="gray-500" align="center">
-                Herhangi bir kayıt bulunumadı!
-              </Paragraph>
+              <div className="no-options-field">
+                <span className="text">Herhangi bir kayıt bulunumadı.</span>
+              </div>
             ) : (
-              <span
-                style={{ padding: "1rem", cursor: "pointer" }}
+              <div
+                className="no-options-field"
                 onClick={() => {
                   onCreate({ value: "", text: singleInputText });
                   setOptionsOpen(false);
                 }}
               >
-                {options.length === 0 && singleInputText.length === 0
-                  ? "Herhangi bir kayıt bulunumadı!"
-                  : `${singleInputText} Ekle`}
-              </span>
+                {options.length === 0 && singleInputText.length === 0 ? (
+                  <span className="text">Herhangi bir kayıt bulunumadı.</span>
+                ) : (
+                  <span className="add-item">
+                    <span className="plus">+</span>
+                    {singleInputText}
+                  </span>
+                )}
+              </div>
             )}
           </div>,
           document.body

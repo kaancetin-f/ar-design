@@ -62,6 +62,8 @@ export type TabProps = {
 // Validation Types
 export type ValidationProperties<T> = {
   key: keyof T;
+  subkey?: string;
+  step?: number;
   shape?: {
     type: "required" | "minimum" | "maximum" | "email";
     value?: string | number;
@@ -69,6 +71,7 @@ export type ValidationProperties<T> = {
   }[];
   where?: (param: T) => boolean;
 };
+export type Errors<TData> = Partial<{ [key in keyof TData]: string }>;
 
 // Charts
 // Pie
