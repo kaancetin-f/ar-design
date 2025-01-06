@@ -3,7 +3,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../../../assets/css/components/form/date-picker/date-picker.css";
 import Input from "../input";
-// import Select from "../select";
 import { Option } from "../../../libs/types";
 import Button from "../button";
 import Alert from "../../feedback/alert";
@@ -27,7 +26,7 @@ const months = [
   { value: 11, text: "Aralık" },
 ];
 
-const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
+const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attributes }) => {
   // refs
   const _arCalendar = useRef<HTMLDivElement>(null);
   const _currentDate = useRef<Date>(new Date()).current;
@@ -178,7 +177,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
   // useEffects
   useEffect(() => {
     if (calendarIsOpen) {
-      handlePosition();
+      setTimeout(() => handlePosition(), 0);
 
       const days = [];
       const firstDayOfMonth = new Date(_year.current, _month.current, 1);
@@ -346,6 +345,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
           setCalendarIsOpen(true);
         }}
         autoComplete="off"
+        validation={validation}
       />
 
       {calendarIsOpen &&

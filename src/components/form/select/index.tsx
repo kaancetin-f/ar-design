@@ -44,14 +44,7 @@ const Select: React.FC<Props> = ({
   const [navigationIndex, setNavigationIndex] = useState<number>(0);
 
   _selectionClassName.push(
-    ...Utils.GetClassName(
-      variant,
-      !Utils.IsNullOrEmpty(validation?.text) ? "danger" : "light",
-      border,
-      undefined,
-      undefined,
-      undefined
-    )
+    ...Utils.GetClassName(variant, validation ? "danger" : "light", border, undefined, undefined, undefined)
   );
 
   // methods

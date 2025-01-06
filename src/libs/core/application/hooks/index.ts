@@ -2,28 +2,31 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { ConfigContext } from "../contexts/Config";
 import { NotificationContext, Status } from "../contexts/Notification";
 import Utils from "../../../infrastructure/shared/Utils";
-import { Errors, ValidationProperties } from "../../../types";
+import { Errors, ValidationProperties, ValidationShape } from "../../../types";
 import { LanguageContext } from "../contexts/Language";
 import { LoadingContext } from "../contexts/Loading";
 
 export const useLayout = () => {
   const context = useContext(ConfigContext);
 
-  if (!context) {
-    throw new Error("useLayout must be used within a LayoutProvider");
-  }
+  if (!context) throw new Error("useLayout must be used within a LayoutProvider");
 
   return context;
 };
 
-export const useLanguage = () => {
-  const context = useContext(LanguageContext);
+export const useLoading = () => useContext(LoadingContext);
 
-  // if (!context) {
-  //   throw new Error("useLayout must be used within a LayoutProvider");
-  // }
+export const useLanguage = () => useContext(LanguageContext);
 
-  return context;
+export const useTranslation = function <TBaseLocale>(
+  currentLanguage: string | undefined,
+  translations: { [key: string]: any }
+) {
+  const t = (key: keyof TBaseLocale, ...args: any[]) => {
+    return Utils.StringFormat(translations[currentLanguage ?? "tr"][key], args) ?? "";
+  };
+
+  return { t, currentLanguage };
 };
 
 export const useNotification = () => {
@@ -87,93 +90,70 @@ export const useValidation = function <TData extends object>(
   const handleParams = (param: ValidationProperties<TData>) => {
     const value = data[param.key as keyof typeof data] as string;
 
+    // Eğer subkey varsa, onunla işlem yapılacak.
     if (param.subkey) {
-      const subvalue = data[param.key as keyof typeof data];
+      let subValue: any = value[param.subkey as keyof typeof value];
 
       if (param.subkey.includes(".")) {
-        let _data: any = subvalue;
+        // Subkey içinde birden fazla seviye varsa, her seviyeye inerek değer alınacak.
         const levels = param.subkey.split(".");
+        let currentData: any = value;
 
-        // "levels.length - 1" çünkü son seviyeye kadar gidip, son seviyedeki değeri alacağız.
-        for (let i = 0; i < levels.length; i++) {
-          const key = levels[i];
+        for (const key of levels) {
+          // Eğer currentData null ya da undefined ise, işlem sonlandırılır.
+          if (currentData == null) return;
 
-          // Eğer `_data` undefined ya da null ise işlem bitirilsin.
-          if (_data === undefined || _data === null) break;
-
-          // `key`'i _data üzerinde kullanarak yeni değeri atıyoruz.
-          _data = _data[key as keyof typeof _data];
+          // Seviye bazında ilerleyerek veriye ulaşılır.
+          currentData = currentData[key as keyof typeof currentData];
         }
 
-        // Burada _data son seviyeye ulaşacaktır.
-        paramsShape(param, _data);
+        // Son seviyedeki veriyi paramsShape fonksiyonuna gönder.
+        paramsShape(param, currentData);
+      } else {
+        // Subkey sadece bir seviye ise, doğrudan kullanılır.
+        paramsShape(param, subValue);
       }
-
-      return;
+    } else {
+      // Eğer subkey yoksa, doğrudan param.key üzerinden işlem yapılır.
+      paramsShape(param, value);
     }
-
-    paramsShape(param, value);
   };
 
   const paramsShape = (param: ValidationProperties<TData>, value: string) => {
+    const getKey = (subkey: string | undefined) => {
+      if (!subkey) return param.key;
+
+      const levels = subkey.split(".");
+      return levels[levels.length - 1] as keyof TData;
+    };
+
+    const handleValidation = (key: keyof TData, s: ValidationShape) => {
+      if (s.type === "required" && Utils.IsNullOrEmpty(value)) {
+        setError(key, s.message, param.step);
+      }
+
+      if (s.type === "minimum" && value.length < (s.value as number)) {
+        setError(key, Utils.StringFormat(s.message, s.value), param.step);
+      }
+
+      if (s.type === "maximum" && value.length > (s.value as number)) {
+        setError(key, Utils.StringFormat(s.message, s.value), param.step);
+      }
+
+      if (s.type === "email" && value && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+        setError(key, s.message, param.step);
+      }
+    };
+
     param.shape?.forEach((s) => {
+      const key = getKey(param.subkey);
+
       if (param.where) {
-        if (s.type === "required" && param.where(data)) {
-          Utils.IsNullOrEmpty(value) ? setError(param.key, s.message, param.step) : null;
+        if (s.type === "required" && !param.where(data)) {
+          Utils.IsNullOrEmpty(value) && setError(param.subkey ? key : param.key, s.message, param.step);
         }
       } else {
-        // Subkeys Validations
-        if (param.subkey) {
-          const levels = param.subkey.split(".");
-          const key = levels[levels.length - 1] as keyof TData;
-
-          if (s.type === "required") {
-            Utils.IsNullOrEmpty(value) ? setError(key, s.message, param.step) : null;
-          }
-
-          if (s.type === "minimum") {
-            value && value.length < (s.value as number)
-              ? setError(key, Utils.StringFormat(s.message, s.value), param.step)
-              : null;
-          }
-
-          if (s.type === "maximum") {
-            value && value.length > (s.value as number)
-              ? setError(key, Utils.StringFormat(s.message, s.value), param.step)
-              : null;
-          }
-
-          if (s.type === "email") {
-            const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
-
-            !regex && Utils.IsNullOrEmpty(value) ? setError(key, s.message, param.step) : null;
-          }
-
-          return;
-        }
-
-        // Keys Validations
-        if (s.type === "required") {
-          Utils.IsNullOrEmpty(value) ? setError(param.key, s.message, param.step) : null;
-        }
-
-        if (s.type === "minimum") {
-          value && value.length < (s.value as number)
-            ? setError(param.key, Utils.StringFormat(s.message, s.value), param.step)
-            : null;
-        }
-
-        if (s.type === "maximum") {
-          value && value.length > (s.value as number)
-            ? setError(param.key, Utils.StringFormat(s.message, s.value), param.step)
-            : null;
-        }
-
-        if (s.type === "email") {
-          const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
-
-          !regex && Utils.IsNullOrEmpty(value) ? setError(param.key, s.message, param.step) : null;
-        }
+        handleValidation(key, s);
       }
     });
   };
@@ -199,25 +179,4 @@ export const useValidation = function <TData extends object>(
         ) as Errors<TData>)
       : errors,
   };
-};
-
-export const useTranslation = function <TBaseLocale>(
-  currentLanguage: string | undefined,
-  translations: { [key: string]: any }
-) {
-  const t = (key: keyof TBaseLocale, ...args: any[]) => {
-    return Utils.StringFormat(translations[currentLanguage ?? "tr"][key], args) ?? "";
-  };
-
-  return { t, currentLanguage };
-};
-
-export const useLoading = () => {
-  const context = useContext(LoadingContext);
-
-  // if (!context) {
-  //   throw new Error("useLayout must be used within a LayoutProvider");
-  // }
-
-  return context;
 };

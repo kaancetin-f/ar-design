@@ -60,15 +60,16 @@ export type TabProps = {
 };
 
 // Validation Types
+export type ValidationShape = {
+  type: "required" | "minimum" | "maximum" | "email";
+  value?: string | number;
+  message: string;
+};
 export type ValidationProperties<T> = {
   key: keyof T;
   subkey?: string;
   step?: number;
-  shape?: {
-    type: "required" | "minimum" | "maximum" | "email";
-    value?: string | number;
-    message: string;
-  }[];
+  shape?: ValidationShape[];
   where?: (param: T) => boolean;
 };
 export type Errors<TData> = Partial<{ [key in keyof TData]: string }>;
