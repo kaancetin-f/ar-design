@@ -39,6 +39,10 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
         event.preventDefault();
 
         const overItem = event.currentTarget as HTMLElement;
+        const rect = overItem.getBoundingClientRect();
+
+        if (rect.top < 250) window.scrollBy(0, -20);
+        if (rect.bottom > window.innerHeight - 150) window.scrollBy(0, 20);
 
         if (!overItem.classList.contains("over-item")) {
           overItem.classList.add("over-item");
@@ -85,7 +89,6 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
       targetItem.ondragend = (event) => {
         const item = event.currentTarget as HTMLElement;
         item.classList.remove("drag-item");
-
         item.classList.add("end-item");
 
         setTimeout(() => item.classList.remove("end-item"), 1000);

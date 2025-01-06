@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import "../../../assets/css/components/navigation/menu/menu.css";
+import "../../../assets/css/components/navigation/menu/styles.css";
 import Divider from "../../data-display/divider";
 import { MenuItemVariants, MenuProps } from "../../../libs/types";
 import IProps from "./IProps";
@@ -10,10 +10,15 @@ const handleOnClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
   event.stopPropagation();
 
   const target = event.currentTarget as HTMLLIElement;
-  const ul = Array.from(target.childNodes).filter((child) => child instanceof HTMLUListElement);
+  const childNodes = Array.from(target.childNodes);
+  const ul = childNodes.filter((child) => child instanceof HTMLUListElement); // UL
+  const div = childNodes.filter((child) => child instanceof HTMLDivElement); // Item Render
 
-  if (ul.length > 0) ul[0].classList.toggle("opened");
-  else {
+  if (ul.length > 0) {
+    const span = div[0].childNodes[div[0].childNodes.length - 1] as HTMLSpanElement;
+    span.classList.toggle("opened");
+    ul[0].classList.toggle("opened");
+  } else {
     const selectedItems = document.querySelectorAll(".selected");
     selectedItems.forEach((item) => item.classList.remove("selected"));
 
@@ -46,7 +51,8 @@ const SubMenu: React.FC<{
           <li key={index} onClick={handleOnClick}>
             <div className="item-render">
               <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
-              {item.render}
+              {item.type === "divider" ? <Divider /> : <span>{item.render}</span>}
+              {item.type === "group" && <span className="angel-down"></span>}
             </div>
 
             {/* Alt menü öğeleri */}
@@ -76,15 +82,12 @@ const Menu: React.FC<IProps> = ({ data, variant = "vertical", ...attributes }) =
     <nav className="ar-menu" {...attributes}>
       <ul>
         {data.map((item, index) => {
-          // let className_li: string[] = ["item"];
-
-          // if (item.type === "group") className_li.push("opened");
-
           return (
             <li key={index} onClick={handleOnClick}>
               <div className="item-render">
                 <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
-                {item.type === "divider" ? <Divider /> : item.render}
+                {item.type === "divider" ? <Divider /> : <span>{item.render}</span>}
+                {item.type === "group" && <span className="angel-down"></span>}
               </div>
 
               {/* Alt menü öğeleri */}

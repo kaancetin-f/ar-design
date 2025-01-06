@@ -92,8 +92,6 @@ export const useValidation = function <TData extends object>(
 
     // Eğer subkey varsa, onunla işlem yapılacak.
     if (param.subkey) {
-      let subValue: any = value[param.subkey as keyof typeof value];
-
       if (param.subkey.includes(".")) {
         // Subkey içinde birden fazla seviye varsa, her seviyeye inerek değer alınacak.
         const levels = param.subkey.split(".");
@@ -101,8 +99,10 @@ export const useValidation = function <TData extends object>(
 
         for (const key of levels) {
           // Eğer currentData null ya da undefined ise, işlem sonlandırılır.
-          if (currentData == null) return;
-
+          if (!currentData) {
+            paramsShape(param, currentData);
+            return;
+          }
           // Seviye bazında ilerleyerek veriye ulaşılır.
           currentData = currentData[key as keyof typeof currentData];
         }
@@ -111,7 +111,7 @@ export const useValidation = function <TData extends object>(
         paramsShape(param, currentData);
       } else {
         // Subkey sadece bir seviye ise, doğrudan kullanılır.
-        paramsShape(param, subValue);
+        paramsShape(param, value[param.subkey as keyof typeof value] as string);
       }
     } else {
       // Eğer subkey yoksa, doğrudan param.key üzerinden işlem yapılır.
