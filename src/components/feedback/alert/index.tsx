@@ -4,13 +4,7 @@ import React from "react";
 import "../../../assets/css/components/feedback/alert/alert.css";
 import IProps from "./IProps";
 
-const Alert: React.FC<IProps> = ({
-  children,
-  message,
-  status = "primary",
-  border = { radius: "sm" },
-  emphasize,
-}) => {
+const Alert: React.FC<IProps> = ({ children, message, status = "primary", border = { radius: "sm" }, emphasize }) => {
   // refs
   let _className = "ar-alert";
 
@@ -29,9 +23,6 @@ const Alert: React.FC<IProps> = ({
     let _lowerCaseMessage = message.toLowerCase();
 
     return emphasize.reduce((currentMessage, emphasize) => {
-      // TODO: ...
-      // if (['""', " "].includes(emphasize)) return currentMessage;
-
       let _lowerCaseEmphasize = emphasize.toLowerCase();
       let startIndex = _lowerCaseMessage.indexOf(_lowerCaseEmphasize);
 

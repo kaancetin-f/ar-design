@@ -133,11 +133,13 @@ const Select: React.FC<Props> = ({
     } else {
       if (_singleInput.current) {
         setSingleInputText("");
-        _singleInput.current.placeholder = placeholder ?? "";
+        _singleInput.current.placeholder = `${validation ? "* " : ""}${placeholder ?? ""}`;
       }
 
       onChange(undefined);
     }
+
+    setOptionsOpen(false);
   };
 
   // Özel büyük harfe dönüştürme işlevi.
@@ -185,7 +187,7 @@ const Select: React.FC<Props> = ({
 
         if (_singleInput.current) {
           setSingleInputText("");
-          _singleInput.current.placeholder = value?.text || placeholder || "";
+          _singleInput.current.placeholder = value?.text || `${validation ? "* " : ""}${placeholder ?? ""}` || "";
         }
       }
 
@@ -208,7 +210,7 @@ const Select: React.FC<Props> = ({
       } else {
         if (_singleInput.current) {
           setSingleInputText(value?.text ?? "");
-          _singleInput.current.placeholder = placeholder ?? "";
+          _singleInput.current.placeholder = `${validation ? "* " : ""}${placeholder ?? ""}`;
         }
       }
     }
@@ -276,7 +278,10 @@ const Select: React.FC<Props> = ({
                   />
                 ))
               ) : (
-                <span className="placeholder">{placeholder}</span>
+                <span className="placeholder">
+                  {validation ? "* " : ""}
+                  {placeholder}
+                </span>
               )}
             </div>
           </div>
@@ -301,6 +306,7 @@ const Select: React.FC<Props> = ({
               setSearchText(event.currentTarget.value);
             }}
             placeholder={placeholder}
+            validation={validation}
             disabled={disabled}
           />
         )}
@@ -323,7 +329,7 @@ const Select: React.FC<Props> = ({
           }}
         ></span>
 
-        {validation?.text && <span className="validation">{validation.text}</span>}
+        {multiple && validation && <span className="validation">{validation.text}</span>}
       </div>
       {/* :End: Select and Multiple Select Field */}
 
@@ -340,6 +346,7 @@ const Select: React.FC<Props> = ({
                   placeholder="Search..."
                   value={searchText}
                   onChange={(event) => setSearchText(event.currentTarget.value)}
+                  onClick={(event) => event.stopPropagation()}
                 />
               </div>
             )}
@@ -354,7 +361,10 @@ const Select: React.FC<Props> = ({
                       key={index}
                       ref={(element) => (_optionItems.current[index] = element)}
                       className={option === value ? "selectedItem" : ""}
-                      onClick={() => handleItemSelected(option)}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        handleItemSelected(option);
+                      }}
                     >
                       {multiple && <Checkbox checked={isItem} status={isItem ? "primary" : "light"} disabled />}
                       <span>{option.text}</span>

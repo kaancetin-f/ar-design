@@ -384,33 +384,6 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, ...attributes }) => {
                   <div>
                     <span>{years.find((year) => year.value === selectedYear)?.text}</span>
                   </div>
-                  {/* <Select
-                    variant="borderless"
-                    value={months.find((month) => month.value === selectedMonth)}
-                    options={months}
-                    onChange={(option) => {
-                      if (!option) return;
-
-                      setSelectedMonth(option.value as number);
-                      _month.current = option.value as number;
-                      setDateChanged((prev) => !prev);
-                    }}
-                    placeholder="Ay"
-                  /> */}
-
-                  {/* <Select
-                    variant="borderless"
-                    value={years.find((years) => years.value === selectedYear)}
-                    options={years}
-                    onChange={(option) => {
-                      if (!option) return;
-
-                      setSelectedYear(option.value as number);
-                      _year.current = option.value as number;
-                      setDateChanged((prev) => !prev);
-                    }}
-                    placeholder="Yıl"
-                  /> */}
                 </div>
 
                 <div className="next">

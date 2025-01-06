@@ -69,12 +69,18 @@ const Input = forwardRef<HTMLInputElement, IProps>(
           {/* Icon */}
           {icon?.element && <span className="icon-element">{icon.element}</span>}
 
-          {attributes.placeholder && <label className={value ? "visible" : "hidden"}>{attributes.placeholder}</label>}
+          {attributes.placeholder && (
+            <label className={value ? "visible" : "hidden"}>
+              {validation && "* "}
+              {attributes.placeholder}
+            </label>
+          )}
 
           {/* Input */}
           <input
             ref={ref}
             {...attributes}
+            placeholder={`${validation ? "* " : ""}${attributes.placeholder}`}
             value={attributes.value !== undefined ? attributes.value : value} // `value` varsa onu kullan, yoksa `internalValue`'yu kullan
             size={20}
             className={_inputClassName.map((c) => c).join(" ")}

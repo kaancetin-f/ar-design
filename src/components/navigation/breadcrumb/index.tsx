@@ -5,7 +5,7 @@ import "../../../assets/css/components/navigation/breadcrumb/styles.css";
 const Breadcrumb: React.FC<IProps> = ({ menus }) => {
   // useState
   const [pathname, setPathname] = useState<string>("");
-  const [breadcrumb, setBreadcrumb] = useState<any[]>([]);
+  // const [breadcrumb, setBreadcrumb] = useState<any[]>([]);
 
   const handleBreadcrumb = (pathname: string | undefined): void => {
     if (pathname === undefined) pathname = window.location.pathname;
