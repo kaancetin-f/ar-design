@@ -42,7 +42,7 @@
   ],
   "author": "Kaan ÇETİN",
   "license": "MIT",
-  "description": "AR Design is a (react || nextjs) library.",
+  "description": "AR Design is a (react || nextjs) ui library.",
   "peerDependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
