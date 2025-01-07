@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Props } from "./Props";
 import Input from "../input";
-import "../../../assets/css/components/form/select/select.css";
+import "../../../assets/css/components/form/select/styles.css";
 import Chip from "../../data-display/chip";
 import Checkbox from "../checkbox";
 import { Option } from "../../../libs/types/index";
@@ -98,7 +98,9 @@ const Select: React.FC<Props> = ({
         const sy = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
 
         _options.current.style.top = `${
-          (InpuRect.top > screenCenter ? InpuRect.top - optionRect.height : InpuRect.top + InpuRect.height) + sy
+          (InpuRect.top > screenCenter
+            ? InpuRect.top - optionRect.height - (multiple ? 20 : 0)
+            : InpuRect.top + InpuRect.height) + sy
         }px`;
         _options.current.style.left = `${InpuRect.left + sx}px`;
         _options.current.style.width = `${InpuRect.width}px`;
@@ -163,7 +165,7 @@ const Select: React.FC<Props> = ({
 
   useEffect(() => {
     if (optionsOpen) {
-      handlePosition();
+      setTimeout(() => handlePosition(), 0);
 
       if (!multiple) {
         // const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
@@ -338,7 +340,7 @@ const Select: React.FC<Props> = ({
                   status="light"
                   placeholder="Search..."
                   value={searchText}
-                  onChange={(event) => setSearchText(event.currentTarget.value)}
+                  onChange={(event) => setSearchText(event.target.value)}
                   onClick={(event) => event.stopPropagation()}
                 />
               </div>
@@ -372,17 +374,18 @@ const Select: React.FC<Props> = ({
             ) : (
               <div
                 className="no-options-field"
-                onClick={() => {
+                onClick={(event) => {
+                  event.stopPropagation();
                   onCreate({ value: "", text: singleInputText });
                   setOptionsOpen(false);
                 }}
               >
-                {options.length === 0 && singleInputText.length === 0 ? (
+                {options.length === 0 && singleInputText.length === 0 && searchText.length === 0 ? (
                   <span className="text">Herhangi bir kayıt bulunumadı.</span>
                 ) : (
                   <span className="add-item">
                     <span className="plus">+</span>
-                    {singleInputText}
+                    {singleInputText.length !== 0 ? singleInputText : searchText}
                   </span>
                 )}
               </div>

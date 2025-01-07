@@ -2,12 +2,14 @@
   background-color: var(--white);
   border: solid 1px var(--gray-200);
   border-radius: var(--border-radius-lg);
+  overflow: hidden;
 }
 .ar-card > .title {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  background-color: var(--gray-100);
   padding: 0 1rem;
   height: 3rem;
   border-bottom: solid 1px var(--gray-200);

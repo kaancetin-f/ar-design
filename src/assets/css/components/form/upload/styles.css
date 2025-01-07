@@ -1,15 +1,19 @@
 .ar-upload {
   position: relative;
-  width: 8.5rem;
 }
 .ar-upload > input {
   display: none;
 }
 
-.ar-upload > .ar-upload-button > .count {
+.ar-upload > .ar-upload-button > button > .icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.ar-upload > .ar-upload-button > button > .icon > .count {
   position: absolute;
   top: 8px;
-  left: 42.5px;
+  right: -10px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -24,23 +28,25 @@
   -webkit-text-stroke: 1px var(--success);
   user-select: none;
 }
-.ar-upload > .ar-upload-button > .count.changed {
+.ar-upload > .ar-upload-button > button > .icon > .count.changed {
   animation: count cubic-bezier(0.23, 1, 0.32, 1) 250ms 0s 1 normal both;
 }
 .ar-upload > .ar-upload-button > button {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem 0;
+  gap: 1rem;
   background-color: rgba(var(--success-rgb), 0.1);
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0 1rem 0 0.15rem;
   border: dashed 2px rgba(var(--success-rgb), 0.5);
   border-radius: var(--border-radius-sm);
   cursor: pointer;
   color: var(--success);
   box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), 0.1);
+  text-wrap: nowrap;
+  -webkit-text-stroke: 1px var(--success);
 }
 
 .ar-upload > .ar-upload-button .selected-files {

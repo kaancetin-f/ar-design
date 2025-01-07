@@ -76,7 +76,7 @@
   flex-wrap: nowrap;
   align-items: center;
   min-height: var(--input-height);
-  padding: 0.35rem;
+  padding: 0.35rem 0.5rem;
 }
 .ar-select-wrapper > .ar-select > .selections > .items {
   display: flex;
@@ -86,8 +86,9 @@
   width: calc(100% - 2.75rem);
 }
 .ar-select-wrapper > .ar-select > .selections > .items > span.placeholder {
-  opacity: 0.5;
-  font-weight: 100;
+  color: var(--dark);
+  font-family: var(--system);
+  -webkit-text-stroke: 0.25px var(--dark);
 }
 .ar-select-wrapper > .ar-select > .selections > ul {
   display: flex;

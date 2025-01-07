@@ -308,7 +308,12 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
 
   return (
     <div className="ar-date-picker">
-      {attributes.placeholder && attributes.placeholder.length > 0 && <label>{attributes.placeholder}</label>}
+      {attributes.placeholder && attributes.placeholder.length > 0 && (
+        <label>
+          {validation ? "* " : ""}
+          {attributes.placeholder}
+        </label>
+      )}
 
       <Input
         ref={_beginDate}

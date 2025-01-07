@@ -173,6 +173,9 @@
 :is(input) {
   border: solid 1px transparent;
 }
+:is(input)::placeholder {
+  color: var(--dark);
+}
 input[type="date"] {
   -webkit-appearance: none;
   -moz-appearance: none;

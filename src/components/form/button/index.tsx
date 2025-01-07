@@ -104,7 +104,7 @@ const Button: React.FC<IProps> = ({
   };
 
   useEffect(() => {
-    if (mouseEnter) handlePosition();
+    if (mouseEnter) setTimeout(() => handlePosition(), 0);
   }, [mouseEnter]);
 
   return (

@@ -4,7 +4,7 @@ import "../../../assets/css/components/form/upload/styles.css";
 import ReactDOM from "react-dom";
 import { ARIcon } from "../../icons";
 
-const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
+const Upload: React.FC<Props> = ({ text, file, onChange, multiple }) => {
   // refs
   const _input = useRef<HTMLInputElement>(null);
   const _arUplaod = useRef<HTMLDivElement>(null);
@@ -83,7 +83,7 @@ const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
 
   // useEffects
   useEffect(() => {
-    handlePosition();
+    setTimeout(() => handlePosition(), 0);
 
     if (_count.current) {
       _count.current.classList.add("changed");
@@ -103,7 +103,7 @@ const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
 
   useEffect(() => {
     if (open) {
-      handlePosition();
+      setTimeout(() => handlePosition(), 0);
 
       window.addEventListener("blur", () => setOpen(false));
       document.addEventListener("click", handleClickOutSide);
@@ -122,17 +122,25 @@ const Upload: React.FC<Props> = ({ file, onChange, multiple }) => {
       <input ref={_input} type="file" onChange={handleFileChange} multiple={multiple} />
 
       <div className="ar-upload-button">
-        <span ref={_count} className="count" onClick={() => setOpen((prev) => !prev)}>
-          {selectedFiles.length === 0 ? (selectedFile ? 1 : 0) : selectedFiles.length}
-        </span>
-
         <button
           onClick={() => {
             if (_input.current) _input.current.click();
           }}
         >
-          <ARIcon variant="bulk" icon="Upload" fill="var(--success)" />
-          <span>Dosya Yükle</span>
+          <span className="icon">
+            <span
+              ref={_count}
+              className="count"
+              onClick={(event) => {
+                event.stopPropagation();
+                setOpen((prev) => !prev);
+              }}
+            >
+              {selectedFiles.length === 0 ? (selectedFile ? 1 : 0) : selectedFiles.length}
+            </span>
+            <ARIcon variant="bulk" icon="Upload" fill="var(--success)" />
+          </span>
+          {text && <span>{text}</span>}
         </button>
       </div>
 

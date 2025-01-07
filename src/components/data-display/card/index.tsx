@@ -1,6 +1,6 @@
 import React from "react";
 import Typography from "../typography";
-import "../../../assets/css/components/data-display/card/card.css";
+import "../../../assets/css/components/data-display/card/styles.css";
 import IProps from "./IProps";
 
 const { Title } = Typography;

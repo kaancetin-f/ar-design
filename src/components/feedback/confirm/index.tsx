@@ -54,7 +54,7 @@ const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfir
   // useEffects
   useEffect(() => {
     if (open) {
-      handlePosition();
+      setTimeout(() => handlePosition(), 0);
 
       window.addEventListener("blur", () => setOpen(false));
       document.addEventListener("click", handleClickOutSide);

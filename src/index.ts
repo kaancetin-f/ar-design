@@ -5,6 +5,7 @@ import Button from "./components/form/button";
 import ButtonAction from "./components/form/button-action";
 import ButtonGroup from "./components/form/button-group";
 import Input from "./components/form/input";
+import InputTag from "./components/form/input-tag";
 import DatePicker from "./components/form/date-picker";
 import Select from "./components/form/select";
 import Checkbox from "./components/form/checkbox";
@@ -44,6 +45,7 @@ export {
   ButtonAction,
   ButtonGroup,
   Input,
+  InputTag,
   DatePicker,
   Select,
   Switch,

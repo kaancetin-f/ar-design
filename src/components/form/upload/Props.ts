@@ -13,6 +13,7 @@ interface ISingle {
 }
 
 type Props = {
+  text: string;
   disabled?: boolean;
 } & (IMultiple | ISingle) &
   IValidation;
