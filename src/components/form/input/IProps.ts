@@ -10,6 +10,7 @@ interface IProps
     IValidation {
   button?: IButtonProps;
   addon?: { variant?: Variants; before?: string | number; after?: string | number };
+  upperCase?: boolean;
 }
 
 export default IProps;

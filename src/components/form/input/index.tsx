@@ -16,6 +16,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
       border = { radius: "sm" },
       button,
       addon,
+      upperCase,
       validation,
       ...attributes
     },
@@ -55,6 +56,25 @@ const Input = forwardRef<HTMLInputElement, IProps>(
       _addonAfterClassName.push(`border-radius-${border.radius}`);
     }
 
+    // methods
+    // Özel büyük harfe dönüştürme işlevi.
+    const convertToUpperCase = (str: string) => {
+      return str
+        .replace(/ş/g, "S")
+        .replace(/Ş/g, "S")
+        .replace(/ı/g, "I")
+        .replace(/I/g, "I")
+        .replace(/ç/g, "C")
+        .replace(/Ç/g, "C")
+        .replace(/ğ/g, "G")
+        .replace(/Ğ/g, "G")
+        .replace(/ö/g, "O")
+        .replace(/Ö/g, "O")
+        .replace(/ü/g, "U")
+        .replace(/Ü/g, "U")
+        .replace(/[a-z]/g, (match) => match.toUpperCase());
+    };
+
     // useEffects
     useEffect(() => {
       if (attributes.value !== undefined) setValue(attributes.value);
@@ -89,6 +109,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
               if (attributes.disabled) return;
 
               (() => {
+                if (upperCase) event.target.value = convertToUpperCase(event.target.value);
                 setValue(event.target.value);
               })();
 
@@ -96,7 +117,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
                 if (attributes.onChange) {
                   // Mevcut değeri alın
                   const _target = event.target;
-                  const currentValue = _target.value;
+                  const currentValue = upperCase ? convertToUpperCase(_target.value) : _target.value;
 
                   // Yeni değeri oluşturun ve onChange fonksiyonunu çağırın
                   const newValue = `${addon?.before ?? ""}${currentValue}${addon?.after ?? ""}`;
