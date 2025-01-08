@@ -13,7 +13,7 @@ interface IProps extends IChildren, ISizes {
   /**
    * ...
    */
-  title: string;
+  title?: string;
 
   /**
    * ...

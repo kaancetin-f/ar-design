@@ -9,33 +9,23 @@
 }
 
 /* #region Open or Close */
-.ar-modal-wrapper:is(.opened) {
+.ar-modal-wrapper.opened {
   visibility: visible;
   opacity: 1;
   transition: visibility 250ms, opacity 250ms ease-in-out;
   z-index: 100;
 }
-.ar-modal-wrapper:is(.opened) > .ar-modal {
-  top: 1.75rem;
-  transition: top 250ms ease-in-out;
-}
-
-.ar-modal-wrapper:is(.closed) {
+.ar-modal-wrapper.closed {
   visibility: hidden;
   opacity: 0;
   transition: visibility 250ms, opacity 250ms ease-in-out;
   z-index: 99;
 }
-.ar-modal-wrapper:is(.closed) > .ar-modal {
-  top: -100%;
-  transition: top 250ms ease-in-out;
-}
 /* #endregion */
 /* Open or Close */
 
 .ar-modal-wrapper > .ar-modal {
-  position: relative;
-  margin: 0 auto;
+  position: absolute;
   background-color: var(--white);
   border-radius: var(--border-radius-sm);
 }

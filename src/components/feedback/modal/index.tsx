@@ -17,30 +17,52 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
   else _modalWrapperClassName.push("closed");
 
   // methods
-  // const handleClickOutSide = (event: MouseEvent) => {
-  //   const target = event.target as HTMLElement;
-
-  //   if (_arModal.current && !_arModal.current.contains(target)) open.set(false);
-  // };
-
   const handleKeys = (event: KeyboardEvent) => {
     const key = event.key;
 
     if (key === "Escape") open.set(false);
   };
 
+  const handleSetPosition = () => {
+    if (_arModal.current) {
+      const arModal = _arModal.current;
+      const content = arModal.querySelector("div .content") as HTMLDivElement;
+
+      const rect = arModal.getBoundingClientRect();
+      const screenCenterX = window.innerWidth / 2;
+      const screenCenterY = window.innerHeight / 2;
+      const sx = window.scrollX || document.documentElement.scrollLeft;
+      const sy = window.scrollY || document.documentElement.scrollTop;
+
+      if (window.innerHeight > 1024) {
+        arModal.style.top = `${screenCenterY - rect.height / 2 + sy}px`;
+        content.removeAttribute("style");
+      } else if (window.innerHeight > 575 && window.innerHeight < 1024) {
+        arModal.style.top = "100px";
+        content.removeAttribute("style");
+      } else if (window.innerHeight < 575) {
+        arModal.style.top = "15px";
+        content.style.maxHeight = "calc(100vh - 2.5px - 3.5rem - 4rem - 2rem)";
+      }
+
+      arModal.style.left = `${screenCenterX - rect.width / 2 + sx}px`;
+    }
+  };
+
   // useEffects
   useEffect(() => {
+    handleSetPosition();
+
     if (open.get) {
       document.body.style.overflow = "hidden";
-      // document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
+      window.addEventListener("resize", handleSetPosition);
     }
 
     return () => {
       document.body.style.removeProperty("overflow");
-      // document.removeEventListener("click", handleClickOutSide);
       document.removeEventListener("keydown", handleKeys);
+      window.removeEventListener("resize", handleSetPosition);
     };
   }, [open.get]);
 
@@ -57,11 +79,13 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
       ></div>
 
       <div ref={_arModal} className={_modalClassName.map((c) => c).join(" ")} role="dialog">
-        <div className="header">
-          <Title Level="h3">{title}</Title>
+        {title && (
+          <div className="header">
+            <Title Level="h3">{title}</Title>
 
-          <div className="close" onClick={() => open.set((prev) => !prev)}></div>
-        </div>
+            <div className="close" onClick={() => open.set((prev) => !prev)}></div>
+          </div>
+        )}
 
         <div className="content">{children}</div>
 
