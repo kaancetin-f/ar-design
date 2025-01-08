@@ -23,7 +23,7 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
     if (key === "Escape") open.set(false);
   };
 
-  const handleSetPosition = () => {
+  const handlePosition = () => {
     if (_arModal.current) {
       const arModal = _arModal.current;
       const content = arModal.querySelector("div .content") as HTMLDivElement;
@@ -51,18 +51,18 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
 
   // useEffects
   useEffect(() => {
-    handleSetPosition();
+    handlePosition();
 
     if (open.get) {
       document.body.style.overflow = "hidden";
       document.addEventListener("keydown", handleKeys);
-      window.addEventListener("resize", handleSetPosition);
+      window.addEventListener("resize", handlePosition);
     }
 
     return () => {
       document.body.style.removeProperty("overflow");
       document.removeEventListener("keydown", handleKeys);
-      window.removeEventListener("resize", handleSetPosition);
+      window.removeEventListener("resize", handlePosition);
     };
   }, [open.get]);
 
