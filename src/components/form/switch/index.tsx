@@ -1,15 +1,10 @@
 "use client";
 
 import React, { useRef } from "react";
-import "../../../assets/css/components/form/switch/switch.css";
+import "../../../assets/css/components/form/switch/styles.css";
 import IProps from "./IProps";
 
-const Switch: React.FC<IProps> = ({
-  label,
-  status = "primary",
-  border = { radius: "pill" },
-  ...attributes
-}) => {
+const Switch: React.FC<IProps> = ({ label, status = "primary", border = { radius: "pill" }, ...attributes }) => {
   // refs
   let _switch = useRef<HTMLInputElement>(null);
 
@@ -34,6 +29,8 @@ const Switch: React.FC<IProps> = ({
           {...attributes}
           size={0}
           onChange={(event) => {
+            event.stopPropagation();
+
             (() => {
               const _current = _switch.current;
               if (!_current) return;

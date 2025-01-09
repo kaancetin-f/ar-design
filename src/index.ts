@@ -26,8 +26,8 @@ import Typography from "./components/data-display/typography";
 
 // Feedback
 import Alert from "./components/feedback/alert";
-import Confirm from "./components/feedback/confirm";
 import Modal from "./components/feedback/modal";
+import Popover from "./components/feedback/popover";
 import Progress from "./components/feedback/progress";
 
 // Navigation
@@ -66,8 +66,8 @@ export {
 
   // Feedback
   Alert,
-  Confirm,
   Modal,
+  Popover,
   Progress,
 
   // Navigation

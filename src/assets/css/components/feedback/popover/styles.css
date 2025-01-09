@@ -1,8 +1,8 @@
-.ar-confirm-wrapper {
+.ar-popover-wrapper {
   position: relative;
 }
 
-.ar-confirm {
+.ar-popover {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -15,18 +15,18 @@
   z-index: 1051;
 }
 
-.ar-confirm > .content {
+.ar-popover > .content {
   max-height: 200px;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-.ar-confirm > .message {
+.ar-popover > .message {
   font-size: 0.85rem;
   text-wrap: wrap;
 }
 
-.ar-confirm > .footer {
+.ar-popover > .footer {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;

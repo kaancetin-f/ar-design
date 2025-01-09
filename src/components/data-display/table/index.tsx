@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
-import "../../../assets/css/components/data-display/table/table.css";
+import "../../../assets/css/components/data-display/table/styles.css";
 import Checkbox from "../../form/checkbox";
 import Actions from "./Actions";
 import Input from "../../form/input";

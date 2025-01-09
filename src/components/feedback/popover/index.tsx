@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import "../../../assets/css/components/feedback/confirm/confirm.css";
+import "../../../assets/css/components/feedback/popover/styles.css";
 import Button from "../../form/button";
 import Typography from "../../data-display/typography";
 import IProps from "./IProps";
@@ -9,11 +9,11 @@ import ReactDOM from "react-dom";
 
 const { Title } = Typography;
 
-const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfirm }) => {
+const Popover: React.FC<IProps> = ({ children, title, message, content, onConfirm }) => {
   // refs
-  const _arConfirmWrapper = useRef<HTMLDivElement>(null);
-  const _arConfirm = useRef<HTMLDivElement>(null);
-  const _arConfirmElement = useRef<HTMLDivElement>(null);
+  const _arPopoverWrapper = useRef<HTMLDivElement>(null);
+  const _arPopover = useRef<HTMLDivElement>(null);
+  const _arPopoverElement = useRef<HTMLDivElement>(null);
 
   // states
   const [open, setOpen] = useState<boolean>(false);
@@ -22,7 +22,7 @@ const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfir
   const handleClickOutSide = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
 
-    if (_arConfirm.current && !_arConfirm.current.contains(target)) setOpen(false);
+    if (_arPopover.current && !_arPopover.current.contains(target)) setOpen(false);
   };
 
   const handleKeys = (event: KeyboardEvent) => {
@@ -32,21 +32,21 @@ const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfir
   };
 
   const handlePosition = () => {
-    if (_arConfirmWrapper.current && _arConfirm.current && _arConfirmElement.current) {
-      const confirmRect = _arConfirm.current.getBoundingClientRect();
-      const elementRect = _arConfirmElement.current.getBoundingClientRect();
+    if (_arPopoverWrapper.current && _arPopover.current && _arPopoverElement.current) {
+      const popoverRect = _arPopover.current.getBoundingClientRect();
+      const elementRect = _arPopoverElement.current.getBoundingClientRect();
 
       if (elementRect) {
         const screenCenter = window.innerHeight / 2;
         const sx = window.scrollX || document.documentElement.scrollLeft;
         const sy = window.scrollY || document.documentElement.scrollTop;
 
-        _arConfirm.current.style.top = `${
+        _arPopover.current.style.top = `${
           (elementRect.top > screenCenter
-            ? elementRect.top - confirmRect.height + elementRect.height
+            ? elementRect.top - popoverRect.height + elementRect.height
             : elementRect.top) + sy
         }px`;
-        _arConfirm.current.style.left = `${elementRect.left - confirmRect.width + sx - 10}px`;
+        _arPopover.current.style.left = `${elementRect.left - popoverRect.width + sx - 10}px`;
       }
     }
   };
@@ -69,10 +69,10 @@ const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfir
   }, [open]);
 
   return (
-    <div ref={_arConfirmWrapper} className="ar-confirm-wrapper" role="dialog">
+    <div ref={_arPopoverWrapper} className="ar-popover-wrapper" role="dialog">
       {open &&
         ReactDOM.createPortal(
-          <div ref={_arConfirm} className="ar-confirm">
+          <div ref={_arPopover} className="ar-popover">
             {title && <Title Level="h4">{title}</Title>}
             {message && <p className="message">{message}</p>}
             {content && <div className="content">{content}</div>}
@@ -106,11 +106,11 @@ const Confirm: React.FC<IProps> = ({ children, title, message, content, onConfir
           document.body
         )}
 
-      <div ref={_arConfirmElement} onClick={() => setOpen((prev) => !prev)}>
+      <div ref={_arPopoverElement} onClick={() => setOpen((prev) => !prev)}>
         {children}
       </div>
     </div>
   );
 };
 
-export default Confirm;
+export default Popover;

@@ -7,11 +7,11 @@
 }
 .ar-switch-wrapper > label {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
+  flex-direction: row;
+  /* justify-content: space-between; */
   align-items: center;
   gap: 0 0.5rem;
-  width: 100%;
+  /* width: 100%; */
   user-select: none;
 }
 .ar-switch-wrapper > label > :is(input[type="checkbox"]) {
@@ -36,7 +36,7 @@
   background-color: var(--white);
   width: 0.75rem;
   height: 0.75rem;
-  transition: left 150ms, width 150ms 350ms, height 150ms 350ms, box-shadow 150ms 500ms ease-in-out;
+  transition: left 150ms, width 150ms 150ms, height 150ms 150ms, box-shadow 150ms 150ms ease-in-out;
 }
 .ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch > .handle {
   left: calc(2.25rem - 0.9rem);
