@@ -5,6 +5,7 @@ interface IProps extends IChildren {
   message?: string;
   content?: React.JSX.Element;
   onConfirm?: (confirm: boolean) => void;
+  windowBlur?: boolean;
 }
 
 export default IProps;
