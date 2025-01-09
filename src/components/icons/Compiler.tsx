@@ -13,11 +13,38 @@ class Icon {
 
   public Compiler = (
     variant: "linear" | "bulk",
-    icon: "CloseSquare" | "Drive" | "Folder" | "Trash" | "Upload" | "Image"
+    icon: "Add" | "CloseSquare" | "Drive" | "Folder" | "Trash" | "Upload" | "Image" | "Import"
   ) => {
     switch (variant) {
       case "linear":
         switch (icon) {
+          case "Add":
+            return (
+              <>
+                <line
+                  fill={this._fill}
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  x1="12"
+                  x2="12"
+                  y1="19"
+                  y2="5"
+                ></line>
+                <line
+                  fill={this._fill}
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  x1="5"
+                  x2="19"
+                  y1="12"
+                  y2="12"
+                ></line>
+              </>
+            );
           case "CloseSquare":
             return (
               <path
@@ -27,6 +54,25 @@ class Icon {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
+            );
+          case "Import":
+            return (
+              <>
+                <path
+                  d="M3 15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H15C17.8284 21 19.2426 21 20.1213 20.1213C21 19.2426 21 17.8284 21 15"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></path>
+                <path
+                  d="M12 3V16M12 16L16 11.625M12 16L8 11.625"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></path>
+              </>
             );
           default:
             return null;

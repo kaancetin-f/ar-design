@@ -2,8 +2,20 @@ import { TableColumnType } from "../../../libs/types";
 import { IChildren } from "../../../libs/types/IGlobalProps";
 
 interface IProps<T> extends IChildren {
+  title?: string;
+  description?: string;
   data: T[];
   columns: TableColumnType<T>[];
+  actions?: {
+    add?: {
+      tooltip: string;
+      click: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    };
+    import?: {
+      tooltip: string;
+      click: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    };
+  };
   selections?: (selectionItems: T[]) => void;
   pagination?: {
     totalRecords: number;

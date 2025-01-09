@@ -5,12 +5,12 @@ import Icon from "./Compiler";
 export const ARIcon: React.FC<{
   size?: string | number | undefined;
   variant?: "linear" | "bulk";
-  icon: "CloseSquare" | "Drive" | "Folder" | "Trash" | "Upload" | "Image";
+  icon: "Add" | "CloseSquare" | "Drive" | "Folder" | "Trash" | "Upload" | "Image" | "Import";
   fill?: string;
   stroke?: string;
   strokeWidth?: number;
   style?: React.CSSProperties | undefined;
-}> = ({ size, variant = "linear", icon, fill, stroke, strokeWidth, style }) => {
+}> = ({ size, variant = "linear", icon, fill = "var(--dark)", stroke = "var(--dark)", strokeWidth = 2, style }) => {
   const { Compiler } = new Icon(fill, stroke, strokeWidth);
 
   return (

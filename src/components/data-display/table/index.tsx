@@ -5,10 +5,23 @@ import IProps from "./IProps";
 import "../../../assets/css/components/data-display/table/styles.css";
 import Checkbox from "../../form/checkbox";
 import Actions from "./Actions";
-import Input from "../../form/input";
 import Pagination from "../../navigation/pagination";
+import Button from "../../form/button";
+import { ARIcon } from "../../icons";
 
-const Table = function <T extends object>({ children, data, columns, selections, pagination, config }: IProps<T>) {
+type SearchedText = { key: string; value: string };
+
+const Table = function <T extends object>({
+  children,
+  title,
+  description,
+  data,
+  columns,
+  actions,
+  selections,
+  pagination,
+  config = { isSearchable: true },
+}: IProps<T>) {
   // refs
   let _dataLength = useRef<number>(0);
   const _tableWrapper = useRef<HTMLDivElement>(null);
@@ -21,8 +34,8 @@ const Table = function <T extends object>({ children, data, columns, selections,
   // states
   const [selectAll, setSelectAll] = useState<boolean>(false);
   const [selectionItems, setSelectionItems] = useState<T[]>([]);
-  const [searchedText, setSearchedText] = useState<string>("");
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [searchedText, setSearchedText] = useState<SearchedText[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   if (config && Object.keys(config.scroll || {}).length > 0) {
     if (_tableContent.current && config.scroll) {
@@ -101,17 +114,24 @@ const Table = function <T extends object>({ children, data, columns, selections,
   };
 
   // Derinlemesine arama yapmak için özyinelemeli bir fonksiyon tanımlayalım.
-  const deepSearch = (value: any, searchedTexts: string[]): boolean => {
+  const deepSearch = (key: string, value: any, searchedTexts: SearchedText[]): boolean => {
     if (value === null || value === undefined) return false;
+
+    if (searchedTexts.length === 0) return true;
 
     // Eğer değer bir sayı veya string ise, aranan metinle eşleşip eşleşmediğini kontrol ediyoruz.
     if (typeof value === "number" || typeof value === "string") {
-      return searchedTexts.some((_searchedText) => value.toString().toLowerCase().includes(_searchedText));
+      return searchedTexts.some(
+        (searchedText) =>
+          searchedText.key === key &&
+          searchedText.value.length > 0 &&
+          value.toString().toLowerCase().includes(searchedText.value.toLowerCase())
+      );
     }
 
     // Eğer değer bir nesne veya dizi ise, içindeki her bir değeri yine deepSearch fonksiyonuyla kontrol ediyoruz.
     if (typeof value === "object") {
-      return Object.values(value).some((innerValue) => deepSearch(innerValue, searchedTexts));
+      return Object.values(value).some((innerValue) => deepSearch(key, innerValue, searchedText));
     }
 
     // Diğer türlerdeki değerleri atla.
@@ -129,15 +149,10 @@ const Table = function <T extends object>({ children, data, columns, selections,
       if (!config?.isServer) _data = data.slice(indexOfFirstRow, indexOfLastRow);
     }
 
-    return searchedText
+    return Object.keys(searchedText).length > 0
       ? _data.filter((item) => {
           // `some` kullanarak herhangi bir girişin arama koşulunu karşılayıp karşılamadığını kontrol ediyoruz.
-          return Object.entries(item).some(([_key, _value]) =>
-            deepSearch(
-              _value,
-              searchedText.split(",").map((text) => text.trim().toLowerCase())
-            )
-          );
+          return Object.entries(item).some(([_key, _value]) => deepSearch(_key, _value, searchedText));
         })
       : _data;
   }, [data, searchedText, currentPage]);
@@ -162,12 +177,38 @@ const Table = function <T extends object>({ children, data, columns, selections,
   return (
     <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
       <div className="header">
-        {config?.isSearchable && (
-          <div>
-            <Input placeholder="Ara" onChange={(event) => setSearchedText(event.target.value.toLowerCase())} />
-          </div>
-        )}
-        <div>{React.Children.map(children, (child) => child)}</div>
+        <div className="title">
+          <h3>{title}</h3>
+          <h5>{description}</h5>
+        </div>
+
+        <div className="actions">
+          {React.Children.count(children) > 0 && <div>{React.Children.map(children, (child) => child)}</div>}
+
+          {actions && (
+            <>
+              {actions.add && (
+                <Button
+                  variant="outlined"
+                  status="dark"
+                  icon={{ element: <ARIcon icon="Add" size={16} /> }}
+                  tooltip={{ text: actions.add.tooltip, direction: "top" }}
+                  onClick={actions.add.click}
+                />
+              )}
+
+              {actions.import && (
+                <Button
+                  variant="outlined"
+                  status="dark"
+                  icon={{ element: <ARIcon icon="Import" size={16} /> }}
+                  tooltip={{ text: actions.import.tooltip, direction: "top" }}
+                  onClick={actions.import.click}
+                />
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       <div ref={_tableContent} className="content" onScroll={handleOnScroll}>
@@ -218,6 +259,47 @@ const Table = function <T extends object>({ children, data, columns, selections,
                 );
               })}
             </tr>
+
+            {config?.isSearchable && (
+              <tr key="isSearchable">
+                {selections && <th key={`column-selections`}></th>}
+
+                {columns.map((c, cIndex) => {
+                  if (c.render) return <th key={`column-${cIndex}`}></th>;
+
+                  return (
+                    <th
+                      key={`column-${cIndex}`}
+                      {...(c.config?.sticky && {
+                        "data-sticky-position": c.config.sticky,
+                      })}
+                    >
+                      <input
+                        className="search-input"
+                        onChange={(event) =>
+                          setSearchedText((prev) => {
+                            const updated = prev.some((item) => item.key === c.key);
+
+                            if (updated) {
+                              if (event.target.value.toLowerCase() === "") {
+                                return prev.filter((item) => item.key !== c.key);
+                              }
+
+                              return prev.map((item) =>
+                                item.key === c.key ? { ...item, value: event.target.value.toLowerCase() } : item
+                              );
+                            } else {
+                              return [...prev, { key: c.key as string, value: event.target.value.toLowerCase() }];
+                            }
+                          })
+                        }
+                        // placeholder={`${c.title} göre ara...`}
+                      />
+                    </th>
+                  );
+                })}
+              </tr>
+            )}
           </thead>
 
           <tbody>
@@ -297,8 +379,13 @@ const Table = function <T extends object>({ children, data, columns, selections,
         </table>
       </div>
 
-      {pagination && pagination.totalRecords > pagination.perPage && (
-        <div className="footer">
+      <div className="footer">
+        <span>
+          <strong>Showing {getData().length}</strong>{" "}
+          <span>of {pagination?.perPage ?? getData().length} agreement</span>
+        </span>
+
+        {pagination && pagination.totalRecords > pagination.perPage && (
           <Pagination
             totalRecords={pagination.totalRecords}
             perPage={pagination.perPage}
@@ -309,8 +396,8 @@ const Table = function <T extends object>({ children, data, columns, selections,
               pagination.onChange(currentPage);
             }}
           />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

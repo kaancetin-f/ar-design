@@ -12,7 +12,7 @@ const Checkbox = forwardRef<HTMLInputElement, IProps>(
     const _checkboxClassName: string[] = ["ar-checkbox"];
 
     // states
-    const [checked, setChecked] = useState<boolean>(false);
+    const [checked, setChecked] = useState<boolean>(attributes.checked ?? false);
 
     _checkboxClassName.push(
       ...Utils.GetClassName("filled", checked ? status : "light", border, size, undefined, attributes.className)
@@ -28,9 +28,6 @@ const Checkbox = forwardRef<HTMLInputElement, IProps>(
             size={0}
             onChange={(event) => {
               (() => {
-                const _current = _checkbox.current;
-                if (!_current) return;
-
                 setChecked(event.target.checked);
               })();
 

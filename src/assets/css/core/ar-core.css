@@ -69,8 +69,8 @@
   --light: #e4e6e9;
   --light-active: #dde0e3;
   --light-rgb: 222, 226, 230;
-  --dark: #343a40;
-  --dark-active: #23272b;
+  --dark: var(--gray-600);
+  --dark-active: var(--gray-700);
   --dark-rgb: 52, 58, 64;
 }
 /* #endregion */

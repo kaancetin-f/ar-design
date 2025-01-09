@@ -1,51 +1,45 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import "../../../assets/css/components/form/switch/styles.css";
 import IProps from "./IProps";
+import Utils from "../../../libs/infrastructure/shared/Utils";
 
 const Switch: React.FC<IProps> = ({ label, status = "primary", border = { radius: "pill" }, ...attributes }) => {
   // refs
   let _switch = useRef<HTMLInputElement>(null);
+  const _switchClassName: string[] = ["ar-switch"];
 
-  // variables
-  let _wrapperClassName = "ar-switch-wrapper";
-  let _switchClassName = `ar-switch filled`;
-  let _handleClassName = `handle`;
+  // states
+  const [checked, setChecked] = useState<boolean>(attributes.checked ?? false);
 
-  // status
-  _switchClassName += ` light`;
-
-  // border
-  _switchClassName += ` border-style-solid`;
-  _switchClassName += ` border-radius-${border.radius}`;
-  _handleClassName += ` border-radius-${border.radius}`;
+  _switchClassName.push(
+    ...Utils.GetClassName("filled", checked ? status : "light", border, undefined, undefined, attributes.className)
+  );
 
   return (
-    <div className={_wrapperClassName}>
+    <div className="ar-switch-wrapper">
       <label>
         <input
-          type={attributes.type || "checkbox"}
+          type={"checkbox"}
           {...attributes}
+          checked={checked}
           size={0}
           onChange={(event) => {
             event.stopPropagation();
 
             (() => {
-              const _current = _switch.current;
-              if (!_current) return;
+              console.log(event.target.checked);
 
-              event.target.checked
-                ? _current.classList.replace("light", status)
-                : _current.classList.replace(status, "light");
+              setChecked(event.target.checked);
             })();
 
             (() => attributes.onChange && attributes.onChange(event))();
           }}
         />
 
-        <span ref={_switch} className={_switchClassName}>
-          <span className={_handleClassName}></span>
+        <span ref={_switch} className={_switchClassName.map((c) => c).join(" ")}>
+          <span className="handle border-radius-pill"></span>
         </span>
 
         {label && <span className="label">{label}</span>}

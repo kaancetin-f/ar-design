@@ -6,7 +6,7 @@ const Box: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       style={{
         display: "flex",
         flexDirection: "row",
-        flexWrap: "wrap",
+        flexWrap: "nowrap",
         alignItems: "center",
         gap: ".5rem",
       }}

@@ -1,20 +1,46 @@
 .ar-table {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem 0;
+  background-color: var(--white);
   max-width: 100%;
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0px 10px 15px -5px rgba(var(--black-rgb), 0.1);
+  overflow: hidden;
 }
 .ar-table > .header {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+}
+.ar-table > .header > .title {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+}
+.ar-table > .header > .title > h3 {
+  color: var(--gray-700);
+  -webkit-text-stroke: 0.25px var(--gray-700);
+}
+.ar-table > .header > .title > h5 {
+  color: var(--gray-600);
+}
+.ar-table > .header > .actions {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.5rem;
+  margin-left: auto;
 }
 
 .ar-table > .footer {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-top: solid 1px var(--gray-200);
 }
 
 .ar-table > .header > div:first-child > .ar-input-wrapper,
@@ -26,19 +52,30 @@
   margin-left: auto;
 }
 
-.ar-table > .content {
-  border-radius: var(--border-radius-sm);
-}
 .ar-table > .content > table {
   border-collapse: collapse;
   width: 100%;
 }
 
+.ar-table > .content > table > thead > tr > th,
+.ar-table > .content > table > tbody > tr > td {
+  height: 3rem;
+  padding: 0 1.5rem;
+}
+
+.ar-table > .content > table > thead {
+  background-color: var(--gray-100);
+  border: solid 1px var(--gray-100);
+  border-top-color: var(--gray-200);
+  border-bottom-color: var(--gray-200);
+}
+.ar-table > .content > table > thead > tr:first-child {
+  border-bottom: solid 1px var(--gray-200);
+}
 .ar-table > .content > table > thead > tr > th {
   position: relative;
-  background-color: var(--gray-100);
-  padding: 0.5rem;
-  color: var(--gray-600);
+  color: var(--gray-700);
+  -webkit-text-stroke: 0.25px var(--gray-700);
   text-align: left;
   transition: background 250ms, box-shadow 250ms ease-in-out;
   z-index: 2;
@@ -54,6 +91,9 @@
   height: 50%;
 }
 .ar-table > .content > table > thead > tr > th:last-child:after {
+  display: none;
+}
+.ar-table > .content > table > thead > tr:last-child > th::after {
   display: none;
 }
 .ar-table > .content > table > thead > tr > th.selection-col {
@@ -72,15 +112,31 @@
   text-align: right;
 }
 
-.ar-table > .content > table > tbody {
-  box-shadow: 0 0 2px 2px var(--gray-200);
+.ar-table > .content > table > thead > tr > th > .search-input {
+  background-color: var(--gray-200);
+  width: 100%;
+  height: var(--input-height);
+  padding: 0 0.5rem;
+  border: solid 1px var(--gray-200);
+  border-radius: var(--border-radius-sm);
+  font-family: var(--system);
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: background 250ms, border 250ms, box-shadow 250ms ease-in-out;
 }
+.ar-table > .content > table > thead > tr > th > .search-input:focus {
+  border: solid 1px var(--primary);
+  box-shadow: 0 0 0 3.5px rgba(var(--primary-rgb), 0.25);
+}
+
 .ar-table > .content > table > tbody > tr {
-  border-bottom: solid 2px var(--gray-100);
+  border-bottom: solid 1px var(--gray-200);
+}
+.ar-table > .content > table > tbody > tr:last-child {
+  border-bottom: none;
 }
 .ar-table > .content > table > tbody > tr > td {
-  background-color: var(--white);
-  padding: 0.5rem;
   z-index: 1;
 }
 .ar-table > .content > table > tbody > tr > td.type-of-number {
