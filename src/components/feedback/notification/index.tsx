@@ -15,13 +15,27 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
   const _i = useRef<number>(0);
 
   const [items, setItems] = useState<
-    { id: number; title: string; message?: string; status: string; direction: Direction }[]
+    { id: number; title: string; message?: string; status: string | number; direction: Direction }[]
   >([]);
 
   useEffect(() => {
     if (!_firstLoad.current) {
       _firstLoad.current = true;
       return;
+    }
+
+    if (typeof status === "number") {
+      if (status >= 100 && status < 200) {
+        status = "information";
+      } else if (status >= 200 && status < 300) {
+        status = "success";
+      } else if (status >= 300 && status < 400) {
+        status = "warning";
+      } else if (status >= 400 && status < 500) {
+        status = "error";
+      } else if (status >= 500 && status < 600) {
+        status = "error";
+      }
     }
 
     setItems((prevItems) => [...prevItems, { id: _i.current++, title, message, status, direction }]);
@@ -92,11 +106,11 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
         }
       >
         <div className="icon">
-          <span className={item.status}></span>
-          <span className={item.status}></span>
-          <span className={item.status}></span>
-          <span className={item.status}></span>
-          <span className={item.status}></span>
+          <span className={String(item.status)}></span>
+          <span className={String(item.status)}></span>
+          <span className={String(item.status)}></span>
+          <span className={String(item.status)}></span>
+          <span className={String(item.status)}></span>
         </div>
 
         <div className="content">

@@ -14,7 +14,7 @@ type Props = {
 type NotificationContextProps = {
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   setMessage: React.Dispatch<React.SetStateAction<string>>;
-  setStatus: React.Dispatch<React.SetStateAction<Status>>;
+  setStatus: React.Dispatch<React.SetStateAction<Status | number>>;
   setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -25,7 +25,7 @@ const NotificationProvider = ({ children, direction }: Props) => {
   const [message, setMessage] = useState<string>(
     "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir."
   );
-  const [status, setStatus] = useState<Status>("success");
+  const [status, setStatus] = useState<Status | number>("success");
   const [trigger, setTrigger] = useState<boolean>(false);
 
   return (
@@ -39,13 +39,7 @@ const NotificationProvider = ({ children, direction }: Props) => {
     >
       {children}
 
-      <Notification
-        title={title}
-        message={message}
-        status={status}
-        direction={direction}
-        trigger={trigger}
-      />
+      <Notification title={title} message={message} status={status} direction={direction} trigger={trigger} />
     </NotificationContext.Provider>
   );
 };

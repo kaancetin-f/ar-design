@@ -34,7 +34,7 @@ export const useNotification = () => {
   const { setTitle, setMessage, setStatus, setTrigger } = useContext(NotificationContext);
 
   // methods
-  const notification = ({ title, message, status }: { title: string; message?: string; status: Status }) => {
+  const notification = ({ title, message, status }: { title: string; message?: string; status: Status | number }) => {
     setTitle && setTitle(title);
     setMessage && setMessage(message ?? "");
     setStatus && setStatus(status);
