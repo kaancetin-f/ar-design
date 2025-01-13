@@ -14,15 +14,15 @@
   height: 100%;
 }
 .ar-layout > main > aside.ar-aside.left {
-  flex: 2;
+  width: 100%;
   min-height: calc(100vh - 7.5rem);
   border-right: solid 1px var(--gray-200);
 }
 .ar-layout > main > aside.ar-aside.right {
-  flex: 2;
+  width: 100%;
 }
 .ar-layout > main > section {
-  flex: 8;
+  min-width: 1000px;
   height: fit-content;
   border-radius: var(--border-radius-lg);
 }

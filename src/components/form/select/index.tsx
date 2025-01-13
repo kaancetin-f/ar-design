@@ -44,7 +44,7 @@ const Select: React.FC<Props> = ({
   const [navigationIndex, setNavigationIndex] = useState<number>(0);
 
   _selectionClassName.push(
-    ...Utils.GetClassName(variant, validation ? "danger" : "light", border, undefined, undefined, undefined)
+    ...Utils.GetClassName(variant, validation?.text ? "danger" : "light", border, undefined, undefined, undefined)
   );
 
   // methods
@@ -103,6 +103,7 @@ const Select: React.FC<Props> = ({
             : InpuRect.top + InpuRect.height) + sy
         }px`;
         _options.current.style.left = `${InpuRect.left + sx}px`;
+        _options.current.style.minWidth = "200px";
         _options.current.style.width = `${InpuRect.width}px`;
       }
     }

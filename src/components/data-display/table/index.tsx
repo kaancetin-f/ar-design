@@ -159,6 +159,10 @@ const Table = function <T extends object>({
 
   // useEffects
   useEffect(() => {
+    handleOnScroll();
+  }, [data]);
+
+  useEffect(() => {
     if (!selections || selectionItems.length === 0) return;
 
     selections(selectionItems);
@@ -265,11 +269,32 @@ const Table = function <T extends object>({
                 {selections && <th key={`column-selections`}></th>}
 
                 {columns.map((c, cIndex) => {
-                  if (c.render) return <th key={`column-${cIndex}`}></th>;
+                  let _className: string[] = [];
+
+                  if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
+                  if (c.config?.alignContent) {
+                    _className.push(`align-content-${c.config.alignContent}`);
+                  }
+
+                  if (!c.key)
+                    return (
+                      <th
+                        key={`column-${cIndex}`}
+                        {...(_className.length > 0 && {
+                          className: `${_className.map((c) => c).join(" ")}`,
+                        })}
+                        {...(c.config?.sticky && {
+                          "data-sticky-position": c.config.sticky,
+                        })}
+                      ></th>
+                    );
 
                   return (
                     <th
                       key={`column-${cIndex}`}
+                      {...(_className.length > 0 && {
+                        className: `${_className.map((c) => c).join(" ")}`,
+                      })}
                       {...(c.config?.sticky && {
                         "data-sticky-position": c.config.sticky,
                       })}
@@ -355,7 +380,7 @@ const Table = function <T extends object>({
                       <td
                         key={`cell-${index}-${cIndex}`}
                         {...(c.config?.width && {
-                          style: { width: c.config.width },
+                          style: { minWidth: c.config.width },
                         })}
                         {...(_className.length > 0 && {
                           className: `${_className.map((c) => c).join(" ")}`,
