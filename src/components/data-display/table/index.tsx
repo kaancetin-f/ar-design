@@ -29,6 +29,7 @@ const Table = function <T extends object>({
   const _tableContent = useRef<HTMLDivElement>(null);
   const _table = useRef<HTMLTableElement>(null);
   const _checkboxItems = useRef<(HTMLInputElement | null)[]>([]);
+  const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
   // className
   const _tableClassName: string[] = ["ar-table", "scroll"];
 
@@ -144,11 +145,11 @@ const Table = function <T extends object>({
     let _data: T[] = [...data];
     _dataLength.current = data.length;
 
-    if (pagination) {
+    if (pagination && !config.isServerSide) {
       const indexOfLastRow = currentPage * pagination.perPage;
       const indexOfFirstRow = indexOfLastRow - pagination.perPage;
 
-      if (!config.isServerSide) _data = data.slice(indexOfFirstRow, indexOfLastRow);
+      _data = data.slice(indexOfFirstRow, indexOfLastRow);
     }
 
     return Object.keys(searchedTexts).length > 0
@@ -172,18 +173,20 @@ const Table = function <T extends object>({
 
   useEffect(() => {
     if (config?.isServerSide && searchedParams) {
-      // Nesneyi query parametrelere dönüştürme
-      const query = Object.entries(_searchedParams ?? {})
-        .map(([key, value]) => {
-          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-        })
-        .join("&");
+      // const query = Object.entries(_searchedParams ?? {})
+      //   .map(([key, value]) => {
+      //     return `${key}=${value}`;
+      //   })
+      //   .join("&");
 
+      const query = new URLSearchParams(_searchedParams).toString();
       searchedParams(_searchedParams, query);
     }
   }, [_searchedParams]);
 
   useEffect(() => {
+    if (!selections) return;
+
     let allChecked = false;
 
     if (_checkboxItems.current.length > 0) {
@@ -319,8 +322,12 @@ const Table = function <T extends object>({
                         className="search-input"
                         onChange={(event) => {
                           if (config.isServerSide) {
-                            // "searchedParams" özelliğinden geriye dönecek olan değer/ler...
-                            setSearchedParams((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+                            if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
+
+                            _searchTimeOut.current = setTimeout(() => {
+                              setSearchedParams((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+                              pagination && pagination.onChange(1);
+                            }, 750);
                           } else {
                             // Bileşen bazlı arama işlemi.
                             setSearchedTexts((prev) => {
@@ -437,10 +444,7 @@ const Table = function <T extends object>({
             totalRecords={pagination.totalRecords}
             perPage={pagination.perPage}
             onChange={(currentPage) => {
-              setCurrentPage(currentPage);
-
-              // Table tarafında yapılan sayfalamayı dışarı aktarmak için kullanılan callback.
-              pagination.onChange(currentPage);
+              !config.isServerSide ? setCurrentPage(currentPage) : pagination.onChange(currentPage);
             }}
           />
         )}
