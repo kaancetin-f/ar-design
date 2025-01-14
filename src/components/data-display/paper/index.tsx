@@ -1,6 +1,6 @@
 import React from "react";
 import Typography from "../typography";
-import "../../../assets/css/components/data-display/paper/paper.css";
+import "../../../assets/css/components/data-display/paper/styles.css";
 
 const { Title } = Typography;
 
