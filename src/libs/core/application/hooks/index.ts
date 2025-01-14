@@ -120,6 +120,8 @@ export const useValidation = function <TData extends object>(
   };
 
   const paramsShape = (param: ValidationProperties<TData>, value: string) => {
+    const vLenght = value ? value.length : 0;
+
     const getKey = (subkey: string | undefined) => {
       if (!subkey) return param.key;
 
@@ -132,11 +134,11 @@ export const useValidation = function <TData extends object>(
         setError(key, s.message, param.step);
       }
 
-      if (s.type === "minimum" && value.length < (s.value as number)) {
+      if (s.type === "minimum" && vLenght < (s.value as number)) {
         setError(key, Utils.StringFormat(s.message, s.value), param.step);
       }
 
-      if (s.type === "maximum" && value.length > (s.value as number)) {
+      if (s.type === "maximum" && vLenght > (s.value as number)) {
         setError(key, Utils.StringFormat(s.message, s.value), param.step);
       }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import IProps from "./IProps";
+import IProps, { SearchedParam } from "./IProps";
 import "../../../assets/css/components/data-display/table/styles.css";
 import Checkbox from "../../form/checkbox";
 import Actions from "./Actions";
@@ -19,6 +19,7 @@ const Table = function <T extends object>({
   columns,
   actions,
   selections,
+  searchedParams,
   pagination,
   config = { isSearchable: true },
 }: IProps<T>) {
@@ -34,7 +35,8 @@ const Table = function <T extends object>({
   // states
   const [selectAll, setSelectAll] = useState<boolean>(false);
   const [selectionItems, setSelectionItems] = useState<T[]>([]);
-  const [searchedText, setSearchedText] = useState<SearchedText[]>([]);
+  const [searchedTexts, setSearchedTexts] = useState<SearchedText[]>([]);
+  const [_searchedParams, setSearchedParams] = useState<SearchedParam | undefined>(undefined);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   if (config && Object.keys(config.scroll || {}).length > 0) {
@@ -131,7 +133,7 @@ const Table = function <T extends object>({
 
     // Eğer değer bir nesne veya dizi ise, içindeki her bir değeri yine deepSearch fonksiyonuyla kontrol ediyoruz.
     if (typeof value === "object") {
-      return Object.values(value).some((innerValue) => deepSearch(key, innerValue, searchedText));
+      return Object.values(value).some((innerValue) => deepSearch(key, innerValue, searchedTexts));
     }
 
     // Diğer türlerdeki değerleri atla.
@@ -146,16 +148,16 @@ const Table = function <T extends object>({
       const indexOfLastRow = currentPage * pagination.perPage;
       const indexOfFirstRow = indexOfLastRow - pagination.perPage;
 
-      if (!config?.isServer) _data = data.slice(indexOfFirstRow, indexOfLastRow);
+      if (!config.isServerSide) _data = data.slice(indexOfFirstRow, indexOfLastRow);
     }
 
-    return Object.keys(searchedText).length > 0
+    return Object.keys(searchedTexts).length > 0
       ? _data.filter((item) => {
           // `some` kullanarak herhangi bir girişin arama koşulunu karşılayıp karşılamadığını kontrol ediyoruz.
-          return Object.entries(item).some(([_key, _value]) => deepSearch(_key, _value, searchedText));
+          return Object.entries(item).some(([_key, _value]) => deepSearch(_key, _value, searchedTexts));
         })
       : _data;
-  }, [data, searchedText, currentPage]);
+  }, [data, searchedTexts, currentPage]);
 
   // useEffects
   useEffect(() => {
@@ -167,6 +169,19 @@ const Table = function <T extends object>({
 
     selections(selectionItems);
   }, [selectionItems]);
+
+  useEffect(() => {
+    if (config?.isServerSide && searchedParams) {
+      // Nesneyi query parametrelere dönüştürme
+      const query = Object.entries(_searchedParams ?? {})
+        .map(([key, value]) => {
+          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        })
+        .join("&");
+
+      searchedParams(_searchedParams, query);
+    }
+  }, [_searchedParams]);
 
   useEffect(() => {
     let allChecked = false;
@@ -191,13 +206,13 @@ const Table = function <T extends object>({
 
           {actions && (
             <>
-              {actions.add && (
+              {actions.create && (
                 <Button
                   variant="outlined"
                   status="dark"
                   icon={{ element: <ARIcon icon="Add" size={16} /> }}
-                  tooltip={{ text: actions.add.tooltip, direction: "top" }}
-                  onClick={actions.add.click}
+                  tooltip={{ text: actions.create.tooltip, direction: "top" }}
+                  onClick={actions.create.onClick}
                 />
               )}
 
@@ -207,7 +222,7 @@ const Table = function <T extends object>({
                   status="dark"
                   icon={{ element: <ARIcon icon="Import" size={16} /> }}
                   tooltip={{ text: actions.import.tooltip, direction: "top" }}
-                  onClick={actions.import.click}
+                  onClick={actions.import.onClick}
                 />
               )}
             </>
@@ -300,24 +315,31 @@ const Table = function <T extends object>({
                       })}
                     >
                       <input
+                        name={String(c.key)}
                         className="search-input"
-                        onChange={(event) =>
-                          setSearchedText((prev) => {
-                            const updated = prev.some((item) => item.key === c.key);
+                        onChange={(event) => {
+                          if (config.isServerSide) {
+                            // "searchedParams" özelliğinden geriye dönecek olan değer/ler...
+                            setSearchedParams((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+                          } else {
+                            // Bileşen bazlı arama işlemi.
+                            setSearchedTexts((prev) => {
+                              const updated = prev.some((item) => item.key === c.key);
 
-                            if (updated) {
-                              if (event.target.value.toLowerCase() === "") {
-                                return prev.filter((item) => item.key !== c.key);
+                              if (updated) {
+                                if (event.target.value.toLowerCase() === "") {
+                                  return prev.filter((item) => item.key !== c.key);
+                                }
+
+                                return prev.map((item) =>
+                                  item.key === c.key ? { ...item, value: event.target.value.toLowerCase() } : item
+                                );
+                              } else {
+                                return [...prev, { key: c.key as string, value: event.target.value.toLowerCase() }];
                               }
-
-                              return prev.map((item) =>
-                                item.key === c.key ? { ...item, value: event.target.value.toLowerCase() } : item
-                              );
-                            } else {
-                              return [...prev, { key: c.key as string, value: event.target.value.toLowerCase() }];
-                            }
-                          })
-                        }
+                            });
+                          }
+                        }}
                         // placeholder={`${c.title} göre ara...`}
                       />
                     </th>

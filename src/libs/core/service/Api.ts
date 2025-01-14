@@ -14,6 +14,10 @@ class Api {
   }
 
   async Get(values: { input?: RequestInfo | undefined; headers?: HeadersInit }): Promise<Response> {
+    if (values.input && values.input.toString().includes("?")) {
+      values.input = values.input.toString().replace(/\/(?=\?)/, "");
+    }
+
     const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "GET",
       headers: {
