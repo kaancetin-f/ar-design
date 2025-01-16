@@ -1,173 +1,169 @@
 import React, { useEffect, useRef, useState } from "react";
 import Props from "./Props";
 import "../../../assets/css/components/form/upload/styles.css";
-import ReactDOM from "react-dom";
 import { ARIcon } from "../../icons";
+import Button from "../button";
 
 const Upload: React.FC<Props> = ({ text, file, onChange, multiple }) => {
   // refs
+  const _firstLoad = useRef<boolean>(false);
   const _input = useRef<HTMLInputElement>(null);
   const _arUplaod = useRef<HTMLDivElement>(null);
-  const _arUplaodFiles = useRef<HTMLDivElement>(null);
-  const _count = useRef<HTMLSpanElement>(null);
-  const _countInterval = useRef<NodeJS.Timeout>();
+  // refs -> File Data
+  const _validationErrors = useRef<string[]>([]);
 
   // states
-  const [open, setOpen] = useState<boolean>(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+  const [validationErrors, setValidationErrors] = useState<Partial<{ [key: string]: string }>[]>([]);
 
   // methods
-  const handleClickOutSide = (event: MouseEvent) => {
-    const target = event.target as HTMLElement;
+  const handleFileChange = (files: FileList | null) => {
+    const _files = Array.from(files ?? []);
 
-    if (_arUplaodFiles.current && !_arUplaodFiles.current.contains(target)) setOpen(false);
-  };
+    if (multiple) {
+      setSelectedFiles((prev) => {
+        const previousFileNames = prev.map((f) => f.name);
+        const newFiles = _files.filter((f) => !previousFileNames.includes(f.name)) ?? [];
 
-  const handleKeys = (event: KeyboardEvent) => {
-    const key = event.key;
-
-    if (key === "Escape") setOpen(false);
-  };
-
-  const handlePosition = () => {
-    if (_arUplaod.current && _arUplaodFiles.current) {
-      const wRect = _arUplaod.current.getBoundingClientRect(); // Wrapper
-      const ufRect = _arUplaodFiles.current.getBoundingClientRect(); // Popup
-      const screenCenter = window.innerHeight / 2;
-      const sx = window.scrollX || document.documentElement.scrollLeft;
-      const sy = window.scrollY || document.documentElement.scrollTop;
-
-      if (multiple) {
-        _arUplaodFiles.current.style.top = `${
-          (wRect.top > screenCenter ? wRect.top - ufRect.height + wRect.height : wRect.top) + sy
-        }px`;
-      } else {
-        _arUplaodFiles.current.style.top = `${wRect.top + sy}px`;
-      }
-      _arUplaodFiles.current.style.left = `${wRect.left - ufRect.width + sx - 10}px`;
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const filesArray = Array.from(event.target.files ?? []);
-    setSelectedFiles(filesArray);
-
-    if (filesArray.length > 0) {
-      const formData = new FormData();
-
-      if (multiple) {
-        filesArray.forEach((file) => formData.append("file", file));
-        onChange(formData, filesArray);
-      } else {
-        formData.append("file", filesArray[0]);
-        onChange(formData, filesArray[0]);
-      }
+        return [...prev, ...newFiles];
+      });
+    } else {
+      setSelectedFile(_files[0]);
     }
   };
 
   const handleFileRemove = (fileToRemove: File) => {
-    setSelectedFiles((prev) => prev.filter((x) => x.name !== fileToRemove.name));
-
-    // Dosyayı input'tan kaldırmak için input'un value'sunu sıfırla
-    if (_input.current) {
-      const inputFiles = Array.from(_input.current.files ?? []);
-      const updatedFiles = inputFiles.filter((file) => file.name !== fileToRemove.name);
+    if (multiple) {
       const dataTransfer = new DataTransfer();
-      updatedFiles.forEach((file) => dataTransfer.items.add(file));
 
-      // input'un files özelliğini güncelle
-      _input.current.files = dataTransfer.files;
+      setSelectedFiles((prev) => {
+        const newList = prev.filter((x) => x.name !== fileToRemove.name);
+        newList.forEach((file) => dataTransfer.items.add(file));
+
+        if (_input.current) _input.current.files = dataTransfer.files;
+
+        return newList;
+      });
     }
+  };
+
+  const handleValidationFile = (file: File) => {
+    const newErrors: Partial<{ [key: string]: string }>[] = [];
+    const allowedTypes = ["image/jpeg", "image/png"];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (!allowedTypes.includes(file.type)) {
+      newErrors.push({ [file.name]: "Geçersiz dosya türü." });
+      _validationErrors.current.push(file.name);
+    }
+    if (file.size > maxSize) {
+      newErrors.push({ [file.name]: "Dosya boyutu çok büyük." });
+      _validationErrors.current.push(file.name);
+    }
+
+    setValidationErrors((prev) => [...prev, ...newErrors]);
   };
 
   // useEffects
   useEffect(() => {
-    setTimeout(() => handlePosition(), 0);
+    const dataTransfer = new DataTransfer();
+    const fileFormData = new FormData();
+    setValidationErrors([]);
+    _validationErrors.current = [];
 
-    if (_count.current) {
-      _count.current.classList.add("changed");
-
-      _countInterval.current = setTimeout(() => {
-        _count.current?.classList.remove("changed");
-        clearTimeout(_countInterval.current);
-      }, 250);
-    }
-  }, [selectedFiles]);
-
-  useEffect(() => {
     if (_input.current) {
-      multiple ? setSelectedFiles(file) : setSelectedFile(file);
+      if (multiple) {
+        // Seçilmiş olan dosyalar validasyona gönderiliyor.
+        selectedFiles.forEach((f) => handleValidationFile(f));
+        const inValidFiles = Array.from(new Set(_validationErrors.current));
+        // Input içerisine dosyalar aktarılıyor.
+        selectedFiles.forEach((f) => dataTransfer.items.add(f));
+        _input.current.files = dataTransfer.files;
+
+        // Geçerli olan dosyalar alındı...
+        const validFiles = [...selectedFiles.filter((x) => !inValidFiles.includes(x.name))];
+        validFiles.forEach((f) => fileFormData.append("file", f));
+        onChange(fileFormData, validFiles);
+      } else {
+        if (selectedFile) {
+          handleValidationFile(selectedFile);
+          fileFormData.append("file", selectedFile);
+          onChange(fileFormData, selectedFile);
+
+          // Input içerisine dosyalar aktarılıyor.
+          dataTransfer.items.add(selectedFile);
+          _input.current.files = dataTransfer.files;
+        }
+      }
     }
-  }, [file]);
+  }, [selectedFiles, selectedFile]);
 
   useEffect(() => {
-    if (open) {
-      setTimeout(() => handlePosition(), 0);
+    if (_firstLoad.current) return;
 
-      window.addEventListener("blur", () => setOpen(false));
-      document.addEventListener("click", handleClickOutSide);
-      document.addEventListener("keydown", handleKeys);
-    }
+    multiple ? setSelectedFiles(file) : setSelectedFile(file);
 
-    return () => {
-      window.removeEventListener("blur", () => setOpen(false));
-      document.removeEventListener("click", handleClickOutSide);
-      document.removeEventListener("keydown", handleKeys);
-    };
-  }, [open]);
+    _firstLoad.current = true;
+  }, [file]);
 
   return (
     <div ref={_arUplaod} className="ar-upload">
-      <input ref={_input} type="file" onChange={handleFileChange} multiple={multiple} />
+      <input ref={_input} type="file" onChange={(event) => handleFileChange(event.target.files)} multiple={multiple} />
 
       <div className="ar-upload-button">
-        <button
+        <Button
+          variant="outlined"
+          status="light"
+          icon={{ element: <ARIcon variant="bulk" icon="Upload" fill="var(--gray-300)" /> }}
           onClick={() => {
             if (_input.current) _input.current.click();
           }}
         >
-          <span className="icon">
-            <span
-              ref={_count}
-              className="count"
-              onClick={(event) => {
-                event.stopPropagation();
-                setOpen((prev) => !prev);
-              }}
-            >
-              {selectedFiles.length === 0 ? (selectedFile ? 1 : 0) : selectedFiles.length}
-            </span>
-            <ARIcon variant="bulk" icon="Upload" fill="var(--success)" />
-          </span>
           {text && <span>{text}</span>}
-        </button>
-      </div>
+        </Button>
 
-      {open && selectedFiles.length > 0 ? (
-        ReactDOM.createPortal(
-          <div ref={_arUplaodFiles} className="ar-upload-files">
-            <ul>
-              {selectedFiles.map((selectedFile, index) => (
-                <li key={index}>
-                  <span>{selectedFile.name}</span>
-                  <span
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      handleFileRemove(selectedFile);
-                    }}
-                  >
-                    <ARIcon variant="bulk" icon="Trash" fill="var(--danger)" size={16} />
-                  </span>
+        <div className="ar-upload-files">
+          <ul>
+            {selectedFiles.map((selectedFile, index) => {
+              let _className: string[] = [];
+
+              const errorMessages = validationErrors
+                .filter((error) => Object.keys(error).includes(selectedFile.name))
+                .map((error) => error[selectedFile.name]);
+
+              if (errorMessages.length > 0) _className.push("error");
+
+              return (
+                <li key={index} className={_className.map((c) => c).join(" ")}>
+                  <div className="list-content">
+                    <span>{selectedFile.name}</span>
+                    <span
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        handleFileRemove(selectedFile);
+                      }}
+                    >
+                      x
+                    </span>
+                  </div>
+
+                  {errorMessages.length > 0 && (
+                    <div className="errors">
+                      {errorMessages.map((message, i) => (
+                        <span key={i}>
+                          <span className="bullet">&#8226;</span>
+                          <span>{message}</span>
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </li>
-              ))}
-            </ul>
-          </div>,
-          document.body
-        )
-      ) : (
-        <span>{selectedFile?.name}</span>
-      )}
+              );
+            })}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };
