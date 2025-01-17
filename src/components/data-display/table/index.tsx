@@ -198,7 +198,7 @@ const Table = function <T extends object>({
 
   return (
     <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
-      {(title || description || actions) && (
+      {(title || description || actions || React.Children.count(children) > 0) && (
         <div className="header">
           <div className="title">
             <h3>{title}</h3>
