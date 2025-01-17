@@ -3,8 +3,10 @@ import Props from "./Props";
 import "../../../assets/css/components/form/upload/styles.css";
 import { ARIcon } from "../../icons";
 import Button from "../button";
+import Tooltip from "../../feedback/tooltip";
+import { AllowedTypes } from "../../../libs/types";
 
-const Upload: React.FC<Props> = ({ text, file, onChange, multiple }) => {
+const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, multiple }) => {
   // refs
   const _firstLoad = useRef<boolean>(false);
   const _input = useRef<HTMLInputElement>(null);
@@ -50,18 +52,22 @@ const Upload: React.FC<Props> = ({ text, file, onChange, multiple }) => {
 
   const handleValidationFile = (file: File) => {
     const newErrors: Partial<{ [key: string]: string }>[] = [];
-    const allowedTypes = ["image/jpeg", "image/png"];
-    const maxSize = 5 * 1024 * 1024; // 5MB
 
-    if (!allowedTypes.includes(file.type)) {
-      newErrors.push({ [file.name]: "Geçersiz dosya türü." });
-      _validationErrors.current.push(file.name);
-    }
-    if (file.size > maxSize) {
-      newErrors.push({ [file.name]: "Dosya boyutu çok büyük." });
-      _validationErrors.current.push(file.name);
+    if (allowedTypes) {
+      if (!allowedTypes.includes(file.type as AllowedTypes)) {
+        newErrors.push({ [file.name]: "Geçersiz dosya türü." });
+        _validationErrors.current.push(file.name);
+      }
     }
 
+    if (maxSize) {
+      const _maxSize = maxSize * 1024 * 1024; // 5MB
+
+      if (file.size > _maxSize) {
+        newErrors.push({ [file.name]: "Dosya boyutu çok büyük." });
+        _validationErrors.current.push(file.name);
+      }
+    }
     setValidationErrors((prev) => [...prev, ...newErrors]);
   };
 
@@ -84,7 +90,7 @@ const Upload: React.FC<Props> = ({ text, file, onChange, multiple }) => {
         // Geçerli olan dosyalar alındı...
         const validFiles = [...selectedFiles.filter((x) => !inValidFiles.includes(x.name))];
         validFiles.forEach((f) => fileFormData.append("file", f));
-        onChange(fileFormData, validFiles);
+        onChange(fileFormData, validFiles, _validationErrors.current.length === 0);
       } else {
         if (selectedFile) {
           handleValidationFile(selectedFile);
@@ -134,29 +140,26 @@ const Upload: React.FC<Props> = ({ text, file, onChange, multiple }) => {
 
               if (errorMessages.length > 0) _className.push("error");
 
+              const content = (
+                <div className="content">
+                  <span className={_className.map((c) => c).join(" ")}>{selectedFile.name}</span>
+                  <span
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleFileRemove(selectedFile);
+                    }}
+                  >
+                    x
+                  </span>
+                </div>
+              );
+
               return (
                 <li key={index} className={_className.map((c) => c).join(" ")}>
-                  <div className="list-content">
-                    <span>{selectedFile.name}</span>
-                    <span
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleFileRemove(selectedFile);
-                      }}
-                    >
-                      x
-                    </span>
-                  </div>
-
-                  {errorMessages.length > 0 && (
-                    <div className="errors">
-                      {errorMessages.map((message, i) => (
-                        <span key={i}>
-                          <span className="bullet">&#8226;</span>
-                          <span>{message}</span>
-                        </span>
-                      ))}
-                    </div>
+                  {errorMessages.length === 0 ? (
+                    content
+                  ) : (
+                    <Tooltip text={errorMessages.map((message) => message ?? "")}>{content}</Tooltip>
                   )}
                 </li>
               );

@@ -74,6 +74,43 @@ export type ValidationProperties<T> = {
 };
 export type Errors<TData> = Partial<{ [key in keyof TData]: string }>;
 
+// Upload
+export type AllowedTypes =
+  | "image/jpeg"
+  | "image/png"
+  | "image/gif"
+  | "image/webp"
+  | "image/svg+xml"
+  | "image/bmp"
+  | "image/tiff"
+  | "application/pdf"
+  | "application/msword"
+  | "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  | "application/vnd.ms-excel"
+  | "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  | "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+  | "application/zip"
+  | "application/x-rar-compressed"
+  | "application/x-7z-compressed"
+  | "application/gzip"
+  | "application/json"
+  | "application/xml"
+  | "text/plain"
+  | "text/csv"
+  | "text/html"
+  | "video/mp4"
+  | "video/quicktime"
+  | "video/x-msvideo"
+  | "video/x-matroska"
+  | "video/webm"
+  | "video/x-flv"
+  | "audio/mpeg"
+  | "audio/wav"
+  | "audio/ogg"
+  | "audio/aac"
+  | "audio/flac"
+  | "application/octet-stream";
+
 // Charts
 // Pie
 export type PieChartDataType = { value: number; text: string };

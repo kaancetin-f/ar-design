@@ -69,6 +69,9 @@
   border-top-color: var(--gray-200);
   border-bottom-color: var(--gray-200);
 }
+.ar-table:not(:has(> .header)) > .content > table > thead {
+  border-top-color: transparent;
+}
 .ar-table > .content > table > thead > tr:first-child {
   border-bottom: solid 1px var(--gray-200);
 }

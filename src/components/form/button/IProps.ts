@@ -23,7 +23,7 @@ interface IProps
 
   tooltip?: {
     text: string;
-    direction: "top" | "right" | "left" | "bottom";
+    direction?: "top" | "right" | "left" | "bottom";
   };
 
   position?: {

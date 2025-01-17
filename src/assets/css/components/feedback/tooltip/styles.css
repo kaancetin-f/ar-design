@@ -1,0 +1,59 @@
+.ar-tooltip {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background-color: var(--white);
+  padding: 0.25rem 0.5rem;
+  border: solid 1px var(--gray-300);
+  border-radius: var(--border-radius-sm);
+  z-index: 1052;
+}
+.ar-tooltip > span {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+}
+.ar-tooltip > .text {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  color: var(--gray-700);
+  font-size: 0.85rem;
+  text-wrap: nowrap;
+  -webkit-text-stroke: 0.75px var(--gray-700);
+}
+.ar-tooltip > .text > .bullet {
+  color: var(--gray-400);
+  -webkit-text-stroke: 0px;
+}
+
+.ar-tooltip::before {
+  position: absolute;
+  content: "";
+  border: solid 7.5px transparent;
+}
+.ar-tooltip.top::before {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: var(--gray-300);
+}
+.ar-tooltip.right::before {
+  top: 50%;
+  transform: translateY(-50%);
+  right: 100%;
+  border-right-color: var(--gray-300);
+}
+.ar-tooltip.bottom::before {
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 100%;
+  border-bottom-color: var(--gray-300);
+}
+.ar-tooltip.left::before {
+  top: 50%;
+  transform: translateY(-50%);
+  left: 100%;
+  border-left-color: var(--gray-300);
+}

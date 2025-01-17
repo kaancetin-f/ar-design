@@ -29,6 +29,7 @@ import Alert from "./components/feedback/alert";
 import Modal from "./components/feedback/modal";
 import Popover from "./components/feedback/popover";
 import Progress from "./components/feedback/progress";
+import Tooltip from "./components/feedback/tooltip";
 
 // Navigation
 import Breadcrumb from "./components/navigation/breadcrumb";
@@ -69,6 +70,7 @@ export {
   Modal,
   Popover,
   Progress,
+  Tooltip,
 
   // Navigation
   Breadcrumb,

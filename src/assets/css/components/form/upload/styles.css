@@ -27,30 +27,36 @@
   list-style-type: none;
 }
 .ar-upload-button > .ar-upload-files > ul > li {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.5rem;
+  position: relative;
   border-bottom: solid 1px var(--gray-200);
+}
+.ar-upload-button > .ar-upload-files > ul > li:hover > .errors {
+  display: flex;
 }
 .ar-upload-button > .ar-upload-files > ul > li.error {
   border-left: solid 2px var(--danger);
 }
-.ar-upload-button > .ar-upload-files > ul > li > .list-content {
+.ar-upload-button > .ar-upload-files > ul > li .content {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  height: 2rem;
+  padding: 0 0.5rem;
 }
-.ar-upload-button > .ar-upload-files > ul > li > .list-content > span:first-child {
+.ar-upload-button > .ar-upload-files > ul > li .content > span:first-child {
   width: 90%;
   font-size: 0.75rem;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
-.ar-upload-button > .ar-upload-files > ul > li > .list-content > span:last-child {
+.ar-upload-button > .ar-upload-files > ul > li .content > span:first-child.error {
+  color: var(--danger);
+  -webkit-text-stroke: 0.5px var(--danger);
+}
+.ar-upload-button > .ar-upload-files > ul > li .content > span:last-child {
   background-color: rgba(var(--danger-rgb), 0.1);
   width: 1rem;
   height: 1rem;
@@ -61,21 +67,6 @@
   -webkit-text-stroke: 1px rgba(var(--danger-rgb), 0.5);
   line-height: 0.85rem;
   cursor: pointer;
-}
-
-.ar-upload-button > .ar-upload-files > ul > li > .errors {
-  display: flex;
-  flex-direction: column;
-  list-style: circle;
-}
-.ar-upload-button > .ar-upload-files > ul > li > .errors > .bullet {
-  color: var(--danger);
-}
-.ar-upload-button > .ar-upload-files > ul > li > .errors > span {
-  display: flex;
-  gap: 0.25rem;
-  font-size: 0.75rem;
-  color: var(--danger);
 }
 
 @import url("./animations.css");

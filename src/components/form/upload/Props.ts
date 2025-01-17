@@ -1,8 +1,9 @@
+import { AllowedTypes } from "../../../libs/types";
 import { IValidation } from "../../../libs/types/IGlobalProps";
 
 interface IMultiple {
   file: File[];
-  onChange: (formData: FormData, files: File[]) => void;
+  onChange: (formData: FormData, files: File[], isInvalidFileExist: boolean) => void;
   multiple: true;
 }
 
@@ -14,6 +15,8 @@ interface ISingle {
 
 type Props = {
   text: string;
+  allowedTypes?: AllowedTypes[];
+  maxSize?: number;
   disabled?: boolean;
 } & (IMultiple | ISingle) &
   IValidation;

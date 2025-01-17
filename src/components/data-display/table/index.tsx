@@ -21,7 +21,7 @@ const Table = function <T extends object>({
   selections,
   searchedParams,
   pagination,
-  config = { isSearchable: true },
+  config = { isSearchable: false },
 }: IProps<T>) {
   // refs
   let _dataLength = useRef<number>(0);
@@ -198,40 +198,42 @@ const Table = function <T extends object>({
 
   return (
     <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
-      <div className="header">
-        <div className="title">
-          <h3>{title}</h3>
-          <h5>{description}</h5>
+      {(title || description || actions) && (
+        <div className="header">
+          <div className="title">
+            <h3>{title}</h3>
+            <h5>{description}</h5>
+          </div>
+
+          <div className="actions">
+            {React.Children.count(children) > 0 && <div>{React.Children.map(children, (child) => child)}</div>}
+
+            {actions && (
+              <>
+                {actions.create && (
+                  <Button
+                    variant="outlined"
+                    status="dark"
+                    icon={{ element: <ARIcon icon="Add" size={16} /> }}
+                    tooltip={{ text: actions.create.tooltip, direction: "top" }}
+                    onClick={actions.create.onClick}
+                  />
+                )}
+
+                {actions.import && (
+                  <Button
+                    variant="outlined"
+                    status="dark"
+                    icon={{ element: <ARIcon icon="Import" size={16} /> }}
+                    tooltip={{ text: actions.import.tooltip, direction: "top" }}
+                    onClick={actions.import.onClick}
+                  />
+                )}
+              </>
+            )}
+          </div>
         </div>
-
-        <div className="actions">
-          {React.Children.count(children) > 0 && <div>{React.Children.map(children, (child) => child)}</div>}
-
-          {actions && (
-            <>
-              {actions.create && (
-                <Button
-                  variant="outlined"
-                  status="dark"
-                  icon={{ element: <ARIcon icon="Add" size={16} /> }}
-                  tooltip={{ text: actions.create.tooltip, direction: "top" }}
-                  onClick={actions.create.onClick}
-                />
-              )}
-
-              {actions.import && (
-                <Button
-                  variant="outlined"
-                  status="dark"
-                  icon={{ element: <ARIcon icon="Import" size={16} /> }}
-                  tooltip={{ text: actions.import.tooltip, direction: "top" }}
-                  onClick={actions.import.onClick}
-                />
-              )}
-            </>
-          )}
-        </div>
-      </div>
+      )}
 
       <div ref={_tableContent} className="content" onScroll={handleOnScroll}>
         <table ref={_table}>
@@ -433,22 +435,24 @@ const Table = function <T extends object>({
         </table>
       </div>
 
-      <div className="footer">
-        <span>
-          <strong>Showing {getData().length}</strong>{" "}
-          <span>of {pagination?.perPage ?? getData().length} agreement</span>
-        </span>
+      {pagination && pagination.totalRecords > pagination.perPage && (
+        <div className="footer">
+          <React.Fragment>
+            <span>
+              <strong>Showing {getData().length}</strong>{" "}
+              <span>of {pagination?.perPage ?? getData().length} agreement</span>
+            </span>
 
-        {pagination && pagination.totalRecords > pagination.perPage && (
-          <Pagination
-            totalRecords={pagination.totalRecords}
-            perPage={pagination.perPage}
-            onChange={(currentPage) => {
-              !config.isServerSide ? setCurrentPage(currentPage) : pagination.onChange(currentPage);
-            }}
-          />
-        )}
-      </div>
+            <Pagination
+              totalRecords={pagination.totalRecords}
+              perPage={pagination.perPage}
+              onChange={(currentPage) => {
+                !config.isServerSide ? setCurrentPage(currentPage) : pagination.onChange(currentPage);
+              }}
+            />
+          </React.Fragment>
+        </div>
+      )}
     </div>
   );
 };
