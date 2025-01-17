@@ -5,7 +5,23 @@ import Icon from "./Compiler";
 export const ARIcon: React.FC<{
   size?: string | number | undefined;
   variant?: "linear" | "bulk";
-  icon: "Add" | "CloseSquare" | "Drive" | "Folder" | "Trash" | "Upload" | "Image" | "Import";
+  icon:
+    | "Add"
+    | "CloseSquare"
+    | "Drive"
+    | "Folder"
+    | "Trash"
+    | "Upload"
+    | "Image"
+    | "Import"
+    | "Bold"
+    | "Italic"
+    | "Underline"
+    | "BulletList"
+    | "NumberList"
+    | "TextAlingLeft"
+    | "TextAlingCenter"
+    | "TextAlingRight";
   fill?: string;
   stroke?: string;
   strokeWidth?: number;

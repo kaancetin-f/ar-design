@@ -1,0 +1,7 @@
+.ar-text-editor {
+}
+.ar-text-editor > .toolbar {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+}

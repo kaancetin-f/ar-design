@@ -13,7 +13,23 @@ class Icon {
 
   public Compiler = (
     variant: "linear" | "bulk",
-    icon: "Add" | "CloseSquare" | "Drive" | "Folder" | "Trash" | "Upload" | "Image" | "Import"
+    icon:
+      | "Add"
+      | "CloseSquare"
+      | "Drive"
+      | "Folder"
+      | "Trash"
+      | "Upload"
+      | "Image"
+      | "Import"
+      | "Bold"
+      | "Italic"
+      | "Underline"
+      | "BulletList"
+      | "NumberList"
+      | "TextAlingLeft"
+      | "TextAlingCenter"
+      | "TextAlingRight"
   ) => {
     switch (variant) {
       case "linear":
@@ -73,6 +89,86 @@ class Icon {
                   strokeLinejoin="round"
                 ></path>
               </>
+            );
+          case "Bold":
+            return (
+              <path
+                d="M4.88 4.5c0-1.1.9-2 2-2H12c2.62 0 4.75 2.13 4.75 4.75S14.62 12 12 12H4.88V4.5ZM4.88 12h9.5c2.62 0 4.75 2.13 4.75 4.75S17 21.5 14.38 21.5h-7.5c-1.1 0-2-.9-2-2V12v0Z"
+                stroke={this._stroke}
+                strokeWidth={this._strokeWidth}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            );
+          case "Italic":
+            return (
+              <path
+                d="M9.62 3h9.25M5.12 21h9.25M14.25 3l-4.5 18"
+                stroke={this._stroke}
+                strokeWidth={this._strokeWidth}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            );
+          case "Underline":
+            return (
+              <path
+                d="M5 21h14M5 3v7c0 3.87 3.13 7 7 7s7-3.13 7-7V3"
+                stroke={this._stroke}
+                strokeWidth={this._strokeWidth}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            );
+          case "BulletList":
+            return (
+              <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                <g transform="translate(-570.000000, -209.000000)" fill={this._fill}>
+                  <path d="M597,226 L579,226 C578.447,226 578,226.448 578,227 C578,227.553 578.447,228 579,228 L597,228 C597.553,228 598,227.553 598,227 C598,226.448 597.553,226 597,226 L597,226 Z M572,209 C570.896,209 570,209.896 570,211 C570,212.104 570.896,213 572,213 C573.104,213 574,212.104 574,211 C574,209.896 573.104,209 572,209 L572,209 Z M579,212 L597,212 C597.553,212 598,211.553 598,211 C598,210.447 597.553,210 597,210 L579,210 C578.447,210 578,210.447 578,211 C578,211.553 578.447,212 579,212 L579,212 Z M597,218 L579,218 C578.447,218 578,218.448 578,219 C578,219.553 578.447,220 579,220 L597,220 C597.553,220 598,219.553 598,219 C598,218.448 597.553,218 597,218 L597,218 Z M572,217 C570.896,217 570,217.896 570,219 C570,220.104 570.896,221 572,221 C573.104,221 574,220.104 574,219 C574,217.896 573.104,217 572,217 L572,217 Z M572,225 C570.896,225 570,225.896 570,227 C570,228.104 570.896,229 572,229 C573.104,229 574,228.104 574,227 C574,225.896 573.104,225 572,225 L572,225 Z" />
+                </g>
+              </g>
+            );
+          case "NumberList":
+            return (
+              <g>
+                <path
+                  d="M10 6L21 6.00066M10 12L21 12.0007M10 18L21 18.0007M3 5L5 4V10M5 10H3M5 10H7M7 20H3L6.41274 17.0139C6.78593 16.6873 7 16.2156 7 15.7197C7 14.7699 6.23008 14 5.28033 14H5C4.06808 14 3.28503 14.6374 3.06301 15.5"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </g>
+            );
+          case "TextAlingLeft":
+            return (
+              <path
+                d="M3 4.5h18M3 9.5h9.47M3 14.5h18M3 19.5h9.47"
+                stroke={this._stroke}
+                strokeWidth={this._strokeWidth}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            );
+          case "TextAlingCenter":
+            return (
+              <path
+                d="M3 4.5h18M7.26 9.5h9.48M3 14.5h18M7.26 19.5h9.48"
+                stroke={this._stroke}
+                strokeWidth={this._strokeWidth}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            );
+          case "TextAlingRight":
+            return (
+              <path
+                d="M3 4.5h18M11.53 9.5H21M3 14.5h18M11.53 19.5H21"
+                stroke={this._stroke}
+                strokeWidth={this._strokeWidth}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             );
           default:
             return null;

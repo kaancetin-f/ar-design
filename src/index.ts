@@ -4,14 +4,15 @@ import "./assets/css/core/ar-core.css";
 import Button from "./components/form/button";
 import ButtonAction from "./components/form/button-action";
 import ButtonGroup from "./components/form/button-group";
+import Checkbox from "./components/form/checkbox";
+import DatePicker from "./components/form/date-picker";
 import Input from "./components/form/input";
 import InputTag from "./components/form/input-tag";
-import DatePicker from "./components/form/date-picker";
-import Select from "./components/form/select";
-import Checkbox from "./components/form/checkbox";
-import Switch from "./components/form/switch";
-import Upload from "./components/form/upload";
 import Radio from "./components/form/radio";
+import Select from "./components/form/select";
+import Switch from "./components/form/switch";
+import TextEditor from "./components/form/text-editor";
+import Upload from "./components/form/upload";
 
 // Data Display
 import Card from "./components/data-display/card";
@@ -45,14 +46,15 @@ export {
   Button,
   ButtonAction,
   ButtonGroup,
+  Checkbox,
+  DatePicker,
   Input,
   InputTag,
-  DatePicker,
+  Radio,
   Select,
   Switch,
+  TextEditor,
   Upload,
-  Checkbox,
-  Radio,
 
   // Data Display
   Card,
