@@ -101,6 +101,7 @@
 }
 .ar-table > .content > table > thead > tr > th.selection-col {
   width: 2rem;
+  z-index: 3;
 }
 .ar-table > .content > table > thead > tr > th.type-of-number {
   text-align: right;

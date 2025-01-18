@@ -1,0 +1,21 @@
+@media (width <= 991px) {
+  .ar-layout > header > .ar-header-with-wrap {
+    width: 767px !important;
+  }
+
+  .ar-layout > main {
+    width: 767px !important;
+  }
+
+  .ar-layout > main > aside.ar-aside.left {
+    display: none;
+  }
+  .ar-layout > main > aside.ar-aside.right {
+    display: none;
+  }
+
+  .ar-layout > main > section {
+    min-width: 100% !important;
+    padding-left: 0 !important;
+  }
+}

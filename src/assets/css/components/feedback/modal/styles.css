@@ -43,3 +43,8 @@
 @import url("./header.css");
 @import url("./content.css");
 @import url("./footer.css");
+
+/* Media Queries */
+@import url("./media-queries/x-large.css");
+@import url("./media-queries/medium.css");
+@import url("./media-queries/small.css");

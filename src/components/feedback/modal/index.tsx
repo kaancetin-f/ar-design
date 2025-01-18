@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import IProps from "./IProps";
-import "../../../assets/css/components/feedback/modal/modal.css";
+import "../../../assets/css/components/feedback/modal/styles.css";
 import Typography from "../../data-display/typography";
 
 const { Title } = Typography;

@@ -279,7 +279,9 @@ const Table = function <T extends object>({
 
             {config?.isSearchable && (
               <tr key="isSearchable">
-                {selections && <th key={`column-selections`}></th>}
+                {selections && (
+                  <th key={`column-selections`} className="selection-col sticky-left" data-sticky-position="left"></th>
+                )}
 
                 {columns.map((c, cIndex) => {
                   let _className: string[] = [];

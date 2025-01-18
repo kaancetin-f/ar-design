@@ -1,0 +1,13 @@
+@media (width <= 1280px) {
+  .ar-layout > header > .ar-header-with-wrap {
+    width: 991px !important;
+  }
+
+  .ar-layout > main {
+    width: 991px !important;
+  }
+
+  .ar-layout > main > section {
+    min-width: 791px !important;
+  }
+}
