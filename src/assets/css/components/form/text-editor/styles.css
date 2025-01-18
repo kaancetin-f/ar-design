@@ -1,7 +1,16 @@
 .ar-text-editor {
+  width: 100%;
 }
 .ar-text-editor > .toolbar {
   display: flex;
   flex-direction: row;
   gap: 0.25rem;
+}
+.ar-text-editor > iframe {
+  width: 100%;
+}
+.ar-text-editor > .validation {
+  color: var(--danger);
+  font-size: 0.8rem;
+  font-weight: 600;
 }

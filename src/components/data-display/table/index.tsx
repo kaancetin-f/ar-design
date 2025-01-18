@@ -49,7 +49,7 @@ const Table = function <T extends object>({
   }
 
   // methods
-  const handleOnScroll = () => {
+  const handleScroll = () => {
     if (!_table.current || !_tableWrapper.current) return;
 
     const wrapperRect = _tableWrapper.current.getBoundingClientRect();
@@ -155,7 +155,7 @@ const Table = function <T extends object>({
 
   // useEffects
   useEffect(() => {
-    handleOnScroll();
+    handleScroll();
   }, [data]);
 
   useEffect(() => {
@@ -228,7 +228,7 @@ const Table = function <T extends object>({
         </div>
       )}
 
-      <div ref={_tableContent} className="content" onScroll={handleOnScroll}>
+      <div ref={_tableContent} className="content" onScroll={handleScroll}>
         <table ref={_table}>
           <thead>
             <tr key="selection">

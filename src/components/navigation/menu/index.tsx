@@ -6,7 +6,7 @@ import Divider from "../../data-display/divider";
 import { MenuItemVariants, MenuProps } from "../../../libs/types";
 import IProps from "./IProps";
 
-const handleOnClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+const handleClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
   event.stopPropagation();
 
   const target = event.currentTarget as HTMLLIElement;
@@ -48,7 +48,7 @@ const SubMenu: React.FC<{
     <ul>
       {items.map((item, index) => {
         return (
-          <li key={index} onClick={handleOnClick}>
+          <li key={index} onClick={handleClick}>
             <div className="item-render">
               <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
               {item.type === "divider" ? <Divider /> : <span>{item.render}</span>}
@@ -83,7 +83,7 @@ const Menu: React.FC<IProps> = ({ data, variant = "vertical", ...attributes }) =
       <ul>
         {data.map((item, index) => {
           return (
-            <li key={index} onClick={handleOnClick}>
+            <li key={index} onClick={handleClick}>
               <div className="item-render">
                 <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
                 {item.type === "divider" ? <Divider /> : <span>{item.render}</span>}

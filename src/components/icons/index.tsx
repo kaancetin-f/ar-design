@@ -1,27 +1,12 @@
 import React from "react";
 import Svg from "./Svg";
 import Icon from "./Compiler";
+import { Icons, IconVariants } from "../../libs/types";
 
 export const ARIcon: React.FC<{
   size?: string | number | undefined;
-  variant?: "linear" | "bulk";
-  icon:
-    | "Add"
-    | "CloseSquare"
-    | "Drive"
-    | "Folder"
-    | "Trash"
-    | "Upload"
-    | "Image"
-    | "Import"
-    | "Bold"
-    | "Italic"
-    | "Underline"
-    | "BulletList"
-    | "NumberList"
-    | "TextAlingLeft"
-    | "TextAlingCenter"
-    | "TextAlingRight";
+  variant?: IconVariants;
+  icon: Icons;
   fill?: string;
   stroke?: string;
   strokeWidth?: number;

@@ -34,6 +34,31 @@ class Utils {
     return null;
   };
 
+  public GetOS = () => {
+    const userAgent = navigator.userAgent;
+
+    // İşletim sistemi bilgilerini tespit etmek için regex kullanıyoruz
+    if (userAgent.indexOf("Win") !== -1) return "Windows";
+    if (userAgent.indexOf("Mac") !== -1) return "MacOS";
+    if (userAgent.indexOf("X11") !== -1) return "UNIX";
+    if (userAgent.indexOf("Linux") !== -1) return "Linux";
+    if (userAgent.indexOf("Android") !== -1) return "Android";
+    if (userAgent.indexOf("like Mac") !== -1) return "iOS";
+
+    return "Bilinmeyen OS";
+  };
+
+  public GetOSShortCutIcons = () => {
+    switch (this.GetOS()) {
+      case "MacOS":
+        return "⌘";
+      case "Windows":
+        return "ctrl";
+      default:
+        return "";
+    }
+  };
+
   public StringFormat = (value: string, ...args: any[]): string => {
     if (args[0].length === 0) return value;
 

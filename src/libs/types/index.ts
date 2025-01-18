@@ -111,6 +111,26 @@ export type AllowedTypes =
   | "audio/flac"
   | "application/octet-stream";
 
+// Icons
+export type IconVariants = "linear" | "bulk";
+export type Icons =
+  | "Add"
+  | "CloseSquare"
+  | "Drive"
+  | "Folder"
+  | "Trash"
+  | "Upload"
+  | "Image"
+  | "Import"
+  | "Bold"
+  | "Italic"
+  | "Underline"
+  | "Strikethrough"
+  | "BulletList"
+  | "NumberList"
+  | "TextAlingLeft"
+  | "TextAlingCenter"
+  | "TextAlingRight";
 // Charts
 // Pie
 export type PieChartDataType = { value: number; text: string };

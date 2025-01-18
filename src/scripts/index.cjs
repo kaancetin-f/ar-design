@@ -249,7 +249,8 @@ const _Variant_OutlinedCss = () => {
 .outlined:not(.disabled).${color}:hover {
   border-color: rgba(var(--${color}-rgb), 0.5);
 }
-input.outlined:not(.disabled).${color}:focus{
+input.outlined:not(.disabled).${color}:focus,
+iframe.outlined:not(.disabled).${color}.focused{
   border-color: var(--${customFocusColor});
   box-shadow: 0 0 0 3.5px rgba(var(--${customFocusColor}-rgb), 0.25);
 }
