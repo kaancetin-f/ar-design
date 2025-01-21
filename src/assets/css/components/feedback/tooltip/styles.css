@@ -1,3 +1,6 @@
+.ar-tooltip-wrapper {
+  width: max-content;
+}
 .ar-tooltip {
   position: absolute;
   display: flex;

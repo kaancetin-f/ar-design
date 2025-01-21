@@ -1,5 +1,6 @@
 .ar-popover-wrapper {
   position: relative;
+  width: max-content;
 }
 
 .ar-popover {
