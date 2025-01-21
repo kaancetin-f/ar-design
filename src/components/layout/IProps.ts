@@ -10,4 +10,6 @@ export interface ILSiderProps {
   text?: string | React.JSX.Element;
 }
 export interface IMainProps extends IChildren {}
-export interface ISectionProps extends IChildren {}
+export interface ISectionProps extends IChildren {
+  fullWidth?: boolean;
+}
