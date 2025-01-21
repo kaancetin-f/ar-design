@@ -1,10 +1,12 @@
 .ar-menu > ul li ul {
-  max-height: 0;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: 250ms ease-in-out;
+}
+.ar-menu > ul li ul > div {
   overflow: hidden;
-  transition: max-height 750ms 0s, margin 250ms 750ms ease-in-out;
+  margin-left: 1rem;
 }
 .ar-menu > ul li ul.opened {
-  max-height: 100rem;
-  margin: 0.5rem 0 0.5rem 1rem;
-  transition: max-height 750ms ease-in-out;
+  grid-template-rows: 1fr;
 }

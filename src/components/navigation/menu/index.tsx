@@ -46,47 +46,13 @@ const SubMenu: React.FC<{
 
   return (
     <ul>
-      {items.map((item, index) => {
-        return (
-          <li key={index} onClick={handleClick}>
-            <div className="item-render">
-              <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
-              {item.type === "divider" ? <Divider /> : <span>{item.render}</span>}
-              {item.type === "group" && <span className="angel-down"></span>}
-            </div>
-
-            {/* Alt menü öğeleri */}
-            {item.submenu && (
-              <SubMenu
-                items={item.submenu}
-                variant={variant}
-                setSelectedMenu={setSelectedMenu}
-                selectedMenu={selectedMenu}
-                setSelectedItem={setSelectedItem}
-                selectedItem={selectedItem}
-              />
-            )}
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
-
-const Menu: React.FC<IProps> = ({ data, variant = "vertical", ...attributes }) => {
-  // states
-  const [selectedMenu, setSelectedMenu] = useState<MenuProps[]>([]);
-  const [selectedItem, setSelectedItem] = useState<MenuProps | null>(null);
-
-  return (
-    <nav className="ar-menu" {...attributes}>
-      <ul>
-        {data.map((item, index) => {
+      <div>
+        {items.map((item, index) => {
           return (
             <li key={index} onClick={handleClick}>
               <div className="item-render">
                 <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
-                {item.type === "divider" ? <Divider /> : <span>{item.render}</span>}
+                {item.type === "divider" ? <Divider /> : <span className="item">{item.render}</span>}
                 {item.type === "group" && <span className="angel-down"></span>}
               </div>
 
@@ -104,6 +70,44 @@ const Menu: React.FC<IProps> = ({ data, variant = "vertical", ...attributes }) =
             </li>
           );
         })}
+      </div>
+    </ul>
+  );
+};
+
+const Menu: React.FC<IProps> = ({ data, variant = "vertical", ...attributes }) => {
+  // states
+  const [selectedMenu, setSelectedMenu] = useState<MenuProps[]>([]);
+  const [selectedItem, setSelectedItem] = useState<MenuProps | null>(null);
+
+  return (
+    <nav className="ar-menu" {...attributes}>
+      <ul>
+        <div>
+          {data.map((item, index) => {
+            return (
+              <li key={index} onClick={handleClick}>
+                <div className="item-render">
+                  <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
+                  {item.type === "divider" ? <Divider /> : <span className="item">{item.render}</span>}
+                  {item.type === "group" && <span className="angel-down"></span>}
+                </div>
+
+                {/* Alt menü öğeleri */}
+                {item.submenu && (
+                  <SubMenu
+                    items={item.submenu}
+                    variant={variant}
+                    setSelectedMenu={setSelectedMenu}
+                    selectedMenu={selectedMenu}
+                    setSelectedItem={setSelectedItem}
+                    selectedItem={selectedItem}
+                  />
+                )}
+              </li>
+            );
+          })}
+        </div>
       </ul>
     </nav>
   );

@@ -1,32 +1,64 @@
 .ar-layout {
   display: flex;
-  flex-direction: column;
-}
-.ar-layout > main {
-  display: flex;
   flex-direction: row;
-  width: 1280px;
-  margin: 2.5rem auto 0 auto;
 }
-.ar-layout > main > aside.ar-aside {
+
+.ar-layout > aside.ar-aside {
   position: sticky;
-  top: 5rem;
-  height: 100%;
+  top: 0;
+  background-color: var(--gray-100);
+  height: 100vh;
+  box-sizing: border-box;
 }
-.ar-layout > main > aside.ar-aside.left {
-  width: 100%;
-  min-height: calc(100vh - 7.5rem);
+.ar-layout > aside.ar-aside.left {
+  display: flex;
+  flex-direction: column;
+  min-width: 280px;
+  padding: 0 1rem;
   border-right: solid 1px var(--gray-200);
 }
-.ar-layout > main > aside.ar-aside.right {
+.ar-layout > aside.ar-aside.left > .logo {
+  display: flex;
+  align-items: center;
+  min-height: 5rem;
+  margin-bottom: 1rem;
+}
+.ar-layout > aside.ar-aside.right {
   width: 100%;
 }
-.ar-layout > main > section {
-  min-width: 1000px;
-  height: fit-content;
-  border-radius: var(--border-radius-lg);
+
+.ar-layout > main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
-.ar-layout > main:not(:has(> .ar-aside)) > section {
+.ar-layout > main > header {
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: rgba(var(--white-rgb), 0.5);
+  backdrop-filter: blur(5px);
+  height: 5rem;
+  padding: 0 2.5rem;
+  box-shadow: 0 10px 10px -15px rgba(var(--black-rgb), 0.25);
+  z-index: 10;
+}
+.ar-layout > main > header > .actions {
+  margin-left: auto;
+}
+
+.ar-layout > main > section {
+  width: 1280px;
+  margin: 0 auto;
+  height: fit-content;
+  padding: 2.5rem;
+}
+.ar-layout > main > section.full-width {
+  width: 100%;
+}
+
+/* .ar-layout > main:not(:has(> .ar-aside)) > section {
   min-width: 100%;
 }
 .ar-layout > main:has(> .ar-aside.left) > section {
@@ -34,9 +66,7 @@
 }
 .ar-layout > main:has(> .ar-aside.left) > section:has(~ .ar-aside.right) {
   padding: 0 2rem;
-}
-
-@import url("./header.css");
+} */
 
 /* Media Queries */
 /* @import url("./media-queries/x-large.css");
