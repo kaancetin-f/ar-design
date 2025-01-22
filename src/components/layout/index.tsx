@@ -23,7 +23,9 @@ const Layout: React.FC<ILayoutProps> & {
       const componentType = child.type as JSXElementConstructor<any> & { displayName?: string };
 
       if (validOrder[index] != componentType.displayName) {
-        throw new Error(`Layout içerisindeki bileşenler yanlış sırada. Beklenen sırada değil: ${validOrder[index]}`);
+        throw new Error(
+          `Layout içerisindeki bileşenler yanlış sırada. Beklenen sırada değil: ${componentType.displayName}`
+        );
       }
     }
   });
