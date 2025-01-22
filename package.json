@@ -1,6 +1,6 @@
 {
   "name": "ar-design",
-  "version": "0.1.85",
+  "version": "0.1.86",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,6 +11,7 @@
     "./@service": "./dist/libs/core/service/index.js",
     "./@config": "./dist/libs/core/application/contexts/index.js",
     "./@hooks": "./dist/libs/core/application/hooks/index.js",
+    "./@locales": "./dist/libs/core/application/locales/index.js",
     "./@types": "./dist/libs/types/index.js",
     "./@styles": "./dist/assets/css/core/ar-core.css"
   },

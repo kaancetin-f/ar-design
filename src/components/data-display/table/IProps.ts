@@ -1,3 +1,4 @@
+import React from "react";
 import { TableColumnType } from "../../../libs/types";
 import { IChildren } from "../../../libs/types/IGlobalProps";
 
@@ -25,9 +26,11 @@ interface IProps<T> extends IChildren {
     perPage: number;
     onChange: (currentPage: number) => void;
   };
+  filterCleaner?: boolean;
   config?: {
     isServerSide?: boolean;
     isSearchable?: boolean;
+    isCleanFilter?: boolean;
     scroll?: {
       maxHeight: number;
     };

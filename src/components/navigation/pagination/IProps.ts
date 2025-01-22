@@ -8,6 +8,8 @@ interface IProps {
    */
   defaultCurrent?: number;
 
+  currentPage: number;
+
   /**
    * Toplam kayıt sayısı.
    * Sayfa başına gösterilecek öğe sayısına göre toplam sayfa sayısı hesaplanacaktır.

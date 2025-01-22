@@ -5,13 +5,13 @@ import IProps from "./IProps";
 import "../../../assets/css/components/navigation/pagination/pagination.css";
 import { ConfigContext } from "../../../libs/core/application/contexts/Config";
 
-const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPage, onChange }) => {
+const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, currentPage, totalRecords, perPage, onChange }) => {
   // context
   const { config } = useContext(ConfigContext);
 
   // states
   const [pages, setPages] = useState<React.JSX.Element[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(defaultCurrent);
+  const [_currentPage, setCurrentPage] = useState<number>(defaultCurrent);
   const [totalPageCount, setTotalPageCount] = useState<number>(0);
 
   // useEffect
@@ -23,8 +23,8 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
     setTotalPageCount(_totalPageCount);
 
     // Başlangıç ve bitiş aralığını hesapla.
-    const startPage = Math.max(1, currentPage - 1);
-    const endPage = Math.min(_totalPageCount, currentPage + 1);
+    const startPage = Math.max(1, _currentPage - 1);
+    const endPage = Math.min(_totalPageCount, _currentPage + 1);
 
     // İlk sayfa ve ... eklemek.
     if (startPage > 1) {
@@ -46,7 +46,7 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
     // Sayfa aralığını eklemek.
     for (let i = startPage; i <= endPage; i++) {
       liItems.push(
-        <li key={i} className={i === currentPage ? "selection-page" : ""} onClick={() => setCurrentPage(i)}>
+        <li key={i} className={i === _currentPage ? "selection-page" : ""} onClick={() => setCurrentPage(i)}>
           {i}
         </li>
       );
@@ -70,16 +70,18 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
     }
 
     setPages(liItems);
-    onChange(currentPage);
-  }, [totalRecords, currentPage]);
+    onChange(_currentPage);
+  }, [totalRecords, _currentPage]);
+
+  useEffect(() => setCurrentPage(currentPage), [currentPage]);
 
   return (
     <div className="ar-pagination">
       <ul>
         <li
-          className={currentPage === 1 ? "passive" : ""}
+          className={_currentPage === 1 ? "passive" : ""}
           onClick={() => {
-            if (currentPage === 1) return;
+            if (_currentPage === 1) return;
 
             setCurrentPage(1);
           }}
@@ -87,9 +89,9 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
           <span>{"«"}</span>
         </li>
         <li
-          className={currentPage === 1 ? "passive" : ""}
+          className={_currentPage === 1 ? "passive" : ""}
           onClick={() => {
-            if (currentPage === 1) return;
+            if (_currentPage === 1) return;
 
             setCurrentPage((prev) => {
               if (prev === 1) return prev;
@@ -103,9 +105,9 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
         {pages}
 
         <li
-          className={totalPageCount === currentPage ? "passive" : ""}
+          className={totalPageCount === _currentPage ? "passive" : ""}
           onClick={() => {
-            if (totalPageCount === currentPage) return;
+            if (totalPageCount === _currentPage) return;
 
             setCurrentPage((prev) => {
               if (prev === totalPageCount) return prev;
@@ -116,9 +118,9 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, totalRecords, perPag
           <span>{"›"}</span>
         </li>
         <li
-          className={totalPageCount === currentPage ? "passive" : ""}
+          className={totalPageCount === _currentPage ? "passive" : ""}
           onClick={() => {
-            if (totalPageCount === currentPage) return;
+            if (totalPageCount === _currentPage) return;
 
             setCurrentPage(totalPageCount);
           }}

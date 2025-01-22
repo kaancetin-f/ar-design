@@ -39,6 +39,7 @@
       "@service/*": ["dist/libs/core/service"],
       "@config/*": ["dist/libs/core/application/contexts"],
       "@hooks/*": ["dist/libs/core/application/hooks"],
+      "@locales/*": ["dist/libs/core/application/locales"],
       "@types/*": ["dist/libs/types"],
       "@styles/*": ["dist/assets/css/core"]
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,

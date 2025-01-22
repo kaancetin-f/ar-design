@@ -21,6 +21,7 @@ const Table = function <T extends object>({
   selections,
   searchedParams,
   pagination,
+  filterCleaner,
   config = { isSearchable: false },
 }: IProps<T>) {
   // refs
@@ -29,7 +30,9 @@ const Table = function <T extends object>({
   const _tableContent = useRef<HTMLDivElement>(null);
   const _table = useRef<HTMLTableElement>(null);
   const _checkboxItems = useRef<(HTMLInputElement | null)[]>([]);
+  const _searchTextInputs = useRef<(HTMLInputElement | null)[]>([]);
   const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
+
   // className
   const _tableClassName: string[] = ["ar-table", "scroll"];
 
@@ -189,6 +192,19 @@ const Table = function <T extends object>({
     setSelectAll(allChecked);
   }, [currentPage]);
 
+  // Tetikleme işlemleri için eklendi.
+  useEffect(() => {
+    if (config.isServerSide) {
+      setSearchedParams({});
+      pagination && pagination.onChange(1);
+    } else {
+      setSearchedText({});
+    }
+
+    setCurrentPage(1);
+    _searchTextInputs.current.map((item) => item && (item.value = ""));
+  }, [filterCleaner]);
+
   return (
     <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
       {(title || description || actions || React.Children.count(children) > 0) && (
@@ -222,6 +238,30 @@ const Table = function <T extends object>({
                     onClick={actions.import.onClick}
                   />
                 )}
+              </>
+            )}
+
+            {config && (
+              <>
+                {/* {config.isCleanFilter && (
+                  <Button
+                    variant="outlined"
+                    status="dark"
+                    icon={{ element: <ARIcon icon="Import" size={16} /> }}
+                    tooltip={{ text: "Clean Filter", direction: "top" }}
+                    onClick={() => {
+                      if (config.isServerSide) {
+                        setSearchedParams({});
+                        setCurrentPage(1);
+                        pagination && pagination.onChange(1);
+                      } else {
+                        setSearchedText({});
+                      }
+
+                      _searchTextInputs.current.map((item) => item && (item.value = ""));
+                    }}
+                  />
+                )} */}
               </>
             )}
           </div>
@@ -315,6 +355,7 @@ const Table = function <T extends object>({
                       })}
                     >
                       <input
+                        ref={(element) => (_searchTextInputs.current[cIndex] = element)}
                         name={typeof c.key !== "object" ? String(c.key) : String(c.key.field)}
                         className="search-input"
                         onChange={(event) => {
@@ -323,9 +364,11 @@ const Table = function <T extends object>({
 
                             _searchTimeOut.current = setTimeout(() => {
                               setSearchedParams((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+                              setCurrentPage(1);
                               pagination && pagination.onChange(1);
                             }, 750);
                           } else {
+                            setCurrentPage(1);
                             setSearchedText((prev) => ({ ...prev, [event.target.name]: event.target.value }));
                           }
                         }}
@@ -424,9 +467,11 @@ const Table = function <T extends object>({
 
             <Pagination
               totalRecords={pagination.totalRecords}
+              currentPage={currentPage}
               perPage={pagination.perPage}
               onChange={(currentPage) => {
-                !config.isServerSide ? setCurrentPage(currentPage) : pagination.onChange(currentPage);
+                config.isServerSide && pagination.onChange(currentPage);
+                setCurrentPage(currentPage);
               }}
             />
           </React.Fragment>
