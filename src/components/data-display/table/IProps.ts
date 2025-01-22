@@ -26,7 +26,7 @@ interface IProps<T> extends IChildren {
     perPage: number;
     onChange: (currentPage: number) => void;
   };
-  filterCleaner?: boolean;
+
   config?: {
     isServerSide?: boolean;
     isSearchable?: boolean;

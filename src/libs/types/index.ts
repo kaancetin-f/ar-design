@@ -48,6 +48,9 @@ export type TableColumnType<T> = {
     textWrap?: "wrap" | "nowrap";
   };
 };
+export type HTMLTableElementWithCustomAttributes = {
+  filterCleaner: () => void;
+} & HTMLTableElement;
 
 // Step Types
 export type StepProps = {
