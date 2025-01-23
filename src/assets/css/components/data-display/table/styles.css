@@ -62,6 +62,10 @@
   height: 3rem;
   padding: 0 1.5rem;
 }
+.ar-table > .content > table > thead > tr > th.min-w,
+.ar-table > .content > table > tbody > tr > td.min-w {
+  min-width: 150px;
+}
 
 .ar-table > .content > table > thead {
   background-color: var(--gray-100);

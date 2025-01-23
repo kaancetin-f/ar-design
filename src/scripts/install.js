@@ -10,7 +10,7 @@ const rl = readline.createInterface({
 // Kullanıcıya soru sorma fonksiyonu
 const askQuestion = (query) => {
   return new Promise((resolve) => {
-    rl.question(query, (answer) => resolve(answer.trim().toLowerCase()));
+    rl.question(query, (answer) => resolve(answer.trim().toLocaleLowerCase()));
   });
 };
 

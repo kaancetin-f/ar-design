@@ -4,20 +4,20 @@ import { IChildren } from "../../../libs/types/IGlobalProps";
 
 export type SearchedParam = { [key: string]: string };
 
+type ActionType = {
+  tooltip: string;
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+};
+
 interface IProps<T> extends IChildren {
   title?: string;
   description?: string;
   data: T[];
   columns: TableColumnType<T>[];
   actions?: {
-    create?: {
-      tooltip: string;
-      onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    };
-    import?: {
-      tooltip: string;
-      onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    };
+    create?: ActionType;
+    import?: ActionType;
+    filterClear?: ActionType;
   };
   selections?: (selectionItems: T[]) => void;
   searchedParams?: (params: SearchedParam | undefined, query: string) => void;
@@ -30,7 +30,6 @@ interface IProps<T> extends IChildren {
   config?: {
     isServerSide?: boolean;
     isSearchable?: boolean;
-    isCleanFilter?: boolean;
     scroll?: {
       maxHeight: number;
     };

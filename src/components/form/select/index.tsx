@@ -39,6 +39,7 @@ const Select: React.FC<Props> = ({
   // states
   const [optionsOpen, setOptionsOpen] = useState<boolean>(false);
   const [filteredOptions, setFilteredOptions] = useState<Option[]>([]);
+  const [isSearchTextEqual, setIsSearchTextEqual] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>("");
   const [singleInputText, setSingleInputText] = useState<string>("");
   const [navigationIndex, setNavigationIndex] = useState<number>(0);
@@ -138,6 +139,30 @@ const Select: React.FC<Props> = ({
     setOptionsOpen(false);
   };
 
+  const createField = () => {
+    if (!onCreate) return;
+
+    return (
+      <div
+        className="no-options-field"
+        onClick={(event) => {
+          event.stopPropagation();
+          onCreate({ value: "", text: singleInputText });
+          setOptionsOpen(false);
+        }}
+      >
+        {options.length === 0 && (singleInputText.length === 0 || searchText.length === 0) ? (
+          <span className="text">Herhangi bir kayıt bulunumadı.</span>
+        ) : (
+          <span className="add-item">
+            <span className="plus">+</span>
+            {singleInputText.length !== 0 ? singleInputText : searchText}
+          </span>
+        )}
+      </div>
+    );
+  };
+
   // Özel büyük harfe dönüştürme işlevi.
   const convertToUpperCase = (str: string) => {
     return str
@@ -226,7 +251,14 @@ const Select: React.FC<Props> = ({
       options?.filter((option) => {
         if (!optionsOpen) return option;
 
-        return option.text.toLowerCase().includes(searchText.toLowerCase());
+        return option.text.toLocaleLowerCase().includes(searchText.toLocaleLowerCase());
+      })
+    );
+    setIsSearchTextEqual(
+      options?.some((option) => {
+        if (!optionsOpen) return option;
+
+        return option.text.toLocaleLowerCase() == searchText.toLocaleLowerCase();
       })
     );
 
@@ -349,6 +381,8 @@ const Select: React.FC<Props> = ({
 
             {filteredOptions.length > 0 ? (
               <ul>
+                {onCreate && !isSearchTextEqual && searchText.length > 0 && <li>{createField()}</li>}
+
                 {filteredOptions.map((option, index) => {
                   const isItem = multiple && value.some((_value) => _value.value === option.value);
 
@@ -373,23 +407,7 @@ const Select: React.FC<Props> = ({
                 <span className="text">Herhangi bir kayıt bulunumadı.</span>
               </div>
             ) : (
-              <div
-                className="no-options-field"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onCreate({ value: "", text: singleInputText });
-                  setOptionsOpen(false);
-                }}
-              >
-                {options.length === 0 && singleInputText.length === 0 && searchText.length === 0 ? (
-                  <span className="text">Herhangi bir kayıt bulunumadı.</span>
-                ) : (
-                  <span className="add-item">
-                    <span className="plus">+</span>
-                    {singleInputText.length !== 0 ? singleInputText : searchText}
-                  </span>
-                )}
-              </div>
+              createField()
             )}
           </div>,
           document.body

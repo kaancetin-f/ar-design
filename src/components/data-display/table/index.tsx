@@ -8,10 +8,9 @@ import IProps, { SearchedParam } from "./IProps";
 import Pagination from "../../navigation/pagination";
 import React, { forwardRef, ReactElement, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { HTMLTableElementWithCustomAttributes } from "../../../libs/types";
+import Actions from "./Actions";
 
-type SearchedText = { [key: string]: string };
-
-const Table = forwardRef(
+const TableWithRef = forwardRef(
   <T extends object>(
     {
       children,
@@ -42,7 +41,7 @@ const Table = forwardRef(
     // states
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [selectionItems, setSelectionItems] = useState<T[]>([]);
-    const [searchedText, setSearchedText] = useState<SearchedText | undefined>(undefined);
+    const [searchedText, setSearchedText] = useState<SearchedParam | undefined>(undefined);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | undefined>(undefined);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -54,6 +53,7 @@ const Table = forwardRef(
       }
     }
 
+    // Custom Attributes
     useImperativeHandle(ref, () => {
       const tableCurrent = _table.current as HTMLTableElement;
 
@@ -142,7 +142,7 @@ const Table = forwardRef(
     };
 
     // Derinlemesine arama yapmak için özyinelemeli bir fonksiyon tanımlayalım.
-    const deepSearch = (item: T, searchedText: SearchedText | undefined): boolean => {
+    const deepSearch = (item: T, searchedText: SearchedParam | undefined): boolean => {
       if (!searchedText) return false;
 
       // Eğer değer bir sayı veya string ise, aranan metinle eşleşip eşleşmediğini kontrol ediyoruz.
@@ -150,14 +150,18 @@ const Table = forwardRef(
         const _itemValue = item[key as keyof typeof item];
 
         if (typeof _itemValue === "number" || typeof _itemValue === "string") {
-          return _itemValue.toString().toLowerCase().includes(value.toLowerCase());
+          return _itemValue.toString().toLocaleLowerCase().includes(value.toLocaleLowerCase());
         }
 
         if (typeof _itemValue === "object") {
-          deepSearch(_itemValue as T, searchedText);
+          return Object.entries(_itemValue ?? {}).some(([_, objValue]) =>
+            String(objValue).toLocaleLowerCase().includes(value.toLocaleLowerCase())
+          );
         }
 
-        // Diğer türlerdeki değerleri atla.
+        if (Array.isArray(_itemValue)) {
+        }
+
         return false;
       });
     };
@@ -247,30 +251,16 @@ const Table = forwardRef(
                       onClick={actions.import.onClick}
                     />
                   )}
-                </>
-              )}
 
-              {config && (
-                <>
-                  {/* {config.isCleanFilter && (
-                  <Button
-                    variant="outlined"
-                    status="dark"
-                    icon={{ element: <ARIcon icon="Import" size={16} /> }}
-                    tooltip={{ text: "Clean Filter", direction: "top" }}
-                    onClick={() => {
-                      if (config.isServerSide) {
-                        setSearchedParams({});
-                        setCurrentPage(1);
-                        pagination && pagination.onChange(1);
-                      } else {
-                        setSearchedText({});
-                      }
-
-                      _searchTextInputs.current.map((item) => item && (item.value = ""));
-                    }}
-                  />
-                )} */}
+                  {actions.filterClear && (
+                    <Button
+                      variant="outlined"
+                      status="dark"
+                      icon={{ element: <ARIcon icon="Trash" size={16} /> }}
+                      tooltip={{ text: actions.filterClear.tooltip, direction: "top" }}
+                      onClick={actions.filterClear.onClick}
+                    />
+                  )}
                 </>
               )}
             </div>
@@ -306,6 +296,7 @@ const Table = forwardRef(
                   let _className: string[] = [];
 
                   if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
+                  if (!c.config?.width) _className.push("min-w");
                   if (c.config?.alignContent) {
                     _className.push(`align-content-${c.config.alignContent}`);
                   }
@@ -315,6 +306,9 @@ const Table = forwardRef(
                       key={`column-${cIndex}`}
                       {...(_className.length > 0 && {
                         className: `${_className.map((c) => c).join(" ")}`,
+                      })}
+                      {...(c.config?.width && {
+                        style: { minWidth: c.config.width },
                       })}
                       {...(c.config?.sticky && {
                         "data-sticky-position": c.config.sticky,
@@ -445,9 +439,6 @@ const Table = forwardRef(
                       return (
                         <td
                           key={`cell-${index}-${cIndex}`}
-                          {...(c.config?.width && {
-                            style: { minWidth: c.config.width },
-                          })}
                           {...(_className.length > 0 && {
                             className: `${_className.map((c) => c).join(" ")}`,
                           })}
@@ -494,5 +485,15 @@ const Table = forwardRef(
     );
   }
 ) as <T>(props: IProps<T> & { ref?: React.ForwardedRef<HTMLTableElement> }) => ReactElement;
+
+type TableCompoundComponents = typeof TableWithRef & {
+  Actions: React.FC<{
+    children: React.ReactElement | React.ReactElement[];
+  }>;
+};
+
+// Actions'ı ekliyoruz.
+const Table = TableWithRef as TableCompoundComponents;
+Table.Actions = Actions;
 
 export default Table;

@@ -20,10 +20,10 @@ const Alert: React.FC<IProps> = ({ children, message, status = "primary", border
     // TODO: Bu konu hakkında düşünüp karar verilecek.
     if (!emphasize) return message;
 
-    let _lowerCaseMessage = message.toLowerCase();
+    let _lowerCaseMessage = message.toLocaleLowerCase();
 
     return emphasize.reduce((currentMessage, emphasize) => {
-      let _lowerCaseEmphasize = emphasize.toLowerCase();
+      let _lowerCaseEmphasize = emphasize.toLocaleLowerCase();
       let startIndex = _lowerCaseMessage.indexOf(_lowerCaseEmphasize);
 
       while (startIndex !== -1) {
@@ -36,7 +36,7 @@ const Alert: React.FC<IProps> = ({ children, message, status = "primary", border
         currentMessage = `${firstValue} <span class="ar-alert-tag">${originalTag}</span> ${lastValue}`;
 
         // Update the lowerCaseMessage to reflect the change
-        _lowerCaseMessage = currentMessage.toLowerCase();
+        _lowerCaseMessage = currentMessage.toLocaleLowerCase();
 
         // Find the next occurrence of the tag
         startIndex = _lowerCaseMessage.indexOf(
