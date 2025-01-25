@@ -27,7 +27,6 @@ const TableWithRef = forwardRef(
     ref: React.ForwardedRef<HTMLTableElementWithCustomAttributes>
   ) => {
     // refs
-    let _dataLength = useRef<number>(0);
     const _tableWrapper = useRef<HTMLDivElement>(null);
     const _table = useRef<HTMLTableElement>(null);
     const _tableContent = useRef<HTMLDivElement>(null);
@@ -43,6 +42,7 @@ const TableWithRef = forwardRef(
     const [selectionItems, setSelectionItems] = useState<T[]>([]);
     const [searchedText, setSearchedText] = useState<SearchedParam | undefined>(undefined);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | undefined>(undefined);
+    // const [totalRecords, setTotalRecords] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
     if (config && Object.keys(config.scroll || {}).length > 0) {
@@ -168,16 +168,15 @@ const TableWithRef = forwardRef(
 
     const getData = useCallback(() => {
       let _data: T[] = [...data];
-      _dataLength.current = data.length;
+
+      if (searchedText) _data = _data.filter((item) => deepSearch(item, searchedText));
 
       if (pagination && !config.isServerSide) {
         const indexOfLastRow = currentPage * pagination.perPage;
         const indexOfFirstRow = indexOfLastRow - pagination.perPage;
 
-        _data = data.slice(indexOfFirstRow, indexOfLastRow);
+        _data = _data.slice(indexOfFirstRow, indexOfLastRow);
       }
-
-      if (searchedText) _data = _data.filter((item) => deepSearch(item, searchedText));
 
       return _data;
     }, [data, searchedText, currentPage]);
