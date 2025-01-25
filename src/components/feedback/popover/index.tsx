@@ -9,7 +9,7 @@ import ReactDOM from "react-dom";
 
 const { Title } = Typography;
 
-const Popover: React.FC<IProps> = ({ children, title, message, content, onConfirm, windowBlur }) => {
+const Popover: React.FC<IProps> = ({ children, title, message, content, onConfirm, windowBlur, config }) => {
   // refs
   const _arPopoverWrapper = useRef<HTMLDivElement>(null);
   const _arPopover = useRef<HTMLDivElement>(null);
@@ -87,7 +87,7 @@ const Popover: React.FC<IProps> = ({ children, title, message, content, onConfir
                     setOpen(false);
                   }}
                 >
-                  Evet
+                  {config?.buttons.okButton ?? "Evet"}
                 </Button>
 
                 <Button
@@ -98,7 +98,7 @@ const Popover: React.FC<IProps> = ({ children, title, message, content, onConfir
                     setOpen(false);
                   }}
                 >
-                  Hayır
+                  {config?.buttons.cancelButton ?? "Hayır"}
                 </Button>
               </div>
             )}
