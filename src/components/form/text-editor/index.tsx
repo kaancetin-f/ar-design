@@ -57,7 +57,7 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, vali
   useEffect(() => {
     if (iframeDocument && !_firstLoad.current) {
       if (value) iframeDocument.body.innerHTML = value;
-      else iframeDocument.body.innerHTML = `<p>${placeholder}</p>`;
+      else iframeDocument.body.innerHTML = `<p>${placeholder ?? ""}</p>`;
 
       _firstLoad.current = true;
     }

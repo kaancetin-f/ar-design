@@ -88,7 +88,7 @@ export const useValidation = function <TData extends object>(
   };
 
   const handleParams = (param: ValidationProperties<TData>) => {
-    const value = data[param.key as keyof typeof data] as string;
+    const value = data[param.key as keyof typeof data] as string | undefined;
 
     // Eğer subkey varsa, onunla işlem yapılacak.
     if (param.subkey) {
@@ -110,6 +110,7 @@ export const useValidation = function <TData extends object>(
         // Son seviyedeki veriyi paramsShape fonksiyonuna gönder.
         paramsShape(param, currentData);
       } else {
+        if (!value) return;
         // Subkey sadece bir seviye ise, doğrudan kullanılır.
         paramsShape(param, value[param.subkey as keyof typeof value] as string);
       }
@@ -119,7 +120,7 @@ export const useValidation = function <TData extends object>(
     }
   };
 
-  const paramsShape = (param: ValidationProperties<TData>, value: string) => {
+  const paramsShape = (param: ValidationProperties<TData>, value: string | undefined) => {
     const vLenght = value ? value.length : 0;
 
     const getKey = (subkey: string | undefined) => {
