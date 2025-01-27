@@ -9,6 +9,8 @@ import Pagination from "../../navigation/pagination";
 import React, { forwardRef, ReactElement, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { HTMLTableElementWithCustomAttributes } from "../../../libs/types";
 import Actions from "./Actions";
+import Input from "../../form/input";
+import Popover from "../../feedback/popover";
 
 const TableWithRef = forwardRef(
   <T extends object>(
@@ -31,8 +33,11 @@ const TableWithRef = forwardRef(
     const _table = useRef<HTMLTableElement>(null);
     const _tableContent = useRef<HTMLDivElement>(null);
     const _checkboxItems = useRef<(HTMLInputElement | null)[]>([]);
+    const _filterCheckboxItems = useRef<(HTMLInputElement | null)[]>([]);
+    // refs -> Search
     const _searchTextInputs = useRef<(HTMLInputElement | null)[]>([]);
     const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
+    // const _searchFilterFirstLoad = useRef<boolean>(false);
 
     // className
     const _tableClassName: string[] = ["ar-table", "scroll"];
@@ -40,8 +45,10 @@ const TableWithRef = forwardRef(
     // states
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [selectionItems, setSelectionItems] = useState<T[]>([]);
+    // states -> Search
     const [searchedText, setSearchedText] = useState<SearchedParam | undefined>(undefined);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | undefined>(undefined);
+    // const [searchedFilters, setSearchedFilters] = useState<string | undefined>(undefined);
     // const [totalRecords, setTotalRecords] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -141,6 +148,57 @@ const TableWithRef = forwardRef(
       });
     };
 
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (config.isServerSide) {
+        if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
+
+        _searchTimeOut.current = setTimeout(() => {
+          setSearchedParams((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+          setCurrentPage(1);
+          pagination && pagination.onChange(1);
+        }, 750);
+      } else {
+        setCurrentPage(1);
+        setSearchedText((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+      }
+    };
+
+    const handleChecboxFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (config.isServerSide) {
+        if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
+
+        setSearchedParams((prev) => {
+          const updatedValues = new Set<string>(prev?.[event.target.name] || []);
+
+          event.target.checked ? updatedValues.add(event.target.value) : updatedValues.delete(event.target.value);
+
+          return {
+            ...prev,
+            ...(Array.from(updatedValues).length > 0
+              ? { [event.target.name]: Array.from(updatedValues) }
+              : { [event.target.name]: [] }),
+          } as SearchedParam;
+        });
+
+        setCurrentPage(1);
+        pagination && pagination.onChange(1);
+      } else {
+        setSearchedText((prev) => {
+          const updatedValues = new Set<string>(prev?.[event.target.name] || []);
+
+          event.target.checked ? updatedValues.add(event.target.value) : updatedValues.delete(event.target.value);
+
+          return {
+            ...prev,
+            ...(Array.from(updatedValues).length > 0
+              ? { [event.target.name]: Array.from(updatedValues) }
+              : { [event.target.name]: [] }),
+          } as SearchedParam;
+        });
+        setCurrentPage(1);
+      }
+    };
+
     // Derinlemesine arama yapmak için özyinelemeli bir fonksiyon tanımlayalım.
     const deepSearch = (item: T, searchedText: SearchedParam | undefined): boolean => {
       if (!searchedText) return false;
@@ -150,16 +208,33 @@ const TableWithRef = forwardRef(
         const _itemValue = item[key as keyof typeof item];
 
         if (typeof _itemValue === "number" || typeof _itemValue === "string") {
+          if (Array.isArray(value)) {
+            if (value.length === 0) return true;
+            else return value.some((v) => _itemValue.toString().toLocaleLowerCase().includes(v.toLocaleLowerCase()));
+          }
+
           return _itemValue.toString().toLocaleLowerCase().includes(value.toLocaleLowerCase());
         }
 
         if (typeof _itemValue === "object") {
+          if (Array.isArray(value)) {
+            if (value.length === 0) return true;
+            else {
+              return value.some((v) =>
+                Object.entries(_itemValue ?? {}).some(([_, objValue]) =>
+                  String(objValue).toLocaleLowerCase().includes(v.toLocaleLowerCase())
+                )
+              );
+            }
+          }
+
           return Object.entries(_itemValue ?? {}).some(([_, objValue]) =>
             String(objValue).toLocaleLowerCase().includes(value.toLocaleLowerCase())
           );
         }
 
         if (Array.isArray(_itemValue)) {
+          console.log("Buradasın", _itemValue);
         }
 
         return false;
@@ -216,6 +291,8 @@ const TableWithRef = forwardRef(
 
       setSelectAll(allChecked);
     }, [currentPage]);
+
+    console.log(searchedText);
 
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
@@ -337,19 +414,6 @@ const TableWithRef = forwardRef(
                       _className.push(`align-content-${c.config.alignContent}`);
                     }
 
-                    if (!c.key)
-                      return (
-                        <th
-                          key={`column-${cIndex}`}
-                          {...(_className.length > 0 && {
-                            className: `${_className.map((c) => c).join(" ")}`,
-                          })}
-                          {...(c.config?.sticky && {
-                            "data-sticky-position": c.config.sticky,
-                          })}
-                        ></th>
-                      );
-
                     return (
                       <th
                         key={`column-${cIndex}`}
@@ -360,25 +424,75 @@ const TableWithRef = forwardRef(
                           "data-sticky-position": c.config.sticky,
                         })}
                       >
-                        <input
-                          ref={(element) => (_searchTextInputs.current[cIndex] = element)}
-                          name={typeof c.key !== "object" ? String(c.key) : String(c.key.field)}
-                          className="search-input"
-                          onChange={(event) => {
-                            if (config.isServerSide) {
-                              if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
+                        <div className="filter-field">
+                          <Input
+                            ref={(element) => (_searchTextInputs.current[cIndex] = element)}
+                            variant={c.key && !c.filters ? "filled" : "outlined"}
+                            status="light"
+                            name={typeof c.key !== "object" ? String(c.key) : String(c.key.field)}
+                            onChange={handleSearch}
+                            disabled={!c.key || !!c.filters}
+                          />
 
-                              _searchTimeOut.current = setTimeout(() => {
-                                setSearchedParams((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-                                setCurrentPage(1);
-                                pagination && pagination.onChange(1);
-                              }, 750);
-                            } else {
-                              setCurrentPage(1);
-                              setSearchedText((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-                            }
-                          }}
-                        />
+                          {c.filters && (
+                            <Popover
+                              content={
+                                <>
+                                  {/* <Input
+                                    placeholder="Search..."
+                                    onChange={(event) => setSearchedFilters(event.target.value.toLocaleLowerCase())}
+                                  /> */}
+
+                                  <ul>
+                                    {c.filters
+                                      // .filter((x) =>
+                                      //   x.text.toLocaleLowerCase().includes(searchedFilters?.toLocaleLowerCase() ?? "")
+                                      // )
+                                      .map((filter, index) => {
+                                        const name = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
+                                        return (
+                                          <li key={index}>
+                                            <Checkbox
+                                              ref={(element) => (_filterCheckboxItems.current[index] = element)}
+                                              label={filter.text}
+                                              name={name}
+                                              status="success"
+                                              value={filter.text}
+                                              checked={
+                                                config.isServerSide
+                                                  ? _searchedParams && _searchedParams[name].includes(filter.text)
+                                                  : searchedText && searchedText[name].includes(filter.text)
+                                              }
+                                              onChange={handleChecboxFilter}
+                                            />
+                                          </li>
+                                        );
+                                      })}
+                                  </ul>
+                                </>
+                              }
+                            >
+                              {_filterCheckboxItems.current.filter((item) => item?.checked).length > 0 && (
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    top: "0.35rem",
+                                    right: "0.35rem",
+                                    width: "0.5rem",
+                                    height: "0.5rem",
+                                    backgroundColor: "var(--danger)",
+                                    borderRadius: "var(--border-radius-pill)",
+                                    zIndex: 1,
+                                  }}
+                                ></div>
+                              )}
+                              <Button
+                                variant="borderless"
+                                icon={{ element: <ARIcon icon="Filter" stroke="var(--primary)" size={16} /> }}
+                              />
+                            </Popover>
+                          )}
+                        </div>
                       </th>
                     );
                   })}
@@ -462,22 +576,20 @@ const TableWithRef = forwardRef(
 
         {pagination && pagination.totalRecords > pagination.perPage && (
           <div className="footer">
-            <React.Fragment>
-              <span>
-                <strong>Showing {getData().length}</strong>{" "}
-                <span>of {pagination?.perPage ?? getData().length} agreement</span>
-              </span>
+            <span>
+              <strong>Showing {getData().length}</strong>{" "}
+              <span>of {pagination?.perPage ?? getData().length} agreement</span>
+            </span>
 
-              <Pagination
-                totalRecords={pagination.totalRecords}
-                currentPage={currentPage}
-                perPage={pagination.perPage}
-                onChange={(currentPage) => {
-                  config.isServerSide && pagination.onChange(currentPage);
-                  setCurrentPage(currentPage);
-                }}
-              />
-            </React.Fragment>
+            <Pagination
+              totalRecords={pagination.totalRecords}
+              currentPage={currentPage}
+              perPage={pagination.perPage}
+              onChange={(currentPage) => {
+                config.isServerSide && pagination.onChange(currentPage);
+                setCurrentPage(currentPage);
+              }}
+            />
           </div>
         )}
       </div>

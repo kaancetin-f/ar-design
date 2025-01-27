@@ -77,7 +77,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
 
     // useEffects
     useEffect(() => {
-      if (attributes.value !== undefined) setValue(attributes.value);
+      if (attributes.value !== undefined) setValue(attributes.value ?? "");
     }, [attributes.value]);
 
     return (
@@ -100,8 +100,8 @@ const Input = forwardRef<HTMLInputElement, IProps>(
           <input
             ref={ref}
             {...attributes}
-            placeholder={`${validation ? "* " : ""}${attributes.placeholder}`}
-            value={attributes.value !== undefined ? attributes.value : value} // `value` varsa onu kullan, yoksa `internalValue`'yu kullan
+            placeholder={`${validation ? "* " : ""}${attributes.placeholder ?? ""}`}
+            value={value ?? attributes.value} // `value` varsa onu kullan, yoksa `internalValue`'yu kullan
             size={20}
             className={_inputClassName.map((c) => c).join(" ")}
             onChange={(event) => {

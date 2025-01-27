@@ -40,6 +40,7 @@ export type MenuItemType = "group" | "divider";
 export type TableColumnType<T> = {
   title: string;
   key?: keyof T | { field: keyof T; nestedKey: string };
+  filters?: Option[];
   render?: (item: T) => React.ReactNode;
   config?: {
     width?: number;
@@ -133,7 +134,8 @@ export type Icons =
   | "NumberList"
   | "TextAlingLeft"
   | "TextAlingCenter"
-  | "TextAlingRight";
+  | "TextAlingRight"
+  | "Filter";
 // Charts
 // Pie
 export type PieChartDataType = { value: number; text: string };
