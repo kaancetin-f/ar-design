@@ -207,6 +207,7 @@ const TableWithRef = forwardRef(
       return Object.entries(searchedText).every(([key, value]) => {
         const _itemValue = item[key as keyof typeof item];
 
+        debugger;
         if (typeof _itemValue === "number" || typeof _itemValue === "string") {
           if (Array.isArray(value)) {
             if (value.length === 0) return true;
@@ -460,8 +461,8 @@ const TableWithRef = forwardRef(
                                               value={filter.text}
                                               checked={
                                                 config.isServerSide
-                                                  ? _searchedParams && _searchedParams[name].includes(filter.text)
-                                                  : searchedText && searchedText[name].includes(filter.text)
+                                                  ? _searchedParams?.[name]?.includes(filter.text)
+                                                  : searchedText?.[name]?.includes(filter.text)
                                               }
                                               onChange={handleChecboxFilter}
                                             />
