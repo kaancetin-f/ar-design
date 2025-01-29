@@ -207,7 +207,6 @@ const TableWithRef = forwardRef(
       return Object.entries(searchedText).every(([key, value]) => {
         const _itemValue = item[key as keyof typeof item];
 
-        debugger;
         if (typeof _itemValue === "number" || typeof _itemValue === "string") {
           if (Array.isArray(value)) {
             if (value.length === 0) return true;
@@ -408,6 +407,8 @@ const TableWithRef = forwardRef(
                   )}
 
                   {columns.map((c, cIndex) => {
+                    if (!c.key) return <th></th>;
+
                     let _className: string[] = [];
 
                     if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
