@@ -292,8 +292,6 @@ const TableWithRef = forwardRef(
       setSelectAll(allChecked);
     }, [currentPage]);
 
-    console.log(searchedText);
-
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
         {(title || description || actions || React.Children.count(children) > 0) && (
@@ -379,7 +377,7 @@ const TableWithRef = forwardRef(
 
                   return (
                     <th
-                      key={`column-${cIndex}`}
+                      key={`column-${cIndex}-${Math.random()}`}
                       {...(_className.length > 0 && {
                         className: `${_className.map((c) => c).join(" ")}`,
                       })}
@@ -450,12 +448,12 @@ const TableWithRef = forwardRef(
                                       // .filter((x) =>
                                       //   x.text.toLocaleLowerCase().includes(searchedFilters?.toLocaleLowerCase() ?? "")
                                       // )
-                                      .map((filter, index) => {
+                                      .map((filter, fIndex) => {
                                         const name = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
                                         return (
-                                          <li key={index}>
+                                          <li key={`filters-${fIndex}-${Math.random()}`}>
                                             <Checkbox
-                                              ref={(element) => (_filterCheckboxItems.current[index] = element)}
+                                              ref={(element) => (_filterCheckboxItems.current[fIndex] = element)}
                                               label={filter.text}
                                               name={name}
                                               status="success"
@@ -505,7 +503,7 @@ const TableWithRef = forwardRef(
             <tbody>
               {getData().length > 0 ? (
                 getData().map((item, index) => (
-                  <tr key={`row-${index}`}>
+                  <tr key={`row-${index}-${Math.random()}`}>
                     {selections && (
                       <td key={`selection-${index}`} className="sticky-left" data-sticky-position="left">
                         <Checkbox

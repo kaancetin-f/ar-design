@@ -5,7 +5,7 @@ class DATE {
     const [y, m, d] = sd.split("-").map(Number);
 
     // Zaman Bilgileri
-    const [c, _] = isCloack ? st.split(".") : "00:00";
+    const [c, _] = isCloack && st ? st.split(".") : "00:00";
     const [hh, mm] = isCloack ? c.split(":").map(Number) : [0, 0];
 
     return {

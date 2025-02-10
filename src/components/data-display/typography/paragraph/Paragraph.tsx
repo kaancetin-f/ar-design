@@ -3,13 +3,7 @@
 import React from "react";
 import IProps from "./IProps";
 
-const Paragraph: React.FC<IProps> = ({
-  children,
-  color,
-  align = "left",
-  size,
-  upperCase = false,
-}) => {
+const Paragraph: React.FC<IProps> = ({ children, color, align = "left", size, upperCase = false }) => {
   let _className: string[] = ["ar-typography-paragraph"];
 
   if (align) _className.push(align);

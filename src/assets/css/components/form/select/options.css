@@ -1,6 +1,8 @@
 .ar-select-options {
   position: absolute;
+  top: 0;
   background-color: var(--white);
+  border: solid 1px var(--gray-200);
   border-radius: var(--border-radius-sm);
   box-shadow: 0 0 15px -2.5px rgba(var(--black-rgb), 0.1);
   overflow: hidden;

@@ -1,11 +1,10 @@
 .ar-date-calendar > .clock > .content {
   display: flex;
   justify-content: space-between;
-  height: calc(100% - 5.5rem);
+  overflow: hidden;
 }
 .ar-date-calendar > .clock > .content > ul {
   width: 50%;
-  padding-bottom: calc(var(--input-height) * 6.5);
   overflow-y: auto;
   scrollbar-width: none;
 }
@@ -19,7 +18,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: var(--input-height);
+  min-height: 2rem;
   cursor: pointer;
 }
 .ar-date-calendar > .clock > .content > ul > li > span {

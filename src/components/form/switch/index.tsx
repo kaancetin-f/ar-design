@@ -29,8 +29,6 @@ const Switch: React.FC<IProps> = ({ label, status = "primary", border = { radius
             event.stopPropagation();
 
             (() => {
-              console.log(event.target.checked);
-
               setChecked(event.target.checked);
             })();
 

@@ -19,8 +19,14 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
   // methods
   const handleKeys = (event: KeyboardEvent) => {
     const key = event.key;
+    const isArSelectOptions = document.getElementsByClassName("ar-select-options").length === 0;
+    const isArCalendar = document.getElementsByClassName("ar-date-calendar").length === 0;
+    const isArPopover = document.getElementsByClassName("ar-popover").length === 0;
 
-    if (key === "Escape") open.set(false);
+    if (key === "Escape" && isArCalendar && isArSelectOptions && isArPopover) {
+      event.stopPropagation();
+      open.set(false);
+    }
   };
 
   const handlePosition = () => {

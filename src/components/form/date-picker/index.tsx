@@ -9,6 +9,7 @@ import Alert from "../../feedback/alert";
 import Props from "./Props";
 import ReactDOM from "react-dom";
 import DATE from "./DATE";
+import { ARIcon } from "../../icons";
 
 const weekdays = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
 const months = [
@@ -29,6 +30,11 @@ const months = [
 const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attributes }) => {
   // refs
   const _arCalendar = useRef<HTMLDivElement>(null);
+  const _arClock = useRef<HTMLDivElement>(null);
+  const _calendarHeader = useRef<HTMLDivElement>(null);
+  const _calendarFooter = useRef<HTMLDivElement>(null);
+  const _clockHeader = useRef<HTMLDivElement>(null);
+  const _clockFooter = useRef<HTMLDivElement>(null);
   const _currentDate = useRef<Date>(new Date()).current;
   const _beginDate = useRef<HTMLInputElement>(null);
 
@@ -63,13 +69,18 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
   const handleClickOutSide = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
 
+    if (target === _beginDate.current) return;
+
     if (_arCalendar.current && !_arCalendar.current.contains(target)) closeCalendar();
   };
 
   const handleKeys = (event: KeyboardEvent) => {
     const key = event.key;
 
-    if (key === "Escape") closeCalendar();
+    if (key === "Escape") {
+      event.stopPropagation();
+      closeCalendar();
+    }
   };
 
   const handlePosition = () => {
@@ -93,7 +104,46 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
     }
   };
 
-  // Şimdi Butonu
+  const handleHeight = () => {
+    if (_arCalendar.current && _arClock.current) {
+      const calendar = _arCalendar.current?.getBoundingClientRect()?.height;
+      _arClock.current.style.maxHeight = `${calendar}px`;
+    }
+
+    if (_calendarHeader.current && _clockHeader.current) {
+      const calendarHeaderH = _calendarHeader.current?.getBoundingClientRect()?.height;
+      _clockHeader.current.style.minHeight = `${calendarHeaderH}px`;
+    }
+
+    if (_calendarFooter && _clockFooter.current) {
+      const calendarFooterH = _calendarFooter.current?.getBoundingClientRect()?.height;
+      _clockFooter.current.style.minHeight = `${calendarFooterH}px`;
+    }
+  };
+
+  const handleOk = (isShutdownOn: boolean = true) => {
+    // Stateler güncelleniyor...
+    setSelectedYear(_year.current);
+    setSelectedMonth(_month.current);
+    setSelectedDay(_day.current);
+    setSelectedHours(_hours.current);
+    setSelectedMinutes(_minutes.current);
+
+    const inputDate = new Date(
+      Date.UTC(
+        _year.current,
+        _month.current,
+        _day.current,
+        !isClock ? 0 : _hours.current,
+        !isClock ? 0 : _minutes.current,
+        0
+      )
+    );
+
+    onChange(inputDate.toISOString());
+    isShutdownOn && setCalendarIsOpen(false);
+  };
+
   const setNowButton = () => {
     const now = new Date();
 
@@ -128,35 +178,9 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
     onChange(inputDate.toISOString());
   };
 
-  // Tamam Butonu
   const okayButton = () => {
     return (
-      <Button
-        variant="borderless"
-        status="success"
-        onClick={() => {
-          // Stateler güncelleniyor...
-          setSelectedYear(_year.current);
-          setSelectedMonth(_month.current);
-          setSelectedDay(_day.current);
-          setSelectedHours(_hours.current);
-          setSelectedMinutes(_minutes.current);
-
-          const inputDate = new Date(
-            Date.UTC(
-              _year.current,
-              _month.current,
-              _day.current,
-              !isClock ? 0 : _hours.current,
-              !isClock ? 0 : _minutes.current,
-              0
-            )
-          );
-
-          onChange(inputDate.toISOString());
-          setCalendarIsOpen(false);
-        }}
-      >
+      <Button variant="borderless" status="success" onClick={() => handleOk()}>
         Tamam
       </Button>
     );
@@ -177,7 +201,10 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
   // useEffects
   useEffect(() => {
     if (calendarIsOpen) {
-      setTimeout(() => handlePosition(), 0);
+      setTimeout(() => {
+        handleHeight();
+        handlePosition();
+      }, 0);
 
       const days = [];
       const firstDayOfMonth = new Date(_year.current, _month.current, 1);
@@ -208,6 +235,8 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
               _day.current = i;
               setSelectedDay(i);
               setDateChanged(!dateChanged);
+
+              handleOk(false);
             }}
           >
             <span>{i}</span>
@@ -221,13 +250,13 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
 
       setCalendarDays(days);
 
-      window.addEventListener("blur", () => closeCalendar());
+      // window.addEventListener("blur", () => closeCalendar());
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
     }
 
     return () => {
-      window.removeEventListener("blur", () => closeCalendar());
+      // window.removeEventListener("blur", () => closeCalendar());
       document.removeEventListener("click", handleClickOutSide);
       document.removeEventListener("keydown", handleKeys);
     };
@@ -252,6 +281,8 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
               _minutes.current = i;
               setSelectedMinutes(i);
             }
+
+            handleOk(false);
           }}
         >
           <span>
@@ -268,6 +299,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
     generateList(60, _minutes.current, setMinutes);
 
     if (!isClock) return;
+    if (calendarIsOpen) handleHeight();
 
     // Seçim sonrasında en yukarı getirme işlemi için aşağıda yer alan kodlar yazılmıştır
     const hourLiElement = _hoursLiElements.current[_hours.current];
@@ -319,12 +351,16 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
         ref={_beginDate}
         value={DATE.ParseValue(String(attributes.value), isClock)}
         type={isClock ? "datetime-local" : "date"}
-        onKeyDown={(event) => event.code == "Space" && event.preventDefault()}
+        onKeyDown={(event) => {
+          if (event.code === "Space") event.preventDefault();
+          else if (event.code === "Enter") handleOk();
+        }}
         onChange={(event) => {
           // Disabled gelmesi durumunda işlem yapmasına izin verme...
           if (attributes.disabled) return;
 
           (() => {
+            if (!calendarIsOpen) setCalendarIsOpen(true);
             const value = event.target.value;
 
             const [date, time] = value.split("T");
@@ -341,8 +377,13 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
               _minutes.current = minutes;
             }
 
+            // Yıl ve Ay'ı anlık yeniler.
+            setSelectedYear(_year.current);
+            setSelectedMonth(_month.current);
+            // Takvimi anlık yeniler.
             setDateChanged((prev) => !prev);
             setTimeChanged((prev) => !prev);
+            onChange(value);
           })();
         }}
         onClick={(event) => {
@@ -357,7 +398,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
         ReactDOM.createPortal(
           <div ref={_arCalendar} className="ar-date-calendar">
             {/* :Begin: Calendar */}
-            <div className="header">
+            <div ref={_calendarHeader} className="header">
               <div className="select-field">
                 <div className="prev">
                   <span
@@ -366,7 +407,9 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
                       setSelectedYear(_year.current);
                       setDateChanged((prev) => !prev);
                     }}
-                  ></span>
+                  >
+                    <ARIcon stroke="var(--primary)" icon="ArrowLeft" size={24} />
+                  </span>
                   <span
                     onClick={() => {
                       if (_month.current <= 0) {
@@ -379,7 +422,9 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
                       setSelectedMonth(_month.current);
                       setDateChanged((prev) => !prev);
                     }}
-                  ></span>
+                  >
+                    <ARIcon icon="ArrowLeft" size={24} />
+                  </span>
                 </div>
 
                 <div className="selects">
@@ -404,14 +449,18 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
                       setSelectedMonth(_month.current);
                       setDateChanged((prev) => !prev);
                     }}
-                  ></span>
+                  >
+                    <ARIcon icon="ArrowRight" size={24} />
+                  </span>
                   <span
                     onClick={() => {
                       _year.current += 1;
                       setSelectedYear(_year.current);
                       setDateChanged((prev) => !prev);
                     }}
-                  ></span>
+                  >
+                    <ARIcon stroke="var(--primary)" icon="ArrowRight" size={24} />
+                  </span>
                 </div>
               </div>
             </div>
@@ -436,7 +485,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
               )}
             </div>
 
-            <div className="footer">
+            <div ref={_calendarFooter} className="footer">
               <div>
                 <Button variant="borderless" onClick={() => setNowButton()}>
                   Şimdi
@@ -448,18 +497,24 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
             {/* :End: Calendar */}
 
             {/* :Begin: Clock */}
-            <div className={`clock ${isClock ? "active" : "passive"}`}>
-              <div className="header">
-                {_hours.current.toString().padStart(2, "0")}
-                {" : "}
-                {_minutes.current.toString().padStart(2, "0")}
+            {isClock && (
+              <div ref={_arClock} className="clock">
+                <div ref={_clockHeader} className="header">
+                  {_hours.current.toString().padStart(2, "0")}
+                  {" : "}
+                  {_minutes.current.toString().padStart(2, "0")}
+                </div>
+
+                <div className="content">
+                  <ul ref={_hoursListElement}>{hours}</ul>
+                  <ul ref={_minutesListElement}>{minutes}</ul>
+                </div>
+
+                <div ref={_clockFooter} className="footer">
+                  {okayButton()}
+                </div>
               </div>
-              <div className="content">
-                <ul ref={_hoursListElement}>{hours}</ul>
-                <ul ref={_minutesListElement}>{minutes}</ul>
-              </div>
-              {isClock && <div className="footer">{okayButton()}</div>}
-            </div>
+            )}
             {/* :End: Clock */}
           </div>,
           document.body

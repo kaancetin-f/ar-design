@@ -53,7 +53,7 @@ class Api {
   }): Promise<Response> {
     const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "POST",
-      headers: { ...values.headers },
+      headers: { ...this.HeaderProperties(), ...values.headers },
       body: values.data,
       ...values.init,
     });

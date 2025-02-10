@@ -119,8 +119,12 @@ export type AllowedTypes =
 export type IconVariants = "linear" | "bulk";
 export type Icons =
   | "Add"
+  | "ArrowLeft"
+  | "ArrowRight"
+  | "CloseCircle"
   | "CloseSquare"
   | "Drive"
+  | "Document"
   | "Folder"
   | "Trash"
   | "Upload"
@@ -135,7 +139,9 @@ export type Icons =
   | "TextAlingLeft"
   | "TextAlingCenter"
   | "TextAlingRight"
-  | "Filter";
+  | "Filter"
+  | "TickCircle"
+  | "File";
 // Charts
 // Pie
 export type PieChartDataType = { value: number; text: string };

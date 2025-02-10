@@ -46,6 +46,28 @@ class Icon {
                 ></line>
               </>
             );
+          case "ArrowLeft":
+            return (
+              <path
+                d="M15 19.92L8.48 13.4c-.77-.77-.77-2.03 0-2.8L15 4.08"
+                stroke={this._stroke}
+                strokeWidth={this._strokeWidth}
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+            );
+          case "ArrowRight":
+            return (
+              <path
+                d="M8.91 19.92l6.52-6.52c.77-.77.77-2.03 0-2.8L8.91 4.08"
+                stroke={this._stroke}
+                strokeWidth={this._strokeWidth}
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+            );
           case "CloseSquare":
             return (
               <path
@@ -55,6 +77,16 @@ class Icon {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
+            );
+          case "CloseCircle":
+            return (
+              <path
+                d="M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10ZM9.17 14.83l5.66-5.66M14.83 14.83 9.17 9.17"
+                stroke={this._stroke}
+                strokeWidth={this._strokeWidth}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
             );
           case "Import":
             return (
@@ -68,6 +100,25 @@ class Icon {
                 ></path>
                 <path
                   d="M12 3V16M12 16L16 11.625M12 16L8 11.625"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></path>
+              </>
+            );
+          case "Document":
+            return (
+              <>
+                <path
+                  d="M22 10v5c0 5-2 7-7 7H9c-5 0-7-2-7-7V9c0-5 2-7 7-7h5"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></path>
+                <path
+                  d="M22 10h-4c-3 0-4-1-4-4V2l8 8Z"
                   stroke={this._stroke}
                   strokeWidth={this._strokeWidth}
                   strokeLinecap="round"
@@ -401,6 +452,25 @@ class Icon {
                   stroke={this._stroke}
                   strokeWidth={this._strokeWidth}
                   strokeMiterlimit="10"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></path>
+              </>
+            );
+          case "TickCircle":
+            return (
+              <>
+                <path
+                  d="M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10Z"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></path>
+                <path
+                  d="m7.75 12 2.83 2.83 5.67-5.66"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 ></path>
