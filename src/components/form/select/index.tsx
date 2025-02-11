@@ -98,6 +98,8 @@ const Select: React.FC<Props> = ({
         const sx = window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft;
         const sy = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
 
+        _options.current.style.visibility = "visible";
+        _options.current.style.opacity = "1";
         _options.current.style.top = `${
           (InpuRect.top > screenCenter
             ? InpuRect.top - optionRect.height - (multiple ? 20 : 0)

@@ -93,6 +93,8 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
         const sx = window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft;
         const sy = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
 
+        _arCalendar.current.style.visibility = "visible";
+        _arCalendar.current.style.opacity = "1";
         _arCalendar.current.style.top = `${
           (InpuRect.top > screenCenterY ? InpuRect.top - arCalendarRect.height : InpuRect.top + InpuRect.height) + sy
         }px`;

@@ -41,6 +41,8 @@ const Popover: React.FC<IProps> = ({ children, title, message, content, onConfir
         const sx = window.scrollX || document.documentElement.scrollLeft;
         const sy = window.scrollY || document.documentElement.scrollTop;
 
+        _arPopover.current.style.visibility = "visible";
+        _arPopover.current.style.opacity = "1";
         _arPopover.current.style.top = `${
           (elementRect.top > screenCenter
             ? elementRect.top - popoverRect.height + elementRect.height
