@@ -38,7 +38,7 @@ import Menu from "./components/navigation/menu";
 import Steps from "./components/navigation/steps";
 
 // Layout
-import Grid from "./components/layout/grid-system";
+import Grid from "./components/data-display/grid-system";
 import Layout from "./components/layout";
 
 export {

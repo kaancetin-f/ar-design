@@ -9,7 +9,6 @@ import Alert from "../../feedback/alert";
 import Props from "./Props";
 import ReactDOM from "react-dom";
 import DATE from "./DATE";
-import { ARIcon } from "../../icons";
 
 const weekdays = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
 const months = [
@@ -336,7 +335,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
     }
 
     setYears(years);
-  }, []);
+  }, [selectedYear]);
 
   return (
     <div className="ar-date-picker">
@@ -407,9 +406,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
                       setSelectedYear(_year.current);
                       setDateChanged((prev) => !prev);
                     }}
-                  >
-                    <ARIcon stroke="var(--primary)" icon="ArrowLeft" size={24} />
-                  </span>
+                  ></span>
                   <span
                     onClick={() => {
                       if (_month.current <= 0) {
@@ -422,9 +419,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
                       setSelectedMonth(_month.current);
                       setDateChanged((prev) => !prev);
                     }}
-                  >
-                    <ARIcon icon="ArrowLeft" size={24} />
-                  </span>
+                  ></span>
                 </div>
 
                 <div className="selects">
@@ -449,18 +444,14 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
                       setSelectedMonth(_month.current);
                       setDateChanged((prev) => !prev);
                     }}
-                  >
-                    <ARIcon icon="ArrowRight" size={24} />
-                  </span>
+                  ></span>
                   <span
                     onClick={() => {
                       _year.current += 1;
                       setSelectedYear(_year.current);
                       setDateChanged((prev) => !prev);
                     }}
-                  >
-                    <ARIcon stroke="var(--primary)" icon="ArrowRight" size={24} />
-                  </span>
+                  ></span>
                 </div>
               </div>
             </div>
