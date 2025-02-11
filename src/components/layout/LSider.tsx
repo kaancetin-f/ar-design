@@ -16,6 +16,7 @@ const LSider: React.FC<ILSiderProps> = ({ image, text }) => {
     <aside className="ar-aside left">
       <div className="logo">
         {image}
+
         <Title Level="h4" align="center">
           {text}
         </Title>

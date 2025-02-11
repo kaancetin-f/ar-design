@@ -13,24 +13,18 @@
 .ar-layout > aside.ar-aside.left {
   display: flex;
   flex-direction: column;
-  min-width: 280px;
-  padding: 0 1rem;
   border-right: solid 1px var(--gray-200);
 }
 .ar-layout > aside.ar-aside.left > .logo {
   display: flex;
   align-items: center;
-  min-height: 5rem;
-  margin-bottom: 1rem;
 }
 .ar-layout > aside.ar-aside.right {
-  width: 100%;
 }
 
 .ar-layout > main {
   display: flex;
   flex-direction: column;
-  width: 100%;
 }
 .ar-layout > main > header {
   display: flex;
@@ -39,8 +33,6 @@
   top: 0;
   background-color: rgba(var(--white-rgb), 0.5);
   backdrop-filter: blur(5px);
-  height: 5rem;
-  padding: 0 2.5rem;
   box-shadow: 0 10px 10px -15px rgba(var(--black-rgb), 0.25);
   z-index: 10;
 }
@@ -49,26 +41,19 @@
 }
 
 .ar-layout > main > section {
-  width: 1280px;
-  margin: 0 auto;
+  width: 100%;
   height: fit-content;
-  padding: 2.5rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 .ar-layout > main > section.full-width {
-  width: 100%;
 }
-
-/* .ar-layout > main:not(:has(> .ar-aside)) > section {
-  min-width: 100%;
-}
-.ar-layout > main:has(> .ar-aside.left) > section {
-  padding-left: 2rem;
-}
-.ar-layout > main:has(> .ar-aside.left) > section:has(~ .ar-aside.right) {
-  padding: 0 2rem;
-} */
 
 /* Media Queries */
-/* @import url("./media-queries/x-large.css");
+@import url("./media-queries/xxx-large.css");
+@import url("./media-queries/xx-large.css");
+@import url("./media-queries/x-large.css");
+@import url("./media-queries/large.css");
 @import url("./media-queries/medium.css");
-@import url("./media-queries/small.css"); */
+@import url("./media-queries/small.css");
+@import url("./media-queries/x-small.css");

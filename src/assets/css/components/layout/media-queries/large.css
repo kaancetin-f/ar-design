@@ -1,5 +1,5 @@
-/* X-Large (Standart Laptop & Küçük Desktop) */
-@media (min-width: 992px) and (max-width: 1199px) {
+/* Large (Tablet Yatay & Büyük Tablet) */
+@media (min-width: 768px) and (max-width: 991px) {
   .ar-layout > aside.ar-aside.left {
     min-width: 280px;
     padding: 0 1rem;
@@ -21,7 +21,7 @@
   }
 
   .ar-layout > main > section {
-    max-width: 960px;
+    max-width: none;
     padding: 2.5rem;
   }
 }

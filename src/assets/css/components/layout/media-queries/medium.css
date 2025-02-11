@@ -1,21 +1,27 @@
-@media (width <= 991px) {
-  .ar-layout > header > .ar-header-with-wrap {
-    width: 767px !important;
+/* Medium (Tablet Dikey & Büyük Telefonlar) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .ar-layout > aside.ar-aside.left {
+    min-width: 280px;
+    padding: 0 1rem;
+  }
+  .ar-layout > aside.ar-aside.left > .logo {
+    min-height: 5rem;
+    margin-bottom: 1rem;
+  }
+  .ar-layout > aside.ar-aside.right {
+    width: 100%;
   }
 
   .ar-layout > main {
-    width: 767px !important;
+    width: 100%;
   }
-
-  .ar-layout > main > aside.ar-aside.left {
-    display: none;
-  }
-  .ar-layout > main > aside.ar-aside.right {
-    display: none;
+  .ar-layout > main > header {
+    height: 5rem;
+    padding: 0 2.5rem;
   }
 
   .ar-layout > main > section {
-    min-width: 100% !important;
-    padding-left: 0 !important;
+    max-width: none;
+    padding: 2.5rem;
   }
 }

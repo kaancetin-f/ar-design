@@ -1,5 +1,6 @@
-/* X-Large (Standart Laptop & Küçük Desktop) */
-@media (min-width: 992px) and (max-width: 1199px) {
+/* XXX-Large (Büyük Ekranlar: TV, Ultra Geniş Monitörler) */
+
+@media (min-width: 1400px) {
   .ar-layout > aside.ar-aside.left {
     min-width: 280px;
     padding: 0 1rem;
@@ -21,7 +22,7 @@
   }
 
   .ar-layout > main > section {
-    max-width: 960px;
+    max-width: 1340px;
     padding: 2.5rem;
   }
 }
