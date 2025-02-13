@@ -2,12 +2,14 @@
 @media (min-width: 992px) and (max-width: 1199px) {
   .ar-layout > aside.ar-aside.left {
     min-width: 280px;
+    max-width: 280px;
     padding: 0 1rem;
   }
   .ar-layout > aside.ar-aside.left > .logo {
-    min-height: 5rem;
+    height: 5rem;
     margin-bottom: 1rem;
   }
+
   .ar-layout > aside.ar-aside.right {
     width: 100%;
   }

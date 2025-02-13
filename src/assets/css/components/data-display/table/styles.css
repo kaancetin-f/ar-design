@@ -3,6 +3,8 @@
   flex-direction: column;
   background-color: var(--white);
   max-width: 100%;
+  min-width: 100%;
+  width: 1px;
   border-radius: var(--border-radius-lg);
   box-shadow: 0px 10px 15px -5px rgba(var(--black-rgb), 0.1);
   overflow: hidden;
@@ -78,6 +80,7 @@
   color: var(--gray-700);
   -webkit-text-stroke: 0.25px var(--gray-700);
   text-align: left;
+  text-wrap: nowrap;
   transition: background 250ms, box-shadow 250ms ease-in-out;
   z-index: 2;
 }

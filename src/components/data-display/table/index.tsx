@@ -258,10 +258,6 @@ const TableWithRef = forwardRef(
 
     // useEffects
     useEffect(() => {
-      handleScroll();
-    }, [data]);
-
-    useEffect(() => {
       if (!selections || selectionItems.length === 0) return;
 
       selections(selectionItems);
@@ -291,6 +287,12 @@ const TableWithRef = forwardRef(
 
       setSelectAll(allChecked);
     }, [currentPage]);
+
+    useEffect(() => {
+      setTimeout(() => {
+        handleScroll();
+      }, 0);
+    }, []);
 
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
