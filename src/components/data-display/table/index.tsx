@@ -289,9 +289,7 @@ const TableWithRef = forwardRef(
     }, [currentPage]);
 
     useEffect(() => {
-      setTimeout(() => {
-        handleScroll();
-      }, 0);
+      setTimeout(() => handleScroll(), 0);
     }, []);
 
     return (
