@@ -290,7 +290,7 @@ const TableWithRef = forwardRef(
 
     useEffect(() => {
       setTimeout(() => handleScroll(), 0);
-    }, []);
+    }, [, data]);
 
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
