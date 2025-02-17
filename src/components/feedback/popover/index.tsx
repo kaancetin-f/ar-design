@@ -58,13 +58,13 @@ const Popover: React.FC<IProps> = ({ children, title, message, content, onConfir
     if (open) {
       setTimeout(() => handlePosition(), 0);
 
-      windowBlur && window.addEventListener("blur", () => setOpen(false));
+      !windowBlur && window.addEventListener("blur", () => setOpen(false));
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
     }
 
     return () => {
-      windowBlur && window.removeEventListener("blur", () => setOpen(false));
+      !windowBlur && window.removeEventListener("blur", () => setOpen(false));
       document.removeEventListener("click", handleClickOutSide);
       document.removeEventListener("keydown", handleKeys);
     };
