@@ -460,8 +460,8 @@ const TableWithRef = forwardRef(
                                               value={filter.text}
                                               checked={
                                                 config.isServerSide
-                                                  ? _searchedParams?.[name]?.includes(filter.text)
-                                                  : searchedText?.[name]?.includes(filter.text)
+                                                  ? _searchedParams?.[name]?.includes(String(filter.value))
+                                                  : searchedText?.[name]?.includes(String(filter.value))
                                               }
                                               onChange={handleChecboxFilter}
                                             />
