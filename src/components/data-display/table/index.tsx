@@ -37,7 +37,6 @@ const TableWithRef = forwardRef(
     // refs -> Search
     const _searchTextInputs = useRef<(HTMLInputElement | null)[]>([]);
     const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
-    // const _searchFilterFirstLoad = useRef<boolean>(false);
 
     // className
     const _tableClassName: string[] = ["ar-table", "scroll"];
@@ -45,6 +44,7 @@ const TableWithRef = forwardRef(
     // states
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [selectionItems, setSelectionItems] = useState<T[]>([]);
+    const [thWidths, setThWidths] = useState<number[]>([]);
     // states -> Search
     const [searchedText, setSearchedText] = useState<SearchedParam | undefined>(undefined);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | undefined>(undefined);
@@ -289,6 +289,13 @@ const TableWithRef = forwardRef(
       setSelectAll(allChecked);
     }, [currentPage]);
 
+    useEffect(() => {
+      if (!_tableContent.current) return;
+
+      const th = _tableContent.current?.querySelectorAll("table > thead > tr:first-child > th");
+      th.forEach((item) => setThWidths((prev) => [...prev, item.getBoundingClientRect().width]));
+    }, []);
+
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
         {(title || description || actions || React.Children.count(children) > 0) && (
@@ -378,9 +385,11 @@ const TableWithRef = forwardRef(
                       {...(_className.length > 0 && {
                         className: `${_className.map((c) => c).join(" ")}`,
                       })}
-                      {...(c.config?.width && {
-                        style: { minWidth: c.config.width },
-                      })}
+                      {...(c.config?.width
+                        ? {
+                            style: { minWidth: c.config.width },
+                          }
+                        : { style: { maxWidth: thWidths[cIndex], minWidth: thWidths[cIndex] } })}
                       {...(c.config?.sticky && {
                         "data-sticky-position": c.config.sticky,
                       })}
@@ -546,6 +555,13 @@ const TableWithRef = forwardRef(
                           {...(_className.length > 0 && {
                             className: `${_className.map((c) => c).join(" ")}`,
                           })}
+                          {...(c.config?.width
+                            ? {
+                                style: { minWidth: c.config.width },
+                              }
+                            : {
+                                style: { maxWidth: thWidths[cIndex], minWidth: thWidths[cIndex] },
+                              })}
                           {...(c.config?.sticky && {
                             "data-sticky-position": c.config.sticky,
                           })}

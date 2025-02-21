@@ -102,7 +102,7 @@ const Select: React.FC<Props> = ({
         _options.current.style.opacity = "1";
         _options.current.style.top = `${
           (InpuRect.top > screenCenter
-            ? InpuRect.top - optionRect.height - (multiple ? 20 : 0)
+            ? InpuRect.top - optionRect.height - (multiple ? 0 : 5)
             : InpuRect.top + InpuRect.height) + sy
         }px`;
         _options.current.style.left = `${InpuRect.left + sx}px`;
@@ -271,6 +271,9 @@ const Select: React.FC<Props> = ({
     // Arama yapılması durumunda arama sonuçlarından ilk olan değeri işaretle.
     const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
     optionItems[_navigationIndex.current]?.classList.add("navigate-with-arrow-keys");
+
+    // Yeniden konumlandır.
+    setTimeout(() => handlePosition(), 0);
   }, [searchText]);
 
   useEffect(() => {
