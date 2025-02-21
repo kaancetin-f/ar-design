@@ -183,20 +183,6 @@ const TableWithRef = forwardRef(
       });
     }, []);
 
-    const handleChecboxFilter = async () => {
-      if (config.isServerSide) {
-        if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
-
-        setSearchedParams(checkboxSelectedParams);
-      } else {
-        setSearchedText(checkboxSelectedParams);
-      }
-
-      setCurrentPage(1);
-      pagination && pagination.onChange(1);
-      setSelectedfilterCheckboxItems(_filterCheckboxItems.current.filter((x) => x?.checked).length);
-    };
-
     // Derinlemesine arama yapmak için özyinelemeli bir fonksiyon tanımlayalım.
     const deepSearch = (item: T, searchedText: SearchedParam | undefined): boolean => {
       if (!searchedText) return false;
@@ -276,6 +262,20 @@ const TableWithRef = forwardRef(
         searchedParams(_searchedParams, query);
       }
     }, [_searchedParams]);
+
+    useEffect(() => {
+      if (config.isServerSide) {
+        if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
+
+        setSearchedParams(checkboxSelectedParams);
+      } else {
+        setSearchedText(checkboxSelectedParams);
+      }
+
+      setCurrentPage(1);
+      pagination && pagination.onChange(1);
+      setSelectedfilterCheckboxItems(_filterCheckboxItems.current.filter((x) => x?.checked).length);
+    }, [checkboxSelectedParams]);
 
     useEffect(() => {
       if (!selections) return;
@@ -453,10 +453,7 @@ const TableWithRef = forwardRef(
                                             status="primary"
                                             value={filter.value}
                                             checked={checkboxSelectedParams?.[name]?.includes(String(filter.value))}
-                                            onChange={async (event) => {
-                                              await handleCheckboxChange(event);
-                                              await handleChecboxFilter();
-                                            }}
+                                            onChange={async (event) => await handleCheckboxChange(event)}
                                           />
                                         </div>
                                       );
