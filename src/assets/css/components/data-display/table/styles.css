@@ -81,7 +81,6 @@
   -webkit-text-stroke: 0.25px var(--gray-700);
   text-align: left;
   text-wrap: nowrap;
-  transition: background 250ms, box-shadow 250ms ease-in-out;
   z-index: 2;
 }
 .ar-table > .content > table > thead > tr > th > .filter-field {

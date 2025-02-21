@@ -75,7 +75,11 @@ const Popover: React.FC<IProps> = ({ children, title, message, content, onConfir
       {open &&
         ReactDOM.createPortal(
           <div ref={_arPopover} className="ar-popover">
-            {title && <Title Level="h4">{title}</Title>}
+            {title && (
+              <div className="title">
+                <Title Level="h4">{title}</Title>
+              </div>
+            )}
             {message && <p className="message">{message}</p>}
             {content && <div className="content">{content}</div>}
 

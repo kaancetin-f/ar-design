@@ -6,7 +6,16 @@ import Button from "../../form/button";
 import Checkbox from "../../form/checkbox";
 import IProps, { SearchedParam } from "./IProps";
 import Pagination from "../../navigation/pagination";
-import React, { forwardRef, ReactElement, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
+import React, {
+  forwardRef,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { HTMLTableElementWithCustomAttributes } from "../../../libs/types";
 import Actions from "./Actions";
 import Input from "../../form/input";
@@ -48,6 +57,9 @@ const TableWithRef = forwardRef(
     // states -> Search
     const [searchedText, setSearchedText] = useState<SearchedParam | undefined>(undefined);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | undefined>(undefined);
+    const [checkboxSelectedParams, setCheckboxSelectedParams] = useState<SearchedParam | undefined>(undefined);
+    const [selectedfilterCheckboxItems, setSelectedfilterCheckboxItems] = useState<number | undefined>(undefined);
+
     // const [searchedFilters, setSearchedFilters] = useState<string | undefined>(undefined);
     // const [totalRecords, setTotalRecords] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -163,40 +175,35 @@ const TableWithRef = forwardRef(
       }
     };
 
-    const handleChecboxFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleCheckboxChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+      event.stopPropagation();
+
+      setCheckboxSelectedParams((prev) => {
+        const updatedValues = new Set<string>(prev?.[event.target.name] || []);
+
+        event.target.checked ? updatedValues.add(event.target.value) : updatedValues.delete(event.target.value);
+
+        return {
+          ...prev,
+          ...(Array.from(updatedValues).length > 0
+            ? { [event.target.name]: Array.from(updatedValues) }
+            : { [event.target.name]: [] }),
+        } as SearchedParam;
+      });
+    }, []);
+
+    const handleChecboxFilter = async () => {
       if (config.isServerSide) {
         if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
 
-        setSearchedParams((prev) => {
-          const updatedValues = new Set<string>(prev?.[event.target.name] || []);
-
-          event.target.checked ? updatedValues.add(event.target.value) : updatedValues.delete(event.target.value);
-
-          return {
-            ...prev,
-            ...(Array.from(updatedValues).length > 0
-              ? { [event.target.name]: Array.from(updatedValues) }
-              : { [event.target.name]: [] }),
-          } as SearchedParam;
-        });
-
-        setCurrentPage(1);
-        pagination && pagination.onChange(1);
+        setSearchedParams(checkboxSelectedParams);
       } else {
-        setSearchedText((prev) => {
-          const updatedValues = new Set<string>(prev?.[event.target.name] || []);
-
-          event.target.checked ? updatedValues.add(event.target.value) : updatedValues.delete(event.target.value);
-
-          return {
-            ...prev,
-            ...(Array.from(updatedValues).length > 0
-              ? { [event.target.name]: Array.from(updatedValues) }
-              : { [event.target.name]: [] }),
-          } as SearchedParam;
-        });
-        setCurrentPage(1);
+        setSearchedText(checkboxSelectedParams);
       }
+
+      setCurrentPage(1);
+      pagination && pagination.onChange(1);
+      setSelectedfilterCheckboxItems(_filterCheckboxItems.current.filter((x) => x?.checked).length);
     };
 
     // Derinlemesine arama yapmak için özyinelemeli bir fonksiyon tanımlayalım.
@@ -253,6 +260,9 @@ const TableWithRef = forwardRef(
         _data = _data.slice(indexOfFirstRow, indexOfLastRow);
       }
 
+      // Veriler yenilenmesi durumunda tablo üzerindeki hesaplamalar tekrar yapılacaktır.
+      setTimeout(() => handleScroll(), 0);
+
       return _data;
     }, [data, searchedText, currentPage]);
 
@@ -287,10 +297,6 @@ const TableWithRef = forwardRef(
 
       setSelectAll(allChecked);
     }, [currentPage]);
-
-    useEffect(() => {
-      setTimeout(() => handleScroll(), 0);
-    }, [, data]);
 
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
@@ -443,36 +449,33 @@ const TableWithRef = forwardRef(
                                     onChange={(event) => setSearchedFilters(event.target.value.toLocaleLowerCase())}
                                   /> */}
 
-                                  <ul>
-                                    {c.filters
-                                      // .filter((x) =>
-                                      //   x.text.toLocaleLowerCase().includes(searchedFilters?.toLocaleLowerCase() ?? "")
-                                      // )
-                                      .map((filter, fIndex) => {
-                                        const name = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
-                                        return (
-                                          <li key={`filters-${fIndex}-${Math.random()}`}>
-                                            <Checkbox
-                                              ref={(element) => (_filterCheckboxItems.current[fIndex] = element)}
-                                              label={filter.text}
-                                              name={name}
-                                              status="success"
-                                              value={filter.text}
-                                              checked={
-                                                config.isServerSide
-                                                  ? _searchedParams?.[name]?.includes(String(filter.value))
-                                                  : searchedText?.[name]?.includes(String(filter.value))
-                                              }
-                                              onChange={handleChecboxFilter}
-                                            />
-                                          </li>
-                                        );
-                                      })}
-                                  </ul>
+                                  <div>
+                                    {c.filters.map((filter, fIndex) => {
+                                      const name = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
+
+                                      return (
+                                        <div>
+                                          <Checkbox
+                                            ref={(element) => (_filterCheckboxItems.current[fIndex] = element)}
+                                            label={filter.text}
+                                            name={name}
+                                            status="primary"
+                                            value={filter.value}
+                                            checked={checkboxSelectedParams?.[name]?.includes(String(filter.value))}
+                                            onChange={async (event) => {
+                                              await handleCheckboxChange(event);
+                                              await handleChecboxFilter();
+                                            }}
+                                          />
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
                                 </>
                               }
+                              windowBlur={true}
                             >
-                              {_filterCheckboxItems.current.filter((item) => item?.checked).length > 0 && (
+                              {(selectedfilterCheckboxItems ?? 0) > 0 && (
                                 <div
                                   style={{
                                     position: "absolute",
