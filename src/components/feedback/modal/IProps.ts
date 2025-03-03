@@ -6,8 +6,8 @@ interface IProps extends IChildren, ISizes {
    *
    */
   open: {
-    set: React.Dispatch<React.SetStateAction<boolean>>;
     get: boolean;
+    set: React.Dispatch<React.SetStateAction<boolean>>;
   };
 
   /**

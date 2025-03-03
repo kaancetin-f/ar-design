@@ -1,5 +1,5 @@
 .ar-modal-wrapper {
-  position: absolute;
+  position: fixed;
   inset: 0;
 }
 .ar-modal-wrapper > .ar-modal-bg {
