@@ -36,18 +36,21 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
 
       const rect = arModal.getBoundingClientRect();
       const screenCenterX = window.innerWidth / 2;
-      const screenCenterY = window.innerHeight / 2;
+      // const screenCenterY = window.innerHeight / 2;
       const sx = window.scrollX || document.documentElement.scrollLeft;
-      const sy = window.scrollY || document.documentElement.scrollTop;
+      // const sy = window.scrollY || document.documentElement.scrollTop;
 
       if (window.innerHeight > 1024) {
-        arModal.style.top = `${sy + 100}px`;
+        // arModal.style.top = `${sy + 100}px`;
+        arModal.style.top = "100px";
         content.removeAttribute("style");
       } else if (window.innerHeight > 575 && window.innerHeight < 1024) {
-        arModal.style.top = `${screenCenterY - rect.height / 2 + sy}px`;
+        // arModal.style.top = `${screenCenterY - rect.height / 2 + sy}px`;
+        arModal.style.top = "100px";
         content.removeAttribute("style");
       } else if (window.innerHeight < 575) {
-        arModal.style.top = `${sy + 15}px`;
+        // arModal.style.top = `${sy + 15}px`;
+        arModal.style.top = "15px";
         content.style.maxHeight = `calc(100vh - ${footer ? "2.5px" : "-30.5px"} - 3.5rem - 4rem - ${
           footer ? "2rem" : "0rem"
         })`;
