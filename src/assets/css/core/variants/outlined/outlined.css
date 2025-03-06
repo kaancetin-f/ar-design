@@ -21,6 +21,29 @@ input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).pri
 /* #endregion */
 /* PRIMARY */
 
+/* #region PRIMARY-LIGHT */
+.outlined:not(.disabled).primary-light {
+  border-color: var(--primary-light);
+  /* color: var(--primary-light); */
+}
+.outlined:not(.disabled).primary-light:hover {
+  border-color: rgba(var(--primary-light-rgb), 0.5);
+}
+input.outlined:not(.disabled).primary-light:focus,
+iframe.outlined:not(.disabled).primary-light.focused{
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3.5px rgba(var(--primary-light-rgb), 0.25);
+}
+input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).primary-light{
+  box-shadow: 0 0 0 2.5px rgba(var(--primary-light-rgb), 0.1);
+}
+.outlined:not(.disabled).primary-light.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: clicked-primary-light ease-in-out 750ms 0s 1 normal both;
+}
+/* #endregion */
+/* PRIMARY-LIGHT */
+
 /* #region SECONDARY */
 .outlined:not(.disabled).secondary {
   border-color: var(--secondary);

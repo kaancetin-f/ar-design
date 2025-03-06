@@ -2,7 +2,17 @@ const fs = require("fs");
 const path = require("path");
 
 const borderTypes = ["sm", "lg", "xl", "xxl", "pill"];
-const colors = ["primary", "secondary", "success", "warning", "danger", "information", "dark", "light"];
+const colors = [
+  "primary",
+  "primary-light",
+  "secondary",
+  "success",
+  "warning",
+  "danger",
+  "information",
+  "dark",
+  "light",
+];
 let customFontColor = "";
 let customFocusColor = "";
 

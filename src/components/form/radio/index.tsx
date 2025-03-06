@@ -11,7 +11,7 @@ const Radio = forwardRef<HTMLInputElement, IProps>(
     const _checkbox = useRef<HTMLInputElement>(null);
     const _checkboxClassName: string[] = ["ar-radio"];
 
-    _checkboxClassName.push(...Utils.GetClassName("filled", undefined, border, size, undefined, attributes.className));
+    _checkboxClassName.push(...Utils.GetClassName("filled", status, border, size, undefined, attributes.className));
 
     return (
       <div className="ar-radio-wrapper">

@@ -1,7 +1,16 @@
 import React from "react";
 
 export type Variants = "filled" | "outlined" | "dashed" | "borderless";
-export type Status = "primary" | "secondary" | "success" | "danger" | "warning" | "information" | "dark" | "light";
+export type Status =
+  | "primary"
+  | "primary-light"
+  | "secondary"
+  | "success"
+  | "danger"
+  | "warning"
+  | "information"
+  | "dark"
+  | "light";
 
 export type ParagraphColors =
   | "gray-100"

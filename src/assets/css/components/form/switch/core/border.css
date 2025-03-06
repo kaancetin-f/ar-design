@@ -8,6 +8,16 @@
 /* #endregion */
 /* Border Color -> PRIMARY */
 
+/* #region Border Color -> PRIMARY-LIGHT */
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.primary-light {
+  box-shadow: 0 0 0 2.5px rgba(var(--primary-light-rgb), .1);
+}
+.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.primary-light > .handle {
+  box-shadow: 0 0 0 2px rgba(var(--primary-light-rgb), .5);
+}
+/* #endregion */
+/* Border Color -> PRIMARY-LIGHT */
+
 /* #region Border Color -> SECONDARY */
 .ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.secondary {
   box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), .1);

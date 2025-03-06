@@ -27,6 +27,35 @@ button.filled:not(.disabled).primary:focus {
 /* #endregion */
 /* PRIMARY */
 
+/* #region PRIMARY-LIGHT */
+.filled:not(.disabled).primary-light {
+  background-color: var(--primary-light);
+  color: var(--white)
+}
+input.filled:not(.disabled).primary-light:hover {
+  background-color: var(--primary-light-active);
+}
+input.filled:not(.disabled).primary-light:focus {
+  background-color: transparent;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3.5px rgba(var(--primary-light-rgb), 0.25);
+}
+input[type="checkbox"]:checked + span > .ar-checkbox.filled:not(.disabled).primary-light{
+  box-shadow: 0 0 0 2.5px rgba(var(--primary-light-rgb), 0.25);
+}
+button.filled:not(.disabled).primary-light {
+  color: var(--white);
+}
+button.filled:not(.disabled).primary-light:focus {
+  background-color: var(--primary-light);
+}
+.filled:not(.disabled).primary-light.active {
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: clicked-primary-light ease-in-out 750ms 0s 1 normal both;
+}
+/* #endregion */
+/* PRIMARY-LIGHT */
+
 /* #region SECONDARY */
 .filled:not(.disabled).secondary {
   background-color: var(--secondary);

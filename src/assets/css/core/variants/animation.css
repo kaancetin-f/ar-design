@@ -13,6 +13,21 @@
 /* #endregion */
 /* Animation -> PRIMARY */
 
+/* #region Animation -> PRIMARY-LIGHT */
+@keyframes clicked-primary-light {
+  0% {
+    box-shadow: 0 0 0 0px rgba(var(--primary-light-rgb), 0);
+  }
+  25% {
+    box-shadow: 0 0 0 5px rgba(var(--primary-light-rgb), 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 7.5px rgba(var(--primary-light-rgb), 0);
+  }
+}
+/* #endregion */
+/* Animation -> PRIMARY-LIGHT */
+
 /* #region Animation -> SECONDARY */
 @keyframes clicked-secondary {
   0% {

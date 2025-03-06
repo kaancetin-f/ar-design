@@ -17,6 +17,25 @@ input.borderless:not(.disabled).primary:focus {
 /* #endregion */
 /* PRIMARY */
 
+/* #region PRIMARY-LIGHT */
+.borderless:not(.disabled).primary-light {
+  color: var(--primary-light);
+}
+.borderless:not(.disabled).primary-light:hover {
+  background-color: rgba(var(--primary-light-rgb), 0.1);
+}
+input.borderless:not(.disabled).primary-light:focus {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3.5px rgba(var(--primary-light-rgb), 0.1);
+}
+.borderless:not(.disabled).primary-light.active {
+  background-color: transparent;
+  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
+  animation: clicked-primary-light ease-in-out 750ms 0s 1 normal both;
+}
+/* #endregion */
+/* PRIMARY-LIGHT */
+
 /* #region SECONDARY */
 .borderless:not(.disabled).secondary {
   color: var(--secondary);

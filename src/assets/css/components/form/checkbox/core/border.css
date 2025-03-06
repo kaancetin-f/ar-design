@@ -14,6 +14,22 @@
 /* #endregion */
 /* Border Color -> PRIMARY */
 
+/* #region Border Color -> PRIMARY-LIGHT */
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.filled.primary-light::before {
+  border-right-color: var(--white);
+  border-bottom-color: var(--white);
+}
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.outlined.primary-light::before {
+  border-right-color: var(--primary-light);
+  border-bottom-color: var(--primary-light);
+}
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.borderless.primary-light::before {
+  border-right-color: var(--primary-light);
+  border-bottom-color: var(--primary-light);
+}
+/* #endregion */
+/* Border Color -> PRIMARY-LIGHT */
+
 /* #region Border Color -> SECONDARY */
 .ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.filled.secondary::before {
   border-right-color: var(--white);
