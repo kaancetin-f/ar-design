@@ -1,4 +1,7 @@
 .ar-text-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   width: 100%;
 }
 .ar-text-editor > .toolbar {
@@ -8,9 +11,44 @@
 }
 .ar-text-editor > iframe {
   width: 100%;
+  border-bottom: none;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
+.ar-text-editor > .resize {
+  position: relative;
+  background-color: var(--gray-200);
+  width: 100%;
+  height: 1.5rem;
+  border: solid 1px transparent;
+  border-top-color: var(--gray-400);
+  border-left-color: var(--gray-300);
+  border-right-color: var(--gray-300);
+  border-bottom-color: var(--gray-300);
+  border-bottom-left-radius: var(--border-radius-sm);
+  border-bottom-right-radius: var(--border-radius-sm);
+  cursor: ns-resize;
+}
+.ar-text-editor > .resize::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--gray-500);
+  width: 2rem;
+  height: 0.1rem;
+  box-shadow: 0px -5px 0 0px var(--gray-500), 0px 5px 0 0px var(--gray-500);
+}
+
 .ar-text-editor > .validation {
   color: var(--danger);
   font-size: 0.8rem;
   font-weight: 600;
+}
+
+.ar-text-editor--block-item {
+  position: absolute;
+  inset: 0;
+  cursor: ns-resize;
 }

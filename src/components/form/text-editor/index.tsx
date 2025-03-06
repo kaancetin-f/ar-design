@@ -1,16 +1,17 @@
 "use client";
 
+import Utils from "../../../libs/infrastructure/shared/Utils";
 import React, { useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
-import { ARIcon } from "../../icons";
 import Button from "../button";
-import "../../../assets/css/components/form/text-editor/styles.css";
 import { Icons } from "../../../libs/types";
-import Utils from "../../../libs/infrastructure/shared/Utils";
+import { ARIcon } from "../../icons";
+import "../../../assets/css/components/form/text-editor/styles.css";
 
 const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, validation }) => {
   // refs
   const _firstLoad = useRef<boolean>(false);
+  const _container = useRef<HTMLDivElement>(null);
   const _arIframe = useRef<HTMLIFrameElement>(null);
 
   // states
@@ -51,6 +52,30 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, vali
   const handleFocus = () => _arIframe.current?.classList.add("focused");
 
   const handleBlur = () => _arIframe.current?.classList.remove("focused");
+
+  const handleMouseDown = () => {
+    // Resizebar a tıklandığında iframe içerisinde bulunan window'un event listenerı olmadığı için orada resize çalışmayacaktır.
+    // Bu yüzden önüne bir duvar örüyoruz ve mevcut sayfanın window'unda işlem yapmaya devam ediyor.
+    const resizeItem = document.createElement("div");
+    resizeItem.classList.add("ar-text-editor--block-item");
+    _container.current?.appendChild(resizeItem);
+
+    window.addEventListener("mousemove", handleResize);
+
+    window.addEventListener("mouseup", () => {
+      resizeItem.remove();
+      window.removeEventListener("mousemove", handleResize);
+    });
+  };
+
+  const handleResize = (event: MouseEvent) => {
+    if (_arIframe.current) {
+      const rect = _arIframe.current.getBoundingClientRect();
+      const height = (rect.height += event.movementY);
+
+      _arIframe.current.style.height = `${height}px`;
+    }
+  };
 
   // useEffects
   // Iframe Document yüklendikten sonra çalışacaktır. (Bir defa çalışır.)
@@ -100,7 +125,7 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, vali
   }, []);
 
   return (
-    <div className="ar-text-editor">
+    <div ref={_container} className="ar-text-editor">
       <div className="toolbar">
         {toolbarButtons.map(({ command, icon, tooltip }) => (
           <Button
@@ -117,6 +142,8 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, vali
       </div>
 
       <iframe ref={_arIframe} name={name} className={_iframeClassName.map((c) => c).join(" ")} />
+
+      <div className="resize" onMouseDown={handleMouseDown}></div>
 
       {validation?.text && <span className="validation">{validation.text}</span>}
     </div>
