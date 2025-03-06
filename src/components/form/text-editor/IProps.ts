@@ -5,6 +5,7 @@ interface IProps extends IValidation {
   value?: string;
   onChange: (value?: string) => void;
   placeholder?: string;
+  height?: number;
 }
 
 export default IProps;

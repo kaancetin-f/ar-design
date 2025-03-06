@@ -8,7 +8,7 @@ import { Icons } from "../../../libs/types";
 import { ARIcon } from "../../icons";
 import "../../../assets/css/components/form/text-editor/styles.css";
 
-const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, validation }) => {
+const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, height, validation }) => {
   // refs
   const _firstLoad = useRef<boolean>(false);
   const _container = useRef<HTMLDivElement>(null);
@@ -141,7 +141,7 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, vali
         ))}
       </div>
 
-      <iframe ref={_arIframe} name={name} className={_iframeClassName.map((c) => c).join(" ")} />
+      <iframe ref={_arIframe} name={name} className={_iframeClassName.map((c) => c).join(" ")} height={height} />
 
       <div className="resize" onMouseDown={handleMouseDown}></div>
 
