@@ -44,7 +44,7 @@ const TableWithRef = forwardRef(
     // states
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [selectionItems, setSelectionItems] = useState<T[]>([]);
-    const [thWidths, setThWidths] = useState<number[]>([]);
+    // const [thWidths, setThWidths] = useState<number[]>([]);
     // states -> Search
     const [searchedText, setSearchedText] = useState<SearchedParam | undefined>(undefined);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | undefined>(undefined);
@@ -289,12 +289,12 @@ const TableWithRef = forwardRef(
       setSelectAll(allChecked);
     }, [currentPage]);
 
-    useEffect(() => {
-      if (!_tableContent.current) return;
+    // useEffect(() => {
+    //   if (!_tableContent.current) return;
 
-      const th = _tableContent.current?.querySelectorAll("table > thead > tr:first-child > th");
-      th.forEach((item) => setThWidths((prev) => [...prev, item.getBoundingClientRect().width]));
-    }, []);
+    //   const th = _tableContent.current?.querySelectorAll("table > thead > tr:first-child > th");
+    //   th.forEach((item) => setThWidths((prev) => [...prev, item.getBoundingClientRect().width]));
+    // }, []);
 
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
@@ -389,7 +389,8 @@ const TableWithRef = forwardRef(
                         ? {
                             style: { minWidth: c.config.width },
                           }
-                        : { style: { maxWidth: thWidths[cIndex], minWidth: thWidths[cIndex] } })}
+                        : // : { style: { maxWidth: thWidths[cIndex], minWidth: thWidths[cIndex] } })}
+                          { style: {} })}
                       {...(c.config?.sticky && {
                         "data-sticky-position": c.config.sticky,
                       })}
@@ -559,8 +560,11 @@ const TableWithRef = forwardRef(
                             ? {
                                 style: { minWidth: c.config.width },
                               }
-                            : {
-                                style: { maxWidth: thWidths[cIndex], minWidth: thWidths[cIndex] },
+                            : // : {
+                              //     style: { maxWidth: thWidths[cIndex], minWidth: thWidths[cIndex] },
+                              //   })}
+                              {
+                                style: {},
                               })}
                           {...(c.config?.sticky && {
                             "data-sticky-position": c.config.sticky,
