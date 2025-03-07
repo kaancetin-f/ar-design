@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../../assets/css/components/form/switch/styles.css";
 import IProps from "./IProps";
 import Utils from "../../../libs/infrastructure/shared/Utils";
@@ -16,6 +16,11 @@ const Switch: React.FC<IProps> = ({ label, status = "primary", border = { radius
   _switchClassName.push(
     ...Utils.GetClassName("filled", checked ? status : "light", border, undefined, undefined, attributes.className)
   );
+
+  // useEffects
+  useEffect(() => {
+    setChecked(attributes.checked ?? false);
+  }, [attributes.checked]);
 
   return (
     <div className="ar-switch-wrapper">
