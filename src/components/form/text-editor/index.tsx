@@ -10,7 +10,6 @@ import "../../../assets/css/components/form/text-editor/styles.css";
 
 const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, height, validation }) => {
   // refs
-  const _firstLoad = useRef<boolean>(false);
   const _container = useRef<HTMLDivElement>(null);
   const _arIframe = useRef<HTMLIFrameElement>(null);
 
@@ -80,11 +79,25 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
   // useEffects
   // Iframe Document yüklendikten sonra çalışacaktır. (Bir defa çalışır.)
   useEffect(() => {
-    if (iframeDocument && !_firstLoad.current) {
-      if (value) iframeDocument.body.innerHTML = value;
-      else iframeDocument.body.innerHTML = `<p>${placeholder ?? ""}</p>`;
+    if (!iframeDocument) return;
 
-      _firstLoad.current = true;
+    const selection = iframeDocument.getSelection();
+    let range: Range | null = null;
+
+    // Eğer bir seçim (caret) varsa, konumunu kaydet
+    if (selection && selection.rangeCount > 0) {
+      range = selection.getRangeAt(0);
+    }
+
+    // Eğer içeriği kendimiz değiştirmedikse ve gelen value farklıysa, içeriği güncelle
+    if (iframeDocument.body.innerHTML !== value) {
+      iframeDocument.body.innerHTML = value || `<p>${placeholder ?? ""}</p>`;
+    }
+
+    // Cursor (caret) konumunu geri yükle
+    if (range) {
+      selection?.removeAllRanges();
+      selection?.addRange(range);
     }
   }, [value, iframeDocument]);
 
