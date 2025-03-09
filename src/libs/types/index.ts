@@ -70,6 +70,7 @@ export type StepProps = {
 export type TabProps = {
   title: string;
   content: React.ReactNode;
+  config?: { canBeClosed: boolean };
 };
 
 // Validation Types

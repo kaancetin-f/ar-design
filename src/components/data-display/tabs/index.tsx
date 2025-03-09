@@ -1,12 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/data-display/tabs/tabs.css";
 
-const Tabs: React.FC<IProps> = ({ tabs = [] }) => {
+const Tabs: React.FC<IProps> = ({ tabs = [], activeTab, onChange, onClose }) => {
   // states
   const [currentTab, setCurrentTab] = useState<number>(0);
+
+  // useEffects
+  useEffect(() => {
+    setCurrentTab(activeTab ?? 0);
+  }, [activeTab]);
 
   return (
     <div className="ar-tabs">
@@ -21,9 +26,23 @@ const Tabs: React.FC<IProps> = ({ tabs = [] }) => {
               <div
                 key={tab.title ?? index}
                 className={className.map((c) => c).join(" ")}
-                onClick={() => setCurrentTab(index)}
+                onClick={() => {
+                  setCurrentTab(index);
+                  onChange && onChange(index);
+                }}
               >
                 <span>{tab.title}</span>
+                {tab.config?.canBeClosed && (
+                  <span
+                    className="close-button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onClose && onClose(index);
+                    }}
+                  >
+                    ✖
+                  </span>
+                )}
               </div>
             );
           })}
