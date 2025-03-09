@@ -143,6 +143,7 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
         {toolbarButtons.map(({ command, icon, tooltip }) => (
           <Button
             key={command}
+            type="button"
             variant="borderless"
             status="secondary"
             icon={{ element: <ARIcon icon={icon} size={18} fill="var(--gray-700)" /> }}
