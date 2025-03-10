@@ -22,6 +22,7 @@ const TableWithRef = forwardRef(
       columns,
       actions,
       selections,
+      previousSelections,
       searchedParams,
       pagination,
       config = { isSearchable: false },
@@ -49,7 +50,12 @@ const TableWithRef = forwardRef(
     const [searchedText, setSearchedText] = useState<SearchedParam | undefined>(undefined);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | undefined>(undefined);
     const [checkboxSelectedParams, setCheckboxSelectedParams] = useState<SearchedParam | undefined>(undefined);
-    const [selectedfilterCheckboxItems, setSelectedfilterCheckboxItems] = useState<number | undefined>(undefined);
+    // const [selectedfilterCheckboxItems, setSelectedfilterCheckboxItems] = useState<
+    //   {
+    //     selectedCount: number;
+    //     columnKey: string;
+    //   }[]
+    // >([]);
 
     // const [searchedFilters, setSearchedFilters] = useState<string | undefined>(undefined);
     // const [totalRecords, setTotalRecords] = useState<number>(0);
@@ -245,6 +251,18 @@ const TableWithRef = forwardRef(
 
     // useEffects
     useEffect(() => {
+      // Eğer `previousSelections` özelliğinden değer geliyorsa bu daha önce seçim yapılmış öğeleri gönderiyorum
+      // demektir ve otomatik olarak seçim yap demek anlamına gekmektedir.
+
+      if (previousSelections && previousSelections.length > 0) {
+        const validSelections = data.filter((item) =>
+          previousSelections.some((selected) => JSON.stringify(selected) === JSON.stringify(item))
+        );
+        setSelectionItems(validSelections);
+      }
+    }, [previousSelections]);
+
+    useEffect(() => {
       if (!selections || selectionItems.length === 0) return;
 
       selections(selectionItems);
@@ -274,7 +292,28 @@ const TableWithRef = forwardRef(
 
       setCurrentPage(1);
       pagination && pagination.onChange(1);
-      setSelectedfilterCheckboxItems(_filterCheckboxItems.current.filter((x) => x?.checked).length);
+      // Filters...
+      // setSelectedfilterCheckboxItems((prev) => {
+      //   debugger;
+      //   const columnKeys = Object.keys(checkboxSelectedParams ?? {});
+      //   const selectedCount = _filterCheckboxItems.current.filter((x) => x?.checked).length;
+
+      //   const updatedItems = [...prev];
+
+      //   columnKeys.forEach((columnKey) => {
+      //     const existingIndex = updatedItems.findIndex((item) => item.columnKey === columnKey);
+
+      //     if (existingIndex !== -1) {
+      //       // Eğer aynı key varsa, güncelle
+      //       updatedItems[existingIndex] = { columnKey, selectedCount };
+      //     } else {
+      //       // Eğer aynı key yoksa, ekle
+      //       updatedItems.push({ columnKey, selectedCount });
+      //     }
+      //   });
+
+      //   return updatedItems;
+      // });
     }, [checkboxSelectedParams]);
 
     useEffect(() => {
@@ -287,7 +326,7 @@ const TableWithRef = forwardRef(
       }
 
       setSelectAll(allChecked);
-    }, [currentPage]);
+    }, [selectionItems, currentPage]);
 
     // useEffect(() => {
     //   if (!_tableContent.current) return;
@@ -473,7 +512,8 @@ const TableWithRef = forwardRef(
                               }
                               windowBlur={true}
                             >
-                              {(selectedfilterCheckboxItems ?? 0) > 0 && (
+                              {/* {Number(selectedfilterCheckboxItems.find((x) => x.columnKey == c.key)?.selectedCount) >
+                                0 && (
                                 <div
                                   style={{
                                     position: "absolute",
@@ -486,7 +526,7 @@ const TableWithRef = forwardRef(
                                     zIndex: 1,
                                   }}
                                 ></div>
-                              )}
+                              )} */}
                               <Button
                                 variant="borderless"
                                 icon={{ element: <ARIcon icon="Filter" stroke="var(--primary)" size={16} /> }}

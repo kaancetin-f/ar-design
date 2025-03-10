@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/form/checkbox/checkbox.css";
 import Utils from "../../../libs/infrastructure/shared/Utils";
@@ -17,6 +17,11 @@ const Checkbox = forwardRef<HTMLInputElement, IProps>(
     _checkboxClassName.push(
       ...Utils.GetClassName("filled", checked ? status : "light", border, size, undefined, attributes.className)
     );
+
+    // useEffects
+    useEffect(() => {
+      setChecked(attributes.checked ?? false);
+    }, [attributes.checked]);
 
     return (
       <div className="ar-checkbox-wrapper">

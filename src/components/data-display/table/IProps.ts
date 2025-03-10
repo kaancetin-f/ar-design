@@ -20,6 +20,7 @@ interface IProps<T> extends IChildren {
     filterClear?: ActionType;
   };
   selections?: (selectionItems: T[]) => void;
+  previousSelections?: T[];
   searchedParams?: (params: SearchedParam | undefined, query: string) => void;
   pagination?: {
     totalRecords: number;
