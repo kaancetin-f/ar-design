@@ -9,13 +9,15 @@ import { Direction } from "../../../libs/core/application/contexts/Notification"
 const Notification = ({ title, message, status, direction = "bottom-left", trigger }: IProps) => {
   const _firstLoad = useRef<boolean>(false);
   const _notificationItems = useRef<(HTMLDivElement | null)[]>([]);
-  const _interval = useRef<NodeJS.Timeout>();
-  // const _automaticRemoveInterval = useRef<NodeJS.Timeout>();
-  // const _closedInterval = useRef<NodeJS.Timeout>();
-  const _i = useRef<number>(0);
-
   const [items, setItems] = useState<
-    { id: number; title: string; message?: string; status: string | number; direction: Direction }[]
+    {
+      id: number;
+      title: string;
+      message?: string;
+      status: string | number;
+      direction: Direction;
+      timeoutId?: NodeJS.Timeout;
+    }[]
   >([]);
 
   useEffect(() => {
@@ -38,37 +40,33 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
       }
     }
 
-    setItems((prevItems) => [...prevItems, { id: _i.current++, title, message, status, direction }]);
+    setItems((prev) => [...prev, { id: Math.random(), title, message, status, direction }]);
   }, [trigger]);
 
   useEffect(() => {
-    if (items.length === 0) return;
+    let clearTimeoutId: NodeJS.Timeout | undefined = undefined;
 
-    // const firstNotification = _notificationItems.current[0];
+    items.forEach((item) => {
+      if (!item.timeoutId) {
+        const timeoutId = setTimeout(() => {
+          clearTimeoutId = item.timeoutId;
+          setItems((prev) => prev.filter((_item) => _item.id !== item.id));
+        }, 3000);
 
-    // _automaticRemoveInterval.current = setTimeout(() => {
-    //   if (firstNotification) firstNotification.classList.add("closed");
-
-    //   _interval.current = setTimeout(() => {
-    //     setItems((prevItems) => prevItems.slice(1));
-    //     if (firstNotification) firstNotification.classList.remove("closed");
-
-    //     clearTimeout(_interval.current);
-    //   }, 500);
-
-    //   clearTimeout(_automaticRemoveInterval.current);
-    // }, 3000);
-
-    _interval.current = setTimeout(() => {
-      setItems((prevItems) => prevItems.slice(1));
-      // if (firstNotification) firstNotification.classList.remove("closed");
-
-      clearTimeout(_interval.current);
-    }, 3000);
+        // Öncesinde timeoutId değerinin tanımlanması yapılıyor.
+        setItems((prev) => prev.map((prevItem) => (prevItem.id === item.id ? { ...prevItem, timeoutId } : prevItem)));
+      }
+    });
 
     return () => {
-      // clearTimeout(_automaticRemoveInterval.current);
-      clearTimeout(_interval.current);
+      if (items.length === 0) return;
+
+      const item = items.find((x) => x.timeoutId == clearTimeoutId);
+
+      if (item) {
+        clearTimeout(item.timeoutId);
+        clearTimeoutId = undefined;
+      }
     };
   }, [items]);
 
@@ -80,7 +78,7 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
       bottom = _notificationItems.current.slice(0, index).reduce((acc, el) => {
         const rect = el!.getBoundingClientRect();
 
-        return acc + rect.height + 20; // +20 değeri ara boşluğu artıyor.
+        return acc + rect.height + 20; // +20 değeri ara boşluğu arttırıyor.
       }, 30); // 30px'lik boşluğu başlangıçta ekliyoruz.
     }
 
@@ -92,7 +90,7 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
 
     return (
       <div
-        key={index}
+        key={item.id}
         ref={(element) => (_notificationItems.current[index] = element)}
         className="ar-notification-item"
         style={
@@ -121,20 +119,9 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
         <div
           className="close"
           onClick={() => {
-            // clearTimeout(_automaticRemoveInterval.current);
-            clearTimeout(_interval.current);
+            if (item.timeoutId) clearTimeout(item.timeoutId);
 
             setItems((prev) => prev.filter((_item) => _item.id !== item.id));
-
-            // if (_notificationItems.current[index]) _notificationItems.current[index]!.classList.add("closed");
-
-            // _closedInterval.current = setTimeout(() => {
-            //   setItems((prev) => prev.filter((_item) => _item.id !== item.id));
-
-            //   if (_notificationItems.current[index]) _notificationItems.current[index]!.classList.remove("closed");
-
-            //   clearTimeout(_closedInterval.current);
-            // }, 500);
           }}
         ></div>
       </div>

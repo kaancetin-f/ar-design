@@ -77,22 +77,19 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
   };
 
   // useEffects
-  // Iframe Document yüklendikten sonra çalışacaktır. (Bir defa çalışır.)
   useEffect(() => {
+    // Iframe Document yüklendikten sonra çalışacaktır.
+
     if (!iframeDocument) return;
 
     const selection = iframeDocument.getSelection();
     let range: Range | null = null;
 
     // Eğer bir seçim (caret) varsa, konumunu kaydet
-    if (selection && selection.rangeCount > 0) {
-      range = selection.getRangeAt(0);
-    }
+    if (selection && selection.rangeCount > 0) range = selection.getRangeAt(0);
 
     // Eğer içeriği kendimiz değiştirmedikse ve gelen value farklıysa, içeriği güncelle
-    if (iframeDocument.body.innerHTML !== value) {
-      iframeDocument.body.innerHTML = value || `<p>${placeholder ?? ""}</p>`;
-    }
+    if (iframeDocument.body.innerHTML !== value) iframeDocument.body.innerHTML = value || `<p>${placeholder ?? ""}</p>`;
 
     // Cursor (caret) konumunu geri yükle
     if (range) {
@@ -101,27 +98,36 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
     }
   }, [value, iframeDocument]);
 
-  // Iframe yüklendikten sonra çalışacaktır.
   useEffect(() => {
+    // Iframe yüklendikten sonra çalışacaktır.
+
     if (!iframe) return;
 
     const iframeDocument = iframe.contentDocument || iframe.contentWindow?.document;
-    if (iframeDocument) {
-      setIframeDocument(iframeDocument);
-      iframeDocument.designMode = "on";
+    if (!iframeDocument) return; // 👈 Güvenlik önlemi
 
-      // Herhangi bir değişikliği izlemek için MutationObserver kullan
-      const observer = new MutationObserver((mutationsList) => {
-        mutationsList.forEach(() => {
-          iframeDocument.body.innerHTML === "<br>" ? onChange(undefined) : onChange(iframeDocument.body.innerHTML);
-        });
+    // Herhangi bir değişikliği izlemek için MutationObserver kullan
+    const observer = new MutationObserver((mutationsList) => {
+      mutationsList.forEach(() => {
+        iframeDocument?.body.innerHTML === "<br>" ? onChange(undefined) : onChange(iframeDocument.body.innerHTML);
       });
-      // Observer'ı body üzerinde başlat
-      observer.observe(iframeDocument.body, { childList: true, subtree: true, characterData: true, attributes: true });
+    });
 
-      iframeDocument.body.addEventListener("focus", handleFocus);
-      iframeDocument.body.addEventListener("blur", handleBlur);
-    }
+    setIframeDocument(iframeDocument);
+    iframeDocument.designMode = "on";
+
+    // Observer'ı body üzerinde başlat
+    observer.observe(iframeDocument.body, { childList: true, subtree: true, characterData: true, attributes: true });
+
+    iframeDocument.body.addEventListener("focus", handleFocus);
+    iframeDocument.body.addEventListener("blur", handleBlur);
+
+    return () => {
+      observer.disconnect();
+
+      iframeDocument?.body.removeEventListener("focus", handleFocus);
+      iframeDocument?.body.removeEventListener("blur", handleBlur);
+    };
   }, [iframe]);
 
   useEffect(() => {
