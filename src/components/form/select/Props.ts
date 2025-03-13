@@ -23,6 +23,7 @@ interface ISingle {
 
 export type Props = {
   options: Option[];
+  onSearch?: (searchText: string) => void;
   onClick?: () => void;
   onCreate?: (option: Option) => void;
   placeholder?: string;

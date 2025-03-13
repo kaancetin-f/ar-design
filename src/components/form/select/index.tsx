@@ -17,6 +17,7 @@ const Select: React.FC<Props> = ({
   options,
   value,
   onChange,
+  onSearch,
   onClick,
   onCreate,
   multiple,
@@ -275,6 +276,9 @@ const Select: React.FC<Props> = ({
 
     // Yeniden konumlandır.
     setTimeout(() => handlePosition(), 0);
+
+    // Aramayı bileşen dışında kullanmak için dışarı aktarım metodu.
+    onSearch && onSearch(searchText);
   }, [searchText]);
 
   useEffect(() => {
