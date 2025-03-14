@@ -35,6 +35,7 @@ const Select: React.FC<Props> = ({
   const _options = useRef<HTMLDivElement>(null);
   const _optionItems = useRef<(HTMLLIElement | null)[]>([]);
   const _searchField = useRef<HTMLInputElement>(null);
+  // const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
   let _otoFocus = useRef<NodeJS.Timeout>().current;
   let _navigationIndex = useRef<number>(0);
 
@@ -87,6 +88,16 @@ const Select: React.FC<Props> = ({
       optionItems[_navigationIndex.current]?.click();
     } else if (key === "Escape") setOptionsOpen(false);
   };
+
+  // const handleSearch = (value: string) => {
+  //   if (searchText.length === 0 || !onSearch) return;
+  //   if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
+
+  //   _searchTimeOut.current = setTimeout(() => {
+  //     setSearchText(value);
+  //     onSearch(value);
+  //   }, 750);
+  // };
 
   const handlePosition = () => {
     if (_options.current) {
@@ -250,21 +261,25 @@ const Select: React.FC<Props> = ({
   }, [optionsOpen]);
 
   useEffect(() => {
-    // Arama kriterlerine uygun olan değerleri bir state e gönderiyoruz.
-    setFilteredOptions(
-      options?.filter((option) => {
-        if (!optionsOpen) return option;
+    if (searchText.length > 0 && onSearch) {
+      onSearch(searchText);
+    } else {
+      // Arama kriterlerine uygun olan değerleri bir state e gönderiyoruz.
+      setFilteredOptions(
+        options?.filter((option) => {
+          if (!optionsOpen) return option;
 
-        return option.text.toLocaleLowerCase().includes(searchText.toLocaleLowerCase());
-      })
-    );
-    setIsSearchTextEqual(
-      options?.some((option) => {
-        if (!optionsOpen) return option;
+          return option.text.toLocaleLowerCase().includes(searchText.toLocaleLowerCase());
+        })
+      );
+      setIsSearchTextEqual(
+        options?.some((option) => {
+          if (!optionsOpen) return option;
 
-        return option.text.toLocaleLowerCase() == searchText.toLocaleLowerCase();
-      })
-    );
+          return option.text.toLocaleLowerCase() == searchText.toLocaleLowerCase();
+        })
+      );
+    }
 
     // Arama yapılması durumunda değerleri sıfırla.
     setNavigationIndex(0);
@@ -276,9 +291,6 @@ const Select: React.FC<Props> = ({
 
     // Yeniden konumlandır.
     setTimeout(() => handlePosition(), 0);
-
-    // Aramayı bileşen dışında kullanmak için dışarı aktarım metodu.
-    onSearch && onSearch(searchText);
   }, [searchText]);
 
   useEffect(() => {
@@ -348,6 +360,9 @@ const Select: React.FC<Props> = ({
               if (event.key === "Enter") return;
 
               setSearchText(event.currentTarget.value);
+            }}
+            onBlur={() => {
+              setTimeout(() => setOptionsOpen(false), 100);
             }}
             placeholder={placeholder}
             validation={validation}

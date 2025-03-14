@@ -6,12 +6,13 @@ import Button from "../../form/button";
 import Checkbox from "../../form/checkbox";
 import IProps, { SearchedParam } from "./IProps";
 import Pagination from "../../navigation/pagination";
-import React, { forwardRef, memo, useCallback, useEffect, useRef, useState } from "react";
+import React, { forwardRef, ReactElement, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { HTMLTableElementWithCustomAttributes } from "../../../libs/types";
+import Actions from "./Actions";
 import Input from "../../form/input";
 import Popover from "../../feedback/popover";
 
-const Table = forwardRef(
+const TableWithRef = forwardRef(
   <T extends object>(
     {
       children,
@@ -30,6 +31,7 @@ const Table = forwardRef(
   ) => {
     // refs
     const _tableWrapper = useRef<HTMLDivElement>(null);
+    const _table = useRef<HTMLTableElement>(null);
     const _tableContent = useRef<HTMLDivElement>(null);
     const _checkboxItems = useRef<(HTMLInputElement | null)[]>([]);
     const _filterCheckboxItems = useRef<(HTMLInputElement | null)[]>([]);
@@ -43,11 +45,20 @@ const Table = forwardRef(
     // states
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [selectionItems, setSelectionItems] = useState<T[]>([]);
+    // const [thWidths, setThWidths] = useState<number[]>([]);
     // states -> Search
     const [searchedText, setSearchedText] = useState<SearchedParam | undefined>(undefined);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | undefined>(undefined);
     const [checkboxSelectedParams, setCheckboxSelectedParams] = useState<SearchedParam | undefined>(undefined);
-    // states -> Pagination
+    // const [selectedfilterCheckboxItems, setSelectedfilterCheckboxItems] = useState<
+    //   {
+    //     selectedCount: number;
+    //     columnKey: string;
+    //   }[]
+    // >([]);
+
+    // const [searchedFilters, setSearchedFilters] = useState<string | undefined>(undefined);
+    // const [totalRecords, setTotalRecords] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
     if (config && Object.keys(config.scroll || {}).length > 0) {
@@ -57,6 +68,26 @@ const Table = forwardRef(
         }
       }
     }
+
+    // Custom Attributes
+    useImperativeHandle(ref, () => {
+      const tableCurrent = _table.current as HTMLTableElement;
+
+      return {
+        ...tableCurrent,
+        filterCleaner: () => {
+          if (config.isServerSide) {
+            setSearchedParams({});
+            pagination && pagination.onChange(1);
+          } else {
+            setSearchedText({});
+          }
+
+          setCurrentPage(1);
+          _searchTextInputs.current.map((item) => item && (item.value = ""));
+        },
+      };
+    });
 
     // methods
     const handleScroll = () => {
@@ -232,7 +263,19 @@ const Table = forwardRef(
     }, [previousSelections]);
 
     useEffect(() => {
+      if (!selections || selectionItems.length === 0) return;
+
+      selections(selectionItems);
+    }, [selectionItems]);
+
+    useEffect(() => {
       if (config?.isServerSide && searchedParams) {
+        // const query = Object.entries(_searchedParams ?? {})
+        //   .map(([key, value]) => {
+        //     return `${key}=${value}`;
+        //   })
+        //   .join("&");
+
         const query = new URLSearchParams(_searchedParams).toString();
         searchedParams(_searchedParams, query);
       }
@@ -249,21 +292,48 @@ const Table = forwardRef(
 
       setCurrentPage(1);
       pagination && pagination.onChange(1);
+      // Filters...
+      // setSelectedfilterCheckboxItems((prev) => {
+      //   debugger;
+      //   const columnKeys = Object.keys(checkboxSelectedParams ?? {});
+      //   const selectedCount = _filterCheckboxItems.current.filter((x) => x?.checked).length;
+
+      //   const updatedItems = [...prev];
+
+      //   columnKeys.forEach((columnKey) => {
+      //     const existingIndex = updatedItems.findIndex((item) => item.columnKey === columnKey);
+
+      //     if (existingIndex !== -1) {
+      //       // Eğer aynı key varsa, güncelle
+      //       updatedItems[existingIndex] = { columnKey, selectedCount };
+      //     } else {
+      //       // Eğer aynı key yoksa, ekle
+      //       updatedItems.push({ columnKey, selectedCount });
+      //     }
+      //   });
+
+      //   return updatedItems;
+      // });
     }, [checkboxSelectedParams]);
 
     useEffect(() => {
       if (!selections) return;
 
-      selections(selectionItems);
-    }, [selectionItems]);
-
-    useEffect(() => {
-      if (!selections) return;
+      let allChecked = false;
 
       if (_checkboxItems.current.length > 0) {
-        setSelectAll(_checkboxItems.current.every((item) => item?.checked === true));
+        allChecked = _checkboxItems.current.every((item) => item?.checked === true);
       }
+
+      setSelectAll(allChecked);
     }, [selectionItems, currentPage]);
+
+    // useEffect(() => {
+    //   if (!_tableContent.current) return;
+
+    //   const th = _tableContent.current?.querySelectorAll("table > thead > tr:first-child > th");
+    //   th.forEach((item) => setThWidths((prev) => [...prev, item.getBoundingClientRect().width]));
+    // }, []);
 
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
@@ -274,7 +344,43 @@ const Table = forwardRef(
               <h5>{description}</h5>
             </div>
 
-            <div></div>
+            <div className="actions">
+              {React.Children.count(children) > 0 && <div>{React.Children.map(children, (child) => child)}</div>}
+
+              {actions && (
+                <>
+                  {actions.create && (
+                    <Button
+                      variant="outlined"
+                      status="dark"
+                      icon={{ element: <ARIcon icon="Add" size={16} /> }}
+                      tooltip={{ text: actions.create.tooltip, direction: "top" }}
+                      onClick={actions.create.onClick}
+                    />
+                  )}
+
+                  {actions.import && (
+                    <Button
+                      variant="outlined"
+                      status="dark"
+                      icon={{ element: <ARIcon icon="Import" size={16} /> }}
+                      tooltip={{ text: actions.import.tooltip, direction: "top" }}
+                      onClick={actions.import.onClick}
+                    />
+                  )}
+
+                  {actions.filterClear && (
+                    <Button
+                      variant="outlined"
+                      status="dark"
+                      icon={{ element: <ARIcon icon="Trash" size={16} /> }}
+                      tooltip={{ text: actions.filterClear.tooltip, direction: "top" }}
+                      onClick={actions.filterClear.onClick}
+                    />
+                  )}
+                </>
+              )}
+            </div>
           </div>
         )}
 
@@ -345,6 +451,8 @@ const Table = forwardRef(
                   )}
 
                   {columns.map((c, cIndex) => {
+                    if (!c.key) return <th></th>;
+
                     let _className: string[] = [];
 
                     if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
@@ -362,20 +470,25 @@ const Table = forwardRef(
                           "data-sticky-position": c.config.sticky,
                         })}
                       >
-                        {c.key && (
-                          <div className="filter-field">
-                            <Input
-                              ref={(element) => (_searchTextInputs.current[cIndex] = element)}
-                              variant={c.key && !c.filters ? "filled" : "outlined"}
-                              status="light"
-                              name={typeof c.key !== "object" ? String(c.key) : String(c.key.field)}
-                              onChange={handleSearch}
-                              disabled={!c.key || !!c.filters}
-                            />
+                        <div className="filter-field">
+                          <Input
+                            ref={(element) => (_searchTextInputs.current[cIndex] = element)}
+                            variant={c.key && !c.filters ? "filled" : "outlined"}
+                            status="light"
+                            name={typeof c.key !== "object" ? String(c.key) : String(c.key.field)}
+                            onChange={handleSearch}
+                            disabled={!c.key || !!c.filters}
+                          />
 
-                            {c.filters && (
-                              <Popover
-                                content={
+                          {c.filters && (
+                            <Popover
+                              content={
+                                <>
+                                  {/* <Input
+                                    placeholder="Search..."
+                                    onChange={(event) => setSearchedFilters(event.target.value.toLocaleLowerCase())}
+                                  /> */}
+
                                   <div>
                                     {c.filters.map((filter, fIndex) => {
                                       const name = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
@@ -395,17 +508,32 @@ const Table = forwardRef(
                                       );
                                     })}
                                   </div>
-                                }
-                                windowBlur={true}
-                              >
-                                <Button
-                                  variant="borderless"
-                                  icon={{ element: <ARIcon icon="Filter" stroke="var(--primary)" size={16} /> }}
-                                />
-                              </Popover>
-                            )}
-                          </div>
-                        )}
+                                </>
+                              }
+                              windowBlur={true}
+                            >
+                              {/* {Number(selectedfilterCheckboxItems.find((x) => x.columnKey == c.key)?.selectedCount) >
+                                0 && (
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    top: "0.35rem",
+                                    right: "0.35rem",
+                                    width: "0.5rem",
+                                    height: "0.5rem",
+                                    backgroundColor: "var(--danger)",
+                                    borderRadius: "var(--border-radius-pill)",
+                                    zIndex: 1,
+                                  }}
+                                ></div>
+                              )} */}
+                              <Button
+                                variant="borderless"
+                                icon={{ element: <ARIcon icon="Filter" stroke="var(--primary)" size={16} /> }}
+                              />
+                            </Popover>
+                          )}
+                        </div>
                       </th>
                     );
                   })}
@@ -414,75 +542,85 @@ const Table = forwardRef(
             </thead>
 
             <tbody>
-              {getData().map((item, index) => (
-                <tr key={`row-${index}-${Math.random()}`}>
-                  {selections && (
-                    <td key={`selection-${index}`} className="sticky-left" data-sticky-position="left">
-                      <Checkbox
-                        ref={(element) => (_checkboxItems.current[index] = element)}
-                        status="primary"
-                        checked={selectionItems.some(
-                          (selectionItem) => JSON.stringify(selectionItem) === JSON.stringify(item)
-                        )}
-                        onChange={(event) => {
-                          if (event.target.checked) setSelectionItems((prev) => [...prev, item]);
-                          else setSelectionItems((prev) => prev.filter((_item) => _item !== item));
-                        }}
-                      />
-                    </td>
-                  )}
-
-                  {columns.map((c, cIndex) => {
-                    let _className: string[] = [];
-                    let render: any; // TODO: Generic yapmak için çalışma yap. (Daha Sonra)
-
-                    // `c.key` bir string ise
-                    if (typeof c.key !== "object") {
-                      render = c.render ? c.render(item) : item[c.key as keyof T];
-                    }
-                    // `c.key` bir nesne ise ve `nestedKey` mevcutsa
-                    else if (typeof c.key === "object") {
-                      const _item = item[c.key.field as keyof T];
-
-                      if (_item && typeof _item === "object") {
-                        render = c.render ? c.render(item) : _item[c.key.nestedKey as keyof typeof _item];
-                      }
-                    }
-                    // Diğer durumlarda `null` döndür
-                    else {
-                      render = null;
-                    }
-
-                    if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
-                    if (c.config?.alignContent) _className.push(`align-content-${c.config.alignContent}`);
-                    if (c.config?.textWrap) _className.push(`text-${c.config.textWrap}`);
-
-                    return (
-                      <td
-                        key={`cell-${index}-${cIndex}`}
-                        {...(_className.length > 0 && {
-                          className: `${_className.map((c) => c).join(" ")}`,
-                        })}
-                        {...(c.config?.width
-                          ? {
-                              style: { minWidth: c.config.width },
-                            }
-                          : // : {
-                            //     style: { maxWidth: thWidths[cIndex], minWidth: thWidths[cIndex] },
-                            //   })}
-                            {
-                              style: {},
-                            })}
-                        {...(c.config?.sticky && {
-                          "data-sticky-position": c.config.sticky,
-                        })}
-                      >
-                        {React.isValidElement(render) ? render : String(render)}
+              {getData().length > 0 ? (
+                getData().map((item, index) => (
+                  <tr key={`row-${index}-${Math.random()}`}>
+                    {selections && (
+                      <td key={`selection-${index}`} className="sticky-left" data-sticky-position="left">
+                        <Checkbox
+                          ref={(element) => (_checkboxItems.current[index] = element)}
+                          status="primary"
+                          checked={selectionItems.some(
+                            (selectionItem) => JSON.stringify(selectionItem) === JSON.stringify(item)
+                          )}
+                          onChange={(event) => {
+                            if (event.target.checked) setSelectionItems((prev) => [...prev, item]);
+                            else setSelectionItems((prev) => prev.filter((_item) => _item !== item));
+                          }}
+                        />
                       </td>
-                    );
-                  })}
+                    )}
+
+                    {columns.map((c, cIndex) => {
+                      let _className: string[] = [];
+                      let render: any; // TODO: Generic yapmak için çalışma yap. (Daha Sonra)
+
+                      // `c.key` bir string ise
+                      if (typeof c.key !== "object") {
+                        render = c.render ? c.render(item) : item[c.key as keyof T];
+                      }
+                      // `c.key` bir nesne ise ve `nestedKey` mevcutsa
+                      else if (typeof c.key === "object") {
+                        const _item = item[c.key.field as keyof T];
+
+                        if (_item && typeof _item === "object") {
+                          render = c.render ? c.render(item) : _item[c.key.nestedKey as keyof typeof _item];
+                        }
+                      }
+                      // Diğer durumlarda `null` döndür
+                      else {
+                        render = null;
+                      }
+
+                      // const isTypeOfNumber = typeof render === "number" ? "type-of-number" : "";
+
+                      // if (isTypeOfNumber) _className.push(isTypeOfNumber);
+
+                      if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
+                      if (c.config?.alignContent) _className.push(`align-content-${c.config.alignContent}`);
+                      if (c.config?.textWrap) _className.push(`text-${c.config.textWrap}`);
+
+                      return (
+                        <td
+                          key={`cell-${index}-${cIndex}`}
+                          {...(_className.length > 0 && {
+                            className: `${_className.map((c) => c).join(" ")}`,
+                          })}
+                          {...(c.config?.width
+                            ? {
+                                style: { minWidth: c.config.width },
+                              }
+                            : // : {
+                              //     style: { maxWidth: thWidths[cIndex], minWidth: thWidths[cIndex] },
+                              //   })}
+                              {
+                                style: {},
+                              })}
+                          {...(c.config?.sticky && {
+                            "data-sticky-position": c.config.sticky,
+                          })}
+                        >
+                          {React.isValidElement(render) ? render : String(render)}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={columns.length + 1}>Herhangi bir kayıt bulunamadı!</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -508,8 +646,16 @@ const Table = forwardRef(
       </div>
     );
   }
-);
+) as <T>(props: IProps<T> & { ref?: React.ForwardedRef<HTMLTableElement> }) => ReactElement;
 
-export default memo(Table, <T extends object>(prevProps: IProps<T>, nextProps: IProps<T>) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
-}) as <T extends object>(props: IProps<T> & { ref?: React.Ref<HTMLTableElement> }) => JSX.Element;
+type TableCompoundComponents = typeof TableWithRef & {
+  Actions: React.FC<{
+    children: React.ReactElement | React.ReactElement[];
+  }>;
+};
+
+// Actions'ı ekliyoruz.
+const Table = TableWithRef as TableCompoundComponents;
+Table.Actions = Actions;
+
+export default Table;
