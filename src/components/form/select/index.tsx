@@ -361,9 +361,6 @@ const Select: React.FC<Props> = ({
 
               setSearchText(event.currentTarget.value);
             }}
-            onBlur={() => {
-              setTimeout(() => setOptionsOpen(false), 100);
-            }}
             placeholder={placeholder}
             validation={validation}
             disabled={disabled}
