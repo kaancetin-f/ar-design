@@ -6,7 +6,7 @@ import Button from "../../form/button";
 import Checkbox from "../../form/checkbox";
 import IProps, { SearchedParam } from "./IProps";
 import Pagination from "../../navigation/pagination";
-import React, { forwardRef, memo, useCallback, useEffect, useRef, useState } from "react";
+import React, { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { HTMLTableElementWithCustomAttributes } from "../../../libs/types";
 import Input from "../../form/input";
 import Popover from "../../feedback/popover";
@@ -48,6 +48,7 @@ const Table = forwardRef(
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | undefined>(undefined);
     const [checkboxSelectedParams, setCheckboxSelectedParams] = useState<SearchedParam | undefined>(undefined);
     // states -> Pagination
+    const [totalRecords, setTotalRecords] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
     if (config && Object.keys(config.scroll || {}).length > 0) {
@@ -132,11 +133,9 @@ const Table = forwardRef(
 
         _searchTimeOut.current = setTimeout(() => {
           setSearchedParams((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-          setCurrentPage(1);
           pagination && pagination.onChange(1);
         }, 750);
       } else {
-        setCurrentPage(1);
         setSearchedText((prev) => ({ ...prev, [event.target.name]: event.target.value }));
       }
     };
@@ -200,10 +199,16 @@ const Table = forwardRef(
       });
     };
 
-    const getData = useCallback(() => {
+    const getData = useMemo(() => {
       let _data: T[] = [...data];
 
-      if (searchedText) _data = _data.filter((item) => deepSearch(item, searchedText));
+      if (searchedText) {
+        _data = _data.filter((item) => deepSearch(item, searchedText));
+        setTotalRecords(_data.length);
+        setCurrentPage(1);
+      } else {
+        setTotalRecords(data.length);
+      }
 
       if (pagination && !config.isServerSide) {
         const indexOfLastRow = currentPage * pagination.perPage;
@@ -414,7 +419,7 @@ const Table = forwardRef(
             </thead>
 
             <tbody>
-              {getData().map((item, index) => (
+              {getData.map((item, index) => (
                 <tr key={`row-${index}-${Math.random()}`}>
                   {selections && (
                     <td key={`selection-${index}`} className="sticky-left" data-sticky-position="left">
@@ -490,12 +495,12 @@ const Table = forwardRef(
         {pagination && pagination.totalRecords > pagination.perPage && (
           <div className="footer">
             <span>
-              <strong>Showing {getData().length}</strong>{" "}
-              <span>of {pagination?.perPage ?? getData().length} agreement</span>
+              <strong>Showing {getData.length}</strong>{" "}
+              <span>of {pagination?.perPage ?? getData.length} agreement</span>
             </span>
 
             <Pagination
-              totalRecords={pagination.totalRecords}
+              totalRecords={config.isServerSide ? pagination.totalRecords : totalRecords ?? 0}
               currentPage={currentPage}
               perPage={pagination.perPage}
               onChange={(currentPage) => {
