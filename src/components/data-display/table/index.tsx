@@ -279,7 +279,41 @@ const Table = forwardRef(
               <h5>{description}</h5>
             </div>
 
-            <div></div>
+            <div className="actions">
+              {actions && (
+                <>
+                  {actions.create && (
+                    <Button
+                      variant="outlined"
+                      status="dark"
+                      icon={{ element: <ARIcon icon="Add" size={16} /> }}
+                      tooltip={{ text: actions.create.tooltip, direction: "top" }}
+                      onClick={actions.create.onClick}
+                    />
+                  )}
+
+                  {actions.import && (
+                    <Button
+                      variant="outlined"
+                      status="dark"
+                      icon={{ element: <ARIcon icon="Import" size={16} /> }}
+                      tooltip={{ text: actions.import.tooltip, direction: "top" }}
+                      onClick={actions.import.onClick}
+                    />
+                  )}
+
+                  {actions.filterClear && (
+                    <Button
+                      variant="outlined"
+                      status="dark"
+                      icon={{ element: <ARIcon icon="Trash" size={16} /> }}
+                      tooltip={{ text: actions.filterClear.tooltip, direction: "top" }}
+                      onClick={actions.filterClear.onClick}
+                    />
+                  )}
+                </>
+              )}
+            </div>
           </div>
         )}
 
