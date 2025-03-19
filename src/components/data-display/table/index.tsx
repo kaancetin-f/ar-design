@@ -136,8 +136,20 @@ const Table = forwardRef(
           pagination && pagination.onChange(1);
         }, 750);
       } else {
-        setSearchedText((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+        setSearchedText((prev) => {
+          const _state = { ...prev };
+
+          if (event.target.value === "") {
+            delete _state[event.target.name]; // Key'i siliyoruz
+          } else {
+            _state[event.target.name] = event.target.value; // Yeni değeri ekliyoruz
+          }
+
+          return _state;
+        });
       }
+
+      setCurrentPage(1);
     };
 
     const handleCheckboxChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -159,7 +171,7 @@ const Table = forwardRef(
 
     // Derinlemesine arama yapmak için özyinelemeli bir fonksiyon tanımlayalım.
     const deepSearch = (item: T, searchedText: SearchedParam | undefined): boolean => {
-      if (!searchedText) return false;
+      if (!searchedText || Object.keys(searchedText).length === 0) return true;
 
       // Eğer değer bir sayı veya string ise, aranan metinle eşleşip eşleşmediğini kontrol ediyoruz.
       return Object.entries(searchedText).every(([key, value]) => {
@@ -205,7 +217,6 @@ const Table = forwardRef(
       if (searchedText) {
         _data = _data.filter((item) => deepSearch(item, searchedText));
         setTotalRecords(_data.length);
-        setCurrentPage(1);
       } else {
         setTotalRecords(data.length);
       }
@@ -249,7 +260,7 @@ const Table = forwardRef(
 
         setSearchedParams(checkboxSelectedParams);
       } else {
-        setSearchedText(checkboxSelectedParams);
+        setSearchedText((prev) => ({ ...prev, ...checkboxSelectedParams }));
       }
 
       setCurrentPage(1);
@@ -552,6 +563,7 @@ const Table = forwardRef(
 export default memo(Table, <T extends object>(prevProps: IProps<T>, nextProps: IProps<T>) => {
   return (
     JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) &&
-    JSON.stringify(prevProps.columns) === JSON.stringify(nextProps.columns)
+    JSON.stringify(prevProps.columns) === JSON.stringify(nextProps.columns) &&
+    JSON.stringify(prevProps.actions) === JSON.stringify(nextProps.actions)
   );
 }) as <T extends object>(props: IProps<T> & { ref?: React.Ref<HTMLTableElement> }) => JSX.Element;
