@@ -14,7 +14,14 @@ const Switch: React.FC<IProps> = ({ label, status = "primary", border = { radius
   const [checked, setChecked] = useState<boolean>(attributes.checked ?? false);
 
   _switchClassName.push(
-    ...Utils.GetClassName("filled", checked ? status : "light", border, undefined, undefined, attributes.className)
+    ...Utils.GetClassName(
+      "filled",
+      attributes.checked ? status : "light",
+      border,
+      undefined,
+      undefined,
+      attributes.className
+    )
   );
 
   // useEffects

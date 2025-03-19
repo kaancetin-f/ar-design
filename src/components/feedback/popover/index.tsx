@@ -37,18 +37,23 @@ const Popover: React.FC<IProps> = ({ children, title, message, content, onConfir
       const elementRect = _arPopoverElement.current.getBoundingClientRect();
 
       if (elementRect) {
-        const screenCenter = window.innerHeight / 2;
+        const screenCenterX = window.innerWidth / 2;
+        const screenCenterY = window.innerHeight / 2;
         const sx = window.scrollX || document.documentElement.scrollLeft;
         const sy = window.scrollY || document.documentElement.scrollTop;
 
         _arPopover.current.style.visibility = "visible";
         _arPopover.current.style.opacity = "1";
         _arPopover.current.style.top = `${
-          (elementRect.top > screenCenter
+          (elementRect.top > screenCenterY
             ? elementRect.top - popoverRect.height + elementRect.height
             : elementRect.top) + sy
         }px`;
-        _arPopover.current.style.left = `${elementRect.left - popoverRect.width + sx - 10}px`;
+        _arPopover.current.style.left = `${
+          (elementRect.left > screenCenterX
+            ? elementRect.right - (elementRect.width + 7.5) - popoverRect.width
+            : elementRect.left + elementRect.width + 7.5) + sx
+        }px`;
       }
     }
   };

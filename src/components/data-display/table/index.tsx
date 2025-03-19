@@ -359,7 +359,7 @@ const Table = forwardRef(
                       })}
                       {...(c.config?.width
                         ? {
-                            style: { minWidth: c.config.width },
+                            style: { minWidth: c.config.width, maxWidth: c.config.width },
                           }
                         : // : { style: { maxWidth: thWidths[cIndex], minWidth: thWidths[cIndex] } })}
                           { style: {} })}
@@ -504,7 +504,7 @@ const Table = forwardRef(
                         })}
                         {...(c.config?.width
                           ? {
-                              style: { minWidth: c.config.width },
+                              style: { minWidth: c.config.width, maxWidth: c.config.width },
                             }
                           : // : {
                             //     style: { maxWidth: thWidths[cIndex], minWidth: thWidths[cIndex] },
@@ -550,5 +550,8 @@ const Table = forwardRef(
 );
 
 export default memo(Table, <T extends object>(prevProps: IProps<T>, nextProps: IProps<T>) => {
-  return JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data);
+  return (
+    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) &&
+    JSON.stringify(prevProps.columns) === JSON.stringify(nextProps.columns)
+  );
 }) as <T extends object>(props: IProps<T> & { ref?: React.Ref<HTMLTableElement> }) => JSX.Element;
