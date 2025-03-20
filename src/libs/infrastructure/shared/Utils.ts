@@ -77,6 +77,21 @@ class Utils {
 
     return false;
   };
+
+  public DeepEqual = (obj1: any, obj2: any): boolean => {
+    if (Object.is(obj1, obj2)) return true; // Aynı referanssa true döndür
+
+    if (typeof obj1 !== "object" || typeof obj2 !== "object" || obj1 === null || obj2 === null) {
+      return false; // Eğer biri obje değilse ve eşit değilse false
+    }
+
+    const keys1 = Object.keys(obj1);
+    const keys2 = Object.keys(obj2);
+
+    if (keys1.length !== keys2.length) return false; // Farklı uzunlukta anahtar varsa false
+
+    return keys1.every((key) => this.DeepEqual(obj1[key], obj2[key])); // Rekürsif karşılaştırma
+  };
 }
 
 export default new Utils();

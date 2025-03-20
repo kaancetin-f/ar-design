@@ -10,6 +10,7 @@ import React, { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useSt
 import { HTMLTableElementWithCustomAttributes } from "../../../libs/types";
 import Input from "../../form/input";
 import Popover from "../../feedback/popover";
+import Utils from "../../../libs/infrastructure/shared/Utils";
 
 const Table = forwardRef(
   <T extends object>(
@@ -280,6 +281,10 @@ const Table = forwardRef(
         setSelectAll(_checkboxItems.current.every((item) => item?.checked === true));
       }
     }, [selectionItems, currentPage]);
+
+    useEffect(() => {
+      console.log("Table component re-rendered!", actions);
+    });
 
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
@@ -561,9 +566,10 @@ const Table = forwardRef(
 );
 
 export default memo(Table, <T extends object>(prevProps: IProps<T>, nextProps: IProps<T>) => {
-  return (
-    JSON.stringify(prevProps.data) === JSON.stringify(nextProps.data) &&
-    JSON.stringify(prevProps.columns) === JSON.stringify(nextProps.columns) &&
-    JSON.stringify(prevProps.actions) === JSON.stringify(nextProps.actions)
-  );
+  const data = Utils.DeepEqual(prevProps.data, nextProps.data);
+  const columns = Utils.DeepEqual(prevProps.columns, nextProps.columns);
+  const actions = Utils.DeepEqual(prevProps.actions, nextProps.actions);
+  const previousSelections = Utils.DeepEqual(prevProps.previousSelections, nextProps.previousSelections);
+
+  return data && columns && actions && previousSelections;
 }) as <T extends object>(props: IProps<T> & { ref?: React.Ref<HTMLTableElement> }) => JSX.Element;
