@@ -73,7 +73,9 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, currentPage, totalRe
     onChange(_currentPage);
   }, [totalRecords, _currentPage]);
 
-  useEffect(() => setCurrentPage(currentPage), [currentPage]);
+  useEffect(() => {
+    setCurrentPage(currentPage);
+  }, [currentPage]);
 
   return (
     <div className="ar-pagination">

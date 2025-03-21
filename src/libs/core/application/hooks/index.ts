@@ -5,6 +5,7 @@ import Utils from "../../../infrastructure/shared/Utils";
 import { Errors, ValidationProperties, ValidationShape } from "../../../types";
 import { LanguageContext } from "../contexts/Language";
 import { LoadingContext } from "../contexts/Loading";
+import { INotificationLocale, NotificationTR, NotificationEN } from "../locales";
 
 export const useLayout = () => {
   const context = useContext(ConfigContext);
@@ -20,10 +21,15 @@ export const useLanguage = () => useContext(LanguageContext);
 
 export const useTranslation = function <TBaseLocale>(
   currentLanguage: string | undefined,
-  translations: { [key: string]: any }
+  translations?: { [key: string]: any }
 ) {
-  const t = (key: keyof TBaseLocale, ...args: any[]) => {
-    return Utils.StringFormat(translations[currentLanguage ?? "tr"][key], args) ?? "";
+  const merged: { [key: string]: any } = {
+    tr: { ...translations?.tr, ...NotificationTR },
+    en: { ...translations?.en, ...NotificationEN },
+  };
+
+  const t = (key: keyof TBaseLocale & keyof INotificationLocale, ...args: any[]) => {
+    return Utils.StringFormat(merged[currentLanguage ?? "tr"][key], args) ?? "";
   };
 
   return { t, currentLanguage };

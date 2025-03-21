@@ -215,7 +215,7 @@ const Table = forwardRef(
     const getData = useMemo(() => {
       let _data: T[] = [...data];
 
-      if (searchedText) {
+      if (searchedText && Object.keys(searchedText).length > 0) {
         _data = _data.filter((item) => deepSearch(item, searchedText));
         setTotalRecords(_data.length);
       } else {
@@ -281,10 +281,6 @@ const Table = forwardRef(
         setSelectAll(_checkboxItems.current.every((item) => item?.checked === true));
       }
     }, [selectionItems, currentPage]);
-
-    useEffect(() => {
-      console.log("Table component re-rendered!", actions);
-    });
 
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
