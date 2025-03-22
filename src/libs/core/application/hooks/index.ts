@@ -28,7 +28,7 @@ export const useTranslation = function <TBaseLocale>(
     en: { ...translations?.en, ...NotificationEN },
   };
 
-  const t = (key: keyof TBaseLocale & keyof INotificationLocale, ...args: any[]) => {
+  const t = (key: keyof TBaseLocale | keyof INotificationLocale, ...args: any[]) => {
     return Utils.StringFormat(merged[currentLanguage ?? "tr"][key], args) ?? "";
   };
 
