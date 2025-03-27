@@ -11,6 +11,8 @@
   box-sizing: border-box;
 }
 .ar-layout > aside.ar-aside.left {
+  position: sticky;
+  top: 0;
   display: flex;
   flex-direction: column;
   border-right: solid 1px var(--gray-200);
@@ -19,6 +21,11 @@
   display: flex;
   align-items: center;
 }
+.ar-layout > aside.ar-aside.left > footer {
+  position: fixed;
+  bottom: 1rem;
+}
+
 .ar-layout > aside.ar-aside.right {
 }
 

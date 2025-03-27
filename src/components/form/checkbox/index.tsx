@@ -20,8 +20,8 @@ const Checkbox = forwardRef<HTMLInputElement, IProps>(
 
     // useEffects
     useEffect(() => {
-      setChecked(attributes.checked ?? false);
-    }, [attributes.checked]);
+      setChecked(attributes.checked ?? attributes.defaultChecked ?? false);
+    }, [attributes.checked, attributes.defaultChecked]);
 
     return (
       <div className="ar-checkbox-wrapper">

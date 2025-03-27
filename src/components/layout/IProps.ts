@@ -8,6 +8,7 @@ export interface IHeaderProps {
 export interface ILSiderProps {
   image?: React.ReactElement<SVGElement | HTMLImageElement>;
   text?: string | React.JSX.Element;
+  footer?: string;
 }
 export interface IMainProps extends IChildren {}
 export interface ISectionProps extends IChildren {

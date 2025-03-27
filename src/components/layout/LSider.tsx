@@ -4,8 +4,9 @@ import React from "react";
 import { useLayout } from "../../libs/core/application/hooks";
 import { ILSiderProps } from "./IProps";
 import Title from "../data-display/typography/title/Title";
+import Paragraph from "../data-display/typography/paragraph/Paragraph";
 
-const LSider: React.FC<ILSiderProps> = ({ image, text }) => {
+const LSider: React.FC<ILSiderProps> = ({ image, text, footer }) => {
   // hooks
   const { config } = useLayout();
   const sider = config.layout.sider.left;
@@ -23,6 +24,12 @@ const LSider: React.FC<ILSiderProps> = ({ image, text }) => {
       </div>
 
       <div>{sider.element}</div>
+
+      {footer && (
+        <footer>
+          <Paragraph size="small">{footer}</Paragraph>
+        </footer>
+      )}
     </aside>
   );
 };
