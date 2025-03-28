@@ -7,7 +7,7 @@ interface IProps extends IChildren {
   onConfirm?: (confirm: boolean) => void;
   windowBlur?: boolean;
   config?: {
-    buttons: { okButton: string; cancelButton: string };
+    buttons: { okButton: string; cancelButton?: string };
   };
 }
 

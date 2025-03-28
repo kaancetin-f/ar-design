@@ -359,7 +359,7 @@ const TableWithRef = forwardRef(
                     />
                   )}
 
-                  {actions.import && (
+                  {/* {actions.import && (
                     <Button
                       variant="outlined"
                       status="dark"
@@ -367,9 +367,9 @@ const TableWithRef = forwardRef(
                       tooltip={{ text: actions.import.tooltip, direction: "top" }}
                       onClick={actions.import.onClick}
                     />
-                  )}
+                  )} */}
 
-                  {actions.filterClear && (
+                  {/* {actions.filterClear && (
                     <Button
                       variant="outlined"
                       status="dark"
@@ -377,7 +377,7 @@ const TableWithRef = forwardRef(
                       tooltip={{ text: actions.filterClear.tooltip, direction: "top" }}
                       onClick={actions.filterClear.onClick}
                     />
-                  )}
+                  )} */}
                 </>
               )}
             </div>

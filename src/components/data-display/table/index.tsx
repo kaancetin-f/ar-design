@@ -11,6 +11,7 @@ import { HTMLTableElementWithCustomAttributes } from "../../../libs/types";
 import Input from "../../form/input";
 import Popover from "../../feedback/popover";
 import Utils from "../../../libs/infrastructure/shared/Utils";
+import Upload from "../../form/upload";
 
 const Table = forwardRef(
   <T extends object>(
@@ -44,6 +45,9 @@ const Table = forwardRef(
     // states
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [selectionItems, setSelectionItems] = useState<T[]>([]);
+    // states -> File
+    const [files, setFiles] = useState<File[]>([]);
+    const [formData, setFormData] = useState<FormData | undefined>(undefined);
     // states -> Search
     const [searchedText, setSearchedText] = useState<SearchedParam | undefined>(undefined);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | undefined>(undefined);
@@ -288,12 +292,49 @@ const Table = forwardRef(
           <div className="header">
             <div className="title">
               <h3>{title}</h3>
-              <h5>{description}</h5>
+              {description && <h5>{description}</h5>}
             </div>
 
             <div className="actions">
               {actions && (
                 <>
+                  {actions.import && (
+                    <Popover
+                      title="İçeri Aktar"
+                      message="Seçtiğiniz dosyaları uygulamaya yükleyebilirsiniz. Bu işlem, dosyalardaki verileri sistemimize aktarır ve verilerle işlem yapmanıza olanak tanır."
+                      content={
+                        <Upload
+                          text="Belge Yükleyin"
+                          allowedTypes={actions.import.allowedTypes}
+                          file={files}
+                          onChange={(formData, files) => {
+                            setFormData(formData);
+                            setFiles(files);
+                          }}
+                          multiple
+                        />
+                      }
+                      onConfirm={(confirm) => {
+                        if (!confirm) {
+                          setFiles([]);
+
+                          return;
+                        }
+
+                        if (actions.import && actions.import.onClick) actions.import.onClick(formData, files);
+                      }}
+                      config={{ buttons: { okButton: "Yükle", cancelButton: "İptal" } }}
+                      windowBlur
+                    >
+                      <Button
+                        variant="outlined"
+                        status="success"
+                        icon={{ element: <ARIcon icon="Import" size={16} /> }}
+                        tooltip={{ text: actions.import.tooltip, direction: "top" }}
+                      />
+                    </Popover>
+                  )}
+
                   {actions.create && (
                     <Button
                       variant="outlined"
@@ -301,26 +342,6 @@ const Table = forwardRef(
                       icon={{ element: <ARIcon icon="Add" size={16} /> }}
                       tooltip={{ text: actions.create.tooltip, direction: "top" }}
                       onClick={actions.create.onClick}
-                    />
-                  )}
-
-                  {actions.import && (
-                    <Button
-                      variant="outlined"
-                      status="dark"
-                      icon={{ element: <ARIcon icon="Import" size={16} /> }}
-                      tooltip={{ text: actions.import.tooltip, direction: "top" }}
-                      onClick={actions.import.onClick}
-                    />
-                  )}
-
-                  {actions.filterClear && (
-                    <Button
-                      variant="outlined"
-                      status="dark"
-                      icon={{ element: <ARIcon icon="Trash" size={16} /> }}
-                      tooltip={{ text: actions.filterClear.tooltip, direction: "top" }}
-                      onClick={actions.filterClear.onClick}
                     />
                   )}
                 </>

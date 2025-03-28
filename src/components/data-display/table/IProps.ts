@@ -1,10 +1,16 @@
 import React from "react";
-import { TableColumnType } from "../../../libs/types";
+import { AllowedTypes, TableColumnType } from "../../../libs/types";
 import { IChildren } from "../../../libs/types/IGlobalProps";
 
 export type SearchedParam = { [key: string]: string };
 
-type ActionType = {
+type ImportActionType = {
+  tooltip: string;
+  allowedTypes?: AllowedTypes[];
+  onClick: (formData: FormData | undefined, files: File[]) => void;
+};
+
+type CreateActionType = {
   tooltip: string;
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
@@ -15,9 +21,8 @@ interface IProps<T> extends IChildren {
   data: T[];
   columns: TableColumnType<T>[];
   actions?: {
-    create?: ActionType;
-    import?: ActionType;
-    filterClear?: ActionType;
+    import?: ImportActionType;
+    create?: CreateActionType;
   };
   selections?: (selectionItems: T[]) => void;
   previousSelections?: T[];
