@@ -7,7 +7,7 @@ import Checkbox from "../../form/checkbox";
 import IProps, { SearchedParam } from "./IProps";
 import Pagination from "../../navigation/pagination";
 import React, { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { HTMLTableElementWithCustomAttributes } from "../../../libs/types";
+import { HTMLTableElementWithCustomAttributes, TableColumnType } from "../../../libs/types";
 import Input from "../../form/input";
 import Popover from "../../feedback/popover";
 import Utils from "../../../libs/infrastructure/shared/Utils";
@@ -26,7 +26,7 @@ const Table = forwardRef(
       previousSelections,
       searchedParams,
       pagination,
-      config = { isSearchable: false },
+      config = { isSearchable: false, subrowSelector: "subitems" },
     }: IProps<T>,
     ref: React.ForwardedRef<HTMLTableElementWithCustomAttributes>
   ) => {
@@ -45,6 +45,7 @@ const Table = forwardRef(
     // states
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [selectionItems, setSelectionItems] = useState<T[]>([]);
+    const [showSubitems, setShowSubitems] = useState<{ [key: string]: boolean }>({});
     // states -> File
     const [files, setFiles] = useState<File[]>([]);
     const [formData, setFormData] = useState<FormData | undefined>(undefined);
@@ -174,7 +175,7 @@ const Table = forwardRef(
       });
     }, []);
 
-    // Derinlemesine arama yapmak için özyinelemeli bir fonksiyon tanımlayalım.
+    // Derinlemesine arama yapmak için özyinelemeli bir fonksiyon olarak kullanılmaktadır.
     const deepSearch = (item: T, searchedText: SearchedParam | undefined): boolean => {
       if (!searchedText || Object.keys(searchedText).length === 0) return true;
 
@@ -238,6 +239,129 @@ const Table = forwardRef(
 
       return _data;
     }, [data, searchedText, currentPage]);
+
+    const renderCell = (item: T, c: TableColumnType<T>, cIndex: number, index: number) => {
+      let render: any;
+
+      // `c.key` bir string ise
+      if (typeof c.key !== "object") {
+        render = c.render ? c.render(item) : item[c.key as keyof T];
+      }
+      // `c.key` bir nesne ise ve `nestedKey` mevcutsa
+      else if (typeof c.key === "object") {
+        const _item = item[c.key.field as keyof T];
+        if (_item && typeof _item === "object") {
+          render = c.render ? c.render(item) : _item[c.key.nestedKey as keyof typeof _item];
+        }
+      }
+      // Diğer durumlarda `null` döndür
+      else {
+        render = null;
+      }
+
+      const _className: string[] = [];
+      if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
+      if (c.config?.alignContent) _className.push(`align-content-${c.config.alignContent}`);
+      if (c.config?.textWrap) _className.push(`text-${c.config.textWrap}`);
+
+      return (
+        <td
+          key={`cell-${index}-${cIndex}`}
+          className={_className.join(" ")}
+          style={c.config?.width ? { minWidth: c.config.width, maxWidth: c.config.width } : {}}
+          data-sticky-position={c.config?.sticky}
+        >
+          {React.isValidElement(render) ? render : String(render)}
+        </td>
+      );
+    };
+
+    const renderRow = (item: T, index: number) => {
+      return (
+        <>
+          <tr key={`row-${index}`}>
+            {selections && (
+              <td className="sticky-left" data-sticky-position="left">
+                <Checkbox
+                  ref={(element) => (_checkboxItems.current[index] = element)}
+                  status="primary"
+                  checked={selectionItems.some(
+                    (selectionItem) => JSON.stringify(selectionItem) === JSON.stringify(item)
+                  )}
+                  onChange={(event) => {
+                    if (event.target.checked) setSelectionItems((prev) => [...prev, item]);
+                    else setSelectionItems((prev) => prev.filter((_item) => _item !== item));
+                  }}
+                />
+              </td>
+            )}
+
+            {data.some((item) => config.subrowSelector ?? "subitems" in item) && (
+              <td style={{ width: 1 }}>
+                {item[config.subrowSelector as keyof typeof item] && (
+                  <span
+                    className={`subitem-open-button ${showSubitems[index] && "opened"}`}
+                    onClick={() => {
+                      setShowSubitems((prev) => ({
+                        ...prev,
+                        [`${index}`]: !prev[`${index}`],
+                      }));
+                    }}
+                  />
+                )}
+              </td>
+            )}
+
+            {columns.map((c, cIndex) => renderCell(item, c, cIndex, index))}
+          </tr>
+
+          {/* Alt satırları burada listele */}
+          {showSubitems[index] && item[config.subrowSelector as keyof typeof item] && (
+            <SubitemList
+              items={item[config.subrowSelector as keyof typeof item] as T[]}
+              columns={columns}
+              index={index}
+              depth={1.5}
+            />
+          )}
+        </>
+      );
+    };
+
+    const SubitemList = ({ items, columns, index, depth }: any) => {
+      return items.map((subitem: T, subindex: number) => (
+        <>
+          <tr key={`subitem-${index}-${subindex}`}>
+            {data.some((item) => config.subrowSelector ?? "subitems" in item) && (
+              <td style={{ paddingLeft: `${depth * 1.5}rem` }}>
+                {subitem[config.subrowSelector as keyof typeof subitem] && (
+                  <span
+                    className={`subitem-open-button ${showSubitems[`${index}.${subindex}`] && "opened"}`}
+                    onClick={() => {
+                      setShowSubitems((prev) => ({
+                        ...prev,
+                        [`${index}.${subindex}`]: !prev[`${index}.${subindex}`],
+                      }));
+                    }}
+                  />
+                )}
+              </td>
+            )}
+
+            {columns.map((c: TableColumnType<T>, cIndex: number) => renderCell(subitem, c, cIndex, subindex))}
+          </tr>
+
+          {showSubitems[`${index}.${subindex}`] && subitem[config.subrowSelector as keyof typeof subitem] && (
+            <SubitemList
+              items={subitem[config.subrowSelector as keyof typeof subitem] as T[]}
+              columns={columns}
+              index={subindex}
+              depth={depth * 1.5}
+            />
+          )}
+        </>
+      ));
+    };
 
     // useEffects
     useEffect(() => {
@@ -375,6 +499,8 @@ const Table = forwardRef(
                   </th>
                 )}
 
+                {data.some((item) => config.subrowSelector ?? "subitems" in item) && <td style={{ width: 1 }}></td>}
+
                 {columns.map((c, cIndex) => {
                   let _className: string[] = [];
 
@@ -487,73 +613,7 @@ const Table = forwardRef(
 
             <tbody>
               {getData.map((item, index) => (
-                <tr key={`row-${index}-${Math.random()}`}>
-                  {selections && (
-                    <td key={`selection-${index}`} className="sticky-left" data-sticky-position="left">
-                      <Checkbox
-                        ref={(element) => (_checkboxItems.current[index] = element)}
-                        status="primary"
-                        checked={selectionItems.some(
-                          (selectionItem) => JSON.stringify(selectionItem) === JSON.stringify(item)
-                        )}
-                        onChange={(event) => {
-                          if (event.target.checked) setSelectionItems((prev) => [...prev, item]);
-                          else setSelectionItems((prev) => prev.filter((_item) => _item !== item));
-                        }}
-                      />
-                    </td>
-                  )}
-
-                  {columns.map((c, cIndex) => {
-                    let _className: string[] = [];
-                    let render: any; // TODO: Generic yapmak için çalışma yap. (Daha Sonra)
-
-                    // `c.key` bir string ise
-                    if (typeof c.key !== "object") {
-                      render = c.render ? c.render(item) : item[c.key as keyof T];
-                    }
-                    // `c.key` bir nesne ise ve `nestedKey` mevcutsa
-                    else if (typeof c.key === "object") {
-                      const _item = item[c.key.field as keyof T];
-
-                      if (_item && typeof _item === "object") {
-                        render = c.render ? c.render(item) : _item[c.key.nestedKey as keyof typeof _item];
-                      }
-                    }
-                    // Diğer durumlarda `null` döndür
-                    else {
-                      render = null;
-                    }
-
-                    if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
-                    if (c.config?.alignContent) _className.push(`align-content-${c.config.alignContent}`);
-                    if (c.config?.textWrap) _className.push(`text-${c.config.textWrap}`);
-
-                    return (
-                      <td
-                        key={`cell-${index}-${cIndex}`}
-                        {...(_className.length > 0 && {
-                          className: `${_className.map((c) => c).join(" ")}`,
-                        })}
-                        {...(c.config?.width
-                          ? {
-                              style: { minWidth: c.config.width, maxWidth: c.config.width },
-                            }
-                          : // : {
-                            //     style: { maxWidth: thWidths[cIndex], minWidth: thWidths[cIndex] },
-                            //   })}
-                            {
-                              style: {},
-                            })}
-                        {...(c.config?.sticky && {
-                          "data-sticky-position": c.config.sticky,
-                        })}
-                      >
-                        {React.isValidElement(render) ? render : String(render)}
-                      </td>
-                    );
-                  })}
-                </tr>
+                <React.Fragment key={index}>{renderRow(item, index)}</React.Fragment>
               ))}
             </tbody>
           </table>

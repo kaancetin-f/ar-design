@@ -38,6 +38,7 @@ interface IProps<T> extends IChildren {
     scroll?: {
       maxHeight: number;
     };
+    subrowSelector?: string;
   };
 }
 
