@@ -1,88 +1,88 @@
 /* #region Border Color -> PRIMARY */
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.primary {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.primary {
   box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), .1);
 }
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.primary > .handle {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.primary > .handle {
   box-shadow: 0 0 0 2px rgba(var(--primary-rgb), .5);
 }
 /* #endregion */
 /* Border Color -> PRIMARY */
 
 /* #region Border Color -> PRIMARY-LIGHT */
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.primary-light {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.primary-light {
   box-shadow: 0 0 0 2.5px rgba(var(--primary-light-rgb), .1);
 }
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.primary-light > .handle {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.primary-light > .handle {
   box-shadow: 0 0 0 2px rgba(var(--primary-light-rgb), .5);
 }
 /* #endregion */
 /* Border Color -> PRIMARY-LIGHT */
 
 /* #region Border Color -> SECONDARY */
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.secondary {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.secondary {
   box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), .1);
 }
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.secondary > .handle {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.secondary > .handle {
   box-shadow: 0 0 0 2px rgba(var(--secondary-rgb), .5);
 }
 /* #endregion */
 /* Border Color -> SECONDARY */
 
 /* #region Border Color -> SUCCESS */
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.success {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.success {
   box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), .1);
 }
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.success > .handle {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.success > .handle {
   box-shadow: 0 0 0 2px rgba(var(--success-rgb), .5);
 }
 /* #endregion */
 /* Border Color -> SUCCESS */
 
 /* #region Border Color -> WARNING */
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.warning {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.warning {
   box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), .1);
 }
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.warning > .handle {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.warning > .handle {
   box-shadow: 0 0 0 2px rgba(var(--warning-rgb), .5);
 }
 /* #endregion */
 /* Border Color -> WARNING */
 
 /* #region Border Color -> DANGER */
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.danger {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.danger {
   box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), .1);
 }
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.danger > .handle {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.danger > .handle {
   box-shadow: 0 0 0 2px rgba(var(--danger-rgb), .5);
 }
 /* #endregion */
 /* Border Color -> DANGER */
 
 /* #region Border Color -> INFORMATION */
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.information {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.information {
   box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), .1);
 }
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.information > .handle {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.information > .handle {
   box-shadow: 0 0 0 2px rgba(var(--information-rgb), .5);
 }
 /* #endregion */
 /* Border Color -> INFORMATION */
 
 /* #region Border Color -> DARK */
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.dark {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.dark {
   box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), .1);
 }
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.dark > .handle {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.dark > .handle {
   box-shadow: 0 0 0 2px rgba(var(--dark-rgb), .5);
 }
 /* #endregion */
 /* Border Color -> DARK */
 
 /* #region Border Color -> LIGHT */
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.light {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.light {
   box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), .1);
 }
-.ar-switch-wrapper > label > :is(input[type="checkbox"]):checked + .ar-switch.light > .handle {
+.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.light > .handle {
   box-shadow: 0 0 0 2px rgba(var(--light-rgb), .5);
 }
 /* #endregion */

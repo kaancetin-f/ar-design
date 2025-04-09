@@ -8,11 +8,13 @@ import Utils from "../../../libs/infrastructure/shared/Utils";
 const Switch: React.FC<IProps> = ({ label, status = "primary", border = { radius: "pill" }, ...attributes }) => {
   // refs
   let _switch = useRef<HTMLInputElement>(null);
+  const _inputClassName: string[] = [];
   const _switchClassName: string[] = ["ar-switch"];
 
   // states
   const [checked, setChecked] = useState<boolean>(attributes.checked ?? false);
 
+  _inputClassName.push(attributes.checked ? "checked" : "unchecked");
   _switchClassName.push(
     ...Utils.GetClassName(
       "filled",
@@ -35,6 +37,7 @@ const Switch: React.FC<IProps> = ({ label, status = "primary", border = { radius
         <input
           type={"checkbox"}
           {...attributes}
+          className={_inputClassName.map((c) => c).join(" ")}
           checked={checked}
           size={0}
           onChange={(event) => {
