@@ -172,8 +172,9 @@
   transform: rotate(135deg);
 }
 .ar-table > .content > table > tbody > tr > td > span.subitem-open-button.passive {
-  border-top-color: var(--gray-200);
-  border-right-color: var(--gray-200);
+  border-top-color: var(--gray-300);
+  border-right-color: var(--gray-300);
+  cursor: no-drop;
 }
 
 @import url("./scroll.css");

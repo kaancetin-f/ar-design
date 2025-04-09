@@ -329,38 +329,39 @@ const Table = forwardRef(
     };
 
     const SubitemList = ({ items, columns, index, depth }: any) => {
-      return items.map((subitem: T, subindex: number) => (
-        <>
-          <tr key={`subitem-${index}-${subindex}`}>
-            {data.some((item) => config.subrowSelector ?? "subitems" in item) && (
-              <td style={{ paddingLeft: `${depth * 1.5}rem` }}>
-                {subitem[config.subrowSelector as keyof typeof subitem] && (
+      return items.map((subitem: T, subindex: number) => {
+        const x = subitem[config.subrowSelector as keyof typeof subitem];
+
+        return (
+          <>
+            <tr key={`subitem-${index}-${subindex}`}>
+              {data.some((item) => config.subrowSelector ?? "subitems" in item) && (
+                <td style={{ paddingLeft: `${depth * 1.5}rem` }}>
                   <span
-                    className={`subitem-open-button ${showSubitems[`${index}.${subindex}`] && "opened"}`}
+                    className={`subitem-open-button ${showSubitems[`${index}.${subindex}`] && "opened"} ${
+                      !x && "passive"
+                    }`}
                     onClick={() => {
+                      if (!x) return;
+
                       setShowSubitems((prev) => ({
                         ...prev,
                         [`${index}.${subindex}`]: !prev[`${index}.${subindex}`],
                       }));
                     }}
                   />
-                )}
-              </td>
+                </td>
+              )}
+
+              {columns.map((c: TableColumnType<T>, cIndex: number) => renderCell(subitem, c, cIndex, subindex))}
+            </tr>
+
+            {showSubitems[`${index}.${subindex}`] && x && (
+              <SubitemList items={x as T[]} columns={columns} index={subindex} depth={depth * 1.5} />
             )}
-
-            {columns.map((c: TableColumnType<T>, cIndex: number) => renderCell(subitem, c, cIndex, subindex))}
-          </tr>
-
-          {showSubitems[`${index}.${subindex}`] && subitem[config.subrowSelector as keyof typeof subitem] && (
-            <SubitemList
-              items={subitem[config.subrowSelector as keyof typeof subitem] as T[]}
-              columns={columns}
-              index={subindex}
-              depth={depth * 1.5}
-            />
-          )}
-        </>
-      ));
+          </>
+        );
+      });
     };
 
     // useEffects
@@ -478,6 +479,8 @@ const Table = forwardRef(
           <table ref={ref}>
             <thead>
               <tr key="selection">
+                {data.some((item) => config.subrowSelector ?? "subitems" in item) && <td style={{ width: 1 }}></td>}
+
                 {selections && (
                   <th className="selection-col sticky-left" data-sticky-position="left">
                     <Checkbox
@@ -498,8 +501,6 @@ const Table = forwardRef(
                     />
                   </th>
                 )}
-
-                {data.some((item) => config.subrowSelector ?? "subitems" in item) && <td style={{ width: 1 }}></td>}
 
                 {columns.map((c, cIndex) => {
                   let _className: string[] = [];
