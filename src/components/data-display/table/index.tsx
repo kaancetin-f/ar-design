@@ -26,7 +26,7 @@ const Table = forwardRef(
       previousSelections,
       searchedParams,
       pagination,
-      config = { isSearchable: false, subrowSelector: "subitems" },
+      config = { isSearchable: false },
     }: IProps<T>,
     ref: React.ForwardedRef<HTMLTableElementWithCustomAttributes>
   ) => {
@@ -38,6 +38,9 @@ const Table = forwardRef(
     // refs -> Search
     const _searchTextInputs = useRef<(HTMLInputElement | null)[]>([]);
     const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
+
+    // variables
+    const _subrowSelector: string = config.subrowSelector ?? "subitems";
 
     // className
     const _tableClassName: string[] = ["ar-table", "scroll"];
@@ -296,9 +299,9 @@ const Table = forwardRef(
               </td>
             )}
 
-            {data.some((item) => config.subrowSelector ?? "subitems" in item) && (
+            {data.some((item) => _subrowSelector in item) && (
               <td style={{ width: 1 }}>
-                {item[config.subrowSelector as keyof typeof item] && (
+                {item[_subrowSelector as keyof typeof item] && (
                   <span
                     className={`subitem-open-button ${showSubitems[index] && "opened"}`}
                     onClick={() => {
@@ -316,9 +319,9 @@ const Table = forwardRef(
           </tr>
 
           {/* Alt satırları burada listele */}
-          {showSubitems[index] && item[config.subrowSelector as keyof typeof item] && (
+          {showSubitems[index] && item[_subrowSelector as keyof typeof item] && (
             <SubitemList
-              items={item[config.subrowSelector as keyof typeof item] as T[]}
+              items={item[_subrowSelector as keyof typeof item] as T[]}
               columns={columns}
               index={index}
               depth={1.5}
@@ -330,12 +333,12 @@ const Table = forwardRef(
 
     const SubitemList = ({ items, columns, index, depth }: any) => {
       return items.map((subitem: T, subindex: number) => {
-        const x = subitem[config.subrowSelector as keyof typeof subitem];
+        const x = subitem[_subrowSelector as keyof typeof subitem];
 
         return (
           <>
             <tr key={`subitem-${index}-${subindex}`}>
-              {data.some((item) => config.subrowSelector ?? "subitems" in item) && (
+              {data.some((item) => _subrowSelector in item) && (
                 <td style={{ paddingLeft: `${depth * 1.5}rem` }}>
                   <span
                     className={`subitem-open-button ${showSubitems[`${index}.${subindex}`] && "opened"} ${
@@ -479,7 +482,7 @@ const Table = forwardRef(
           <table ref={ref}>
             <thead>
               <tr key="selection">
-                {data.some((item) => config.subrowSelector ?? "subitems" in item) && <td style={{ width: 1 }}></td>}
+                {data.some((item) => _subrowSelector in item) && <td style={{ width: 1 }}></td>}
 
                 {selections && (
                   <th className="selection-col sticky-left" data-sticky-position="left">
