@@ -500,7 +500,7 @@ const TableWithRef = forwardRef(
                                             label={filter.text}
                                             name={name}
                                             status="primary"
-                                            value={filter.value}
+                                            // value={filter.value}
                                             checked={checkboxSelectedParams?.[name]?.includes(String(filter.value))}
                                             onChange={async (event) => await handleCheckboxChange(event)}
                                           />

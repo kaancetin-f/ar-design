@@ -33,7 +33,7 @@ export type Icon = {
 
 export type Sizes = "large" | "normal" | "small";
 
-export type Option = { value: string | number; text: string };
+export type Option = { value: string | number | null; text: string };
 
 // Menu Types
 export type MenuProps = {
