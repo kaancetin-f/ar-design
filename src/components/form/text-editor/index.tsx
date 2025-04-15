@@ -1,14 +1,14 @@
 "use client";
 
-import Utils from "../../../libs/infrastructure/shared/Utils";
-import React, { useEffect, useRef, useState } from "react";
-import IProps from "./IProps";
-import Button from "../button";
-import { Icons } from "../../../libs/types";
-import { ARIcon } from "../../icons";
 import "../../../assets/css/components/form/text-editor/styles.css";
+import { ARIcon } from "../../icons";
+import { Icons } from "../../../libs/types";
+import Button from "../button";
+import IProps from "./IProps";
+import React, { useEffect, useRef, useState } from "react";
+import Utils from "../../../libs/infrastructure/shared/Utils";
 
-const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, height, validation }) => {
+const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, height, multilang, validation }) => {
   // refs
   const _container = useRef<HTMLDivElement>(null);
   const _arIframe = useRef<HTMLIFrameElement>(null);
@@ -79,7 +79,6 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
   // useEffects
   useEffect(() => {
     // Iframe Document yüklendikten sonra çalışacaktır.
-
     if (!iframeDocument) return;
 
     const selection = iframeDocument.getSelection();
@@ -89,7 +88,10 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
     if (selection && selection.rangeCount > 0) range = selection.getRangeAt(0);
 
     // Eğer içeriği kendimiz değiştirmedikse ve gelen value farklıysa, içeriği güncelle
-    if (iframeDocument.body.innerHTML !== value) iframeDocument.body.innerHTML = value || `<p>${placeholder ?? ""}</p>`;
+    if (iframeDocument.body.innerHTML !== value) {
+      // iframeDocument.body.innerHTML = value || `<p>${placeholder ?? ""}</p>`;
+      iframeDocument.body.innerHTML = value ?? "";
+    }
 
     // Cursor (caret) konumunu geri yükle
     if (range) {
@@ -103,30 +105,32 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
 
     if (!iframe) return;
 
-    const iframeDocument = iframe.contentDocument || iframe.contentWindow?.document;
-    if (!iframeDocument) return; // 👈 Güvenlik önlemi
+    const _iframeDocument = iframe.contentDocument || iframe.contentWindow?.document;
+    if (!_iframeDocument) return;
+
+    setIframeDocument(_iframeDocument);
+    _iframeDocument.designMode = "on";
 
     // Herhangi bir değişikliği izlemek için MutationObserver kullan
     const observer = new MutationObserver((mutationsList) => {
       mutationsList.forEach(() => {
-        iframeDocument?.body.innerHTML === "<br>" ? onChange(undefined) : onChange(iframeDocument.body.innerHTML);
+        _iframeDocument?.body.innerHTML === "<br>"
+          ? onChangeRef.current(undefined)
+          : onChangeRef.current(_iframeDocument.body.innerHTML);
       });
     });
 
-    setIframeDocument(iframeDocument);
-    iframeDocument.designMode = "on";
-
     // Observer'ı body üzerinde başlat
-    observer.observe(iframeDocument.body, { childList: true, subtree: true, characterData: true, attributes: true });
+    observer.observe(_iframeDocument.body, { childList: true, subtree: true, characterData: true, attributes: true });
 
-    iframeDocument.body.addEventListener("focus", handleFocus);
-    iframeDocument.body.addEventListener("blur", handleBlur);
+    _iframeDocument.body.addEventListener("focus", handleFocus);
+    _iframeDocument.body.addEventListener("blur", handleBlur);
 
     return () => {
       observer.disconnect();
 
-      iframeDocument?.body.removeEventListener("focus", handleFocus);
-      iframeDocument?.body.removeEventListener("blur", handleBlur);
+      _iframeDocument?.body.removeEventListener("focus", handleFocus);
+      _iframeDocument?.body.removeEventListener("blur", handleBlur);
     };
   }, [iframe]);
 
@@ -142,6 +146,13 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
       }
     };
   }, []);
+
+  const onChangeRef = useRef(onChange);
+
+  // onChange değiştiğinde ref'i güncelle
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
 
   return (
     <div ref={_container} className="ar-text-editor">
