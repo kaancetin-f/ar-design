@@ -186,7 +186,7 @@ const Table = forwardRef(
       return Object.entries(searchedText).every(([key, value]) => {
         const _itemValue = item[key as keyof typeof item];
 
-        if (typeof _itemValue === "number" || typeof _itemValue === "string") {
+        if (typeof _itemValue === "number" || typeof _itemValue === "string" || typeof _itemValue === "boolean") {
           if (Array.isArray(value)) {
             if (value.length === 0) return true;
             else return value.some((v) => _itemValue.toString().toLocaleLowerCase().includes(v.toLocaleLowerCase()));
