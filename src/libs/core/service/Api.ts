@@ -35,6 +35,10 @@ class Api {
     headers?: HeadersInit;
     init?: Omit<RequestInit | undefined, "body">;
   }): Promise<Response> {
+    if (values.input && values.input.toString().includes("?")) {
+      values.input = values.input.toString().replace(/\/(?=\?)/, "");
+    }
+
     const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "POST",
       headers: { ...this.HeaderProperties(), ...values.headers },
@@ -51,6 +55,10 @@ class Api {
     headers?: HeadersInit;
     init?: Omit<RequestInit | undefined, "body">;
   }): Promise<Response> {
+    if (values.input && values.input.toString().includes("?")) {
+      values.input = values.input.toString().replace(/\/(?=\?)/, "");
+    }
+
     const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "POST",
       headers: { ...this.HeaderProperties(), ...values.headers },
@@ -67,6 +75,10 @@ class Api {
     headers?: HeadersInit;
     init?: Omit<RequestInit | undefined, "body">;
   }): Promise<Response> {
+    if (values.input && values.input.toString().includes("?")) {
+      values.input = values.input.toString().replace(/\/(?=\?)/, "");
+    }
+
     const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "PUT",
       headers: {
@@ -81,6 +93,10 @@ class Api {
   }
 
   async Delete(values: { input?: RequestInfo; headers?: HeadersInit }): Promise<Response> {
+    if (values.input && values.input.toString().includes("?")) {
+      values.input = values.input.toString().replace(/\/(?=\?)/, "");
+    }
+
     const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "DELETE",
       headers: {
