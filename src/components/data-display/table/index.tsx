@@ -382,8 +382,18 @@ const Table = forwardRef(
 
     useEffect(() => {
       if (config?.isServerSide && searchedParams) {
-        const query = new URLSearchParams(_searchedParams).toString();
-        searchedParams(_searchedParams, query);
+        const query = new URLSearchParams(_searchedParams);
+
+        columns.forEach((column) => {
+          const getParamsLength = column.filters?.length;
+          const searchedParamLength = Array.from(
+            _searchedParams?.[column.key as keyof typeof _searchedParams] ?? []
+          ).length;
+
+          if (getParamsLength === searchedParamLength) query.delete(column.key as string);
+        });
+
+        searchedParams(_searchedParams, query.toString());
       }
     }, [_searchedParams]);
 
