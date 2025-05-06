@@ -2,6 +2,7 @@ import Api from "./Api";
 
 type Result<TResponse> = {
   response: TResponse;
+  __response__: Response;
   __ok__: boolean;
   __statusCode__: number;
   __statusText__: string;
@@ -129,6 +130,7 @@ class Service {
 
     return {
       response: _response,
+      __response__: response,
       __ok__: response.ok,
       __statusCode__: response.status,
       __statusText__: response.statusText,
