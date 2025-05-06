@@ -2,7 +2,7 @@ import Api from "./Api";
 
 type Result<TResponse> = {
   response: TResponse;
-  __response__: Response;
+  __response__: Promise<Response> | null;
   __ok__: boolean;
   __statusCode__: number;
   __statusText__: string;
@@ -22,12 +22,12 @@ class Service {
       let endPoint: string = `${this._endPoint}`;
       if (values?.input) endPoint += `/${values.input}`;
 
-      const response = await this._api.Get({
+      const { p_response, response } = await this._api.Get({
         input: endPoint,
         headers: values?.headers,
       });
 
-      return await this.Response(response);
+      return await this.Response(p_response, response);
     } catch (error) {
       throw new Error(error instanceof Error ? error.message : "Beklenmeyen bir hata oluştu.");
     }
@@ -50,7 +50,7 @@ class Service {
         init: values?.init,
       });
 
-      return await this.Response(response);
+      return await this.Response(null, response);
     } catch (error) {
       throw new Error(error instanceof Error ? error.message : "Beklenmeyen bir hata oluştu.");
     }
@@ -73,7 +73,7 @@ class Service {
         init: values?.init,
       });
 
-      return await this.Response(response);
+      return await this.Response(null, response);
     } catch (error) {
       throw new Error(error instanceof Error ? error.message : "Beklenmeyen bir hata oluştu.");
     }
@@ -96,7 +96,7 @@ class Service {
         init: values?.init,
       });
 
-      return await this.Response(response);
+      return await this.Response(null, response);
     } catch (error) {
       throw new Error(error instanceof Error ? error.message : "Beklenmeyen bir hata oluştu.");
     }
@@ -112,13 +112,13 @@ class Service {
         headers: values?.headers,
       });
 
-      return await this.Response(response);
+      return await this.Response(null, response);
     } catch (error) {
       throw new Error(error instanceof Error ? error.message : "Beklenmeyen bir hata oluştu.");
     }
   }
 
-  private Response = async (response: Response) => {
+  private Response = async (p_response: Promise<Response> | null, response: Response) => {
     const text = (await response.text()).trim();
     let _response;
 
@@ -130,7 +130,7 @@ class Service {
 
     return {
       response: _response,
-      __response__: response,
+      __response__: p_response,
       __ok__: response.ok,
       __statusCode__: response.status,
       __statusText__: response.statusText,

@@ -13,20 +13,22 @@ class Api {
     this._url = `${this._host}/${this._core ? this._core + "/" : ""}`;
   }
 
-  async Get(values: { input?: RequestInfo | undefined; headers?: HeadersInit }): Promise<Response> {
+  async Get(values: { input?: RequestInfo | undefined; headers?: HeadersInit }) {
     if (values.input && values.input.toString().includes("?")) {
       values.input = values.input.toString().replace(/\/(?=\?)/, "");
     }
 
-    const response = await this.CustomFetch(`${this._url}${values.input}`, {
+    const p_response = this.CustomFetch(`${this._url}${values.input}`, {
       method: "GET",
       headers: {
         ...this.HeaderProperties(),
         ...values.headers,
       },
     });
+    const clone = (await p_response).clone();
+    const response = await clone;
 
-    return response;
+    return { p_response, response };
   }
 
   async Post(values: {
