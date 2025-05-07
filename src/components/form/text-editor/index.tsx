@@ -12,6 +12,8 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
   // refs
   const _container = useRef<HTMLDivElement>(null);
   const _arIframe = useRef<HTMLIFrameElement>(null);
+  const _onChange = useRef(onChange);
+  const _onChangeTimeOut = useRef<NodeJS.Timeout | null>(null);
 
   // states
   const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null);
@@ -101,8 +103,12 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
   }, [value, iframeDocument]);
 
   useEffect(() => {
-    // Iframe yüklendikten sonra çalışacaktır.
+    // onChange değiştiğinde ref'i güncelle
+    _onChange.current = onChange;
+  }, [onChange]);
 
+  useEffect(() => {
+    // Iframe yüklendikten sonra çalışacaktır.
     if (!iframe) return;
 
     const _iframeDocument = iframe.contentDocument || iframe.contentWindow?.document;
@@ -113,11 +119,15 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
 
     // Herhangi bir değişikliği izlemek için MutationObserver kullan
     const observer = new MutationObserver((mutationsList) => {
-      mutationsList.forEach(() => {
-        _iframeDocument?.body.innerHTML === "<br>"
-          ? onChangeRef.current(undefined)
-          : onChangeRef.current(_iframeDocument.body.innerHTML);
-      });
+      if (_onChangeTimeOut.current) clearTimeout(_onChangeTimeOut.current);
+
+      _onChangeTimeOut.current = setTimeout(() => {
+        mutationsList.forEach(() => {
+          _iframeDocument?.body.innerHTML === "<br>"
+            ? _onChange.current(undefined)
+            : _onChange.current(_iframeDocument.body.innerHTML);
+        });
+      }, 750);
     });
 
     // Observer'ı body üzerinde başlat
@@ -147,15 +157,10 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
     };
   }, []);
 
-  const onChangeRef = useRef(onChange);
-
-  // onChange değiştiğinde ref'i güncelle
-  useEffect(() => {
-    onChangeRef.current = onChange;
-  }, [onChange]);
-
   return (
     <div ref={_container} className="ar-text-editor">
+      <iframe ref={_arIframe} name={name} className={_iframeClassName.map((c) => c).join(" ")} height={height} />
+
       <div className="toolbar">
         {toolbarButtons.map(({ command, icon, tooltip }) => (
           <Button
@@ -163,6 +168,7 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
             type="button"
             variant="borderless"
             status="secondary"
+            border={{ radius: "none" }}
             icon={{ element: <ARIcon icon={icon} size={18} fill="var(--gray-700)" /> }}
             tooltip={{
               text: tooltip,
@@ -171,8 +177,6 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
           />
         ))}
       </div>
-
-      <iframe ref={_arIframe} name={name} className={_iframeClassName.map((c) => c).join(" ")} height={height} />
 
       <div className="resize" onMouseDown={handleMouseDown}></div>
 

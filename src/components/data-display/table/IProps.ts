@@ -7,6 +7,8 @@ export type SearchedParam = { [key: string]: string };
 type ImportActionType = {
   tooltip: string;
   allowedTypes?: AllowedTypes[];
+  prefixItem?: React.ReactNode;
+  suffixItem?: React.ReactNode;
   onClick: (formData: FormData | undefined, files: File[]) => void;
 };
 
@@ -30,7 +32,7 @@ interface IProps<T> extends IChildren {
   pagination?: {
     totalRecords: number;
     perPage: number;
-    onChange: (currentPage: number) => void;
+    onChange?: (currentPage: number) => void;
   };
   config?: {
     isServerSide?: boolean;

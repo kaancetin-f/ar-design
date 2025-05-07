@@ -78,7 +78,7 @@ const TableWithRef = forwardRef(
         filterCleaner: () => {
           if (config.isServerSide) {
             setSearchedParams({});
-            pagination && pagination.onChange(1);
+            // pagination && pagination.onChange(1);
           } else {
             setSearchedText({});
           }
@@ -164,7 +164,7 @@ const TableWithRef = forwardRef(
         _searchTimeOut.current = setTimeout(() => {
           setSearchedParams((prev) => ({ ...prev, [event.target.name]: event.target.value }));
           setCurrentPage(1);
-          pagination && pagination.onChange(1);
+          // pagination && pagination.onChange(1);
         }, 750);
       } else {
         setCurrentPage(1);
@@ -291,7 +291,7 @@ const TableWithRef = forwardRef(
       }
 
       setCurrentPage(1);
-      pagination && pagination.onChange(1);
+      // pagination && pagination.onChange(1);
       // Filters...
       // setSelectedfilterCheckboxItems((prev) => {
       //   debugger;
@@ -637,7 +637,7 @@ const TableWithRef = forwardRef(
               currentPage={currentPage}
               perPage={pagination.perPage}
               onChange={(currentPage) => {
-                config.isServerSide && pagination.onChange(currentPage);
+                // config.isServerSide && pagination.onChange(currentPage);
                 setCurrentPage(currentPage);
               }}
             />

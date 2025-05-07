@@ -142,7 +142,7 @@ const Table = forwardRef(
 
         _searchTimeOut.current = setTimeout(() => {
           setSearchedParams((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-          pagination && pagination.onChange(1);
+          if (pagination && pagination.onChange) pagination.onChange(1);
         }, 750);
       } else {
         setSearchedText((prev) => {
@@ -407,7 +407,7 @@ const Table = forwardRef(
       }
 
       setCurrentPage(1);
-      pagination && pagination.onChange(1);
+      if (pagination && pagination.onChange) pagination.onChange(1);
     }, [checkboxSelectedParams]);
 
     useEffect(() => {
@@ -441,16 +441,22 @@ const Table = forwardRef(
                       title="İçeri Aktar"
                       message="Seçtiğiniz dosyaları uygulamaya yükleyebilirsiniz. Bu işlem, dosyalardaki verileri sistemimize aktarır ve verilerle işlem yapmanıza olanak tanır."
                       content={
-                        <Upload
-                          text="Belge Yükleyin"
-                          allowedTypes={actions.import.allowedTypes}
-                          file={files}
-                          onChange={(formData, files) => {
-                            setFormData(formData);
-                            setFiles(files);
-                          }}
-                          multiple
-                        />
+                        <>
+                          {actions.import.prefixItem}
+
+                          <Upload
+                            text="Belge Yükleyin"
+                            allowedTypes={actions.import.allowedTypes}
+                            file={files}
+                            onChange={(formData, files) => {
+                              setFormData(formData);
+                              setFiles(files);
+                            }}
+                            multiple
+                          />
+
+                          {actions.import.suffixItem}
+                        </>
                       }
                       onConfirm={(confirm) => {
                         if (!confirm) {
@@ -645,7 +651,8 @@ const Table = forwardRef(
               currentPage={currentPage}
               perPage={pagination.perPage}
               onChange={(currentPage) => {
-                config.isServerSide && pagination.onChange(currentPage);
+                if (config.isServerSide && pagination && pagination.onChange) pagination.onChange(currentPage);
+
                 setCurrentPage(currentPage);
               }}
             />
