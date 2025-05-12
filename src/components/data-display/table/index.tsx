@@ -51,6 +51,7 @@ const Table = forwardRef(
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [selectionItems, setSelectionItems] = useState<T[]>([]);
     const [showSubitems, setShowSubitems] = useState<{ [key: string]: boolean }>({});
+    const [isTrueSubitems, setIsTrueSubitems] = useState<{ [key: string]: boolean }>({});
     // states -> File
     const [files, setFiles] = useState<File[]>([]);
     const [formData, setFormData] = useState<FormData | undefined>(undefined);
@@ -228,12 +229,7 @@ const Table = forwardRef(
           if (_subrowSelector in item) {
             setShowSubitems((prev) => ({
               ...prev,
-              [`${index}`]: !prev[`${index}`],
-            }));
-          } else {
-            setShowSubitems((prev) => ({
-              ...prev,
-              [`${index}`]: false,
+              [`${index}`]: true,
             }));
           }
         });
@@ -326,8 +322,6 @@ const Table = forwardRef(
                     <span
                       className={`subitem-open-button ${(showSubitems[index] && "opened") ?? ""}`}
                       onClick={() => {
-                        console.log(showSubitems);
-
                         setShowSubitems((prev) => ({
                           ...prev,
                           [`${index}`]: !prev[`${index}`],
