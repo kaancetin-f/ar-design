@@ -56,9 +56,13 @@
 
 .ar-table > .content > table > thead > tr > th,
 .ar-table > .content > table > tbody > tr > td {
-  height: 3rem;
-  padding: 0 1.5rem;
+  height: 2.5rem;
 }
+.ar-table > .content > table > thead > tr > th,
+.ar-table > .content > table > tbody > tr > td > .table-cell {
+  padding: 0 1rem;
+}
+
 .ar-table > .content > table > thead > tr > th.min-w,
 .ar-table > .content > table > tbody > tr > td.min-w {
   min-width: 150px;
@@ -157,7 +161,10 @@
   text-wrap: nowrap;
 }
 
-.ar-table > .content > table > tbody > tr > td > span.subitem-open-button {
+.ar-table > .content > table > tbody > tr > td > .subitem-open-button-wrapper {
+  padding: 0 1rem;
+}
+.ar-table > .content > table > tbody > tr > td > .subitem-open-button-wrapper > span {
   display: inline-block;
   width: 0.75rem;
   height: 0.75rem;
@@ -168,10 +175,10 @@
   cursor: pointer;
   transition: transform 100ms ease-in-out;
 }
-.ar-table > .content > table > tbody > tr > td > span.subitem-open-button.opened {
+.ar-table > .content > table > tbody > tr > td > .subitem-open-button-wrapper > span.opened {
   transform: rotate(135deg);
 }
-.ar-table > .content > table > tbody > tr > td > span.subitem-open-button.passive {
+.ar-table > .content > table > tbody > tr > td > .subitem-open-button-wrapper > span.passive {
   border-top-color: var(--gray-300);
   border-right-color: var(--gray-300);
   cursor: no-drop;

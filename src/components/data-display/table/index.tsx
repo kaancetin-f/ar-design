@@ -40,7 +40,9 @@ const Table = forwardRef(
     const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
 
     // variables
-    const _subrowSelector: string = config.subrowSelector ?? "subitems";
+    const _subrowOpenAutomatically: boolean = config.subrow?.openAutomatically ?? false;
+    const _subrowSelector: string = config.subrow?.selector ?? "subitems";
+    const _subrowButton: boolean = config.subrow?.button ?? false;
 
     // className
     const _tableClassName: string[] = ["ar-table", "scroll"];
@@ -199,17 +201,15 @@ const Table = forwardRef(
           if (Array.isArray(value)) {
             if (value.length === 0) return true;
             else {
-              return value.some((v) =>
-                Object.entries(_itemValue ?? {}).some(([_, objValue]) =>
-                  String(objValue).toLocaleLowerCase().includes(v.toLocaleLowerCase())
-                )
-              );
+              return value.some((v) => {
+                if (Array.isArray(_itemValue)) {
+                  return Object.values(_itemValue?.[0 as keyof typeof _itemValue] ?? {}).some((objValue) => {
+                    return String(objValue).toLocaleLowerCase().includes(String(v).toLocaleLowerCase());
+                  });
+                }
+              });
             }
           }
-
-          return Object.entries(_itemValue ?? {}).some(([_, objValue]) =>
-            String(objValue).toLocaleLowerCase().includes(value.toLocaleLowerCase())
-          );
         }
 
         if (Array.isArray(_itemValue)) {
@@ -222,6 +222,22 @@ const Table = forwardRef(
 
     const getData = useMemo(() => {
       let _data: T[] = [...data];
+
+      if (_subrowOpenAutomatically) {
+        data.forEach((item, index) => {
+          if (_subrowSelector in item) {
+            setShowSubitems((prev) => ({
+              ...prev,
+              [`${index}`]: !prev[`${index}`],
+            }));
+          } else {
+            setShowSubitems((prev) => ({
+              ...prev,
+              [`${index}`]: false,
+            }));
+          }
+        });
+      }
 
       if (searchedText && Object.keys(searchedText).length > 0) {
         _data = _data.filter((item) => deepSearch(item, searchedText));
@@ -243,7 +259,7 @@ const Table = forwardRef(
       return _data;
     }, [data, searchedText, currentPage]);
 
-    const renderCell = (item: T, c: TableColumnType<T>, cIndex: number, index: number) => {
+    const renderCell = (item: T, c: TableColumnType<T>, cIndex: number, index: number, depth: number) => {
       let render: any;
 
       // `c.key` bir string ise
@@ -253,12 +269,12 @@ const Table = forwardRef(
       // `c.key` bir nesne ise ve `nestedKey` mevcutsa
       else if (typeof c.key === "object") {
         const _item = item[c.key.field as keyof T];
+
         if (_item && typeof _item === "object") {
           render = c.render ? c.render(item) : _item[c.key.nestedKey as keyof typeof _item];
         }
-      }
-      // Diğer durumlarda `null` döndür
-      else {
+      } else {
+        // Diğer durumlarda `null` döndür
         render = null;
       }
 
@@ -271,15 +287,19 @@ const Table = forwardRef(
         <td
           key={`cell-${index}-${cIndex}`}
           className={_className.join(" ")}
-          style={c.config?.width ? { minWidth: c.config.width, maxWidth: c.config.width } : {}}
+          style={
+            c.config?.width ? { minWidth: c.config.width, maxWidth: c.config.width, paddingLeft: `${depth}rem` } : {}
+          }
           data-sticky-position={c.config?.sticky}
         >
-          {React.isValidElement(render) ? render : String(render)}
+          <div className="table-cell">{React.isValidElement(render) ? render : String(render)}</div>
         </td>
       );
     };
 
     const renderRow = (item: T, index: number) => {
+      const isHasSubitems = _subrowSelector in item;
+
       return (
         <>
           <tr key={`row-${index}`}>
@@ -299,23 +319,29 @@ const Table = forwardRef(
               </td>
             )}
 
-            {data.some((item) => _subrowSelector in item) && (
-              <td style={{ width: 1 }}>
+            {_subrowButton && isHasSubitems ? (
+              <td>
                 {item[_subrowSelector as keyof typeof item] && (
-                  <span
-                    className={`subitem-open-button ${showSubitems[index] && "opened"}`}
-                    onClick={() => {
-                      setShowSubitems((prev) => ({
-                        ...prev,
-                        [`${index}`]: !prev[`${index}`],
-                      }));
-                    }}
-                  />
+                  <div className="subitem-open-button-wrapper">
+                    <span
+                      className={`subitem-open-button ${(showSubitems[index] && "opened") ?? ""}`}
+                      onClick={() => {
+                        console.log(showSubitems);
+
+                        setShowSubitems((prev) => ({
+                          ...prev,
+                          [`${index}`]: !prev[`${index}`],
+                        }));
+                      }}
+                    />
+                  </div>
                 )}
               </td>
-            )}
+            ) : _subrowButton ? (
+              <td style={{ width: 0, minWidth: 0 }}></td>
+            ) : null}
 
-            {columns.map((c, cIndex) => renderCell(item, c, cIndex, index))}
+            {columns.map((c, cIndex) => renderCell(item, c, cIndex, index, 0))}
           </tr>
 
           {/* Alt satırları burada listele */}
@@ -333,34 +359,38 @@ const Table = forwardRef(
 
     const SubitemList = ({ items, columns, index, depth }: any) => {
       return items.map((subitem: T, subindex: number) => {
-        const x = subitem[_subrowSelector as keyof typeof subitem];
+        const _subitem = subitem[_subrowSelector as keyof typeof subitem];
 
         return (
           <>
             <tr key={`subitem-${index}-${subindex}`}>
-              {data.some((item) => _subrowSelector in item) && (
-                <td style={{ paddingLeft: `${depth * 1.5}rem` }}>
-                  <span
-                    className={`subitem-open-button ${showSubitems[`${index}.${subindex}`] && "opened"} ${
-                      !x && "passive"
-                    }`}
-                    onClick={() => {
-                      if (!x) return;
+              {_subrowSelector in subitem && _subrowButton && (
+                <td style={{ paddingLeft: `${depth}rem` }}>
+                  <div className="subitem-open-button-wrapper">
+                    <span
+                      className={`${(showSubitems[`${index}.${subindex}`] && "opened") ?? ""} ${
+                        !_subitem && "passive"
+                      }`}
+                      onClick={() => {
+                        if (!_subitem) return;
 
-                      setShowSubitems((prev) => ({
-                        ...prev,
-                        [`${index}.${subindex}`]: !prev[`${index}.${subindex}`],
-                      }));
-                    }}
-                  />
+                        setShowSubitems((prev) => ({
+                          ...prev,
+                          [`${index}.${subindex}`]: !prev[`${index}.${subindex}`],
+                        }));
+                      }}
+                    />
+                  </div>
                 </td>
               )}
 
-              {columns.map((c: TableColumnType<T>, cIndex: number) => renderCell(subitem, c, cIndex, subindex))}
+              {columns.map((c: TableColumnType<T>, cIndex: number) =>
+                renderCell(subitem, c, cIndex, subindex, depth * 1.5)
+              )}
             </tr>
 
-            {showSubitems[`${index}.${subindex}`] && x && (
-              <SubitemList items={x as T[]} columns={columns} index={subindex} depth={depth * 1.5} />
+            {showSubitems[`${index}.${subindex}`] && _subitem && (
+              <SubitemList items={_subitem as T[]} columns={columns} index={subindex} depth={depth * 1.5} />
             )}
           </>
         );
@@ -498,7 +528,8 @@ const Table = forwardRef(
           <table ref={ref}>
             <thead>
               <tr key="selection">
-                {data.some((item) => _subrowSelector in item) && <td style={{ width: 1 }}></td>}
+                {/* {data.some((item) => _subrowSelector in item) && <td style={{ width: 0, minWidth: 0 }}></td>} */}
+                {_subrowButton && <td style={{ width: 0, minWidth: 0 }}></td>}
 
                 {selections && (
                   <th className="selection-col sticky-left" data-sticky-position="left">
