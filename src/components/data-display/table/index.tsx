@@ -221,19 +221,28 @@ const Table = forwardRef(
       });
     };
 
+    const openAllSubrowsRecursively = (data: T[], parentKey: string = ""): Record<string, boolean> => {
+      let result: Record<string, boolean> = {};
+
+      data.forEach((item, index) => {
+        const key = parentKey ? `${parentKey}.${index}` : `${index}`;
+        const subitems = item[_subrowSelector as keyof typeof item];
+
+        if (subitems && Array.isArray(subitems) && subitems.length > 0) {
+          const nested = openAllSubrowsRecursively(subitems as T[], key);
+
+          result[key] = true;
+          result = { ...result, ...nested };
+        }
+      });
+
+      return result;
+    };
+
     const getData = useMemo(() => {
       let _data: T[] = [...data];
 
-      if (_subrowOpenAutomatically) {
-        data.forEach((item, index) => {
-          if (_subrowSelector in item) {
-            setShowSubitems((prev) => ({
-              ...prev,
-              [`${index}`]: true,
-            }));
-          }
-        });
-      }
+      if (_subrowOpenAutomatically) setShowSubitems(openAllSubrowsRecursively(data));
 
       if (searchedText && Object.keys(searchedText).length > 0) {
         _data = _data.filter((item) => deepSearch(item, searchedText));
