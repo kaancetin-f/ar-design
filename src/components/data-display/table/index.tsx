@@ -6,7 +6,7 @@ import Button from "../../form/button";
 import Checkbox from "../../form/checkbox";
 import IProps, { SearchedParam } from "./IProps";
 import Pagination from "../../navigation/pagination";
-import React, { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { forwardRef, Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { HTMLTableElementWithCustomAttributes, TableColumnType } from "../../../libs/types";
 import Input from "../../form/input";
 import Popover from "../../feedback/popover";
@@ -304,9 +304,9 @@ const Table = forwardRef(
 
     const renderRow = (item: T, index: number) => {
       const isHasSubitems = _subrowSelector in item;
-
+      // TODO: Keylere bakılacak...
       return (
-        <>
+        <Fragment key={`row-${index}`}>
           <tr key={`row-${index}`}>
             {selections && (
               <td className="sticky-left" data-sticky-position="left">
@@ -356,7 +356,7 @@ const Table = forwardRef(
               depth={1.5}
             />
           )}
-        </>
+        </Fragment>
       );
     };
 
@@ -364,9 +364,10 @@ const Table = forwardRef(
       return items.map((subitem: T, subindex: number) => {
         const _subitem = subitem[_subrowSelector as keyof typeof subitem];
 
+        // TODO: Keylere bakılacak...
         return (
-          <>
-            <tr key={`subitem-${index}-${subindex}`}>
+          <Fragment key={`subitem-${index}-${subindex}-${Math.random()}`}>
+            <tr key={`subitem-${index}-${subindex}-${Math.random()}`}>
               {_subrowSelector in subitem && _subrowButton && (
                 <td style={{ paddingLeft: `${depth}rem` }}>
                   <div className="subitem-open-button-wrapper">
@@ -393,9 +394,15 @@ const Table = forwardRef(
             </tr>
 
             {showSubitems[`${index}.${subindex}`] && _subitem && (
-              <SubitemList items={_subitem as T[]} columns={columns} index={subindex} depth={depth * 1.5} />
+              <SubitemList
+                key={`subitem-${index}-${subindex}-${Math.random()}`} // TODO: Daha sonra tekrar bakılacak...
+                items={_subitem as T[]}
+                columns={columns}
+                index={subindex}
+                depth={depth * 1.5}
+              />
             )}
-          </>
+          </Fragment>
         );
       });
     };
