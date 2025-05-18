@@ -62,14 +62,25 @@
   position: absolute;
   background-color: var(--white);
   width: 200px;
-  height: 150px;
-  border: solid 1px var(--gray-300);
+  max-height: 250px;
+  border: solid 1px var(--gray-200);
   border-radius: var(--border-radius-lg);
   overflow-y: auto;
   overflow-x: hidden;
   box-shadow: 0 10px 15px -5px rgba(var(--black-rgb), 0.1);
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
   animation: opened ease-in-out 250ms 0s 1 normal both;
+}
+.ar-alias-panel > ul > li {
+  display: flex;
+  align-items: center;
+  gap: 0 0.5rem;
+  padding: 0 1rem;
+  height: var(--input-height);
+  cursor: pointer;
+}
+.ar-alias-panel > ul > li:hover {
+  background-color: var(--gray-100);
 }
 
 @keyframes opened {

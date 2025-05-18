@@ -1,6 +1,6 @@
 {
   "name": "ar-design",
-  "version": "0.2.49",
+  "version": "0.2.50",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",

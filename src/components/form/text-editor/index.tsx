@@ -22,17 +22,20 @@ const TextEditor = <T extends object>({
   // refs
   const _container = useRef<HTMLDivElement>(null);
   const _arIframe = useRef<HTMLIFrameElement>(null);
-  const _arAliasPanel = useRef<HTMLDivElement>(null);
-  const _target = useRef<Node | null>(null);
   const _onChange = useRef(onChange);
   const _onChangeTimeOut = useRef<NodeJS.Timeout | null>(null);
+  // refs -> Alias Panel
+  const _target = useRef<Node | null>(null);
+  const _arAliasPanel = useRef<HTMLDivElement>(null);
 
   // states
   const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null);
   const [iframeDocument, setIframeDocument] = useState<Document | undefined>(undefined);
-  const [atRect, setAtRect] = useState<DOMRect | null>(null);
   // states -> Data
   const [tagged, setTagged] = useState<T[]>([]);
+  // states -> Alias Panel
+  const [atRect, setAtRect] = useState<DOMRect | null>(null);
+  const [filtered, setFiltered] = useState<string | null>(null);
 
   // variables
   const toolbarButtons: { command: string; icon: Icons; tooltip: string }[] = [
@@ -96,6 +99,56 @@ const TextEditor = <T extends object>({
     }
   };
 
+  // methods -> Alias Panel
+  const handleBackSpaceKeydown = (event: KeyboardEvent) => {
+    const key = event.key;
+
+    if (key === "Backspace" || key === "Delete") {
+      const selection = _arIframe.current?.contentDocument?.getSelection();
+
+      if (!selection || selection.rangeCount === 0) return;
+
+      const range = selection.getRangeAt(0);
+
+      // 1. Çoklu seçim varsa: clone edip span'ları bul.
+      const contents = range.cloneContents();
+      const multiSpans = contents.querySelectorAll("span[data-tag]");
+
+      if (multiSpans.length > 0) {
+        event.preventDefault();
+
+        const tagsToRemove: string[] = [];
+        multiSpans.forEach((span) => {
+          const tag = span.getAttribute("data-tag");
+          if (tag) tagsToRemove.push(tag);
+        });
+
+        // DOM'dan temizle
+        range.deleteContents();
+
+        // State'ten temizle
+        setTagged((prev) => prev.filter((x) => tagsToRemove.every((tag) => !JSON.stringify(x).includes(tag))));
+        return;
+      }
+
+      // 2. Tekli seçim: caret bir span içindeyse sil
+      const node = selection.anchorNode;
+      const container = (node as HTMLElement)?.parentElement;
+
+      if (container?.tagName === "SPAN" && container.dataset.tag) {
+        event.preventDefault();
+
+        const tag = container.dataset.tag;
+
+        // DOM'dan sil
+        container.remove();
+
+        // State'ten kaldır
+        setTagged((prev) => prev.filter((x) => !JSON.stringify(x).includes(tag ?? "")));
+      }
+    }
+  };
+
   // useEffects
   useEffect(() => {
     // Iframe Document yüklendikten sonra çalışacaktır.
@@ -150,7 +203,7 @@ const TextEditor = <T extends object>({
               const atIndex = text.lastIndexOf(dynamicList?.triggerKey ?? "@");
 
               if (atIndex !== -1) {
-                const afterAt = text.slice(atIndex + 1);
+                const afterAt = text.slice(atIndex + 1); // @ sonrası metin.
                 const hasWhitespace = /\s/.test(afterAt);
 
                 if (!hasWhitespace) {
@@ -162,6 +215,7 @@ const TextEditor = <T extends object>({
                     range.collapse(true);
 
                     setAtRect(rect);
+                    setFiltered(afterAt);
                     return;
                   }
                 }
@@ -185,11 +239,19 @@ const TextEditor = <T extends object>({
     _iframeDocument.body.addEventListener("focus", handleFocus);
     _iframeDocument.body.addEventListener("blur", handleBlur);
 
+    if (dynamicList) {
+      _iframeDocument.body.addEventListener("keydown", handleBackSpaceKeydown);
+    }
+
     return () => {
       observer.disconnect();
 
-      _iframeDocument?.body.removeEventListener("focus", handleFocus);
-      _iframeDocument?.body.removeEventListener("blur", handleBlur);
+      _iframeDocument.body.removeEventListener("focus", handleFocus);
+      _iframeDocument.body.removeEventListener("blur", handleBlur);
+
+      if (dynamicList) {
+        _iframeDocument.body.removeEventListener("keydown", handleBackSpaceKeydown);
+      }
     };
   }, [iframe]);
 
@@ -235,8 +297,9 @@ const TextEditor = <T extends object>({
 
       {validation?.text && <span className="validation">{validation.text}</span>}
 
-      {/* @... */}
-      {atRect &&
+      {/* Dynamic List */}
+      {dynamicList &&
+        atRect &&
         ReactDOM.createPortal(
           <div
             ref={_arAliasPanel}
@@ -251,59 +314,78 @@ const TextEditor = <T extends object>({
           >
             <ul>
               {dynamicList &&
-                dynamicList.render.items.map((item) => (
-                  <li
-                    onClick={() => {
-                      const selection = iframeDocument?.getSelection();
-                      const target = _target.current;
+                dynamicList.render.items
+                  // .filter((fItem) => !tagged.some((t: T) => JSON.stringify(fItem) === JSON.stringify(t)))
+                  .filter((item) => {
+                    const displayText = (item[dynamicList.render.display as keyof typeof item] as string) ?? "";
 
-                      if (selection && selection.rangeCount > 0 && target && target.nodeType === Node.TEXT_NODE) {
-                        const text = target.textContent ?? "";
-                        const atIndex = text.lastIndexOf(dynamicList?.triggerKey ?? "@");
+                    return displayText.toLowerCase().includes((filtered as string).toLowerCase());
+                  })
+                  .map((item, index) => (
+                    <li
+                      key={index}
+                      onClick={(event) => {
+                        event.stopPropagation();
 
-                        if (atIndex !== -1) {
-                          const range = selection.getRangeAt(0).cloneRange();
-                          range.setStart(target, atIndex);
-                          range.setEnd(target, text.length);
-                          range.deleteContents();
+                        const selection = iframeDocument?.getSelection();
+                        const target = _target.current;
 
-                          const itemText = (item[dynamicList.render.display as keyof typeof item] as string) ?? "";
-                          const span = iframeDocument?.createElement("span");
-                          const spaceNode = iframeDocument?.createTextNode("\u200B");
+                        if (selection && selection.rangeCount > 0 && target && target.nodeType === Node.TEXT_NODE) {
+                          const text = target.textContent ?? "";
+                          const atIndex = text.lastIndexOf(dynamicList?.triggerKey ?? "@");
 
-                          if (span && spaceNode && iframeDocument) {
-                            span.style.color = "#720f67";
-                            span.style.fontWeight = "bold";
-                            span.textContent = `@${itemText} `;
+                          if (atIndex !== -1) {
+                            const range = selection.getRangeAt(0).cloneRange();
+                            range.setStart(target, atIndex);
+                            range.setEnd(target, text.length);
+                            range.deleteContents();
 
-                            // Yeni bir wrapper fragment oluştur
-                            const fragment = iframeDocument.createDocumentFragment();
-                            fragment.appendChild(span);
-                            fragment.appendChild(spaceNode); // görünmez boş node, ama yazılabilir
+                            const itemText = (item[dynamicList.render.display as keyof typeof item] as string) ?? "";
+                            const span = iframeDocument?.createElement("span");
+                            const spaceNode = iframeDocument?.createTextNode(" \u200B");
 
-                            range.insertNode(fragment);
+                            if (span && spaceNode && iframeDocument) {
+                              span.setAttribute("data-tag", `${itemText}`);
 
-                            // Cursor'u spaceNode’un sonuna yerleştir
-                            const newRange = iframeDocument.createRange();
-                            newRange.setStart(spaceNode, spaceNode.length);
-                            newRange.collapse(true);
-                            selection.removeAllRanges();
-                            selection.addRange(newRange);
+                              span.style.backgroundColor = "rgba(114, 15, 103, .1)";
+                              span.style.padding = "0 5px";
+                              span.style.borderRadius = "2px";
+                              span.style.color = "#720f67";
+                              span.style.fontWeight = "bold";
+                              span.textContent = `@${itemText}`;
 
-                            // Focus zaten varsa sorun olmayacak
-                            const activeEl = iframeDocument?.activeElement as HTMLElement;
-                            activeEl?.focus();
+                              // Yeni bir wrapper fragment oluştur
+                              const fragment = iframeDocument.createDocumentFragment();
+                              fragment.appendChild(span);
+                              fragment.appendChild(spaceNode); // görünmez boş node, ama yazılabilir
+
+                              range.insertNode(fragment);
+
+                              // Cursor'u spaceNode’un sonuna yerleştir
+                              const newRange = iframeDocument.createRange();
+                              newRange.setStart(spaceNode, spaceNode.length);
+                              newRange.collapse(true);
+                              selection.removeAllRanges();
+                              selection.addRange(newRange);
+
+                              // Focus zaten varsa sorun olmayacak
+                              const activeEl = iframeDocument?.activeElement as HTMLElement;
+                              activeEl?.focus();
+                            }
+
+                            setAtRect(null);
+                            setTagged((prev) => {
+                              const exists = prev.some((i) => JSON.stringify(i) === JSON.stringify(item));
+
+                              return exists ? prev : [...prev, item];
+                            });
                           }
-
-                          setAtRect(null);
-                          setTagged((prev) => [...prev, item]);
                         }
-                      }
-                    }}
-                  >
-                    {(item[dynamicList.render.display as keyof typeof item] as string) ?? ""}
-                  </li>
-                ))}
+                      }}
+                    >
+                      {(item[dynamicList.render.display as keyof typeof item] as string) ?? ""}
+                    </li>
+                  ))}
             </ul>
           </div>,
           document.body
