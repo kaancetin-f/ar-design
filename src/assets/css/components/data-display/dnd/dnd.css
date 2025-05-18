@@ -36,7 +36,7 @@
 }
 .ar-dnd > div.end-item {
   /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: endItem ease-in-out 1000ms 0s 1 normal both;
+  animation: endItem ease-in-out 1s 0s 1 normal both;
 }
 
 .ar-dnd > div > .move {

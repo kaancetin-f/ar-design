@@ -7,17 +7,32 @@ import Button from "../button";
 import IProps from "./IProps";
 import React, { useEffect, useRef, useState } from "react";
 import Utils from "../../../libs/infrastructure/shared/Utils";
+import ReactDOM from "react-dom";
 
-const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, height, multilang, validation }) => {
+const TextEditor = <T extends object>({
+  name,
+  value,
+  onChange,
+  dynamicList,
+  // placeholder,
+  height,
+  // multilang,
+  validation,
+}: IProps<T>) => {
   // refs
   const _container = useRef<HTMLDivElement>(null);
   const _arIframe = useRef<HTMLIFrameElement>(null);
+  const _arAliasPanel = useRef<HTMLDivElement>(null);
+  const _target = useRef<Node | null>(null);
   const _onChange = useRef(onChange);
   const _onChangeTimeOut = useRef<NodeJS.Timeout | null>(null);
 
   // states
   const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null);
   const [iframeDocument, setIframeDocument] = useState<Document | undefined>(undefined);
+  const [atRect, setAtRect] = useState<DOMRect | null>(null);
+  // states -> Data
+  const [tagged, setTagged] = useState<T[]>([]);
 
   // variables
   const toolbarButtons: { command: string; icon: Icons; tooltip: string }[] = [
@@ -52,7 +67,10 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
 
   const handleFocus = () => _arIframe.current?.classList.add("focused");
 
-  const handleBlur = () => _arIframe.current?.classList.remove("focused");
+  const handleBlur = () => {
+    _arIframe.current?.classList.remove("focused");
+    // setAtRect(null);
+  };
 
   const handleMouseDown = () => {
     // Resizebar a tıklandığında iframe içerisinde bulunan window'un event listenerı olmadığı için orada resize çalışmayacaktır.
@@ -122,7 +140,38 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
       if (_onChangeTimeOut.current) clearTimeout(_onChangeTimeOut.current);
 
       _onChangeTimeOut.current = setTimeout(() => {
-        mutationsList.forEach(() => {
+        mutationsList.forEach((record) => {
+          const target = record.target;
+          _target.current = record.target;
+
+          if (dynamicList) {
+            if (target.nodeType === Node.TEXT_NODE) {
+              const text = target.textContent ?? "";
+              const atIndex = text.lastIndexOf(dynamicList?.triggerKey ?? "@");
+
+              if (atIndex !== -1) {
+                const afterAt = text.slice(atIndex + 1);
+                const hasWhitespace = /\s/.test(afterAt);
+
+                if (!hasWhitespace) {
+                  const selection = _iframeDocument?.getSelection();
+
+                  if (selection && selection.rangeCount > 0) {
+                    const range = selection.getRangeAt(0).cloneRange();
+                    const rect = range.getBoundingClientRect();
+                    range.collapse(true);
+
+                    setAtRect(rect);
+                    return;
+                  }
+                }
+              }
+
+              // Eğer @ yoksa ya da boşluk varsa paneli kapat.
+              setAtRect(null);
+            }
+          }
+
           _iframeDocument?.body.innerHTML === "<br>"
             ? _onChange.current(undefined)
             : _onChange.current(_iframeDocument.body.innerHTML);
@@ -143,6 +192,10 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
       _iframeDocument?.body.removeEventListener("blur", handleBlur);
     };
   }, [iframe]);
+
+  useEffect(() => {
+    dynamicList?.onTagged && dynamicList?.onTagged(tagged);
+  }, [tagged]);
 
   useEffect(() => {
     if (!_arIframe.current) return;
@@ -181,6 +234,80 @@ const TextEditor: React.FC<IProps> = ({ name, value, onChange, placeholder, heig
       <div className="resize" onMouseDown={handleMouseDown}></div>
 
       {validation?.text && <span className="validation">{validation.text}</span>}
+
+      {/* @... */}
+      {atRect &&
+        ReactDOM.createPortal(
+          <div
+            ref={_arAliasPanel}
+            className="ar-alias-panel"
+            style={{
+              top: (_arIframe.current?.getBoundingClientRect().top ?? 0) + atRect.top + 20,
+              left: (_arIframe.current?.getBoundingClientRect().left ?? 0) + atRect.left,
+            }}
+            onClick={() => {
+              setAtRect(null);
+            }}
+          >
+            <ul>
+              {dynamicList &&
+                dynamicList.render.items.map((item) => (
+                  <li
+                    onClick={() => {
+                      const selection = iframeDocument?.getSelection();
+                      const target = _target.current;
+
+                      if (selection && selection.rangeCount > 0 && target && target.nodeType === Node.TEXT_NODE) {
+                        const text = target.textContent ?? "";
+                        const atIndex = text.lastIndexOf(dynamicList?.triggerKey ?? "@");
+
+                        if (atIndex !== -1) {
+                          const range = selection.getRangeAt(0).cloneRange();
+                          range.setStart(target, atIndex);
+                          range.setEnd(target, text.length);
+                          range.deleteContents();
+
+                          const itemText = (item[dynamicList.render.display as keyof typeof item] as string) ?? "";
+                          const span = iframeDocument?.createElement("span");
+                          const spaceNode = iframeDocument?.createTextNode("\u200B");
+
+                          if (span && spaceNode && iframeDocument) {
+                            span.style.color = "#720f67";
+                            span.style.fontWeight = "bold";
+                            span.textContent = `@${itemText} `;
+
+                            // Yeni bir wrapper fragment oluştur
+                            const fragment = iframeDocument.createDocumentFragment();
+                            fragment.appendChild(span);
+                            fragment.appendChild(spaceNode); // görünmez boş node, ama yazılabilir
+
+                            range.insertNode(fragment);
+
+                            // Cursor'u spaceNode’un sonuna yerleştir
+                            const newRange = iframeDocument.createRange();
+                            newRange.setStart(spaceNode, spaceNode.length);
+                            newRange.collapse(true);
+                            selection.removeAllRanges();
+                            selection.addRange(newRange);
+
+                            // Focus zaten varsa sorun olmayacak
+                            const activeEl = iframeDocument?.activeElement as HTMLElement;
+                            activeEl?.focus();
+                          }
+
+                          setAtRect(null);
+                          setTagged((prev) => [...prev, item]);
+                        }
+                      }
+                    }}
+                  >
+                    {(item[dynamicList.render.display as keyof typeof item] as string) ?? ""}
+                  </li>
+                ))}
+            </ul>
+          </div>,
+          document.body
+        )}
     </div>
   );
 };
