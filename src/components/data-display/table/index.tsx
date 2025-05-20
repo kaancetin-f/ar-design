@@ -42,7 +42,7 @@ const Table = forwardRef(
     // variables
     const _subrowOpenAutomatically: boolean = config.subrow?.openAutomatically ?? false;
     const _subrowSelector: string = config.subrow?.selector ?? "subitems";
-    const _subrowButton: boolean = config.subrow?.button ?? false;
+    const _subrowButton: boolean = config.subrow?.button ?? true;
 
     // className
     const _tableClassName: string[] = ["ar-table", "scroll"];
@@ -264,44 +264,6 @@ const Table = forwardRef(
       return _data;
     }, [data, searchedText, currentPage]);
 
-    const renderCell = (item: T, c: TableColumnType<T>, cIndex: number, index: number, depth: number) => {
-      let render: any;
-
-      // `c.key` bir string ise
-      if (typeof c.key !== "object") {
-        render = c.render ? c.render(item) : item[c.key as keyof T];
-      }
-      // `c.key` bir nesne ise ve `nestedKey` mevcutsa
-      else if (typeof c.key === "object") {
-        const _item = item[c.key.field as keyof T];
-
-        if (_item && typeof _item === "object") {
-          render = c.render ? c.render(item) : _item[c.key.nestedKey as keyof typeof _item];
-        }
-      } else {
-        // Diğer durumlarda `null` döndür
-        render = null;
-      }
-
-      const _className: string[] = [];
-      if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
-      if (c.config?.alignContent) _className.push(`align-content-${c.config.alignContent}`);
-      if (c.config?.textWrap) _className.push(`text-${c.config.textWrap}`);
-
-      return (
-        <td
-          key={`cell-${index}-${cIndex}`}
-          className={_className.join(" ")}
-          style={
-            c.config?.width ? { minWidth: c.config.width, maxWidth: c.config.width, paddingLeft: `${depth}rem` } : {}
-          }
-          data-sticky-position={c.config?.sticky}
-        >
-          <div className="table-cell">{React.isValidElement(render) ? render : String(render)}</div>
-        </td>
-      );
-    };
-
     const renderRow = (item: T, index: number) => {
       const isHasSubitems = _subrowSelector in item;
       // TODO: Keylere bakılacak...
@@ -360,6 +322,44 @@ const Table = forwardRef(
       );
     };
 
+    const renderCell = (item: T, c: TableColumnType<T>, cIndex: number, index: number, depth: number) => {
+      let render: any;
+
+      // `c.key` bir string ise
+      if (typeof c.key !== "object") {
+        render = c.render ? c.render(item) : item[c.key as keyof T];
+      }
+      // `c.key` bir nesne ise ve `nestedKey` mevcutsa
+      else if (typeof c.key === "object") {
+        const _item = item[c.key.field as keyof T];
+
+        if (_item && typeof _item === "object") {
+          render = c.render ? c.render(item) : _item[c.key.nestedKey as keyof typeof _item];
+        }
+      } else {
+        // Diğer durumlarda `null` döndür
+        render = null;
+      }
+
+      const _className: string[] = [];
+      if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
+      if (c.config?.alignContent) _className.push(`align-content-${c.config.alignContent}`);
+      if (c.config?.textWrap) _className.push(`text-${c.config.textWrap}`);
+
+      return (
+        <td
+          key={`cell-${index}-${cIndex}`}
+          className={_className.join(" ")}
+          style={c.config?.width ? { minWidth: c.config.width, maxWidth: c.config.width } : {}}
+          data-sticky-position={c.config?.sticky}
+        >
+          <div style={{ paddingLeft: `${depth}rem` }} className="table-cell">
+            {React.isValidElement(render) ? render : String(render)}
+          </div>
+        </td>
+      );
+    };
+
     const SubitemList = ({ items, columns, index, depth }: any) => {
       return items.map((subitem: T, subindex: number) => {
         const _subitem = subitem[_subrowSelector as keyof typeof subitem];
@@ -367,9 +367,12 @@ const Table = forwardRef(
         // TODO: Keylere bakılacak...
         return (
           <Fragment key={`subitem-${index}-${subindex}-${Math.random()}`}>
-            <tr key={`subitem-${index}-${subindex}-${Math.random()}`}>
-              {_subrowSelector in subitem && _subrowButton && (
-                <td style={{ paddingLeft: `${depth}rem` }}>
+            <tr
+              key={`subitem-${index}-${subindex}-${Math.random()}`}
+              className={`subrow-item ${_subrowButton ? "type-b" : "type-a"}`}
+            >
+              {_subrowSelector in subitem && _subrowButton ? (
+                <td>
                   <div className="subitem-open-button-wrapper">
                     <span
                       className={`${(showSubitems[`${index}.${subindex}`] && "opened") ?? ""} ${
@@ -386,7 +389,9 @@ const Table = forwardRef(
                     />
                   </div>
                 </td>
-              )}
+              ) : _subrowButton ? (
+                <td style={{ width: 0, minWidth: 0 }}></td>
+              ) : null}
 
               {columns.map((c: TableColumnType<T>, cIndex: number) =>
                 renderCell(subitem, c, cIndex, subindex, depth * 1.5)
