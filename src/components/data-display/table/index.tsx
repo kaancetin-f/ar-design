@@ -286,7 +286,7 @@ const Table = forwardRef(
               </td>
             )}
 
-            {_subrowButton && isHasSubitems ? (
+            {isHasSubitems && _subrowButton ? (
               <td>
                 {item[_subrowSelector as keyof typeof item] && (
                   <div className="subitem-open-button-wrapper">
@@ -302,7 +302,7 @@ const Table = forwardRef(
                   </div>
                 )}
               </td>
-            ) : _subrowButton ? (
+            ) : isHasSubitems && _subrowButton ? (
               <td style={{ width: 0, minWidth: 0 }}></td>
             ) : null}
 
@@ -363,6 +363,7 @@ const Table = forwardRef(
     const SubitemList = ({ items, columns, index, depth }: any) => {
       return items.map((subitem: T, subindex: number) => {
         const _subitem = subitem[_subrowSelector as keyof typeof subitem];
+        const isHasSubitems = _subrowSelector in subitem;
 
         // TODO: Keylere bakılacak...
         return (
@@ -371,7 +372,7 @@ const Table = forwardRef(
               key={`subitem-${index}-${subindex}-${Math.random()}`}
               className={`subrow-item ${_subrowButton ? "type-b" : "type-a"}`}
             >
-              {_subrowSelector in subitem && _subrowButton ? (
+              {isHasSubitems && _subrowButton ? (
                 <td>
                   <div className="subitem-open-button-wrapper">
                     <span
@@ -389,7 +390,7 @@ const Table = forwardRef(
                     />
                   </div>
                 </td>
-              ) : _subrowButton ? (
+              ) : isHasSubitems && _subrowButton ? (
                 <td style={{ width: 0, minWidth: 0 }}></td>
               ) : null}
 
@@ -543,8 +544,9 @@ const Table = forwardRef(
           <table ref={ref}>
             <thead>
               <tr key="selection">
-                {/* {data.some((item) => _subrowSelector in item) && <td style={{ width: 0, minWidth: 0 }}></td>} */}
-                {_subrowButton && <td style={{ width: 0, minWidth: 0 }}></td>}
+                {data.some((item) => _subrowSelector in item) && _subrowButton && (
+                  <td style={{ width: 0, minWidth: 0 }}></td>
+                )}
 
                 {selections && (
                   <th className="selection-col sticky-left" data-sticky-position="left">
