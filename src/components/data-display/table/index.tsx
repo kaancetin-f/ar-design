@@ -353,7 +353,7 @@ const Table = forwardRef(
           style={c.config?.width ? { minWidth: c.config.width, maxWidth: c.config.width } : {}}
           data-sticky-position={c.config?.sticky}
         >
-          <div style={{ paddingLeft: `${depth}rem` }} className="table-cell">
+          <div style={{ paddingLeft: `${depth == 0 ? 1 : depth}rem` }} className="table-cell">
             {React.isValidElement(render) ? render : String(render)}
           </div>
         </td>
