@@ -51,7 +51,6 @@ const Table = forwardRef(
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [selectionItems, setSelectionItems] = useState<T[]>([]);
     const [showSubitems, setShowSubitems] = useState<{ [key: string]: boolean }>({});
-    const [isTrueSubitems, setIsTrueSubitems] = useState<{ [key: string]: boolean }>({});
     // states -> File
     const [files, setFiles] = useState<File[]>([]);
     const [formData, setFormData] = useState<FormData | undefined>(undefined);

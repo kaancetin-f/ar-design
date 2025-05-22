@@ -22,7 +22,7 @@
     padding: 0 2.5rem;
   }
 
-  .ar-layout > main > section {
+  .ar-layout > main > section:not(.full-width) {
     max-width: 960px;
     padding: 2.5rem;
   }

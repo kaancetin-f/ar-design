@@ -52,8 +52,10 @@
   height: fit-content;
   margin-left: auto;
   margin-right: auto;
+  padding: 2.5rem;
 }
 .ar-layout > main > section.full-width {
+  width: 100%;
 }
 
 /* Media Queries */
