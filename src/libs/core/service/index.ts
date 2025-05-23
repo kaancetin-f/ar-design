@@ -1,6 +1,6 @@
 import Api from "./Api";
 
-type Result<TResponse> = {
+export type Result<TResponse> = {
   response: TResponse;
   __response__: Promise<Response> | null;
   __ok__: boolean;
