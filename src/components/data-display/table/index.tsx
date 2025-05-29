@@ -4,14 +4,42 @@ import "../../../assets/css/components/data-display/table/styles.css";
 import { ARIcon } from "../../icons";
 import Button from "../../form/button";
 import Checkbox from "../../form/checkbox";
-import IProps, { SearchedParam } from "./IProps";
+import IProps, { FilterValue, SearchedParam } from "./IProps";
 import Pagination from "../../navigation/pagination";
-import React, { forwardRef, Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { HTMLTableElementWithCustomAttributes, TableColumnType } from "../../../libs/types";
+import React, {
+  ChangeEvent,
+  forwardRef,
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { HTMLTableElementWithCustomAttributes, Option, TableColumnType } from "../../../libs/types";
 import Input from "../../form/input";
 import Popover from "../../feedback/popover";
 import Utils from "../../../libs/infrastructure/shared/Utils";
 import Upload from "../../form/upload";
+import FilterPopup from "./FilterPopup";
+import { FilterOperator } from "../../../libs/infrastructure/shared/Enums";
+import Select from "../../form/select";
+import Grid from "../grid-system";
+import THeadCell from "./THeadCell";
+
+const filterOption: Option[] = [
+  { value: FilterOperator.Contains, text: "İçerir" },
+  { value: FilterOperator.DoesNotContains, text: "İçermez" },
+  { value: FilterOperator.Equals, text: "Eşittir" },
+  { value: FilterOperator.DoesNotEquals, text: "Eşit değildir" },
+  { value: FilterOperator.BeginsWith, text: "İle başlar" },
+  { value: FilterOperator.EndsWith, text: "İle biter" },
+  { value: FilterOperator.Blank, text: "Boş" },
+  { value: FilterOperator.NotBlank, text: "Boş değil" },
+];
+
+const { Row, Column } = Grid;
 
 const Table = forwardRef(
   <T extends object>(
@@ -38,6 +66,8 @@ const Table = forwardRef(
     // refs -> Search
     const _searchTextInputs = useRef<(HTMLInputElement | null)[]>([]);
     const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
+    // refs -> Filter
+    const _filterButton = useRef<(HTMLSpanElement | null)[]>([]);
 
     // variables
     const _subrowOpenAutomatically: boolean = config.subrow?.openAutomatically ?? false;
@@ -55,9 +85,22 @@ const Table = forwardRef(
     const [files, setFiles] = useState<File[]>([]);
     const [formData, setFormData] = useState<FormData | undefined>(undefined);
     // states -> Search
-    const [searchedText, setSearchedText] = useState<SearchedParam | undefined>(undefined);
-    const [_searchedParams, setSearchedParams] = useState<SearchedParam | undefined>(undefined);
-    const [checkboxSelectedParams, setCheckboxSelectedParams] = useState<SearchedParam | undefined>(undefined);
+    const [searchedText, setSearchedText] = useState<SearchedParam | null>(null);
+    const [_searchedParams, setSearchedParams] = useState<SearchedParam | null>(null);
+    const [checkboxSelectedParams, setCheckboxSelectedParams] = useState<SearchedParam | null>(null);
+    // states -> Filter
+    const [filterButtonCoordinate, setFilterButtonCoordinate] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+    const [filterPopupContent, setFilterPopupContent] = useState<JSX.Element | null>(null);
+    const [filterPopupOption, setFilterPopupOption] = useState<{ key: string; option: Option | undefined } | null>(
+      null
+    );
+    const [filterPopupOptionSearchText, setFilterPopupOptionSearchText] = useState<string | null>(null);
+    // states -> Filter Fields Backup
+    const [filterCurrentColumn, setFilterCurrentColumn] = useState<TableColumnType<T> | null>(null);
+    const [filterCurrentDataType, setFilterCurrentDataType] = useState<
+      "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function" | null
+    >(null);
+    const [filterCurrentIndex, setFilterCurrentIndex] = useState<number | null>(null);
     // states -> Pagination
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -71,7 +114,7 @@ const Table = forwardRef(
     }
 
     // methods
-    const handleScroll = () => {
+    const handleScroll = useCallback(() => {
       if (!_tableWrapper.current) return;
 
       const wrapperRect = _tableWrapper.current.getBoundingClientRect();
@@ -107,7 +150,7 @@ const Table = forwardRef(
               child.style.left = `${prevLeft}px`;
             } else child.classList.add("sticky");
 
-            if (child.nodeName === "TD") child.style.zIndex = `${leftChildren.length - index}`;
+            if (child.nodeName === "TD") child.style.zIndex = `5`;
           });
           // #endregion
 
@@ -136,88 +179,252 @@ const Table = forwardRef(
         updateStickyPositions(theadElements);
         updateStickyPositions(tbodyElements);
       });
-    };
+    }, []);
 
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (config.isServerSide) {
-        if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
+    const handleSearch = useCallback(
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        const operator =
+          filterPopupOption?.key == name
+            ? (filterPopupOption.option?.value as FilterOperator)
+            : FilterOperator.Contains;
 
-        _searchTimeOut.current = setTimeout(() => {
-          setSearchedParams((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-          if (pagination && pagination.onChange) pagination.onChange(1);
-        }, 750);
-      } else {
-        setSearchedText((prev) => {
-          const _state = { ...prev };
+        if (config.isServerSide) {
+          if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
 
-          if (event.target.value === "") {
-            delete _state[event.target.name]; // Key'i siliyoruz
-          } else {
-            _state[event.target.name] = event.target.value; // Yeni değeri ekliyoruz
-          }
+          _searchTimeOut.current = setTimeout(() => {
+            setSearchedParams((prev) => ({
+              ...prev,
+              [name]: { value: value, operator: operator },
+            }));
+            if (pagination && pagination.onChange) pagination.onChange(1);
+          }, 750);
+        } else {
+          setSearchedText((prev) => {
+            const _state = { ...prev };
 
-          return _state;
-        });
-      }
+            if (value === "") {
+              delete _state[name]; // Key'i siliyoruz
+            } else {
+              _state[name] = { value: value, operator: operator }; // Yeni değeri ekliyoruz
+            }
 
-      setCurrentPage(1);
-    };
+            return _state;
+          });
+        }
+
+        event.target.value = value;
+
+        setCurrentPage(1);
+      },
+      [filterPopupOption]
+    );
 
     const handleCheckboxChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
       event.stopPropagation();
 
-      setCheckboxSelectedParams((prev) => {
-        const updatedValues = new Set<string>(prev?.[event.target.name] || []);
+      const { name, value, checked } = event.target;
 
-        event.target.checked ? updatedValues.add(event.target.value) : updatedValues.delete(event.target.value);
+      setCheckboxSelectedParams((prev) => {
+        const prevFilters = (prev?.[name] as FilterValue[]) || [];
+        const updatedSet = new Set(prevFilters.map((f) => String(f.value)));
+
+        checked ? updatedSet.add(value) : updatedSet.delete(value);
+
+        const updatedArray: FilterValue[] = Array.from(updatedSet).map((v) => ({
+          value: v,
+          operator: FilterOperator.Equals, // Checkbox’lar genelde “Equals” anlamındadır.
+        }));
 
         return {
           ...prev,
-          ...(Array.from(updatedValues).length > 0
-            ? { [event.target.name]: Array.from(updatedValues) }
-            : { [event.target.name]: [] }),
-        } as SearchedParam;
+          ...(updatedArray.length > 0 ? { [name]: updatedArray } : { [name]: [] }),
+        };
       });
     }, []);
+
+    const handleFilterPopupContent = (
+      c: TableColumnType<T>,
+      dataType: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function",
+      index: number | null
+    ) => {
+      const key = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
+      const value = Array.isArray(searchedText?.[key])
+        ? "" // veya ihtiyacına göre birleştirme yap: searchedText[key].map(v => v.value).join(", ").
+        : ((searchedText?.[key] as FilterValue)?.value as string);
+
+      const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { value } = event.target;
+
+        const input = _searchTextInputs.current[index ?? 0];
+
+        if (input) {
+          const event = new Event("input", { bubbles: true });
+          input.value = value;
+          input.dispatchEvent(event);
+        }
+      };
+
+      setFilterPopupContent(() => {
+        switch (dataType) {
+          case "string":
+          case "number":
+            return (
+              <Row>
+                <Column size={12}>
+                  <Select
+                    value={
+                      filterOption.find(
+                        (x) => x.value === filterPopupOption?.option?.value && filterPopupOption.key === c.key
+                      ) ?? filterOption[0]
+                    }
+                    options={filterOption}
+                    onChange={(option) => {
+                      setFilterPopupOption({ key: c.key as string, option: option });
+                    }}
+                    placeholder="Koşul"
+                  />
+                </Column>
+                <Column size={12}>
+                  <Input value={value ?? ""} onChange={handleChange} placeholder="Ara" />
+                </Column>
+              </Row>
+            );
+          case "object":
+          case "boolean":
+            return (
+              <Row>
+                <Column size={12}>
+                  <Input
+                    placeholder="Ara"
+                    value={value ?? ""}
+                    onChange={(event) => setFilterPopupOptionSearchText(event.target.value)}
+                  />
+                </Column>
+
+                <Column size={12}>
+                  {c.filters
+                    ?.filter((filter) =>
+                      filter.text.toLocaleLowerCase().includes(filterPopupOptionSearchText?.toLocaleLowerCase() ?? "")
+                    )
+                    ?.map((filter, fIndex) => {
+                      const name = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
+
+                      return (
+                        <div>
+                          <Checkbox
+                            ref={(element) => (_filterCheckboxItems.current[fIndex] = element)}
+                            label={filter.text}
+                            name={name}
+                            status="primary"
+                            value={filter.value as string}
+                            checked={
+                              Array.isArray(checkboxSelectedParams?.[name]) &&
+                              checkboxSelectedParams?.[name]?.some((f) => String(f.value) === String(filter.value))
+                            }
+                            onChange={async (event) => await handleCheckboxChange(event)}
+                          />
+                        </div>
+                      );
+                    })}
+                </Column>
+              </Row>
+            );
+
+          default:
+            return <></>;
+        }
+      });
+    };
 
     // Derinlemesine arama yapmak için özyinelemeli bir fonksiyon olarak kullanılmaktadır.
     const deepSearch = (item: T, searchedText: SearchedParam | undefined): boolean => {
       if (!searchedText || Object.keys(searchedText).length === 0) return true;
 
-      // Eğer değer bir sayı veya string ise, aranan metinle eşleşip eşleşmediğini kontrol ediyoruz.
-      return Object.entries(searchedText).every(([key, value]) => {
+      const applyOperator = (value: any, filter: FilterValue): boolean => {
+        if (Array.isArray(value)) {
+          // Array içindeki herhangi bir öğe eşleşirse true dön
+          return value.some((item) => applyOperator(item, filter));
+        }
+
+        if (typeof value === "object" && value !== null) {
+          // Eğer obje ise, içindeki değerlerden biri eşleşirse true dön
+          return Object.values(value).some((v) => applyOperator(v, filter));
+        }
+
+        const text = String(value ?? "").toLocaleLowerCase();
+        const searchText = String(filter.value ?? "").toLocaleLowerCase();
+
+        switch (filter.operator) {
+          case FilterOperator.Contains:
+            return text.includes(searchText);
+          case FilterOperator.DoesNotContains:
+            return !text.includes(searchText);
+          case FilterOperator.Equals:
+            return text === searchText;
+          case FilterOperator.DoesNotEquals:
+            return text !== searchText;
+          case FilterOperator.BeginsWith:
+            return text.startsWith(searchText);
+          case FilterOperator.EndsWith:
+            return text.endsWith(searchText);
+          case FilterOperator.Blank:
+            return text.trim() === "";
+          case FilterOperator.NotBlank:
+            return text.trim() !== "";
+          default:
+            return false;
+        }
+      };
+
+      return Object.entries(searchedText).every(([key, param]) => {
         const _itemValue = item[key as keyof typeof item];
 
-        if (typeof _itemValue === "number" || typeof _itemValue === "string" || typeof _itemValue === "boolean") {
-          if (Array.isArray(value)) {
-            if (value.length === 0) return true;
-            else return value.some((v) => _itemValue.toString().toLocaleLowerCase().includes(v.toLocaleLowerCase()));
-          }
-
-          return _itemValue.toString().toLocaleLowerCase().includes(value.toLocaleLowerCase());
+        if (Array.isArray(param)) {
+          if (param.length === 0) return true;
+          return param.some((filter) => applyOperator(_itemValue, filter));
+        } else {
+          return applyOperator(_itemValue, param);
         }
-
-        if (typeof _itemValue === "object") {
-          if (Array.isArray(value)) {
-            if (value.length === 0) return true;
-            else {
-              return value.some((v) => {
-                if (Array.isArray(_itemValue)) {
-                  return Object.values(_itemValue?.[0 as keyof typeof _itemValue] ?? {}).some((objValue) => {
-                    return String(objValue).toLocaleLowerCase().includes(String(v).toLocaleLowerCase());
-                  });
-                }
-              });
-            }
-          }
-        }
-
-        if (Array.isArray(_itemValue)) {
-          console.log("Buradasın", _itemValue);
-        }
-
-        return false;
       });
+
+      // Eğer değer bir sayı veya string ise, aranan metinle eşleşip eşleşmediğini kontrol ediyoruz.
+      // return Object.entries(searchedText).every(([key, param]) => {
+      //   const _itemValue = item[key as keyof typeof item];
+
+      //   if (typeof _itemValue === "number" || typeof _itemValue === "string" || typeof _itemValue === "boolean") {
+      //     if (Array.isArray(param)) {
+      //       if (param.length === 0) return true;
+      //       else return param.some((v) => _itemValue.toString().toLocaleLowerCase().includes(v.toLocaleLowerCase()));
+      //     }
+
+      //     return _itemValue
+      //       .toString()
+      //       .toLocaleLowerCase()
+      //       .includes(param.toLocaleLowerCase() ?? "");
+      //   }
+
+      //   if (typeof _itemValue === "object") {
+      //     if (Array.isArray(param)) {
+      //       if (param.length === 0) return true;
+      //       else {
+      //         return param.some((v) => {
+      //           if (Array.isArray(_itemValue)) {
+      //             return Object.values(_itemValue?.[0 as keyof typeof _itemValue] ?? {}).some((objValue) => {
+      //               return String(objValue).toLocaleLowerCase().includes(String(v).toLocaleLowerCase());
+      //             });
+      //           }
+      //         });
+      //       }
+      //     }
+      //   }
+
+      //   if (Array.isArray(_itemValue)) {
+      //     console.log("Buradasın", _itemValue);
+      //   }
+
+      //   return false;
+      // });
     };
 
     const openAllSubrowsRecursively = (data: T[], parentKey: string = ""): Record<string, boolean> => {
@@ -427,15 +634,31 @@ const Table = forwardRef(
 
     useEffect(() => {
       if (config?.isServerSide && searchedParams) {
-        const query = new URLSearchParams(_searchedParams);
+        const searchRecord: Record<string, string> = {};
+
+        Object.entries(_searchedParams ?? {}).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            // Çoklu filtre değerleri varsa virgülle birleştir.
+            searchRecord[key] = value.map((v) => v.value).join(",");
+          } else if (value && typeof value === "object") {
+            searchRecord[key] = String(value.value);
+          }
+        });
+
+        const query = new URLSearchParams(searchRecord);
 
         columns.forEach((column) => {
-          const getParamsLength = column.filters?.length;
-          const searchedParamLength = Array.from(
-            _searchedParams?.[column.key as keyof typeof _searchedParams] ?? []
-          ).length;
+          const key = column.key as keyof typeof _searchedParams;
+          const filterValue = _searchedParams?.[key];
 
-          if (getParamsLength === searchedParamLength) query.delete(column.key as string);
+          const filterArray = Array.isArray(filterValue) ? filterValue : filterValue ? [filterValue] : [];
+
+          const getParamsLength = column.filters?.length ?? 0;
+          const searchedParamLength = filterArray.length;
+
+          if (getParamsLength === searchedParamLength) {
+            query.delete(column.key as string);
+          }
         });
 
         searchedParams(_searchedParams, query.toString());
@@ -443,10 +666,11 @@ const Table = forwardRef(
     }, [_searchedParams]);
 
     useEffect(() => {
+      if (!checkboxSelectedParams) return;
+
       if (config.isServerSide) {
         if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
-
-        setSearchedParams(checkboxSelectedParams);
+        setSearchedParams((prev) => ({ ...prev, ...checkboxSelectedParams }));
       } else {
         setSearchedText((prev) => ({ ...prev, ...checkboxSelectedParams }));
       }
@@ -468,6 +692,13 @@ const Table = forwardRef(
         setSelectAll(_checkboxItems.current.every((item) => item?.checked === true));
       }
     }, [selectionItems, currentPage]);
+
+    useEffect(() => {
+      // Filter Content alanı re-render işlemi.
+      if (filterCurrentColumn && filterCurrentDataType) {
+        handleFilterPopupContent(filterCurrentColumn, filterCurrentDataType, filterCurrentIndex);
+      }
+    }, [checkboxSelectedParams, filterPopupOption, filterPopupOptionSearchText]);
 
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
@@ -568,35 +799,7 @@ const Table = forwardRef(
                   </th>
                 )}
 
-                {columns.map((c, cIndex) => {
-                  let _className: string[] = [];
-
-                  if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
-                  if (!c.config?.width) _className.push("min-w");
-                  if (c.config?.alignContent) {
-                    _className.push(`align-content-${c.config.alignContent}`);
-                  }
-
-                  return (
-                    <th
-                      key={`column-${cIndex}-${Math.random()}`}
-                      {...(_className.length > 0 && {
-                        className: `${_className.map((c) => c).join(" ")}`,
-                      })}
-                      {...(c.config?.width
-                        ? {
-                            style: { minWidth: c.config.width, maxWidth: c.config.width },
-                          }
-                        : // : { style: { maxWidth: thWidths[cIndex], minWidth: thWidths[cIndex] } })}
-                          { style: {} })}
-                      {...(c.config?.sticky && {
-                        "data-sticky-position": c.config.sticky,
-                      })}
-                    >
-                      {c.title}
-                    </th>
-                  );
-                })}
+                <THeadCell columns={columns} />
               </tr>
 
               {config?.isSearchable && (
@@ -609,8 +812,16 @@ const Table = forwardRef(
                     ></th>
                   )}
 
+                  {/* Buraya */}
                   {columns.map((c, cIndex) => {
                     let _className: string[] = [];
+                    const key = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
+                    const csrValue = Array.isArray(searchedText?.[key])
+                      ? "" // veya ihtiyacına göre birleştirme yap: searchedText[key].map(v => v.value).join(", ").
+                      : ((searchedText?.[key] as FilterValue)?.value as string);
+                    const ssrValue = Array.isArray(_searchedParams?.[key])
+                      ? "" // veya ihtiyacına göre birleştirme yap: _searchedParams[key].map(v => v.value).join(", ").
+                      : ((_searchedParams?.[key] as FilterValue)?.value as string);
 
                     if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
                     if (c.config?.alignContent) {
@@ -631,44 +842,61 @@ const Table = forwardRef(
                           <div className="filter-field">
                             <Input
                               ref={(element) => (_searchTextInputs.current[cIndex] = element)}
-                              variant={c.key && !c.filters ? "filled" : "outlined"}
+                              variant={c.key && !c.filters ? "outlined" : "filled"}
                               status="light"
-                              name={typeof c.key !== "object" ? String(c.key) : String(c.key.field)}
-                              onChange={handleSearch}
+                              style={{ height: "2rem" }}
+                              value={(config.isServerSide ? ssrValue : csrValue) ?? ""}
+                              name={key}
+                              onInput={handleSearch}
                               disabled={!c.key || !!c.filters}
                             />
 
-                            {c.filters && (
-                              <Popover
-                                content={
-                                  <div>
-                                    {c.filters.map((filter, fIndex) => {
-                                      const name = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
+                            <span
+                              ref={(element) => (_filterButton.current[cIndex] = element)}
+                              onClick={(event) => {
+                                event.stopPropagation();
 
-                                      return (
-                                        <div>
-                                          <Checkbox
-                                            ref={(element) => (_filterCheckboxItems.current[fIndex] = element)}
-                                            label={filter.text}
-                                            name={name}
-                                            status="primary"
-                                            value={filter.value as string}
-                                            checked={checkboxSelectedParams?.[name]?.includes(String(filter.value))}
-                                            onChange={async (event) => await handleCheckboxChange(event)}
-                                          />
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                }
-                                windowBlur={true}
-                              >
-                                <Button
-                                  variant="borderless"
-                                  icon={{ element: <ARIcon icon="Filter" stroke="var(--primary)" size={16} /> }}
-                                />
-                              </Popover>
-                            )}
+                                // Temizlik...
+                                setFilterPopupOptionSearchText("");
+
+                                const rect = event.currentTarget.getBoundingClientRect();
+                                const screenCenterX = window.innerWidth / 2;
+                                // const screenCenterY = window.innerHeight / 2;
+                                const coordinateX = rect.x > screenCenterX ? rect.x + rect.width - 225 : rect.x;
+                                const coordinateY = rect.y + rect.height;
+                                // data içindeki alanların tiplerini bulmak için kullanılmaktadır
+                                const getDataFirstItem = { ...data[0] };
+                                const key = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
+
+                                const getValueByKey = getDataFirstItem[key as keyof typeof getDataFirstItem];
+                                let dataType = typeof getValueByKey;
+
+                                if (getValueByKey == null) dataType = "string";
+
+                                setFilterButtonCoordinate({ x: coordinateX, y: coordinateY });
+                                setFilterCurrentColumn(c);
+                                setFilterCurrentDataType(dataType);
+                                setFilterCurrentIndex(cIndex);
+
+                                handleFilterPopupContent(c, dataType, cIndex);
+                              }}
+                            >
+                              <Button
+                                variant="borderless"
+                                status="dark"
+                                icon={{
+                                  element: (
+                                    <ARIcon
+                                      viewBox="0 0 16 16"
+                                      size={24}
+                                      icon="Filter"
+                                      fill="var(--dark)"
+                                      strokeWidth={0}
+                                    />
+                                  ),
+                                }}
+                              />
+                            </span>
                           </div>
                         )}
                       </th>
@@ -685,6 +913,10 @@ const Table = forwardRef(
             </tbody>
           </table>
         </div>
+
+        <FilterPopup tableContent={_tableContent} coordinate={filterButtonCoordinate} buttons={_filterButton}>
+          {filterPopupContent}
+        </FilterPopup>
 
         {pagination && pagination.totalRecords > pagination.perPage && (
           <div className="footer">

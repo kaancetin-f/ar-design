@@ -13,7 +13,7 @@
   list-style: none;
 }
 .ar-menu > ul li {
-  -webkit-text-stroke: 0.5px var(--black);
+  /* -webkit-text-stroke: 0.5px var(--black); */
 }
 
 .ar-menu > ul li .item-render {

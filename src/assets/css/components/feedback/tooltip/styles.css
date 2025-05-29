@@ -24,11 +24,11 @@
   color: var(--gray-700);
   font-size: 0.85rem;
   text-wrap: nowrap;
-  -webkit-text-stroke: 0.75px var(--gray-700);
+  /* -webkit-text-stroke: 0.75px var(--gray-700); */
 }
 .ar-tooltip > .text > .bullet {
   color: var(--gray-400);
-  -webkit-text-stroke: 0px;
+  /* -webkit-text-stroke: 0px; */
 }
 
 .ar-tooltip::before {

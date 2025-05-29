@@ -54,7 +54,7 @@
 }
 .ar-upload-button > .ar-upload-files > ul > li .content > span:first-child.error {
   color: var(--danger);
-  -webkit-text-stroke: 0.5px var(--danger);
+  /* -webkit-text-stroke: 0.5px var(--danger); */
 }
 .ar-upload-button > .ar-upload-files > ul > li .content > span:last-child {
   background-color: rgba(var(--danger-rgb), 0.1);
@@ -64,7 +64,7 @@
   color: rgba(var(--danger-rgb), 0.5);
   font-size: 0.75rem;
   text-align: center;
-  -webkit-text-stroke: 1px rgba(var(--danger-rgb), 0.5);
+  /* -webkit-text-stroke: 1px rgba(var(--danger-rgb), 0.5); */
   line-height: 0.85rem;
   cursor: pointer;
 }

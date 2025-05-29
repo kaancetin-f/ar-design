@@ -9,6 +9,6 @@
   font-weight: 600;
   white-space: nowrap;
   user-select: none;
-  -webkit-text-stroke: 0.5px var(--white);
+  /* -webkit-text-stroke: 0.5px var(--white); */
   letter-spacing: 1px;
 }

@@ -33,7 +33,7 @@
   color: var(--white);
   font-size: 0.75rem;
   line-height: 1rem;
-  -webkit-text-stroke: 0.75px var(--white);
+  /* -webkit-text-stroke: 0.75px var(--white); */
   z-index: 1;
 }
 .ar-progress > .ar-progress-value > span::before {

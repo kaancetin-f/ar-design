@@ -25,7 +25,7 @@
   height: var(--input-height);
 }
 .ar-date-calendar > .header > .select-field > .selects > div > span {
-  -webkit-text-stroke: 1px var(--black);
+  /* -webkit-text-stroke: 1px var(--black); */
   user-select: none;
 }
 

@@ -1,8 +1,37 @@
 import React from "react";
 import { AllowedTypes, TableColumnType } from "../../../libs/types";
 import { IChildren } from "../../../libs/types/IGlobalProps";
+import { FilterOperator } from "../../../libs/infrastructure/shared/Enums";
 
-export type SearchedParam = { [key: string]: string };
+export type Operator =
+  | "Contains"
+  | "DoesNotContains"
+  | "Equals"
+  | "DoesNotEquals"
+  | "BeginsWith"
+  | "EndsWith"
+  | "Blank"
+  | "NotBlank";
+
+export type FilterValue = {
+  value: string | number | boolean;
+  operator: FilterOperator;
+};
+
+export type SearchedParam = { [key: string]: FilterValue | FilterValue[] };
+
+export type Config = {
+  isServerSide?: boolean;
+  isSearchable?: boolean;
+  scroll?: {
+    maxHeight: number;
+  };
+  subrow?: {
+    openAutomatically?: boolean;
+    selector?: string;
+    button?: boolean;
+  };
+};
 
 type ImportActionType = {
   tooltip: string;
@@ -28,24 +57,13 @@ interface IProps<T> extends IChildren {
   };
   selections?: (selectionItems: T[]) => void;
   previousSelections?: T[];
-  searchedParams?: (params: SearchedParam | undefined, query: string) => void;
+  searchedParams?: (params: SearchedParam | null, query: string) => void;
   pagination?: {
     totalRecords: number;
     perPage: number;
     onChange?: (currentPage: number) => void;
   };
-  config?: {
-    isServerSide?: boolean;
-    isSearchable?: boolean;
-    scroll?: {
-      maxHeight: number;
-    };
-    subrow?: {
-      openAutomatically?: boolean;
-      selector?: string;
-      button?: boolean;
-    };
-  };
+  config?: Config;
 }
 
 export default IProps;

@@ -1,9 +1,9 @@
 "use client";
 
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import Utils from "../../../libs/infrastructure/shared/Utils";
+import React, { forwardRef, useRef } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/form/checkbox/checkbox.css";
-import Utils from "../../../libs/infrastructure/shared/Utils";
 
 const Checkbox = forwardRef<HTMLInputElement, IProps>(
   ({ label, size = "normal", status, border = { radius: "sm" }, upperCase, ...attributes }, ref) => {
@@ -11,17 +11,11 @@ const Checkbox = forwardRef<HTMLInputElement, IProps>(
     const _checkbox = useRef<HTMLInputElement>(null);
     const _checkboxClassName: string[] = ["ar-checkbox"];
 
-    // states
-    const [checked, setChecked] = useState<boolean>(attributes.checked ?? false);
+    const isChecked = attributes.checked ?? false;
 
     _checkboxClassName.push(
-      ...Utils.GetClassName("filled", checked ? status : "light", border, size, undefined, attributes.className)
+      ...Utils.GetClassName("filled", isChecked ? status : "light", border, size, undefined, attributes.className)
     );
-
-    // useEffects
-    useEffect(() => {
-      setChecked(attributes.checked ?? attributes.defaultChecked ?? false);
-    }, [attributes.checked, attributes.defaultChecked]);
 
     return (
       <div className="ar-checkbox-wrapper">
@@ -32,9 +26,9 @@ const Checkbox = forwardRef<HTMLInputElement, IProps>(
             {...attributes}
             size={0}
             onChange={(event) => {
-              (() => {
-                setChecked(event.target.checked);
-              })();
+              // (() => {
+              //   attributes.onChange?.(event);
+              // })();
 
               (() => attributes.onChange && attributes.onChange(event))();
             }}

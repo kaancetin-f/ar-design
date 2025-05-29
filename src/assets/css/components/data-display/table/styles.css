@@ -25,7 +25,7 @@
 }
 .ar-table > .header > .title > h3 {
   color: var(--gray-700);
-  -webkit-text-stroke: 0.25px var(--gray-700);
+  /* -webkit-text-stroke: 0.25px var(--gray-700); */
 }
 .ar-table > .header > .title > h5 {
   color: var(--gray-600);
@@ -83,11 +83,12 @@
 .ar-table > .content > table > thead > tr > th {
   position: relative;
   color: var(--gray-700);
-  -webkit-text-stroke: 0.25px var(--gray-700);
+  /* -webkit-text-stroke: 0.25px var(--gray-700); */
   text-align: left;
   text-wrap: nowrap;
   z-index: 2;
 }
+
 .ar-table > .content > table > thead > tr > th > .filter-field {
   display: flex;
   flex-direction: row;
@@ -96,6 +97,7 @@
   gap: 0.5rem;
   min-width: 100%;
 }
+
 .ar-table > .content > table > thead > tr > th::after {
   position: absolute;
   top: 50%;
@@ -231,3 +233,4 @@
 }
 
 @import url("./scroll.css");
+@import url("./filter-popup.css");

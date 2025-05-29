@@ -4,5 +4,5 @@
   align-items: center;
   border-bottom: solid 1px var(--gray-200);
   text-align: center;
-  -webkit-text-stroke: 1px var(--black);
+  /* -webkit-text-stroke: 1px var(--black); */
 }
