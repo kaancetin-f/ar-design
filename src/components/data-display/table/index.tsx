@@ -560,7 +560,9 @@ const Table = forwardRef(
           data-sticky-position={c.config?.sticky}
         >
           <div style={{ paddingLeft: `${depth == 0 ? 1 : depth}rem` }} className="table-cell">
+            {cIndex === 0 && <div className="before"></div>}
             {React.isValidElement(render) ? render : String(render)}
+            {cIndex === 0 && <div className="after"></div>}
           </div>
         </td>
       );
@@ -601,7 +603,7 @@ const Table = forwardRef(
               ) : null}
 
               {columns.map((c: TableColumnType<T>, cIndex: number) =>
-                renderCell(subitem, c, cIndex, subindex, depth * 1.5)
+                renderCell(subitem, c, cIndex, subindex, depth * 1.75)
               )}
             </tr>
 
@@ -661,7 +663,7 @@ const Table = forwardRef(
           }
         });
 
-        searchedParams(_searchedParams, query.toString());
+        searchedParams(_searchedParams, query.toString(), filterPopupOption?.option?.value as FilterOperator);
       }
     }, [_searchedParams]);
 

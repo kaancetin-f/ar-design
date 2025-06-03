@@ -57,7 +57,7 @@ interface IProps<T> extends IChildren {
   };
   selections?: (selectionItems: T[]) => void;
   previousSelections?: T[];
-  searchedParams?: (params: SearchedParam | null, query: string) => void;
+  searchedParams?: (params: SearchedParam | null, query: string, operator: FilterOperator) => void;
   pagination?: {
     totalRecords: number;
     perPage: number;
