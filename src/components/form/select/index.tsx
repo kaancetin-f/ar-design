@@ -316,7 +316,16 @@ const Select: React.FC<Props> = ({
       {/* :Begin: Select and Multiple Select Field */}
       <div ref={_multipleInput} className="ar-select">
         {multiple ? (
-          <div className={_selectionClassName.map((c) => c).join(" ")} onClick={() => setOptionsOpen((x) => !x)}>
+          <div
+            className={_selectionClassName.map((c) => c).join(" ")}
+            onClick={() => {
+              onClick && onClick();
+
+              (() => {
+                setOptionsOpen((prev) => !prev);
+              })();
+            }}
+          >
             <div className="items">
               {value.length > 0 ? (
                 value.map((_value, index) => (
