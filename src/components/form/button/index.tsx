@@ -15,30 +15,30 @@ const Button: React.FC<IProps> = ({
   size = "normal",
   tooltip,
   position,
+  fullWidth,
   icon,
   upperCase,
   ...attributes
 }) => {
   // refs
   const _button = useRef<HTMLButtonElement>(null);
-  const _buttonClassName: string[] = ["ar-button"];
+  const _arButtonClassName: string[] = ["ar-button"];
 
-  _buttonClassName.push(...Utils.GetClassName(variant, status, border, size, icon, attributes.className));
+  _arButtonClassName.push(...Utils.GetClassName(variant, status, border, size, icon, attributes.className));
 
-  if (!children) _buttonClassName.push("no-content");
-
-  if (shape) _buttonClassName.push(`ar-button-shape ${shape}`);
-
+  if (!children) _arButtonClassName.push("no-content");
+  if (fullWidth) _arButtonClassName.push("full-width");
+  if (shape) _arButtonClassName.push(`ar-button-shape ${shape}`);
   if (position) {
-    _buttonClassName.push(position.type);
-    _buttonClassName.push(position.inset.map((_inset) => _inset).join(" "));
+    _arButtonClassName.push(position.type);
+    _arButtonClassName.push(position.inset.map((_inset) => _inset).join(" "));
   }
 
   const buttonElement: React.JSX.Element = (
     <button
       ref={_button}
       {...attributes}
-      className={_buttonClassName.map((c) => c).join(" ")}
+      className={_arButtonClassName.map((c) => c).join(" ")}
       onClick={(event) => {
         // Disabled gelmesi durumunda işlem yapmasına izin verme...
         if (attributes.disabled) return;

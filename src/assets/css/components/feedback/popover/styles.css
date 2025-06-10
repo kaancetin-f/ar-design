@@ -2,6 +2,9 @@
   position: relative;
   width: max-content;
 }
+.ar-popover-wrapper.full-width {
+  width: 100%;
+}
 
 .ar-popover {
   visibility: hidden;

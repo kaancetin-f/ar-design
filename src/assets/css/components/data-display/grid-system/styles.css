@@ -2,6 +2,7 @@
 @import url("./row/styles.css");
 
 /* Column Css */
+@import url("./column/styles.css");
 @import url("./column/x-large.css");
 @import url("./column/large.css");
 @import url("./column/medium.css");

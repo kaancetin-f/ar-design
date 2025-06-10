@@ -10,9 +10,8 @@
 .ar-button.disabled {
   cursor: no-drop;
 }
-
-.ar-button.max-width {
-  width: 100%;
+.ar-button.full-width {
+  min-width: 100%;
 }
 
 .ar-button > .text {

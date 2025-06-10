@@ -6,6 +6,7 @@ interface IProps extends IChildren {
   content?: React.JSX.Element;
   onConfirm?: (confirm: boolean) => void;
   windowBlur?: boolean;
+  fullWidth?: boolean;
   config?: {
     buttons: { okButton: string; cancelButton?: string };
   };

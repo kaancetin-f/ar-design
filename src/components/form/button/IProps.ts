@@ -30,6 +30,8 @@ interface IProps
     type: "fixed" | "absolute";
     inset: ("top" | "right" | "bottom" | "left")[];
   };
+
+  fullWidth?: boolean;
 }
 
 export default IProps;

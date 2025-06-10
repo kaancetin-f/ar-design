@@ -1,0 +1,6 @@
+.row > [class^="col"].right,
+.row > [class*="col"].right {
+  position: relative;
+  display: flex;
+  justify-content: right;
+}

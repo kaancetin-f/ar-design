@@ -9,11 +9,14 @@ import ReactDOM from "react-dom";
 
 const { Title } = Typography;
 
-const Popover: React.FC<IProps> = ({ children, title, message, content, onConfirm, windowBlur, config }) => {
+const Popover: React.FC<IProps> = ({ children, title, message, content, onConfirm, windowBlur, fullWidth, config }) => {
   // refs
   const _arPopoverWrapper = useRef<HTMLDivElement>(null);
   const _arPopover = useRef<HTMLDivElement>(null);
   const _arPopoverElement = useRef<HTMLDivElement>(null);
+  const _arPopoverClassName: string[] = ["ar-popover-wrapper"];
+
+  if (fullWidth) _arPopoverClassName.push("full-width");
 
   // states
   const [open, setOpen] = useState<boolean>(false);
@@ -76,7 +79,7 @@ const Popover: React.FC<IProps> = ({ children, title, message, content, onConfir
   }, [open]);
 
   return (
-    <div ref={_arPopoverWrapper} className="ar-popover-wrapper" role="dialog">
+    <div ref={_arPopoverWrapper} className={_arPopoverClassName.map((c) => c).join(" ")} role="dialog">
       {open &&
         ReactDOM.createPortal(
           <div ref={_arPopover} className="ar-popover">
