@@ -350,6 +350,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
 
       <Input
         ref={_beginDate}
+        {...attributes}
         value={DATE.ParseValue(String(attributes.value), isClock)}
         type={isClock ? "datetime-local" : "date"}
         onKeyDown={(event) => {

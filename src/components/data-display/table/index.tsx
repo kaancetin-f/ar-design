@@ -573,6 +573,8 @@ const Table = forwardRef(
         const _subitem = subitem[_subrowSelector as keyof typeof subitem];
         const isHasSubitems = _subrowSelector in subitem;
 
+        console.log(isHasSubitems);
+
         // TODO: Keylere bakılacak...
         return (
           <Fragment key={`subitem-${index}-${subindex}-${Math.random()}`}>
@@ -598,7 +600,7 @@ const Table = forwardRef(
                     />
                   </div>
                 </td>
-              ) : isHasSubitems && _subrowButton ? (
+              ) : !isHasSubitems && _subrowButton ? (
                 <td style={{ width: 0, minWidth: 0 }}></td>
               ) : null}
 
