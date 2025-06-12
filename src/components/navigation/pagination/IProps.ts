@@ -1,13 +1,18 @@
-/**
- * Pagination component props
- */
 interface IProps {
   /**
    * Varsayılan olarak seçili olan sayfa numarası.
    * Eğer belirtilmezse, 1. sayfa varsayılan olarak kabul edilir.
+   *
+   * Örneğin;
+   * ```tsx
+   * <Pagination defaultCurrent={3} />
+   * ```
    */
   defaultCurrent?: number;
 
+  /**
+   * Şu anda aktif olan sayfa numarası.
+   */
   currentPage: number;
 
   /**
@@ -24,6 +29,7 @@ interface IProps {
 
   /**
    * Sayfa değiştiğinde tetiklenen geri çağırma fonksiyonu.
+   *
    * @param currentPage - Kullanıcının seçtiği yeni sayfa numarası.
    */
   onChange: (currentPage: number) => void;

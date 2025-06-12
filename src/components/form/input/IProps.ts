@@ -1,16 +1,48 @@
-import React from "react";
 import IButtonProps from "../button/IProps";
 import { Variants } from "../../../libs/types";
-import { IGlobalProps, ISizes, IValidation } from "../../../libs/types/IGlobalProps";
+import { IBorder, IIcon, ISize, IStatus, IUpperCase, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
 
 interface IProps
-  extends Omit<IGlobalProps, "children" | "disabled">,
-    ISizes,
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "size">,
-    IValidation {
+  extends IVariant,
+    IStatus,
+    IBorder,
+    IIcon,
+    ISize,
+    IUpperCase,
+    IValidation,
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "size"> {
+  /**
+   * Bileşene entegre bir buton özelliği eklemek için kullanılır.
+   *
+   * `IButtonProps` tipi ile tanımlanır ve butonun davranışlarını, metnini, tıklama olaylarını vs. içerir.
+   *
+   * Örneğin;
+   *
+   * ```jsx
+   * <Input
+   *   button={{
+   *     text: "Gönder",
+   *     onClick: () => console.log("Tıklandı"),
+   *   }}
+   * />
+   * ```
+   */
   button?: IButtonProps;
+
+  /**
+   * Bileşenin başına (`before`) veya sonuna (`after`) yardımcı içerikler (ek öğeler) eklemek için kullanılır.
+   *
+   * - `variant`: Stil türünü belirtir ("filled" | "outlined" | "dashed" | "borderless").
+   * - `before`: Bileşenin soluna içerik ekler (örneğin ₺, %, vb.).
+   * - `after`: Bileşenin sağına içerik ekler.
+   *
+   * Örneğin;
+   *
+   * ```jsx
+   * <Input addon={{ variant: "outlined", before: "₺", after: "KDV" }} />
+   * ```
+   */
   addon?: { variant?: Variants; before?: string | number; after?: string | number };
-  upperCase?: boolean;
 }
 
 export default IProps;

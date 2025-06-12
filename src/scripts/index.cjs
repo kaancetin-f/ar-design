@@ -114,43 +114,43 @@ const _Input_CheckboxCss = () => {
   WriteCssFile(file, content);
 };
 
-const _Input_RadioCss = () => {
-  const file = path.join(__dirname, "../assets", "css", "components", "form", "radio", "border.css");
+// const _Input_RadioCss = () => {
+//   const file = path.join(__dirname, "../assets", "css", "components", "form", "radio", "border.css");
 
-  const content = colors
-    .map((color) => {
-      switch (color) {
-        case "warning":
-          customFontColor = "dark";
-          break;
-        case "light":
-          customFontColor = "dark";
-          break;
-        default:
-          customFontColor = "white";
-          break;
-      }
+//   const content = colors
+//     .map((color) => {
+//       switch (color) {
+//         case "warning":
+//           customFontColor = "dark";
+//           break;
+//         case "light":
+//           customFontColor = "dark";
+//           break;
+//         default:
+//           customFontColor = "white";
+//           break;
+//       }
 
-      return `/* #region Border Color -> ${color.toUpperCase()} */
-.ar-radio-wrapper > label > :is(input[type="radio"]):checked + span > .ar-radio.filled.${color}::before {
-  border-right-color: var(--${customFontColor});
-  border-bottom-color: var(--${customFontColor});
-}
-.ar-radio-wrapper > label > :is(input[type="radio"]):checked + span > .ar-radio.outlined.${color}::before {
-  border-right-color: var(--${color});
-  border-bottom-color: var(--${color});
-}
-.ar-radio-wrapper > label > :is(input[type="radio"]):checked + span > .ar-radio.borderless.${color}::before {
-  border-right-color: var(--${color});
-  border-bottom-color: var(--${color});
-}
-/* #endregion */
-/* Border Color -> ${color.toUpperCase()} */`;
-    })
-    .join("\n\n");
+//       return `/* #region Border Color -> ${color.toUpperCase()} */
+// .ar-radio-wrapper > label > :is(input[type="radio"]):checked + span > .ar-radio.filled.${color}::before {
+//   border-right-color: var(--${customFontColor});
+//   border-bottom-color: var(--${customFontColor});
+// }
+// .ar-radio-wrapper > label > :is(input[type="radio"]):checked + span > .ar-radio.outlined.${color}::before {
+//   border-right-color: var(--${color});
+//   border-bottom-color: var(--${color});
+// }
+// .ar-radio-wrapper > label > :is(input[type="radio"]):checked + span > .ar-radio.borderless.${color}::before {
+//   border-right-color: var(--${color});
+//   border-bottom-color: var(--${color});
+// }
+// /* #endregion */
+// /* Border Color -> ${color.toUpperCase()} */`;
+//     })
+//     .join("\n\n");
 
-  WriteCssFile(file, content);
-};
+//   WriteCssFile(file, content);
+// };
 
 const _Input_SwitchCss = () => {
   const file = path.join(__dirname, "../assets", "css", "components", "form", "switch", "core", "border.css");

@@ -1,9 +1,6 @@
 import { StepProps, ValidationProperties } from "../../../libs/types";
 import { IChildren } from "../../../libs/types/IGlobalProps";
 
-/**
- * Stepper component props
- */
 interface IProps<TData extends object> extends IChildren {
   /**
    * Step'leri temsil eden dizisi.
@@ -18,10 +15,22 @@ interface IProps<TData extends object> extends IChildren {
   onChange: (currentStep: number) => void;
 
   /**
-   * ...
+   * Doğrulama için kullanılan veri nesnesi.
+   *
+   * `TData` tipi ile esnek şekilde tanımlanır.
    */
   validation?: {
+    /**
+     * Doğrulama yapılacak veri.
+     */
     data: TData;
+
+    /**
+     * Doğrulama kuralları dizisi.
+     *
+     * `ValidationProperties<TData>` tipiyle tanımlanır ve
+     * `data` üzerindeki alanlara uygulanacak doğrulama kurallarını içerir.
+     */
     rules: ValidationProperties<TData>[];
   };
 }

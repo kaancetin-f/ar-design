@@ -1,9 +1,35 @@
-import { IChildren, IGlobalProps } from "../../../libs/types/IGlobalProps";
+import { IBorder, IChildren, IStatus } from "../../../libs/types/IGlobalProps";
 
 type message = string | message[];
 
-interface IProps extends Omit<IGlobalProps, "variant" | "icon">, IChildren {
+interface IProps extends IChildren, IStatus, IBorder {
+  /**
+   * Uyarı mesajı içeriğidir.
+   *
+   * `string` veya özel `message` tipi olabilir.
+   *
+   * Örneğin;
+   *
+   * ```jsx
+   * <Alert message="İşlem başarıyla tamamlandı." />
+   * ```
+   */
   message?: message;
+
+  /**
+   * Mesaj içindeki vurgulanacak kelime veya ifadeleri belirtir.
+   *
+   * Bu kelimeler mesaj içinde bold veya farklı stillerle öne çıkarılabilir.
+   *
+   * Örneğin;
+   *
+   * ```jsx
+   * <Alert
+   *   message="Kritik hata oluştu: sunucuya ulaşılamıyor."
+   *   emphasize={["...", "..."]}
+   * />
+   * ```
+   */
   emphasize?: string[];
 }
 

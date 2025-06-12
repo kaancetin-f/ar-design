@@ -1,9 +1,19 @@
-import React from "react";
-import { IChildren, ISizes } from "../../../libs/types/IGlobalProps";
+import { IChildren, ISize } from "../../../libs/types/IGlobalProps";
 
-interface IProps extends IChildren, ISizes {
+interface IProps extends IChildren, ISize {
   /**
+   * Modal'ın açık olup olmadığını kontrol eden ve değiştiren değerler.
    *
+   * - `get`: Modal açık mı?
+   * - `set`: Aç/kapa işlemini yapan fonksiyon.
+   *
+   * Örneğin;
+   *
+   * ```jsx
+   * const [isOpen, setIsOpen] = useState(false);
+   *
+   * <Modal open={{ get: isOpen, set: setIsOpen }} />
+   * ```
    */
   open: {
     get: boolean;
@@ -11,12 +21,26 @@ interface IProps extends IChildren, ISizes {
   };
 
   /**
-   * ...
+   * Modal başlığı.
+   *
+   * Örneğin;
+   *
+   * ```jsx
+   * <Modal title="Bilgilendirme" />
+   * ```
    */
   title?: string;
 
   /**
-   * ...
+   * Modal alt içerik alanı (footer).
+   *
+   * Genellikle buton veya açıklamalar içerir.
+   *
+   * Örneğin;
+   *
+   * ```jsx
+   * <Modal footer={<button onClick={onClose}>Kapat</button>} />
+   * ```
    */
   footer?: React.ReactNode;
 }

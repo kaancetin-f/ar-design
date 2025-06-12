@@ -1,10 +1,13 @@
-import React from "react";
-import { IGlobalProps, ISizes, IValidation } from "../../../libs/types/IGlobalProps";
+import { IBorder, IIcon, ISize, IStatus, IUpperCase, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
 
 interface IProps
-  extends Omit<IGlobalProps, "children" | "disabled">,
-    ISizes,
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "size">,
-    IValidation {}
+  extends IVariant,
+    IStatus,
+    IBorder,
+    IIcon,
+    ISize,
+    IUpperCase,
+    IValidation,
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "size"> {}
 
 export default IProps;

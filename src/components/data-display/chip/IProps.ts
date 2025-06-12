@@ -1,6 +1,15 @@
-import { IGlobalProps } from "../../../libs/types/IGlobalProps";
+import { IBorder, IIcon, IStatus, IVariant } from "../../../libs/types/IGlobalProps";
 
-interface IProps extends IGlobalProps {
+interface IProps extends IVariant, IStatus, IBorder, IIcon {
+  /**
+   * Bileşende gösterilecek metin.
+   *
+   * Örneğin;
+   *
+   * ```jsx
+   * <Chip text="..." />
+   * ```
+   */
   text: string;
 }
 
