@@ -4,6 +4,7 @@ interface IProps {
    * Eğer belirtilmezse, 1. sayfa varsayılan olarak kabul edilir.
    *
    * Örneğin;
+   *
    * ```tsx
    * <Pagination defaultCurrent={3} />
    * ```
