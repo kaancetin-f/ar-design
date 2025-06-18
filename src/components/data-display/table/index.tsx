@@ -747,7 +747,7 @@ const Table = forwardRef(
 
                         if (actions.import && actions.import.onClick) actions.import.onClick(formData, files);
                       }}
-                      config={{ buttons: { okButton: "Yükle", cancelButton: "İptal" } }}
+                      config={{ buttons: { okay: "Yükle", cancel: "İptal" } }}
                       windowBlur
                     >
                       <Button

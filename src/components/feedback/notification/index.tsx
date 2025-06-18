@@ -20,6 +20,7 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
     }[]
   >([]);
 
+  // useEffects
   useEffect(() => {
     if (!_firstLoad.current) {
       _firstLoad.current = true;

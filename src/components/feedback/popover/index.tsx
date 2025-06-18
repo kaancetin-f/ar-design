@@ -101,7 +101,7 @@ const Popover: React.FC<IProps> = ({ children, title, message, content, onConfir
                     setOpen(false);
                   }}
                 >
-                  {config?.buttons.okButton ?? "Evet"}
+                  {config?.buttons.okay ?? "Evet"}
                 </Button>
 
                 <Button
@@ -112,7 +112,7 @@ const Popover: React.FC<IProps> = ({ children, title, message, content, onConfir
                     setOpen(false);
                   }}
                 >
-                  {config?.buttons.cancelButton ?? "Hayır"}
+                  {config?.buttons.cancel ?? "Hayır"}
                 </Button>
               </div>
             )}

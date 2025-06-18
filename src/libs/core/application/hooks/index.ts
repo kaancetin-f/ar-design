@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { ConfigContext } from "../contexts/Config";
-import { NotificationContext, Status } from "../contexts/Notification";
+import { NotificationContext, PopupButtonProps, Status } from "../contexts/Notification";
 import Utils from "../../../infrastructure/shared/Utils";
 import { Errors, ValidationProperties, ValidationShape } from "../../../types";
 import { LanguageContext } from "../contexts/Language";
@@ -37,7 +37,8 @@ export const useTranslation = function <TBaseLocale>(
 
 export const useNotification = () => {
   // contexts
-  const { setTitle, setMessage, setStatus, setTrigger } = useContext(NotificationContext);
+  const { setTitle, setMessage, setStatus, setTrigger, setIsPopupOpen, setPopupButtons } =
+    useContext(NotificationContext);
 
   // methods
   const notification = ({ title, message, status }: { title: string; message?: string; status: Status | number }) => {
@@ -47,7 +48,25 @@ export const useNotification = () => {
     setTrigger && setTrigger((trigger) => !trigger);
   };
 
-  return { notification };
+  const popup = ({
+    title,
+    message,
+    status,
+    buttons,
+  }: {
+    title: string;
+    message?: string;
+    status: Status | number;
+    buttons?: PopupButtonProps | null;
+  }) => {
+    setTitle && setTitle(title);
+    setMessage && setMessage(message ?? "");
+    setStatus && setStatus(status);
+    setIsPopupOpen && setIsPopupOpen((trigger) => !trigger);
+    setPopupButtons && setPopupButtons(buttons ?? null);
+  };
+
+  return { notification, popup };
 };
 
 export const useValidation = function <TData extends object>(

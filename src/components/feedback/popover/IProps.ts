@@ -83,8 +83,8 @@ interface IProps extends IChildren {
    */
   config?: {
     buttons: {
-      okButton: string;
-      cancelButton?: string;
+      okay: string;
+      cancel?: string;
     };
   };
 }
