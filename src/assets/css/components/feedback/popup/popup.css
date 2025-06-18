@@ -41,7 +41,7 @@
 }
 .ar-notification-popup > .icon.success::before {
   content: "";
-  width: 4rem;
+  width: 3rem;
   height: 1.75rem;
   transform: rotate(-45deg);
   border: solid 10.5px transparent;
