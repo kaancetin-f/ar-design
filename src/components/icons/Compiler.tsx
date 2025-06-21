@@ -231,6 +231,32 @@ class Icon {
                 />
               </>
             );
+          case "Success":
+            return (
+              <>
+                <path
+                  d="M22 11.1V6.9C22 3.4 20.6 2 17.1 2h-4.2C9.4 2 8 3.4 8 6.9V8h3.1c3.5 0 4.9 1.4 4.9 4.9V16h1.1c3.5 0 4.9-1.4 4.9-4.9z"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M16 17.1v-4.2C16 9.4 14.6 8 11.1 8H6.9C3.4 8 2 9.4 2 12.9v4.2C2 20.6 3.4 22 6.9 22h4.2c3.5 0 4.9-1.4 4.9-4.9z"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M6.08 15l1.95 1.95 3.89-3.9"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </>
+            );
           case "BulletList":
             return (
               <>
@@ -475,14 +501,33 @@ class Icon {
                   strokeWidth={this._strokeWidth}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                ></path>
+                />
                 <path
                   d="m7.75 12 2.83 2.83 5.67-5.66"
                   stroke={this._stroke}
                   strokeWidth={this._strokeWidth}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                ></path>
+                />
+              </>
+            );
+          case "Warning":
+            return (
+              <>
+                <path
+                  d="M12 7.75V13M2.92 8.58c0-1.12.6-2.16 1.57-2.73l5.94-3.43c.97-.56 2.17-.56 3.15 0l5.94 3.43c.97.56 1.57 1.6 1.57 2.73v6.84c0 1.12-.6 2.16-1.57 2.73l-5.94 3.43c-.97.56-2.17.56-3.15 0l-5.94-3.43a3.15 3.15 0 0 1-1.57-2.73v-2.76"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M12 16.2v.1"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </>
             );
           default:

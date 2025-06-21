@@ -40,8 +40,8 @@ const TextEditor = <T extends object>({
   // variables
   const toolbarButtons: { command: string; icon: Icons; tooltip: string }[] = [
     { command: "bold", icon: "Bold", tooltip: `Bold (${Utils.GetOSShortCutIcons()} + B)` },
-    { command: "italic", icon: "Italic", tooltip: `Bold (${Utils.GetOSShortCutIcons()} + I)` },
-    { command: "underline", icon: "Underline", tooltip: `Bold (${Utils.GetOSShortCutIcons()} + U)` },
+    { command: "italic", icon: "Italic", tooltip: `Italic (${Utils.GetOSShortCutIcons()} + I)` },
+    { command: "underline", icon: "Underline", tooltip: `Underline (${Utils.GetOSShortCutIcons()} + U)` },
     { command: "insertUnorderedList", icon: "BulletList", tooltip: "Bulleted List" },
     { command: "insertOrderedList", icon: "NumberList", tooltip: "Numbered List" },
     { command: "justifyLeft", icon: "TextAlingLeft", tooltip: "Align Left" },
@@ -284,7 +284,7 @@ const TextEditor = <T extends object>({
             variant="borderless"
             status="secondary"
             border={{ radius: "none" }}
-            icon={{ element: <ARIcon icon={icon} size={18} fill="var(--gray-700)" /> }}
+            icon={{ element: <ARIcon icon={icon} size={18} fill="transparent" /> }}
             tooltip={{
               text: tooltip,
             }}

@@ -6,6 +6,8 @@ import "../../../assets/css/components/feedback/popup/popup.css";
 import Button from "../../form/button";
 import ReactDOM from "react-dom";
 import { NotificationContext } from "../../../libs/core/application/contexts/Notification";
+import { Status } from "../../../libs/types";
+import { ARIcon } from "../../icons";
 
 const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
   // contexts
@@ -18,6 +20,38 @@ const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
   // states
   const _notificaitonPopupWrapperClassName: string[] = ["ar-notification-popup-wrapper"];
   const [className, setClassName] = useState<string[]>(["ar-notification-popup", ""]);
+
+  // methods
+  const buttonStatus = (): Status => {
+    switch (status) {
+      case "success":
+        return "success";
+      case "warning":
+        return "warning";
+      case "information":
+        return "information";
+      case "error":
+        return "danger";
+
+      default:
+        return "light";
+    }
+  };
+  const buttonIcons = () => {
+    switch (status) {
+      case "success":
+        return <ARIcon icon="Success" fill="transparent" stroke="var(--white)" size={48} />;
+      case "warning":
+        return <ARIcon icon="Warning" fill="transparent" stroke="var(--white)" size={48} />;
+      case "information":
+        return "information";
+      case "error":
+        return <ARIcon icon="CloseCircle" fill="transparent" stroke="var(--white)" size={48} />;
+
+      default:
+        return "light";
+    }
+  };
 
   // useEffects
   useEffect(() => {
@@ -55,7 +89,7 @@ const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
         ></div>
 
         <div ref={_arNotificationPopup} className={className.map((c) => c).join(" ")}>
-          <div className={`icon ${status}`}></div>
+          <div className={`icon ${status}`}>{buttonIcons()}</div>
 
           <div className="content">
             <span className={`title ${status}`}>{title}!</span>
@@ -64,7 +98,7 @@ const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
 
           <Button
             variant="filled"
-            status={status == "success" ? "success" : "danger"}
+            status={buttonStatus()}
             onClick={() => {
               (() => buttons?.okay?.onClick && buttons.okay?.onClick())();
 

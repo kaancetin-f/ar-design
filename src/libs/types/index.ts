@@ -143,6 +143,7 @@ export type Icons =
   | "Bold"
   | "Italic"
   | "Underline"
+  | "Success"
   | "Strikethrough"
   | "BulletList"
   | "NumberList"
@@ -151,7 +152,8 @@ export type Icons =
   | "TextAlingRight"
   | "Filter"
   | "TickCircle"
-  | "File";
+  | "File"
+  | "Warning";
 // Charts
 // Pie
 export type PieChartDataType = { value: number; text: string };

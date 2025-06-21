@@ -50,15 +50,15 @@
   border-radius: var(--border-radius-pill);
   box-shadow: 0 0 0 5px rgba(var(--success-rgb), 0.25);
 }
-.ar-notification-popup > .icon.success::before {
-  content: "";
-  width: 3rem;
-  height: 1.75rem;
-  transform: rotate(-45deg);
-  border: solid 10.5px transparent;
-  border-radius: var(--border-radius-sm);
-  border-left-color: var(--white);
-  border-bottom-color: var(--white);
+
+.ar-notification-popup > .icon.warning {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--warning);
+  border-radius: var(--border-radius-pill);
+  box-shadow: 0 0 0 5px rgba(var(--warning-rgb), 0.25);
 }
 
 .ar-notification-popup > .icon.error {
@@ -69,24 +69,6 @@
   background-color: var(--danger);
   border-radius: var(--border-radius-pill);
   box-shadow: 0 0 0 5px rgba(var(--danger-rgb), 0.25);
-}
-.ar-notification-popup > .icon.error::before {
-  position: absolute;
-  content: "";
-  background-color: var(--white);
-  width: 10.5px;
-  height: 3.5rem;
-  transform: rotate(-45deg);
-  border-radius: var(--border-radius-sm);
-}
-.ar-notification-popup > .icon.error::after {
-  position: absolute;
-  content: "";
-  background-color: var(--white);
-  width: 10.5px;
-  height: 3.5rem;
-  transform: rotate(45deg);
-  border-radius: var(--border-radius-sm);
 }
 
 .ar-notification-popup > .content {
@@ -99,15 +81,9 @@
   color: var(--gray-700);
 }
 .ar-notification-popup > .content > .title {
+  color: var(--gray-700);
   font-size: 1.75rem;
   text-align: center;
-}
-
-.ar-notification-popup > .content > .title.success {
-  color: var(--success);
-}
-.ar-notification-popup > .content > .title.error {
-  color: var(--danger);
 }
 
 .ar-notification-popup > .content > .message {

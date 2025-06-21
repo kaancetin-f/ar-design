@@ -48,17 +48,18 @@ export const useNotification = () => {
     setTrigger && setTrigger((trigger) => !trigger);
   };
 
-  const popup = ({
-    title,
-    message,
-    status,
-    buttons,
-  }: {
-    title: string;
-    message?: string;
-    status: Status | number;
-    buttons?: PopupButtonProps | null;
-  }) => {
+  const popup = (
+    {
+      title,
+      message,
+      status,
+    }: {
+      title: string;
+      message?: string;
+      status: Status | number;
+    },
+    buttons?: PopupButtonProps | null
+  ) => {
     setTitle && setTitle(title);
     setMessage && setMessage(message ?? "");
     setStatus && setStatus(status);
