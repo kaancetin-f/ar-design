@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import Props from "./Props";
 import "../../../assets/css/components/form/upload/styles.css";
-import { ARIcon } from "../../icons";
-import Button from "../button";
 import Tooltip from "../../feedback/tooltip";
 import { AllowedTypes } from "../../../libs/types";
+import { ARIcon } from "../../icons";
 
 const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, multiple }) => {
   // refs
@@ -47,6 +46,8 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
 
         return newList;
       });
+    } else {
+      setSelectedFile(undefined);
     }
   };
 
@@ -61,7 +62,7 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
     }
 
     if (maxSize) {
-      const _maxSize = maxSize * 1024 * 1024; // 5MB
+      const _maxSize = maxSize * 1024 * 1024; // MB
 
       if (file.size > _maxSize) {
         newErrors.push({ [file.name]: "Dosya boyutu çok büyük." });
@@ -71,38 +72,63 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
     setValidationErrors((prev) => [...prev, ...newErrors]);
   };
 
+  function handleFileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.result && typeof reader.result === "string") {
+          resolve(reader.result);
+        } else {
+          reject(new Error("Failed to read the file"));
+        }
+      };
+      reader.onerror = reject;
+
+      reader.readAsDataURL(file);
+    });
+  }
+
   // useEffects
   useEffect(() => {
-    const dataTransfer = new DataTransfer();
-    const fileFormData = new FormData();
-    setValidationErrors([]);
-    _validationErrors.current = [];
+    (async () => {
+      const dataTransfer = new DataTransfer();
+      const fileFormData = new FormData();
 
-    if (_input.current) {
-      if (multiple) {
-        // Seçilmiş olan dosyalar validasyona gönderiliyor.
-        selectedFiles.forEach((f) => handleValidationFile(f));
-        const inValidFiles = Array.from(new Set(_validationErrors.current));
-        // Input içerisine dosyalar aktarılıyor.
-        selectedFiles.forEach((f) => dataTransfer.items.add(f));
-        _input.current.files = dataTransfer.files;
+      setValidationErrors([]);
+      _validationErrors.current = [];
 
-        // Geçerli olan dosyalar alındı...
-        const validFiles = [...selectedFiles.filter((x) => !inValidFiles.includes(x.name))];
-        validFiles.forEach((f) => fileFormData.append("file", f));
-        onChange(fileFormData, validFiles, _validationErrors.current.length === 0);
-      } else {
-        if (selectedFile) {
-          handleValidationFile(selectedFile);
-          fileFormData.append("file", selectedFile);
-          onChange(fileFormData, selectedFile);
-
+      if (_input.current) {
+        if (multiple) {
+          // Seçilmiş olan dosyalar validasyona gönderiliyor.
+          selectedFiles.forEach((f) => handleValidationFile(f));
+          const inValidFiles = Array.from(new Set(_validationErrors.current));
           // Input içerisine dosyalar aktarılıyor.
-          dataTransfer.items.add(selectedFile);
+          selectedFiles.forEach((f) => dataTransfer.items.add(f));
           _input.current.files = dataTransfer.files;
+
+          // Geçerli olan dosyalar alındı...
+          const validFiles = [...selectedFiles.filter((x) => !inValidFiles.includes(x.name))];
+          validFiles.forEach((f) => fileFormData.append("file", f));
+
+          // Geçerli olan dosyalar base64'e dönüştürülüyor...
+          const base64Array = await Promise.all(validFiles.map((validFile) => handleFileToBase64(validFile)));
+
+          onChange(fileFormData, validFiles, base64Array, _validationErrors.current.length === 0);
+        } else {
+          if (selectedFile) {
+            handleValidationFile(selectedFile);
+            fileFormData.append("file", selectedFile);
+
+            onChange(fileFormData, selectedFile, await handleFileToBase64(selectedFile));
+
+            // Input içerisine dosyalar aktarılıyor.
+            dataTransfer.items.add(selectedFile);
+            _input.current.files = dataTransfer.files;
+          }
         }
       }
-    }
+    })();
   }, [selectedFiles, selectedFile]);
 
   useEffect(() => {
@@ -118,53 +144,81 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
       <input ref={_input} type="file" onChange={(event) => handleFileChange(event.target.files)} multiple={multiple} />
 
       <div className="ar-upload-button">
-        <Button
-          variant="outlined"
-          status="light"
-          icon={{ element: <ARIcon variant="bulk" icon="Upload" fill="var(--gray-300)" /> }}
+        <div
+          className="button"
           onClick={() => {
             if (_input.current) _input.current.click();
           }}
         >
+          <div className="information">
+            <ARIcon variant="linear" icon="Upload" stroke="var(--gray-600)" fill="transparent" />
+
+            <div className="properies">
+              {allowedTypes && (
+                <div className="allow-types">
+                  {allowedTypes?.map((allowedType) => allowedType.split("/")[1].toLocaleUpperCase()).join(", ")}
+                </div>
+              )}
+
+              {maxSize && <div className="max-size">up to {maxSize}MB</div>}
+            </div>
+          </div>
+
           {text && <span>{text}</span>}
-        </Button>
+        </div>
 
         <div className="ar-upload-files">
-          <ul>
-            {selectedFiles.map((selectedFile, index) => {
-              let _className: string[] = [];
+          {multiple ? (
+            <ul>
+              {selectedFiles.map((selectedFile, index) => {
+                let _className: string[] = [];
 
-              const errorMessages = validationErrors
-                .filter((error) => Object.keys(error).includes(selectedFile.name))
-                .map((error) => error[selectedFile.name]);
+                const errorMessages = validationErrors
+                  .filter((error) => Object.keys(error).includes(selectedFile.name))
+                  .map((error) => error[selectedFile.name]);
 
-              if (errorMessages.length > 0) _className.push("error");
+                if (errorMessages.length > 0) _className.push("error");
 
-              const content = (
-                <div className="content">
-                  <span className={_className.map((c) => c).join(" ")}>{selectedFile.name}</span>
-                  <span
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      handleFileRemove(selectedFile);
-                    }}
-                  >
-                    x
-                  </span>
+                const content = (
+                  <div className="content">
+                    <span className={_className.map((c) => c).join(" ")}>{selectedFile.name}</span>
+                    <span
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        handleFileRemove(selectedFile);
+                      }}
+                    >
+                      x
+                    </span>
+                  </div>
+                );
+
+                return (
+                  <li key={index} className={_className.map((c) => c).join(" ")}>
+                    {errorMessages.length === 0 ? (
+                      content
+                    ) : (
+                      <Tooltip text={errorMessages.map((message) => message ?? "")}>{content}</Tooltip>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            selectedFile && (
+              <div className="file">
+                <div className="information">
+                  {/* <ARIcon icon={"File"} /> */}
+                  <span>{selectedFile.name}</span>
+                  <span>{(selectedFile.size / 1024).toFixed(3)}KB</span>
                 </div>
-              );
 
-              return (
-                <li key={index} className={_className.map((c) => c).join(" ")}>
-                  {errorMessages.length === 0 ? (
-                    content
-                  ) : (
-                    <Tooltip text={errorMessages.map((message) => message ?? "")}>{content}</Tooltip>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+                <div className="delete" onClick={() => handleFileRemove(selectedFile)}>
+                  <ARIcon icon="CloseCircle" fill="transparent" size={20} />
+                </div>
+              </div>
+            )
+          )}
         </div>
       </div>
     </div>

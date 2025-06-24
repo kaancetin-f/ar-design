@@ -19,7 +19,7 @@ export const ARIcon: React.FC<{
   icon,
   fill = "var(--dark)",
   stroke = "var(--dark)",
-  strokeWidth = 2,
+  strokeWidth = 1,
   style,
 }) => {
   const { Compiler } = new Icon(fill, stroke, strokeWidth);

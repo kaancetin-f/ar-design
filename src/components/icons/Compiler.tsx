@@ -202,6 +202,32 @@ class Icon {
                 />
               </>
             );
+          case "Upload":
+            return (
+              <>
+                <path
+                  d="M9 17v-6l-2 2M9 11l2 2"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M22 10v5c0 5-2 7-7 7H9c-5 0-7-2-7-7V9c0-5 2-7 7-7h5"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M22 10h-4c-3 0-4-1-4-4V2l8 8Z"
+                  stroke={this._stroke}
+                  strokeWidth={this._strokeWidth}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </>
+            );
           case "Strikethrough":
             return (
               <>
@@ -565,7 +591,6 @@ class Icon {
                 </svg>
               </>
             );
-
           case "Upload":
             return (
               <>

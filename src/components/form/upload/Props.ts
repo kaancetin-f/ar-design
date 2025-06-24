@@ -34,7 +34,7 @@ interface IMultiple {
    * />
    * ```
    */
-  onChange: (formData: FormData, files: File[], isInvalidFileExist: boolean) => void;
+  onChange: (formData: FormData, files: File[], base64: string[], isInvalidFileExist: boolean) => void;
 
   /**
    * Çoklu dosya seçiminin aktif olduğunu belirtir.
@@ -71,7 +71,7 @@ interface ISingle {
    * <Upload onChange={(formData, file) => console.log(file)} />
    * ```
    */
-  onChange: (formData: FormData | undefined, files: File | null) => void;
+  onChange: (formData: FormData | undefined, files: File | null, base64: string) => void;
 
   /**
    * Çoklu dosya seçiminin devre dışı olduğunu belirtir.
