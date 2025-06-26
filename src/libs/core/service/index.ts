@@ -43,14 +43,14 @@ class Service {
       let endPoint: string = `${this._endPoint}`;
       if (values?.input) endPoint += `/${values.input}`;
 
-      const response = await this._api.Post({
+      const { p_response, response } = await this._api.Post({
         input: endPoint,
         data: values?.data,
         headers: values?.headers,
         init: values?.init,
       });
 
-      return await this.Response(null, response);
+      return await this.Response(p_response, response);
     } catch (error) {
       throw new Error(error instanceof Error ? error.message : "Beklenmeyen bir hata oluştu.");
     }

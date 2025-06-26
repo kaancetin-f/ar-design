@@ -13,7 +13,10 @@ class Api {
     this._url = `${this._host}/${this._core ? this._core + "/" : ""}`;
   }
 
-  async Get(values: { input?: RequestInfo | undefined; headers?: HeadersInit }) {
+  async Get(values: { input?: RequestInfo | undefined; headers?: HeadersInit }): Promise<{
+    p_response: Promise<Response>;
+    response: Response;
+  }> {
     if (values.input && values.input.toString().includes("?")) {
       values.input = values.input.toString().replace(/\/(?=\?)/, "");
     }
@@ -25,6 +28,7 @@ class Api {
         ...values.headers,
       },
     });
+
     const clone = (await p_response).clone();
     const response = await clone;
 
@@ -36,19 +40,22 @@ class Api {
     data?: any;
     headers?: HeadersInit;
     init?: Omit<RequestInit | undefined, "body">;
-  }): Promise<Response> {
+  }): Promise<{ p_response: Promise<Response>; response: Response }> {
     if (values.input && values.input.toString().includes("?")) {
       values.input = values.input.toString().replace(/\/(?=\?)/, "");
     }
 
-    const response = await this.CustomFetch(`${this._url}${values.input}`, {
+    const p_response = this.CustomFetch(`${this._url}${values.input}`, {
       method: "POST",
       headers: { ...this.HeaderProperties(), ...values.headers },
       body: JSON.stringify(values.data),
       ...values.init,
     });
 
-    return response;
+    const clone = (await p_response).clone();
+    const response = await clone;
+
+    return { p_response, response };
   }
 
   async PostWithFormData(values: {
