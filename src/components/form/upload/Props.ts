@@ -107,6 +107,8 @@ type Props = {
    */
   allowedTypes?: AllowedTypes[];
 
+  uploadType?: "image" | "application-file";
+
   /**
    * Kabul edilen maksimum dosya boyutu (byte cinsinden).
    *

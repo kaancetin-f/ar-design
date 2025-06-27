@@ -29,6 +29,17 @@
   cursor: pointer;
   user-select: none;
 }
+.ar-upload-button > .button:has(> img) {
+  padding: 0;
+  border: none;
+  overflow: hidden;
+}
+.ar-upload-button > .button > img {
+  width: 100%;
+  height: 200px;
+  object-fit: fill;
+  object-position: top;
+}
 .ar-upload-button > .button > .information {
   display: flex;
   flex-direction: column;
@@ -54,53 +65,10 @@
   transition: top 250ms ease-in-out;
 }
 .ar-upload-button > .ar-upload-files > ul {
-  display: flex;
-  flex-direction: column;
-  list-style-type: none;
-}
-.ar-upload-button > .ar-upload-files > ul > li {
-  position: relative;
-  border-bottom: solid 1px var(--gray-200);
-}
-.ar-upload-button > .ar-upload-files > ul > li:hover > .errors {
-  display: flex;
-}
-.ar-upload-button > .ar-upload-files > ul > li.error {
-  border-left: solid 2px var(--danger);
-}
-.ar-upload-button > .ar-upload-files > ul > li .content {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 2rem;
-  padding: 0 0.5rem;
-}
-.ar-upload-button > .ar-upload-files > ul > li .content > span:first-child {
-  width: 90%;
-  font-size: 0.75rem;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-.ar-upload-button > .ar-upload-files > ul > li .content > span:first-child.error {
-  color: var(--danger);
-  /* -webkit-text-stroke: 0.5px var(--danger); */
-}
-.ar-upload-button > .ar-upload-files > ul > li .content > span:last-child {
-  background-color: rgba(var(--danger-rgb), 0.1);
-  width: 1rem;
-  height: 1rem;
-  border-radius: var(--border-radius-pill);
-  color: rgba(var(--danger-rgb), 0.5);
-  font-size: 0.75rem;
-  text-align: center;
-  /* -webkit-text-stroke: 1px rgba(var(--danger-rgb), 0.5); */
-  line-height: 0.85rem;
-  cursor: pointer;
+  list-style: none;
 }
 
+.ar-upload-button > .ar-upload-files > ul > li > .file,
 .ar-upload-button > .ar-upload-files > .file {
   display: flex;
   flex-direction: row;
@@ -111,14 +79,17 @@
   padding: 0.5rem;
   border-radius: var(--border-radius-sm);
 }
+.ar-upload-button > .ar-upload-files > ul > li > .file > .information,
 .ar-upload-button > .ar-upload-files > .file > .information {
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
 }
+.ar-upload-button > .ar-upload-files > ul > li > .file > .information > span,
 .ar-upload-button > .ar-upload-files > .file > .information > span {
   display: inline-block;
 }
+.ar-upload-button > .ar-upload-files > ul > li > .file > .information > span:last-child,
 .ar-upload-button > .ar-upload-files > .file > .information > span:last-child {
   background-color: var(--primary);
   padding: 0 0.25rem;
@@ -127,6 +98,7 @@
   font-size: 0.75rem;
   line-height: 2;
 }
+.ar-upload-button > .ar-upload-files > ul > li > .file > .delete,
 .ar-upload-button > .ar-upload-files > .file > .delete {
   cursor: pointer;
 }

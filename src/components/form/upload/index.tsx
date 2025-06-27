@@ -5,7 +5,15 @@ import Tooltip from "../../feedback/tooltip";
 import { AllowedTypes } from "../../../libs/types";
 import { ARIcon } from "../../icons";
 
-const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, multiple }) => {
+const Upload: React.FC<Props> = ({
+  text,
+  file,
+  onChange,
+  allowedTypes,
+  uploadType = "application-file",
+  maxSize,
+  multiple,
+}) => {
   // refs
   const _firstLoad = useRef<boolean>(false);
   const _input = useRef<HTMLInputElement>(null);
@@ -14,8 +22,9 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
   const _validationErrors = useRef<string[]>([]);
 
   // states
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+  const [selectedFileBase64, setSelectedFileBase64] = useState<string | undefined>(undefined);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [validationErrors, setValidationErrors] = useState<Partial<{ [key: string]: string }>[]>([]);
 
   // methods
@@ -48,6 +57,7 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
       });
     } else {
       setSelectedFile(undefined);
+      setSelectedFileBase64(undefined);
     }
   };
 
@@ -122,6 +132,8 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
 
             onChange(fileFormData, selectedFile, await handleFileToBase64(selectedFile));
 
+            setSelectedFileBase64(await handleFileToBase64(selectedFile));
+
             // Input içerisine dosyalar aktarılıyor.
             dataTransfer.items.add(selectedFile);
             _input.current.files = dataTransfer.files;
@@ -150,21 +162,27 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
             if (_input.current) _input.current.click();
           }}
         >
-          <div className="information">
-            <ARIcon variant="linear" icon="Upload" stroke="var(--gray-600)" fill="transparent" />
+          {uploadType === "image" && selectedFileBase64 && <img src={selectedFileBase64} />}
 
-            <div className="properies">
-              {allowedTypes && (
-                <div className="allow-types">
-                  {allowedTypes?.map((allowedType) => allowedType.split("/")[1].toLocaleUpperCase()).join(", ")}
+          {(uploadType === "application-file" || !selectedFileBase64) && (
+            <>
+              <div className="information">
+                <ARIcon variant="linear" icon="Upload" stroke="var(--gray-600)" fill="transparent" />
+
+                <div className="properies">
+                  {allowedTypes && (
+                    <div className="allow-types">
+                      {allowedTypes?.map((allowedType) => allowedType.split("/")[1].toLocaleUpperCase()).join(", ")}
+                    </div>
+                  )}
+
+                  {maxSize && <div className="max-size">up to {maxSize}MB</div>}
                 </div>
-              )}
+              </div>
 
-              {maxSize && <div className="max-size">up to {maxSize}MB</div>}
-            </div>
-          </div>
-
-          {text && <span>{text}</span>}
+              {text && <span>{text}</span>}
+            </>
+          )}
         </div>
 
         <div className="ar-upload-files">
@@ -180,16 +198,16 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
                 if (errorMessages.length > 0) _className.push("error");
 
                 const content = (
-                  <div className="content">
-                    <span className={_className.map((c) => c).join(" ")}>{selectedFile.name}</span>
-                    <span
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleFileRemove(selectedFile);
-                      }}
-                    >
-                      x
-                    </span>
+                  <div className="file">
+                    <div className="information">
+                      {/* <ARIcon icon={"File"} /> */}
+                      <span>{selectedFile.name}</span>
+                      <span>{(selectedFile.size / 1024).toFixed(3)}KB</span>
+                    </div>
+
+                    <div className="delete" onClick={() => handleFileRemove(selectedFile)}>
+                      <ARIcon icon="CloseCircle" fill="transparent" size={20} />
+                    </div>
                   </div>
                 );
 
