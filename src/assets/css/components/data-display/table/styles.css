@@ -186,18 +186,68 @@
   cursor: no-drop;
 }
 
-.ar-table > .content > table > tbody > tr.subrow-item > td > .table-cell > .before {
+/* For Rows */
+.ar-table > .content > table > tbody > tr > td > .table-cell > .before {
   position: absolute;
   top: 0px;
   content: "";
-  background-color: var(--gray-600);
+  background: linear-gradient(0deg, var(--gray-200) 0%, var(--primary) 50%, var(--gray-200) 100%);
   width: 2px;
   height: 100%;
   margin-left: -17.5px;
 }
+.ar-table > .content > table > tbody > tr:not(:has(+ tr)) > td > .table-cell > .before,
+.ar-table > .content > table > tbody > tr:last-child > td > .table-cell > .before {
+  height: 50%;
+  background: linear-gradient(0deg, var(--gray-600) 0%, var(--gray-200) 100%);
+}
+.ar-table > .content > table > tbody > tr > td > .table-cell > .after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  content: "";
+  background-color: var(--primary);
+  width: 15px;
+  height: 2px;
+  margin-left: -17.5px;
+}
+.ar-table > .content > table > tbody > tr > td > .table-cell > .after > .circle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+  content: "";
+  background-color: var(--primary);
+  width: 5px;
+  height: 5px;
+  border-radius: var(--border-radius-pill);
+}
+
+/* For Subrows */
+.ar-table > .content > table > tbody > tr.subrow-item > td > .table-cell > .before {
+  position: absolute;
+  top: 0px;
+  content: "";
+  background: linear-gradient(0deg, var(--gray-200) 0%, var(--gray-600) 50%, var(--gray-200) 100%) !important;
+  width: 2px;
+  height: 100%;
+  margin-left: -17.5px;
+}
+.ar-table > .content > table > tbody > tr.subrow-item > td > .table-cell > .last-before {
+  position: absolute;
+  top: 0px;
+  content: "";
+  background: linear-gradient(0deg, var(--gray-200) 0%, var(--gray-600) 50%, var(--gray-200) 100%) !important;
+  width: 2px;
+  height: 100%;
+}
+.ar-table > .content > table > tbody > tr.subrow-item > td > .table-cell > .last-before:first-child {
+  background: linear-gradient(0deg, var(--gray-200) 0%, var(--primary) 50%, var(--gray-200) 100%) !important;
+}
 .ar-table > .content > table > tbody > tr.subrow-item:not(:has(+ tr.subrow-item)) > td > .table-cell > .before,
 .ar-table > .content > table > tbody > tr.subrow-item:last-child > td > .table-cell > .before {
   height: 50%;
+  background: linear-gradient(0deg, var(--gray-600) 0%, var(--gray-200) 100%) !important;
 }
 .ar-table > .content > table > tbody > tr.subrow-item > td > .table-cell > .after {
   position: absolute;
@@ -208,6 +258,17 @@
   width: 15px;
   height: 2px;
   margin-left: -17.5px;
+}
+.ar-table > .content > table > tbody > tr.subrow-item > td > .table-cell > .after > .circle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+  content: "";
+  background-color: var(--gray-600);
+  width: 5px;
+  height: 5px;
+  border-radius: var(--border-radius-pill);
 }
 
 @import url("./scroll.css");

@@ -470,7 +470,7 @@ const Table = forwardRef(
       return _data;
     }, [data, searchedText, currentPage]);
 
-    const renderRow = (item: T, index: number) => {
+    const renderRow = (item: T, index: number, deph: number) => {
       const isHasSubitems = _subrowSelector in item;
       // TODO: Keylere bakılacak...
       return (
@@ -512,7 +512,7 @@ const Table = forwardRef(
               <td style={{ width: 0, minWidth: 0 }}></td>
             ) : null}
 
-            {columns.map((c, cIndex) => renderCell(item, c, cIndex, index, 0))}
+            {columns.map((c, cIndex) => renderCell(item, c, cIndex, index, deph * (config.isTreeView ? 1.75 : 0), 0))}
           </tr>
 
           {/* Alt satırları burada listele */}
@@ -528,7 +528,15 @@ const Table = forwardRef(
       );
     };
 
-    const renderCell = (item: T, c: TableColumnType<T>, cIndex: number, index: number, depth: number) => {
+    const renderCell = (
+      item: T,
+      c: TableColumnType<T>,
+      cIndex: number,
+      index: number,
+      depth: number,
+      level: number,
+      isSubrows: boolean = false
+    ) => {
       let render: any;
 
       // `c.key` bir string ise
@@ -552,6 +560,8 @@ const Table = forwardRef(
       if (c.config?.alignContent) _className.push(`align-content-${c.config.alignContent}`);
       if (c.config?.textWrap) _className.push(`text-${c.config.textWrap}`);
 
+      console.log(depth);
+
       return (
         <td
           key={`cell-${index}-${cIndex}`}
@@ -560,20 +570,34 @@ const Table = forwardRef(
           data-sticky-position={c.config?.sticky}
         >
           <div style={{ paddingLeft: `${depth == 0 ? 1 : depth}rem` }} className="table-cell">
-            {cIndex === 0 && <div className="before"></div>}
+            {config.isTreeView && cIndex === 0 && (
+              <>
+                {isSubrows &&
+                  Array.from({ length: level }).map((_, i) => {
+                    if (i > 0) i *= 1.655;
+
+                    return (
+                      <div key={`last-before-${i}`} style={{ left: `${i + 0.65}rem` }} className="last-before"></div>
+                    );
+                  })}
+                <div className="before"></div>
+              </>
+            )}
             {React.isValidElement(render) ? render : String(render)}
-            {cIndex === 0 && <div className="after"></div>}
+            {config.isTreeView && cIndex === 0 && (
+              <div className="after">
+                <div className="circle"></div>
+              </div>
+            )}
           </div>
         </td>
       );
     };
 
-    const SubitemList = ({ items, columns, index, depth }: any) => {
+    const SubitemList = ({ items, columns, index, depth, level = 1 }: any) => {
       return items.map((subitem: T, subindex: number) => {
         const _subitem = subitem[_subrowSelector as keyof typeof subitem];
         const isHasSubitems = _subrowSelector in subitem;
-
-        console.log(isHasSubitems);
 
         // TODO: Keylere bakılacak...
         return (
@@ -581,6 +605,7 @@ const Table = forwardRef(
             <tr
               key={`subitem-${index}-${subindex}-${Math.random()}`}
               className={`subrow-item ${_subrowButton ? "type-b" : "type-a"}`}
+              data-level={level}
             >
               {isHasSubitems && _subrowButton ? (
                 <td>
@@ -605,7 +630,7 @@ const Table = forwardRef(
               ) : null}
 
               {columns.map((c: TableColumnType<T>, cIndex: number) =>
-                renderCell(subitem, c, cIndex, subindex, depth * 1.75)
+                renderCell(subitem, c, cIndex, subindex, depth * (config.isTreeView ? 2.25 : 1.75), level, true)
               )}
             </tr>
 
@@ -615,7 +640,8 @@ const Table = forwardRef(
                 items={_subitem as T[]}
                 columns={columns}
                 index={subindex}
-                depth={depth * 1.5}
+                depth={depth + 0.75}
+                level={level + 1}
               />
             )}
           </Fragment>
@@ -912,7 +938,7 @@ const Table = forwardRef(
 
             <tbody>
               {getData.map((item, index) => (
-                <React.Fragment key={index}>{renderRow(item, index)}</React.Fragment>
+                <React.Fragment key={index}>{renderRow(item, index, 1)}</React.Fragment>
               ))}
             </tbody>
           </table>

@@ -67,6 +67,8 @@ export type Config = {
      */
     button?: boolean;
   };
+
+  isTreeView?: boolean;
 };
 
 type ImportActionType = {

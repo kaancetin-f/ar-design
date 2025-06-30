@@ -38,7 +38,7 @@ const MemoizedTHeadCell = function <T>({ columns }: { columns: TableColumnType<T
   );
 };
 
-// 👇 React.memo kullanımı sırasında generic tipi koruyoruz
+// React.memo kullanımı sırasında generic tipi koruyoruz.
 const THeadCell = React.memo(MemoizedTHeadCell) as typeof MemoizedTHeadCell;
 
 export default THeadCell;
