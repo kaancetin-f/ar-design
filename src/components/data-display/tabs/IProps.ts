@@ -1,7 +1,10 @@
 import { TabProps } from "../../../libs/types";
 
 interface IProps {
-  name?: string;
+  /**
+   * İsim benzersiz olmalıdır. Sayfa yenilenmesinde seçimin değişmemesi için kullanılmaktadır.
+   */
+  name: string;
 
   /**
    * Tab'ları temsil eden dizi.
