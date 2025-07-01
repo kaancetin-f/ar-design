@@ -4,14 +4,19 @@ import React, { useEffect, useState } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/data-display/tabs/tabs.css";
 
-const Tabs: React.FC<IProps> = ({ tabs = [], activeTab, onChange, onClose }) => {
+const Tabs: React.FC<IProps> = ({ name, tabs = [], activeTab, onChange, onClose }) => {
   // states
   const [currentTab, setCurrentTab] = useState<number>(0);
 
   // useEffects
+  useEffect(() => setCurrentTab(activeTab ?? 0), [activeTab]);
+
   useEffect(() => {
-    setCurrentTab(activeTab ?? 0);
-  }, [activeTab]);
+    const key = `${window.location.pathname}::${name}`;
+    const stored = sessionStorage.getItem(key);
+
+    setCurrentTab(stored !== null ? Number(stored) : 0);
+  }, []);
 
   return (
     <div className="ar-tabs">
@@ -29,6 +34,9 @@ const Tabs: React.FC<IProps> = ({ tabs = [], activeTab, onChange, onClose }) => 
                 onClick={() => {
                   setCurrentTab(index);
                   onChange && onChange(index);
+
+                  const key = `${window.location.pathname}::${name}`;
+                  sessionStorage.setItem(key, String(index));
                 }}
               >
                 <span>{tab.title}</span>

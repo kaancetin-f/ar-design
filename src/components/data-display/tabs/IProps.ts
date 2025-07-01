@@ -1,6 +1,8 @@
 import { TabProps } from "../../../libs/types";
 
 interface IProps {
+  name?: string;
+
   /**
    * Tab'ları temsil eden dizi.
    * Her bir eleman `TabProps` tipinde olmalıdır.

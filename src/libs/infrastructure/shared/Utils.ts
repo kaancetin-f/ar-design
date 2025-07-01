@@ -92,6 +92,17 @@ class Utils {
 
     return keys1.every((key) => this.DeepEqual(obj1[key], obj2[key])); // Rekürsif karşılaştırma
   };
+
+  public RandomCharacterGenerator = (length: number) => {
+    const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let sonuc = "";
+
+    for (let i = 0; i < length; i++) {
+      sonuc += characters[Math.floor(Math.random() * characters.length)];
+    }
+
+    return sonuc;
+  };
 }
 
 export default new Utils();

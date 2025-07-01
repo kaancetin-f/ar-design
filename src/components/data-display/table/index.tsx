@@ -560,8 +560,6 @@ const Table = forwardRef(
       if (c.config?.alignContent) _className.push(`align-content-${c.config.alignContent}`);
       if (c.config?.textWrap) _className.push(`text-${c.config.textWrap}`);
 
-      console.log(depth);
-
       return (
         <td
           key={`cell-${index}-${cIndex}`}
