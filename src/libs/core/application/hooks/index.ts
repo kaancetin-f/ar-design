@@ -136,8 +136,17 @@ export const useValidation = function <TData extends object>(
         // Son seviyedeki veriyi paramsShape fonksiyonuna gönder.
         paramsShape(param, currentData);
       } else {
-        // Subkey sadece bir seviye ise, doğrudan kullanılır.
-        paramsShape(param, value?.[param.subkey as keyof typeof value] as string);
+        if (Array.isArray(value)) {
+          // Eğer value bir dizi ise ve subkey sadece bir seviye ise,
+          // dizinin her bir elemanına subkey uygulanabilir.
+          const extractedValues = value.map((item) => item?.[param.subkey as keyof typeof item]);
+
+          // Elde edilen değerler topluca paramsShape'e gönderilebilir ya da başka bir şekilde işlenebilir.
+          extractedValues.map((extractedValue) => paramsShape(param, extractedValue));
+        } else {
+          // Value bir obje ise, subkey doğrudan kullanılır.
+          paramsShape(param, value?.[param.subkey as keyof typeof value] as string);
+        }
       }
     } else {
       // Eğer subkey yoksa, doğrudan param.key üzerinden işlem yapılır.
