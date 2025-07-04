@@ -27,6 +27,7 @@ import Typography from "./components/data-display/typography";
 
 // Feedback
 import Alert from "./components/feedback/alert";
+import Drawer from "./components/feedback/drawer";
 import Modal from "./components/feedback/modal";
 import Popover from "./components/feedback/popover";
 import Progress from "./components/feedback/progress";
@@ -69,6 +70,7 @@ export {
 
   // Feedback
   Alert,
+  Drawer,
   Modal,
   Popover,
   Progress,

@@ -1,0 +1,5 @@
+.ar-drawer-wrapper > .ar-drawer > .content {
+  padding: 2rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
