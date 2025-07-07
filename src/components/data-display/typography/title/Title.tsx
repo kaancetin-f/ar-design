@@ -3,7 +3,7 @@
 import React, { useRef } from "react";
 import IProps from "./IProps";
 
-const Title: React.FC<IProps> = ({ children, Level, align = "left", size, upperCase = false }) => {
+const Title: React.FC<IProps> = ({ children, Level, align = "left", size, upperCase = false, ...attributes }) => {
   // refs
   let _className = useRef<string>("ar-typography-title").current;
 
@@ -11,7 +11,7 @@ const Title: React.FC<IProps> = ({ children, Level, align = "left", size, upperC
   if (size) _className += ` ${size}`;
 
   return (
-    <Level className={_className}>
+    <Level className={_className} {...attributes}>
       {typeof children === "string" && upperCase ? children.toLocaleUpperCase() : children}
     </Level>
   );

@@ -1,6 +1,6 @@
 import { IChildren, IUpperCase } from "../../../../libs/types/IGlobalProps";
 
-interface IProps extends IChildren, IUpperCase {
+interface IProps extends IChildren, IUpperCase, React.HTMLAttributes<HTMLHeadingElement> {
   /**
    * Başlığın HTML seviyesini belirler.
    *
