@@ -1,6 +1,6 @@
-import { IChildren } from "../../../libs/types/IGlobalProps";
+import { IChildren, IStatus } from "../../../libs/types/IGlobalProps";
 
-interface IProps extends IChildren {
+interface IProps extends IChildren, IStatus {
   /**
    * Kart başlığı.
    *

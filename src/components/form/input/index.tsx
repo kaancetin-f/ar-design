@@ -25,7 +25,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     // states
     const [value, setValue] = useState<string | number | readonly string[] | undefined>("");
 
-    // variable/s
+    // variables
     const _wrapperClassName: string[] = ["ar-input-wrapper"];
     const _addonBeforeClassName: string[] = ["addon-before"];
     const _addonAfterClassName: string[] = ["addon-after"];

@@ -10,7 +10,7 @@ const Pie: React.FC<IProps> = ({ title, data, size }) => {
   // state
   const [conic, setConic] = useState<string[]>([]);
 
-  // variable/s
+  // variables
   const conicColors = [
     ["#fff35e", "#000"], // Sarı
     ["#ffc752", "#000"], // Açık Sarı

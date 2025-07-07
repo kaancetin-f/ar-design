@@ -5,7 +5,7 @@ import { Status } from "../../../libs/types";
 import "../../../assets/css/components/feedback/progress/progress.css";
 
 const Progress: React.FC<IProps> = ({ value, reverse, isVisibleValue = false }) => {
-  // variable/s
+  // variables
   let _status: Status | undefined = undefined;
   const _arProgressClassName: string[] = [];
 
