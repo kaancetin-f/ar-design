@@ -31,15 +31,19 @@ const Upload: React.FC<Props> = ({
   const handleFileChange = (files: FileList | null) => {
     const _files = Array.from(files ?? []);
 
-    if (multiple) {
-      setSelectedFiles((prev) => {
-        const previousFileNames = prev.map((f) => f.name);
-        const newFiles = _files.filter((f) => !previousFileNames.includes(f.name)) ?? [];
+    if (_files.length > 0) {
+      if (multiple) {
+        setSelectedFiles((prev) => {
+          const previousFileNames = prev.map((f) => f.name);
+          const newFiles = _files.filter((f) => !previousFileNames.includes(f.name)) ?? [];
 
-        return [...prev, ...newFiles];
-      });
+          return [...prev, ...newFiles];
+        });
+      } else {
+        setSelectedFile(_files[0]);
+      }
     } else {
-      setSelectedFile(_files[0]);
+      multiple ? setSelectedFiles(file) : setSelectedFile(file);
     }
   };
 
@@ -146,9 +150,17 @@ const Upload: React.FC<Props> = ({
   useEffect(() => {
     if (_firstLoad.current) return;
 
-    multiple ? setSelectedFiles(file) : setSelectedFile(file);
+    if (multiple) {
+      if (file.length === 0) return;
 
-    _firstLoad.current = true;
+      setSelectedFiles(file);
+      _firstLoad.current = true;
+    } else {
+      if (!file) return;
+
+      setSelectedFile(file);
+      _firstLoad.current = true;
+    }
   }, [file]);
 
   return (
