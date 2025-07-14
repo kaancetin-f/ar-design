@@ -1,0 +1,136 @@
+.ar-upload-button > .button.multiple > .preview {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 100%;
+  border-right: solid 1px rgba(var(--black-rgb), 0.75);
+}
+.ar-upload-button > .button.multiple > .preview > .selected-image {
+  height: 100%;
+  object-fit: fill;
+  object-position: top;
+}
+
+.ar-upload-button > .button.multiple > .items {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  background-color: var(--primary);
+  backdrop-filter: blur(5px);
+  width: 10rem;
+  height: 12.5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.ar-upload-button > .button.multiple > .items > .item {
+  --size: 5rem;
+
+  position: relative;
+  min-width: var(--size);
+  min-height: var(--size);
+  height: var(--size);
+  border-bottom: solid 1px rgba(var(--black-rgb), 0.75);
+  overflow: hidden;
+}
+.ar-upload-button > .button.multiple > .items > .item > .buttons {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ar-upload-button > .button.multiple > .items > .item > .buttons::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background-color: transparent;
+  z-index: 1;
+  transition: background-color 250ms ease-in-out;
+}
+.ar-upload-button > .button.multiple > .items > .item > .buttons:hover::before {
+  background-color: rgba(var(--black-rgb), 0.75);
+}
+.ar-upload-button > .button.multiple > .items > .item > .buttons > div {
+  display: flex;
+  flex-direction: row;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 2;
+  transition: visibility 250ms, opacity 250ms ease-in-out;
+}
+.ar-upload-button > .button.multiple > .items > .item > .buttons:hover div {
+  visibility: visible;
+  opacity: 1;
+}
+.ar-upload-button > .button.multiple > .items > .item > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+.ar-upload-button > .button.multiple > .items > .item .error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: rgba(var(--danger-rgb), 0.5);
+  color: var(--white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  z-index: 5;
+}
+
+.ar-upload-button > .button.multiple > .preview > .informations {
+  visibility: visible;
+  opacity: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  position: absolute;
+  inset: auto 7.5rem 0 0;
+  background-color: rgba(var(--black-rgb), 0.75);
+  padding: 0.5rem;
+  transition: visibility 250ms, opacity 250ms ease-in-out;
+}
+.ar-upload-button > .button.multiple > .preview > .informations > .file-name {
+  color: var(--white);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.ar-upload-button > .button.multiple > .preview > .informations > div {
+  display: flex;
+  gap: 0.25rem;
+}
+.ar-upload-button > .button.multiple > .preview > .informations > div > .file-size {
+  background-color: var(--primary);
+  padding: 0.25rem 0 0.25rem 0.25rem;
+  border-radius: var(--border-radius-sm);
+  color: var(--white);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.ar-upload-button > .button.multiple > .preview > .informations > div > .file-size > .size-type {
+  background-color: rgba(var(--black-rgb), 0.5);
+  margin-left: 0.25rem;
+  border-top-right-radius: var(--border-radius-sm);
+  border-bottom-right-radius: var(--border-radius-sm);
+  padding: 0.25rem;
+  color: var(--primary);
+  font-weight: 700;
+}
+.ar-upload-button > .button.multiple > .preview > .informations > div > .file-type {
+  background-color: var(--warning);
+  padding: 0.25rem;
+  border-radius: var(--border-radius-sm);
+  color: var(--black);
+  font-size: 0.75rem;
+  font-weight: 700;
+}

@@ -18,89 +18,150 @@
 }
 
 .ar-upload-button > .button {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 0;
+  height: 8.5rem;
   border: dashed 1px var(--gray-300);
   border-radius: var(--border-radius-sm);
   cursor: pointer;
   user-select: none;
+  transition: border 250ms, box-shadow 250ms ease-in-out;
 }
-.ar-upload-button > .button:has(> img) {
+.ar-upload-button > .button.multiple {
+  height: 12.5rem !important;
+}
+.ar-upload-button > .button.has-file {
+  flex-direction: row !important;
+  justify-content: flex-end !important;
+  gap: 0 !important;
+  align-items: flex-start !important;
+}
+.ar-upload-button > .button:not(.multiple):hover .preview > .informations {
+  visibility: hidden;
+  opacity: 0;
+}
+.ar-upload-button > .button:not(.multiple):has(.preview > img):hover {
+  border: solid 1px transparent !important;
+}
+.ar-upload-button > .button:has(.preview > img) {
   padding: 0;
-  border: none;
+  border: solid 1px rgba(var(--black-rgb), 0.75);
   overflow: hidden;
 }
-.ar-upload-button > .button > img {
+.ar-upload-button > .button.dragging {
+  box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), 0.75);
+}
+
+.ar-upload-button > .button > .preview > .buttons {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ar-upload-button > .button > .preview > .buttons::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background-color: transparent;
+  z-index: 1;
+  transition: background-color 250ms ease-in-out;
+}
+.ar-upload-button > .button > .preview > .buttons:hover::before {
+  background-color: rgba(var(--black-rgb), 0.75);
+}
+.ar-upload-button > .button > .preview > .buttons > div {
+  display: flex;
+  flex-direction: row;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 2;
+  transition: visibility 250ms, opacity 250ms ease-in-out;
+}
+.ar-upload-button > .button > .preview > .buttons:hover div {
+  visibility: visible;
+  opacity: 1;
+}
+.ar-upload-button > .button > .preview > img {
   width: 100%;
-  height: 200px;
+  height: 100%;
   object-fit: fill;
   object-position: top;
 }
-.ar-upload-button > .button > .information {
+
+.ar-upload-button > .button > .preview > .informations {
+  visibility: visible;
+  opacity: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  position: absolute;
+  inset: auto 0 0 0;
+  background-color: rgba(var(--black-rgb), 0.75);
+  padding: 0.5rem;
+  transition: visibility 250ms, opacity 250ms ease-in-out;
+}
+.ar-upload-button > .button > .preview > .informations > .file-name {
+  color: var(--white);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.ar-upload-button > .button > .preview > .informations > div {
+  display: flex;
+  gap: 0.25rem;
+}
+.ar-upload-button > .button > .preview > .informations > div > .file-size {
+  background-color: var(--primary);
+  padding: 0.25rem 0 0.25rem 0.25rem;
+  border-radius: var(--border-radius-sm);
+  color: var(--white);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.ar-upload-button > .button > .preview > .informations > div > .file-size > .size-type {
+  background-color: rgba(var(--black-rgb), 0.5);
+  margin-left: 0.25rem;
+  border-top-right-radius: var(--border-radius-sm);
+  border-bottom-right-radius: var(--border-radius-sm);
+  padding: 0.25rem;
+  color: var(--primary);
+  font-weight: 700;
+}
+.ar-upload-button > .button > .preview > .informations > div > .file-type {
+  background-color: var(--warning);
+  padding: 0.25rem;
+  border-radius: var(--border-radius-sm);
+  color: var(--black);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ar-upload-button > .button > .upload {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
 }
-.ar-upload-button > .button > .information > .properies {
+.ar-upload-button > .button > .upload > .properies {
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
   font-size: 0.85rem;
 }
-.ar-upload-button > .button > .information > .properies > .max-size {
+.ar-upload-button > .button > .upload > .properies > .max-size {
   color: var(--gray-500);
 }
-.ar-upload-button > .button > .information > .properies > .allow-types {
+.ar-upload-button > .button > .upload > .properies > .allow-types {
   color: var(--gray-500);
 }
 
-.ar-upload-button > .ar-upload-files {
-  width: 100%;
-  transition: top 250ms ease-in-out;
-}
-.ar-upload-button > .ar-upload-files > ul {
-  list-style: none;
-}
-
-.ar-upload-button > .ar-upload-files > ul > li > .file,
-.ar-upload-button > .ar-upload-files > .file {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--gray-200);
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  border-radius: var(--border-radius-sm);
-}
-.ar-upload-button > .ar-upload-files > ul > li > .file > .information,
-.ar-upload-button > .ar-upload-files > .file > .information {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-}
-.ar-upload-button > .ar-upload-files > ul > li > .file > .information > span,
-.ar-upload-button > .ar-upload-files > .file > .information > span {
-  display: inline-block;
-}
-.ar-upload-button > .ar-upload-files > ul > li > .file > .information > span:last-child,
-.ar-upload-button > .ar-upload-files > .file > .information > span:last-child {
-  background-color: var(--primary);
-  padding: 0 0.25rem;
-  border-radius: var(--border-radius-sm);
-  color: var(--white);
-  font-size: 0.75rem;
-  line-height: 2;
-}
-.ar-upload-button > .ar-upload-files > ul > li > .file > .delete,
-.ar-upload-button > .ar-upload-files > .file > .delete {
-  cursor: pointer;
-}
-
+@import url("./preview-selected-files.css");
 @import url("./animations.css");

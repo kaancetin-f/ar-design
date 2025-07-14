@@ -1,6 +1,6 @@
 {
   "name": "ar-design",
-  "version": "0.2.78",
+  "version": "0.2.79",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -47,5 +47,8 @@
     "ts-node": "^10.9.2",
     "tslib": "^2.6.3",
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "bootstrap-icons": "^1.13.1"
   }
 }

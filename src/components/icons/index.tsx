@@ -1,5 +1,4 @@
 import React from "react";
-import Svg from "./Svg";
 import Icon from "./Compiler";
 import { Icons, IconVariants } from "../../libs/types";
 
@@ -14,7 +13,7 @@ export const ARIcon: React.FC<{
   style?: React.CSSProperties | undefined;
 }> = ({
   viewBox,
-  size,
+  size = 16,
   variant = "linear",
   icon,
   fill = "var(--dark)",
@@ -25,8 +24,15 @@ export const ARIcon: React.FC<{
   const { Compiler } = new Icon(fill, stroke, strokeWidth);
 
   return (
-    <Svg viewBox={viewBox} fill={fill} width={size} height={size} style={style}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox={viewBox ?? `0 0 16 16`}
+      fill={fill}
+      width={size}
+      height={size}
+      style={style}
+    >
       {Compiler(variant, icon)}
-    </Svg>
+    </svg>
   );
 };

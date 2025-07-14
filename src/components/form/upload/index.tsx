@@ -1,9 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Props from "./Props";
 import "../../../assets/css/components/form/upload/styles.css";
-import Tooltip from "../../feedback/tooltip";
 import { AllowedTypes } from "../../../libs/types";
 import { ARIcon } from "../../icons";
+import PreviewSelectedFile from "./PreviewSelectedFile";
+import PreviewSelectedFiles from "./PreviewSelectedFiles";
+
+export type ValidationError = { fileName: string; message: string };
 
 const Upload: React.FC<Props> = ({
   text,
@@ -21,14 +24,16 @@ const Upload: React.FC<Props> = ({
   // refs -> File Data
   const _validationErrors = useRef<string[]>([]);
 
+  // variables
+  const [className, setClassName] = useState<string[]>(["button"]);
+
   // states
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
-  const [selectedFileBase64, setSelectedFileBase64] = useState<string | undefined>(undefined);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [validationErrors, setValidationErrors] = useState<Partial<{ [key: string]: string }>[]>([]);
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
 
   // methods
-  const handleFileChange = (files: FileList | null) => {
+  const handleFileChange = useCallback((files: FileList | null) => {
     const _files = Array.from(files ?? []);
 
     if (_files.length > 0) {
@@ -45,9 +50,9 @@ const Upload: React.FC<Props> = ({
     } else {
       multiple ? setSelectedFiles(file) : setSelectedFile(file);
     }
-  };
+  }, []);
 
-  const handleFileRemove = (fileToRemove: File) => {
+  const handleFileRemove = useCallback((fileToRemove: File) => {
     if (multiple) {
       const dataTransfer = new DataTransfer();
 
@@ -57,20 +62,22 @@ const Upload: React.FC<Props> = ({
 
         if (_input.current) _input.current.files = dataTransfer.files;
 
+        if (newList.length === 0) setClassName((prev) => prev.filter((c) => c !== "has-file"));
+
         return newList;
       });
     } else {
       setSelectedFile(undefined);
-      setSelectedFileBase64(undefined);
+      setClassName((prev) => prev.filter((c) => c !== "has-file"));
     }
-  };
+  }, []);
 
-  const handleValidationFile = (file: File) => {
-    const newErrors: Partial<{ [key: string]: string }>[] = [];
+  const handleValidationFile = useCallback((file: File) => {
+    const newErrors: ValidationError[] = [];
 
     if (allowedTypes) {
       if (!allowedTypes.includes(file.type as AllowedTypes)) {
-        newErrors.push({ [file.name]: "Geçersiz dosya türü." });
+        newErrors.push({ fileName: file.name, message: "Geçersiz dosya türü." });
         _validationErrors.current.push(file.name);
       }
     }
@@ -79,14 +86,15 @@ const Upload: React.FC<Props> = ({
       const _maxSize = maxSize * 1024 * 1024; // MB
 
       if (file.size > _maxSize) {
-        newErrors.push({ [file.name]: "Dosya boyutu çok büyük." });
+        newErrors.push({ fileName: file.name, message: "Dosya boyutu çok büyük." });
         _validationErrors.current.push(file.name);
       }
     }
-    setValidationErrors((prev) => [...prev, ...newErrors]);
-  };
 
-  function handleFileToBase64(file: File): Promise<string> {
+    setValidationErrors((prev) => [...prev, ...newErrors]);
+  }, []);
+
+  const handleFileToBase64 = useCallback((file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
@@ -101,7 +109,42 @@ const Upload: React.FC<Props> = ({
 
       reader.readAsDataURL(file);
     });
-  }
+  }, []);
+
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setClassName((prev) => {
+        const index = prev.findIndex((c) => c === "dragging");
+
+        if (index === -1) return [...prev, "dragging"];
+
+        return prev;
+      });
+    } else {
+      setClassName((prev) => prev.filter((c) => c !== "dragging"));
+    }
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const files = e.dataTransfer.files;
+
+    if (files && files.length > 0) {
+      if (multiple) {
+        setSelectedFiles(Array.from(files));
+      } else {
+        setSelectedFile(files[files.length - 1]);
+        _firstLoad.current = true;
+      }
+    }
+
+    setClassName((prev) => prev.filter((c) => c !== "dragging"));
+  }, []);
 
   // useEffects
   useEffect(() => {
@@ -114,6 +157,8 @@ const Upload: React.FC<Props> = ({
 
       if (_input.current) {
         if (multiple) {
+          if (selectedFiles.length === 0) return;
+
           // Seçilmiş olan dosyalar validasyona gönderiliyor.
           selectedFiles.forEach((f) => handleValidationFile(f));
           const inValidFiles = Array.from(new Set(_validationErrors.current));
@@ -129,14 +174,21 @@ const Upload: React.FC<Props> = ({
           const base64Array = await Promise.all(validFiles.map((validFile) => handleFileToBase64(validFile)));
 
           onChange(fileFormData, validFiles, base64Array, _validationErrors.current.length === 0);
+
+          // Eğer dosya varsa.
+          setClassName((prev) => {
+            const index = prev.findIndex((c) => c === "has-file");
+
+            if (index === -1) return [...prev, "has-file"];
+
+            return prev;
+          });
         } else {
           if (selectedFile) {
             handleValidationFile(selectedFile);
             fileFormData.append("file", selectedFile);
 
             onChange(fileFormData, selectedFile, await handleFileToBase64(selectedFile));
-
-            setSelectedFileBase64(await handleFileToBase64(selectedFile));
 
             // Input içerisine dosyalar aktarılıyor.
             dataTransfer.items.add(selectedFile);
@@ -163,23 +215,45 @@ const Upload: React.FC<Props> = ({
     }
   }, [file]);
 
+  useEffect(() => {
+    if (multiple) setClassName((prev) => [...prev, "multiple"]);
+  }, []);
+
   return (
     <div ref={_arUplaod} className="ar-upload">
       <input ref={_input} type="file" onChange={(event) => handleFileChange(event.target.files)} multiple={multiple} />
 
       <div className="ar-upload-button">
         <div
-          className="button"
+          className={className.map((c) => c).join(" ")}
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
           onClick={() => {
             if (_input.current) _input.current.click();
           }}
         >
-          {uploadType === "image" && selectedFileBase64 && <img src={selectedFileBase64} />}
+          {uploadType === "image" &&
+            (multiple ? (
+              <PreviewSelectedFiles
+                selectedFiles={selectedFiles}
+                validationErrors={validationErrors}
+                handleFileToBase64={handleFileToBase64}
+                handleFileRemove={handleFileRemove}
+              />
+            ) : (
+              <PreviewSelectedFile
+                selectedFile={selectedFile}
+                handleFileToBase64={handleFileToBase64}
+                handleFileRemove={handleFileRemove}
+              />
+            ))}
 
-          {(uploadType === "application-file" || !selectedFileBase64) && (
+          {!selectedFile && selectedFiles.length === 0 && (
             <>
-              <div className="information">
-                <ARIcon variant="linear" icon="Upload" stroke="var(--gray-600)" fill="transparent" />
+              <div className="upload">
+                <ARIcon variant="fill" icon="CloudUpload" size={32} />
 
                 <div className="properies">
                   {allowedTypes && (
@@ -194,60 +268,6 @@ const Upload: React.FC<Props> = ({
 
               {text && <span>{text}</span>}
             </>
-          )}
-        </div>
-
-        <div className="ar-upload-files">
-          {multiple ? (
-            <ul>
-              {selectedFiles.map((selectedFile, index) => {
-                let _className: string[] = [];
-
-                const errorMessages = validationErrors
-                  .filter((error) => Object.keys(error).includes(selectedFile.name))
-                  .map((error) => error[selectedFile.name]);
-
-                if (errorMessages.length > 0) _className.push("error");
-
-                const content = (
-                  <div className="file">
-                    <div className="information">
-                      {/* <ARIcon icon={"File"} /> */}
-                      <span>{selectedFile.name}</span>
-                      <span>{(selectedFile.size / 1024).toFixed(3)}KB</span>
-                    </div>
-
-                    <div className="delete" onClick={() => handleFileRemove(selectedFile)}>
-                      <ARIcon icon="CloseCircle" fill="transparent" size={20} />
-                    </div>
-                  </div>
-                );
-
-                return (
-                  <li key={index} className={_className.map((c) => c).join(" ")}>
-                    {errorMessages.length === 0 ? (
-                      content
-                    ) : (
-                      <Tooltip text={errorMessages.map((message) => message ?? "")}>{content}</Tooltip>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            selectedFile && (
-              <div className="file">
-                <div className="information">
-                  {/* <ARIcon icon={"File"} /> */}
-                  <span>{selectedFile.name}</span>
-                  <span>{(selectedFile.size / 1024).toFixed(3)}KB</span>
-                </div>
-
-                <div className="delete" onClick={() => handleFileRemove(selectedFile)}>
-                  <ARIcon icon="CloseCircle" fill="transparent" size={20} />
-                </div>
-              </div>
-            )
           )}
         </div>
       </div>

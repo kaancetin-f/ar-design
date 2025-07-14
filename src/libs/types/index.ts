@@ -126,33 +126,37 @@ export type AllowedTypes =
   | "application/octet-stream";
 
 // Icons
-export type IconVariants = "linear" | "bulk";
+export type IconVariants = "linear" | "fill";
 export type Icons =
   | "Add"
   | "ArrowLeft"
   | "ArrowRight"
+  | "Bold"
+  | "BulletList"
   | "CloseCircle"
   | "CloseSquare"
-  | "Drive"
+  | "CloudUpload"
   | "Document"
+  | "Drive"
+  | "ExclamationCircle"
+  | "ExclamationDiamond"
+  | "Eye"
+  | "File"
+  | "Filter"
   | "Folder"
-  | "Trash"
-  | "Upload"
   | "Image"
   | "Import"
-  | "Bold"
   | "Italic"
-  | "Underline"
-  | "Success"
-  | "Strikethrough"
-  | "BulletList"
   | "NumberList"
-  | "TextAlingLeft"
+  | "Strikethrough"
+  | "Success"
   | "TextAlingCenter"
+  | "TextAlingLeft"
   | "TextAlingRight"
-  | "Filter"
   | "TickCircle"
-  | "File"
+  | "Trash"
+  | "Underline"
+  | "Upload"
   | "Warning";
 // Charts
 // Pie
