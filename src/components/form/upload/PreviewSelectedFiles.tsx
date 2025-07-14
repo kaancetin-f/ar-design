@@ -2,6 +2,8 @@ import React, { memo, useEffect, useState } from "react";
 import Button from "../button";
 import { ARIcon } from "../../icons";
 import { ValidationError } from ".";
+import { MimeTypes } from "../../../libs/types";
+import Utils from "../../../libs/infrastructure/shared/Utils";
 
 interface IProps {
   selectedFiles: File[];
@@ -21,6 +23,7 @@ const PreviewSelectedFiles = ({ selectedFiles, validationErrors, handleFileToBas
     (async () => {
       const items = await Promise.all(
         selectedFiles.map(async (selectedFile) => {
+          const fileInformation = Utils.GetFileTypeInformation(selectedFile.type as MimeTypes);
           const _selectedFileBase64 = await handleFileToBase64(selectedFile);
           const message = validationErrors.find(
             (validationError) => validationError.fileName === selectedFile.name
@@ -29,6 +32,7 @@ const PreviewSelectedFiles = ({ selectedFiles, validationErrors, handleFileToBas
           return (
             <div
               className="item"
+              style={{ backgroundColor: fileInformation.color }}
               onClick={(event) => event.stopPropagation()}
               onMouseOver={async (event) => {
                 event.stopPropagation();
@@ -48,19 +52,42 @@ const PreviewSelectedFiles = ({ selectedFiles, validationErrors, handleFileToBas
                 <div>
                   <Button
                     variant="borderless"
-                    icon={{ element: <ARIcon variant="fill" icon={"Eye"} fill="currentColor" /> }}
+                    type="button"
+                    icon={{ element: <ARIcon icon={"Download"} fill="currentColor" /> }}
                     onClick={(event) => {
                       event.stopPropagation();
 
-                      const newTab = window.open();
-                      newTab?.document.write(
-                        `<img src="${_selectedFileBase64}" title="${selectedFile.name}" alt="${selectedFile.name}" />`
-                      );
+                      const url = window.URL.createObjectURL(selectedFile);
+                      const a = document.createElement("a");
+                      a.href = url;
+                      a.download = selectedFile.name;
+                      a.click();
+
+                      // Belleği temizle
+                      window.URL.revokeObjectURL(url);
                     }}
                   />
+
+                  {selectedFile.type.includes("image") && (
+                    <Button
+                      variant="borderless"
+                      type="button"
+                      icon={{ element: <ARIcon variant="fill" icon={"Eye"} fill="currentColor" /> }}
+                      onClick={(event) => {
+                        event.stopPropagation();
+
+                        const newTab = window.open();
+                        newTab?.document.write(
+                          `<img src="${_selectedFileBase64}" title="${selectedFile.name}" alt="${selectedFile.name}" />`
+                        );
+                      }}
+                    />
+                  )}
+
                   <Button
                     variant="borderless"
                     status="danger"
+                    type="button"
                     icon={{ element: <ARIcon variant="fill" icon={"Trash"} fill="currentColor" /> }}
                     onClick={(event) => {
                       event.stopPropagation();
@@ -71,7 +98,11 @@ const PreviewSelectedFiles = ({ selectedFiles, validationErrors, handleFileToBas
                 </div>
               </div>
 
-              <img src={_selectedFileBase64} />
+              {selectedFile.type.includes("image") ? (
+                <img src={_selectedFileBase64} />
+              ) : (
+                <ARIcon icon={fileInformation.icon ?? "Document"} fill="var(--white)" size={32} />
+              )}
             </div>
           );
         })
@@ -88,7 +119,11 @@ const PreviewSelectedFiles = ({ selectedFiles, validationErrors, handleFileToBas
     selectedFiles.length > 0 && (
       <>
         <div className="preview">
-          <img src={selectedFileBase64} className="selected-image" />
+          {selectedFile?.type.includes("image") ? (
+            <img src={selectedFileBase64} className="selected-image" />
+          ) : (
+            "Önizleme Yok."
+          )}
 
           {selectedFile && (
             <div className="informations">
@@ -100,7 +135,10 @@ const PreviewSelectedFiles = ({ selectedFiles, validationErrors, handleFileToBas
                   <span className="size-type">KB</span>
                 </span>
 
-                <span className="file-type">{selectedFile.type.split("/")[1].toLocaleUpperCase()}</span>
+                {/* <span className="file-type">{selectedFile.type.split("/")[1].toLocaleUpperCase()}</span> */}
+                <span className="file-type">
+                  {Utils.GetFileTypeInformation(selectedFile.type as MimeTypes).readableType}
+                </span>
               </div>
             </div>
           )}

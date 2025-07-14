@@ -89,7 +89,7 @@ export type ValidationProperties<T> = {
 export type Errors<TData> = Partial<{ [key in keyof TData]: string }>;
 
 // Upload
-export type AllowedTypes =
+export type MimeTypes =
   | "image/jpeg"
   | "image/png"
   | "image/gif"
@@ -124,7 +124,19 @@ export type AllowedTypes =
   | "audio/aac"
   | "audio/flac"
   | "application/octet-stream";
-
+export type FileCategory =
+  | "image"
+  | "document"
+  | "spreadsheet"
+  | "presentation"
+  | "archive"
+  | "text"
+  | "video"
+  | "audio"
+  | "json"
+  | "xml"
+  | "binary"
+  | "other";
 // Icons
 export type IconVariants = "linear" | "fill";
 export type Icons =
@@ -157,7 +169,22 @@ export type Icons =
   | "Trash"
   | "Underline"
   | "Upload"
-  | "Warning";
+  | "Download"
+  | "Warning"
+  | "FileTypeXlsx"
+  | "FileTypeXls"
+  | "FileTypeCsv"
+  | "FileTypeDoc"
+  | "FileTypeDocx"
+  | "FileTypePdf"
+  | "FileTypePptx"
+  | "FileTypeZip"
+  | "FileTypeTxt"
+  | "FileTypeHtml"
+  | "FileTypeJson"
+  | "FileTypeXml"
+  | "CameraReels"
+  | "FileEarmark";
 // Charts
 // Pie
 export type PieChartDataType = { value: number; text: string };

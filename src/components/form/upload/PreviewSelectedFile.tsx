@@ -28,6 +28,25 @@ const PreviewSelectedFile = ({ selectedFile, handleFileToBase64, handleFileRemov
           <div>
             <Button
               variant="borderless"
+              type="button"
+              icon={{ element: <ARIcon icon={"Download"} fill="currentColor" /> }}
+              onClick={(event) => {
+                event.stopPropagation();
+
+                const url = window.URL.createObjectURL(selectedFile);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = selectedFile.name;
+                a.click();
+
+                // Belleği temizle
+                window.URL.revokeObjectURL(url);
+              }}
+            />
+
+            <Button
+              variant="borderless"
+              type="button"
               icon={{ element: <ARIcon variant="fill" icon={"Eye"} fill="currentColor" /> }}
               onClick={(event) => {
                 event.stopPropagation();
@@ -38,9 +57,11 @@ const PreviewSelectedFile = ({ selectedFile, handleFileToBase64, handleFileRemov
                 );
               }}
             />
+
             <Button
               variant="borderless"
               status="danger"
+              type="button"
               icon={{ element: <ARIcon variant="fill" icon={"Trash"} fill="currentColor" /> }}
               onClick={(event) => {
                 event.stopPropagation();

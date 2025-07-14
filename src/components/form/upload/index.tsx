@@ -1,22 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Props from "./Props";
 import "../../../assets/css/components/form/upload/styles.css";
-import { AllowedTypes } from "../../../libs/types";
+import { MimeTypes } from "../../../libs/types";
 import { ARIcon } from "../../icons";
 import PreviewSelectedFile from "./PreviewSelectedFile";
 import PreviewSelectedFiles from "./PreviewSelectedFiles";
 
 export type ValidationError = { fileName: string; message: string };
 
-const Upload: React.FC<Props> = ({
-  text,
-  file,
-  onChange,
-  allowedTypes,
-  uploadType = "application-file",
-  maxSize,
-  multiple,
-}) => {
+const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, multiple }) => {
   // refs
   const _firstLoad = useRef<boolean>(false);
   const _input = useRef<HTMLInputElement>(null);
@@ -76,7 +68,7 @@ const Upload: React.FC<Props> = ({
     const newErrors: ValidationError[] = [];
 
     if (allowedTypes) {
-      if (!allowedTypes.includes(file.type as AllowedTypes)) {
+      if (!allowedTypes.includes(file.type as MimeTypes)) {
         newErrors.push({ fileName: file.name, message: "Geçersiz dosya türü." });
         _validationErrors.current.push(file.name);
       }
@@ -234,21 +226,20 @@ const Upload: React.FC<Props> = ({
             if (_input.current) _input.current.click();
           }}
         >
-          {uploadType === "image" &&
-            (multiple ? (
-              <PreviewSelectedFiles
-                selectedFiles={selectedFiles}
-                validationErrors={validationErrors}
-                handleFileToBase64={handleFileToBase64}
-                handleFileRemove={handleFileRemove}
-              />
-            ) : (
-              <PreviewSelectedFile
-                selectedFile={selectedFile}
-                handleFileToBase64={handleFileToBase64}
-                handleFileRemove={handleFileRemove}
-              />
-            ))}
+          {multiple ? (
+            <PreviewSelectedFiles
+              selectedFiles={selectedFiles}
+              validationErrors={validationErrors}
+              handleFileToBase64={handleFileToBase64}
+              handleFileRemove={handleFileRemove}
+            />
+          ) : (
+            <PreviewSelectedFile
+              selectedFile={selectedFile}
+              handleFileToBase64={handleFileToBase64}
+              handleFileRemove={handleFileRemove}
+            />
+          )}
 
           {!selectedFile && selectedFiles.length === 0 && (
             <>

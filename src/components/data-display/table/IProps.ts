@@ -1,5 +1,5 @@
 import React from "react";
-import { AllowedTypes, TableColumnType } from "../../../libs/types";
+import { MimeTypes, TableColumnType } from "../../../libs/types";
 import { IChildren } from "../../../libs/types/IGlobalProps";
 import { FilterOperator } from "../../../libs/infrastructure/shared/Enums";
 
@@ -80,7 +80,7 @@ type ImportActionType = {
   /**
    * Kabul edilen dosya türleri.
    */
-  allowedTypes?: AllowedTypes[];
+  allowedTypes?: MimeTypes[];
 
   /**
    * Butonun önünde gösterilecek içerik.

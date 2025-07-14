@@ -1,4 +1,4 @@
-import { AllowedTypes } from "../../../libs/types";
+import { MimeTypes } from "../../../libs/types";
 import { IDisabled, IValidation } from "../../../libs/types/IGlobalProps";
 
 interface IMultiple {
@@ -105,9 +105,7 @@ type Props = {
    * <Upload allowedTypes={["image/png", "application/pdf"]} />
    * ```
    */
-  allowedTypes?: AllowedTypes[];
-
-  uploadType?: "image" | "application-file";
+  allowedTypes?: MimeTypes[];
 
   /**
    * Kabul edilen maksimum dosya boyutu (byte cinsinden).

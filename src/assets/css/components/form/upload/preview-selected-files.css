@@ -1,4 +1,5 @@
 .ar-upload-button > .button.multiple > .preview {
+  position: relative;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -26,6 +27,9 @@
 .ar-upload-button > .button.multiple > .items > .item {
   --size: 5rem;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   min-width: var(--size);
   min-height: var(--size);
@@ -95,7 +99,7 @@
   align-items: center;
   gap: 0.5rem;
   position: absolute;
-  inset: auto 7.5rem 0 0;
+  inset: auto 0 0 0;
   background-color: rgba(var(--black-rgb), 0.75);
   padding: 0.5rem;
   transition: visibility 250ms, opacity 250ms ease-in-out;
