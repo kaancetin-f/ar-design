@@ -8,10 +8,8 @@
 .ar-switch-wrapper > label {
   display: flex;
   flex-direction: row;
-  /* justify-content: space-between; */
   align-items: center;
   gap: 0 0.5rem;
-  /* width: 100%; */
   user-select: none;
 }
 .ar-switch-wrapper > label > input[type="checkbox"] {
@@ -22,7 +20,7 @@
   position: relative;
   display: inline-block;
   width: 2.25rem;
-  height: 1rem;
+  height: 1.25rem;
   transition: box-shadow 250ms ease-in-out;
 }
 
@@ -34,14 +32,12 @@
   display: inline-block;
   content: "";
   background-color: var(--white);
-  width: 0.75rem;
-  height: 0.75rem;
+  width: 0.85rem;
+  height: 0.85rem;
   transition: left 150ms, width 150ms 150ms, height 150ms 150ms, box-shadow 150ms 150ms ease-in-out;
 }
 .ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch > .handle {
-  left: calc(2.25rem - 0.9rem);
-  width: 1rem;
-  height: 1rem;
+  left: calc(2.25rem - 1rem);
 }
 
 @import url("./core/border.css");

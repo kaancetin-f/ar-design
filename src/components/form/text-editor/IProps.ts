@@ -1,6 +1,6 @@
-import { IValidation } from "../../../libs/types/IGlobalProps";
+import { IColors, IValidation } from "../../../libs/types/IGlobalProps";
 
-export interface IProps<T> extends IValidation {
+export interface IProps<T> extends IValidation, IColors {
   /**
    * Bileşenin isim (name) değeridir.
    *

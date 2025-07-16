@@ -1,6 +1,6 @@
-import { IBorder, IIcon, IStatus, IVariant } from "../../../libs/types/IGlobalProps";
+import { IBorder, IColors, IIcon, IVariant } from "../../../libs/types/IGlobalProps";
 
-interface IProps extends IVariant, IStatus, IBorder, IIcon {
+interface IProps extends IVariant, IColors, IBorder, IIcon {
   /**
    * Bileşende gösterilecek metin.
    *

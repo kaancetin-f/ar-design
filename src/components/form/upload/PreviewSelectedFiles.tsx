@@ -86,7 +86,7 @@ const PreviewSelectedFiles = ({ selectedFiles, validationErrors, handleFileToBas
 
                   <Button
                     variant="borderless"
-                    status="danger"
+                    color="red"
                     type="button"
                     icon={{ element: <ARIcon variant="fill" icon={"Trash"} fill="currentColor" /> }}
                     onClick={(event) => {

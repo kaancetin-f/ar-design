@@ -6,7 +6,7 @@ import "../../../assets/css/components/feedback/popup/popup.css";
 import Button from "../../form/button";
 import ReactDOM from "react-dom";
 import { NotificationContext } from "../../../libs/core/application/contexts/Notification";
-import { Status } from "../../../libs/types";
+import { Color } from "../../../libs/types";
 import { ARIcon } from "../../icons";
 
 const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
@@ -22,16 +22,16 @@ const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
   const [className, setClassName] = useState<string[]>(["ar-notification-popup", ""]);
 
   // methods
-  const buttonStatus = (): Status => {
+  const buttonColor = (): Color => {
     switch (status) {
       case "success":
-        return "success";
+        return "green";
       case "warning":
-        return "warning";
+        return "orange";
       case "information":
-        return "information";
+        return "teal";
       case "error":
-        return "danger";
+        return "red";
 
       default:
         return "light";
@@ -98,7 +98,7 @@ const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
 
           <Button
             variant="filled"
-            status={buttonStatus()}
+            color={buttonColor()}
             onClick={() => {
               (() => buttons?.okay?.onClick && buttons.okay?.onClick())();
 

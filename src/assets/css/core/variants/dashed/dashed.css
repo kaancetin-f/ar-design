@@ -1,197 +1,373 @@
-/* #region PRIMARY */
-.dashed:not(.disabled).primary {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-.dashed:not(.disabled).primary:hover {
-  border-color: rgba(var(--primary-rgb), 0.5);
-}
-input.dashed:not(.disabled).primary:focus{
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3.5px rgba(var(--primary-rgb), 0.25);
-}
-input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).primary{
-  box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), 0.1);
-}
-.dashed:not(.disabled).primary.active {
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-primary ease-in-out 750ms 0s 1 normal both;
-}
-/* #endregion */
-/* PRIMARY */
+/* #region BLUE */
+.dashed:not(.disabled) {
+  &.blue {
+    border: dashed 1px var(--blue-500);
+    color: var(--blue-500);
 
-/* #region PRIMARY-LIGHT */
-.dashed:not(.disabled).primary-light {
-  border-color: var(--primary-light);
-  color: var(--primary-light);
+    &.active {
+      animation: clicked-blue ease-in-out 750ms 0s 1 normal both;
+    }
+  }
 }
-.dashed:not(.disabled).primary-light:hover {
-  border-color: rgba(var(--primary-light-rgb), 0.5);
-}
-input.dashed:not(.disabled).primary-light:focus{
-  border-color: var(--primary-light);
-  box-shadow: 0 0 0 3.5px rgba(var(--primary-light-rgb), 0.25);
-}
-input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).primary-light{
-  box-shadow: 0 0 0 2.5px rgba(var(--primary-light-rgb), 0.1);
-}
-.dashed:not(.disabled).primary-light.active {
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-primary-light ease-in-out 750ms 0s 1 normal both;
-}
-/* #endregion */
-/* PRIMARY-LIGHT */
 
-/* #region SECONDARY */
-.dashed:not(.disabled).secondary {
-  border-color: var(--secondary);
-  color: var(--secondary);
+input.dashed:not(.disabled),
+iframe.dashed:not(.disabled) {
+  &.blue {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
 }
-.dashed:not(.disabled).secondary:hover {
-  border-color: rgba(var(--secondary-rgb), 0.5);
-}
-input.dashed:not(.disabled).secondary:focus{
-  border-color: var(--secondary);
-  box-shadow: 0 0 0 3.5px rgba(var(--secondary-rgb), 0.25);
-}
-input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).secondary{
-  box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), 0.1);
-}
-.dashed:not(.disabled).secondary.active {
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-secondary ease-in-out 750ms 0s 1 normal both;
-}
-/* #endregion */
-/* SECONDARY */
 
-/* #region SUCCESS */
-.dashed:not(.disabled).success {
-  border-color: var(--success);
-  color: var(--success);
-}
-.dashed:not(.disabled).success:hover {
-  border-color: rgba(var(--success-rgb), 0.5);
-}
-input.dashed:not(.disabled).success:focus{
-  border-color: var(--success);
-  box-shadow: 0 0 0 3.5px rgba(var(--success-rgb), 0.25);
-}
-input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).success{
-  box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), 0.1);
-}
-.dashed:not(.disabled).success.active {
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-success ease-in-out 750ms 0s 1 normal both;
+button.dashed:not(.disabled) {
+  &.blue { 
+    &:hover,
+    &:focus {
+      background-color: var(--blue-100);
+    }
+  }
 }
 /* #endregion */
-/* SUCCESS */
+/* BLUE */
 
-/* #region WARNING */
-.dashed:not(.disabled).warning {
-  border-color: var(--warning);
-  color: var(--warning);
-}
-.dashed:not(.disabled).warning:hover {
-  border-color: rgba(var(--warning-rgb), 0.5);
-}
-input.dashed:not(.disabled).warning:focus{
-  border-color: var(--warning);
-  box-shadow: 0 0 0 3.5px rgba(var(--warning-rgb), 0.25);
-}
-input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).warning{
-  box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), 0.1);
-}
-.dashed:not(.disabled).warning.active {
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-warning ease-in-out 750ms 0s 1 normal both;
-}
-/* #endregion */
-/* WARNING */
+/* #region PURPLE */
+.dashed:not(.disabled) {
+  &.purple {
+    border: dashed 1px var(--purple-500);
+    color: var(--purple-500);
 
-/* #region DANGER */
-.dashed:not(.disabled).danger {
-  border-color: var(--danger);
-  color: var(--danger);
+    &.active {
+      animation: clicked-purple ease-in-out 750ms 0s 1 normal both;
+    }
+  }
 }
-.dashed:not(.disabled).danger:hover {
-  border-color: rgba(var(--danger-rgb), 0.5);
-}
-input.dashed:not(.disabled).danger:focus{
-  border-color: var(--danger);
-  box-shadow: 0 0 0 3.5px rgba(var(--danger-rgb), 0.25);
-}
-input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).danger{
-  box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), 0.1);
-}
-.dashed:not(.disabled).danger.active {
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-danger ease-in-out 750ms 0s 1 normal both;
-}
-/* #endregion */
-/* DANGER */
 
-/* #region INFORMATION */
-.dashed:not(.disabled).information {
-  border-color: var(--information);
-  color: var(--information);
+input.dashed:not(.disabled),
+iframe.dashed:not(.disabled) {
+  &.purple {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
 }
-.dashed:not(.disabled).information:hover {
-  border-color: rgba(var(--information-rgb), 0.5);
-}
-input.dashed:not(.disabled).information:focus{
-  border-color: var(--information);
-  box-shadow: 0 0 0 3.5px rgba(var(--information-rgb), 0.25);
-}
-input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).information{
-  box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), 0.1);
-}
-.dashed:not(.disabled).information.active {
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-information ease-in-out 750ms 0s 1 normal both;
-}
-/* #endregion */
-/* INFORMATION */
 
-/* #region DARK */
-.dashed:not(.disabled).dark {
-  border-color: var(--dark);
-  color: var(--dark);
-}
-.dashed:not(.disabled).dark:hover {
-  border-color: rgba(var(--dark-rgb), 0.5);
-}
-input.dashed:not(.disabled).dark:focus{
-  border-color: var(--dark);
-  box-shadow: 0 0 0 3.5px rgba(var(--dark-rgb), 0.25);
-}
-input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).dark{
-  box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), 0.1);
-}
-.dashed:not(.disabled).dark.active {
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-dark ease-in-out 750ms 0s 1 normal both;
+button.dashed:not(.disabled) {
+  &.purple { 
+    &:hover,
+    &:focus {
+      background-color: var(--purple-100);
+    }
+  }
 }
 /* #endregion */
-/* DARK */
+/* PURPLE */
+
+/* #region PINK */
+.dashed:not(.disabled) {
+  &.pink {
+    border: dashed 1px var(--pink-500);
+    color: var(--pink-500);
+
+    &.active {
+      animation: clicked-pink ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.dashed:not(.disabled),
+iframe.dashed:not(.disabled) {
+  &.pink {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.dashed:not(.disabled) {
+  &.pink { 
+    &:hover,
+    &:focus {
+      background-color: var(--pink-100);
+    }
+  }
+}
+/* #endregion */
+/* PINK */
+
+/* #region RED */
+.dashed:not(.disabled) {
+  &.red {
+    border: dashed 1px var(--red-500);
+    color: var(--red-500);
+
+    &.active {
+      animation: clicked-red ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.dashed:not(.disabled),
+iframe.dashed:not(.disabled) {
+  &.red {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.dashed:not(.disabled) {
+  &.red { 
+    &:hover,
+    &:focus {
+      background-color: var(--red-100);
+    }
+  }
+}
+/* #endregion */
+/* RED */
+
+/* #region ORANGE */
+.dashed:not(.disabled) {
+  &.orange {
+    border: dashed 1px var(--orange-500);
+    color: var(--orange-500);
+
+    &.active {
+      animation: clicked-orange ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.dashed:not(.disabled),
+iframe.dashed:not(.disabled) {
+  &.orange {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.dashed:not(.disabled) {
+  &.orange { 
+    &:hover,
+    &:focus {
+      background-color: var(--orange-100);
+    }
+  }
+}
+/* #endregion */
+/* ORANGE */
+
+/* #region YELLOW */
+.dashed:not(.disabled) {
+  &.yellow {
+    border: dashed 1px var(--yellow-500);
+    color: var(--yellow-500);
+
+    &.active {
+      animation: clicked-yellow ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.dashed:not(.disabled),
+iframe.dashed:not(.disabled) {
+  &.yellow {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.dashed:not(.disabled) {
+  &.yellow { 
+    &:hover,
+    &:focus {
+      background-color: var(--yellow-100);
+    }
+  }
+}
+/* #endregion */
+/* YELLOW */
+
+/* #region GREEN */
+.dashed:not(.disabled) {
+  &.green {
+    border: dashed 1px var(--green-500);
+    color: var(--green-500);
+
+    &.active {
+      animation: clicked-green ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.dashed:not(.disabled),
+iframe.dashed:not(.disabled) {
+  &.green {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.dashed:not(.disabled) {
+  &.green { 
+    &:hover,
+    &:focus {
+      background-color: var(--green-100);
+    }
+  }
+}
+/* #endregion */
+/* GREEN */
+
+/* #region TEAL */
+.dashed:not(.disabled) {
+  &.teal {
+    border: dashed 1px var(--teal-500);
+    color: var(--teal-500);
+
+    &.active {
+      animation: clicked-teal ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.dashed:not(.disabled),
+iframe.dashed:not(.disabled) {
+  &.teal {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.dashed:not(.disabled) {
+  &.teal { 
+    &:hover,
+    &:focus {
+      background-color: var(--teal-100);
+    }
+  }
+}
+/* #endregion */
+/* TEAL */
+
+/* #region CYAN */
+.dashed:not(.disabled) {
+  &.cyan {
+    border: dashed 1px var(--cyan-500);
+    color: var(--cyan-500);
+
+    &.active {
+      animation: clicked-cyan ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.dashed:not(.disabled),
+iframe.dashed:not(.disabled) {
+  &.cyan {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.dashed:not(.disabled) {
+  &.cyan { 
+    &:hover,
+    &:focus {
+      background-color: var(--cyan-100);
+    }
+  }
+}
+/* #endregion */
+/* CYAN */
+
+/* #region GRAY */
+.dashed:not(.disabled) {
+  &.gray {
+    border: dashed 1px var(--gray-500);
+    color: var(--gray-500);
+
+    &.active {
+      animation: clicked-gray ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.dashed:not(.disabled),
+iframe.dashed:not(.disabled) {
+  &.gray {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.dashed:not(.disabled) {
+  &.gray { 
+    &:hover,
+    &:focus {
+      background-color: var(--gray-100);
+    }
+  }
+}
+/* #endregion */
+/* GRAY */
 
 /* #region LIGHT */
-.dashed:not(.disabled).light {
-  border-color: var(--light);
-  color: var(--dark);
+.dashed:not(.disabled) {
+  &.light {
+    border: dashed 1px var(--light-500);
+    color: var(--light-500);
+
+    &.active {
+      animation: clicked-light ease-in-out 750ms 0s 1 normal both;
+    }
+  }
 }
-.dashed:not(.disabled).light:hover {
-  border-color: rgba(var(--light-rgb), 0.5);
+
+input.dashed:not(.disabled),
+iframe.dashed:not(.disabled) {
+  &.light {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
 }
-input.dashed:not(.disabled).light:focus{
-  border-color: var(--light);
-  box-shadow: 0 0 0 3.5px rgba(var(--light-rgb), 0.25);
-}
-input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).light{
-  box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), 0.1);
-}
-.dashed:not(.disabled).light.active {
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-light ease-in-out 750ms 0s 1 normal both;
+
+button.dashed:not(.disabled) {
+  &.light { 
+    &:hover,
+    &:focus {
+      background-color: var(--light-100);
+    }
+  }
 }
 /* #endregion */
 /* LIGHT */

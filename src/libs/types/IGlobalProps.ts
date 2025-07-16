@@ -1,4 +1,4 @@
-import { Border, Icon, Sizes, Status, Variants } from ".";
+import { Border, Color, Icon, Sizes, Status, Variants } from ".";
 
 export interface IChildren {
   /**
@@ -56,6 +56,19 @@ export interface IStatus {
    * ```
    */
   status?: Status;
+}
+
+export interface IColors {
+  /**
+   * Bileşenin renk özelliğini belirtir.
+   *
+   * Örneğin;
+   *
+   * ```jsx
+   * <Component color="blue">Hello, World!</Component>
+   * ```
+   */
+  color?: Color;
 }
 
 export interface IBorder {

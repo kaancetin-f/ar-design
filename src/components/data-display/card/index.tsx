@@ -10,7 +10,7 @@ const Card: React.FC<IProps> = ({ children, title = "", actions, status }) => {
   // variables
   const _titleClassName: string[] = ["title"];
 
-  _titleClassName.push(...Utils.GetClassName(undefined, status, undefined, undefined, undefined, undefined));
+  _titleClassName.push(...Utils.GetClassName(undefined, status, undefined, undefined, undefined, undefined, undefined));
 
   return (
     <div className="ar-card">

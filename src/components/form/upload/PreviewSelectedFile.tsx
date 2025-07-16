@@ -60,7 +60,7 @@ const PreviewSelectedFile = ({ selectedFile, handleFileToBase64, handleFileRemov
 
             <Button
               variant="borderless"
-              status="danger"
+              color="red"
               type="button"
               icon={{ element: <ARIcon variant="fill" icon={"Trash"} fill="currentColor" /> }}
               onClick={(event) => {

@@ -181,7 +181,7 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
 
   const okayButton = () => {
     return (
-      <Button variant="borderless" status="success" onClick={() => handleOk()}>
+      <Button variant="borderless" color="green" onClick={() => handleOk()}>
         Tamam
       </Button>
     );
@@ -350,9 +350,9 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
 
       <Input
         ref={_beginDate}
-        {...attributes}
         value={DATE.ParseValue(String(attributes.value), isClock)}
         type={isClock ? "datetime-local" : "date"}
+        {...attributes}
         onKeyDown={(event) => {
           if (event.code === "Space") event.preventDefault();
           else if (event.code === "Enter") handleOk();

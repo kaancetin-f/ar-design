@@ -1,18 +1,33 @@
-import { Border, FileCategory, Icon, Icons, IconVariants, MimeTypes, Sizes, Status, Variants } from "../../types";
+import {
+  Border,
+  Color,
+  FileCategory,
+  Icon,
+  Icons,
+  IconVariants,
+  MimeTypes,
+  Sizes,
+  Status,
+  Variants,
+} from "../../types";
 
 class Utils {
   public GetClassName = (
-    variant: Variants = "filled",
-    status: Status = "light",
-    border: Border = { radius: "sm" },
-    size: Sizes = "normal",
+    variant?: Variants,
+    status?: Status,
+    color?: Color,
+    border?: Border,
+    size?: Sizes,
     icon?: Icon,
     className?: string
   ) => {
-    const classNames: string[] = [variant, status, `border-radius-${border.radius}`];
+    const classNames: string[] = [];
 
+    if (variant) classNames.push(variant);
+    if (status) classNames.push(status);
+    if (color) classNames.push(color);
+    if (border) classNames.push(`border-radius-${border.radius}`);
     if (size) classNames.push(size);
-
     if (icon && icon.element) {
       classNames.push("icon");
       classNames.push(`icon-${icon.position || "start"}`);

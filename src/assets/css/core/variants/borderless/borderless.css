@@ -1,170 +1,373 @@
-/* #region PRIMARY */
-.borderless:not(.disabled).primary {
-  color: var(--primary);
-}
-.borderless:not(.disabled).primary:hover {
-  background-color: rgba(var(--primary-rgb), 0.1);
-}
-input.borderless:not(.disabled).primary:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3.5px rgba(var(--primary-rgb), 0.1);
-}
-.borderless:not(.disabled).primary.active {
-  background-color: transparent;
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-primary ease-in-out 750ms 0s 1 normal both;
-}
-/* #endregion */
-/* PRIMARY */
+/* #region BLUE */
+.borderless:not(.disabled) {
+  &.blue {
+    color: var(--blue-500);
 
-/* #region PRIMARY-LIGHT */
-.borderless:not(.disabled).primary-light {
-  color: var(--primary-light);
+    &.active {
+      animation: clicked-blue ease-in-out 750ms 0s 1 normal both;
+    }
+  }
 }
-.borderless:not(.disabled).primary-light:hover {
-  background-color: rgba(var(--primary-light-rgb), 0.1);
-}
-input.borderless:not(.disabled).primary-light:focus {
-  border-color: var(--primary-light);
-  box-shadow: 0 0 0 3.5px rgba(var(--primary-light-rgb), 0.1);
-}
-.borderless:not(.disabled).primary-light.active {
-  background-color: transparent;
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-primary-light ease-in-out 750ms 0s 1 normal both;
-}
-/* #endregion */
-/* PRIMARY-LIGHT */
 
-/* #region SECONDARY */
-.borderless:not(.disabled).secondary {
-  color: var(--secondary);
+input.borderless:not(.disabled),
+iframe.borderless:not(.disabled) {
+  &.blue {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
 }
-.borderless:not(.disabled).secondary:hover {
-  background-color: rgba(var(--secondary-rgb), 0.1);
-}
-input.borderless:not(.disabled).secondary:focus {
-  border-color: var(--secondary);
-  box-shadow: 0 0 0 3.5px rgba(var(--secondary-rgb), 0.1);
-}
-.borderless:not(.disabled).secondary.active {
-  background-color: transparent;
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-secondary ease-in-out 750ms 0s 1 normal both;
-}
-/* #endregion */
-/* SECONDARY */
 
-/* #region SUCCESS */
-.borderless:not(.disabled).success {
-  color: var(--success);
-}
-.borderless:not(.disabled).success:hover {
-  background-color: rgba(var(--success-rgb), 0.1);
-}
-input.borderless:not(.disabled).success:focus {
-  border-color: var(--success);
-  box-shadow: 0 0 0 3.5px rgba(var(--success-rgb), 0.1);
-}
-.borderless:not(.disabled).success.active {
-  background-color: transparent;
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-success ease-in-out 750ms 0s 1 normal both;
+button.borderless:not(.disabled) {
+  &.blue { 
+    &:hover,
+    &:focus {
+      background-color: var(--blue-500);
+      color: var(--white)
+    }
+  }
 }
 /* #endregion */
-/* SUCCESS */
+/* BLUE */
 
-/* #region WARNING */
-.borderless:not(.disabled).warning {
-  color: var(--warning);
-}
-.borderless:not(.disabled).warning:hover {
-  background-color: rgba(var(--warning-rgb), 0.1);
-}
-input.borderless:not(.disabled).warning:focus {
-  border-color: var(--warning);
-  box-shadow: 0 0 0 3.5px rgba(var(--warning-rgb), 0.1);
-}
-.borderless:not(.disabled).warning.active {
-  background-color: transparent;
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-warning ease-in-out 750ms 0s 1 normal both;
-}
-/* #endregion */
-/* WARNING */
+/* #region PURPLE */
+.borderless:not(.disabled) {
+  &.purple {
+    color: var(--purple-500);
 
-/* #region DANGER */
-.borderless:not(.disabled).danger {
-  color: var(--danger);
+    &.active {
+      animation: clicked-purple ease-in-out 750ms 0s 1 normal both;
+    }
+  }
 }
-.borderless:not(.disabled).danger:hover {
-  background-color: rgba(var(--danger-rgb), 0.1);
-}
-input.borderless:not(.disabled).danger:focus {
-  border-color: var(--danger);
-  box-shadow: 0 0 0 3.5px rgba(var(--danger-rgb), 0.1);
-}
-.borderless:not(.disabled).danger.active {
-  background-color: transparent;
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-danger ease-in-out 750ms 0s 1 normal both;
-}
-/* #endregion */
-/* DANGER */
 
-/* #region INFORMATION */
-.borderless:not(.disabled).information {
-  color: var(--information);
+input.borderless:not(.disabled),
+iframe.borderless:not(.disabled) {
+  &.purple {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
 }
-.borderless:not(.disabled).information:hover {
-  background-color: rgba(var(--information-rgb), 0.1);
-}
-input.borderless:not(.disabled).information:focus {
-  border-color: var(--information);
-  box-shadow: 0 0 0 3.5px rgba(var(--information-rgb), 0.1);
-}
-.borderless:not(.disabled).information.active {
-  background-color: transparent;
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-information ease-in-out 750ms 0s 1 normal both;
-}
-/* #endregion */
-/* INFORMATION */
 
-/* #region DARK */
-.borderless:not(.disabled).dark {
-  color: var(--dark);
-}
-.borderless:not(.disabled).dark:hover {
-  background-color: rgba(var(--dark-rgb), 0.1);
-}
-input.borderless:not(.disabled).dark:focus {
-  border-color: var(--dark);
-  box-shadow: 0 0 0 3.5px rgba(var(--dark-rgb), 0.1);
-}
-.borderless:not(.disabled).dark.active {
-  background-color: transparent;
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-dark ease-in-out 750ms 0s 1 normal both;
+button.borderless:not(.disabled) {
+  &.purple { 
+    &:hover,
+    &:focus {
+      background-color: var(--purple-500);
+      color: var(--white)
+    }
+  }
 }
 /* #endregion */
-/* DARK */
+/* PURPLE */
+
+/* #region PINK */
+.borderless:not(.disabled) {
+  &.pink {
+    color: var(--pink-500);
+
+    &.active {
+      animation: clicked-pink ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.borderless:not(.disabled),
+iframe.borderless:not(.disabled) {
+  &.pink {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.borderless:not(.disabled) {
+  &.pink { 
+    &:hover,
+    &:focus {
+      background-color: var(--pink-500);
+      color: var(--white)
+    }
+  }
+}
+/* #endregion */
+/* PINK */
+
+/* #region RED */
+.borderless:not(.disabled) {
+  &.red {
+    color: var(--red-500);
+
+    &.active {
+      animation: clicked-red ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.borderless:not(.disabled),
+iframe.borderless:not(.disabled) {
+  &.red {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.borderless:not(.disabled) {
+  &.red { 
+    &:hover,
+    &:focus {
+      background-color: var(--red-500);
+      color: var(--white)
+    }
+  }
+}
+/* #endregion */
+/* RED */
+
+/* #region ORANGE */
+.borderless:not(.disabled) {
+  &.orange {
+    color: var(--orange-500);
+
+    &.active {
+      animation: clicked-orange ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.borderless:not(.disabled),
+iframe.borderless:not(.disabled) {
+  &.orange {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.borderless:not(.disabled) {
+  &.orange { 
+    &:hover,
+    &:focus {
+      background-color: var(--orange-500);
+      color: var(--white)
+    }
+  }
+}
+/* #endregion */
+/* ORANGE */
+
+/* #region YELLOW */
+.borderless:not(.disabled) {
+  &.yellow {
+    color: var(--yellow-500);
+
+    &.active {
+      animation: clicked-yellow ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.borderless:not(.disabled),
+iframe.borderless:not(.disabled) {
+  &.yellow {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.borderless:not(.disabled) {
+  &.yellow { 
+    &:hover,
+    &:focus {
+      background-color: var(--yellow-500);
+      color: var(--white)
+    }
+  }
+}
+/* #endregion */
+/* YELLOW */
+
+/* #region GREEN */
+.borderless:not(.disabled) {
+  &.green {
+    color: var(--green-500);
+
+    &.active {
+      animation: clicked-green ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.borderless:not(.disabled),
+iframe.borderless:not(.disabled) {
+  &.green {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.borderless:not(.disabled) {
+  &.green { 
+    &:hover,
+    &:focus {
+      background-color: var(--green-500);
+      color: var(--white)
+    }
+  }
+}
+/* #endregion */
+/* GREEN */
+
+/* #region TEAL */
+.borderless:not(.disabled) {
+  &.teal {
+    color: var(--teal-500);
+
+    &.active {
+      animation: clicked-teal ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.borderless:not(.disabled),
+iframe.borderless:not(.disabled) {
+  &.teal {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.borderless:not(.disabled) {
+  &.teal { 
+    &:hover,
+    &:focus {
+      background-color: var(--teal-500);
+      color: var(--white)
+    }
+  }
+}
+/* #endregion */
+/* TEAL */
+
+/* #region CYAN */
+.borderless:not(.disabled) {
+  &.cyan {
+    color: var(--cyan-500);
+
+    &.active {
+      animation: clicked-cyan ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.borderless:not(.disabled),
+iframe.borderless:not(.disabled) {
+  &.cyan {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.borderless:not(.disabled) {
+  &.cyan { 
+    &:hover,
+    &:focus {
+      background-color: var(--cyan-500);
+      color: var(--white)
+    }
+  }
+}
+/* #endregion */
+/* CYAN */
+
+/* #region GRAY */
+.borderless:not(.disabled) {
+  &.gray {
+    color: var(--gray-500);
+
+    &.active {
+      animation: clicked-gray ease-in-out 750ms 0s 1 normal both;
+    }
+  }
+}
+
+input.borderless:not(.disabled),
+iframe.borderless:not(.disabled) {
+  &.gray {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
+}
+
+button.borderless:not(.disabled) {
+  &.gray { 
+    &:hover,
+    &:focus {
+      background-color: var(--gray-500);
+      color: var(--white)
+    }
+  }
+}
+/* #endregion */
+/* GRAY */
 
 /* #region LIGHT */
-.borderless:not(.disabled).light {
-  color: var(--dark);
+.borderless:not(.disabled) {
+  &.light {
+    color: var(--light-500);
+
+    &.active {
+      animation: clicked-light ease-in-out 750ms 0s 1 normal both;
+    }
+  }
 }
-.borderless:not(.disabled).light:hover {
-  background-color: rgba(var(--light-rgb), 0.1);
+
+input.borderless:not(.disabled),
+iframe.borderless:not(.disabled) {
+  &.light {
+    &:focus,
+    &.focused {
+      border-color: var(--);
+      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+    }
+  }
 }
-input.borderless:not(.disabled).light:focus {
-  border-color: var(--light);
-  box-shadow: 0 0 0 3.5px rgba(var(--light-rgb), 0.1);
-}
-.borderless:not(.disabled).light.active {
-  background-color: transparent;
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-light ease-in-out 750ms 0s 1 normal both;
+
+button.borderless:not(.disabled) {
+  &.light { 
+    &:hover,
+    &:focus {
+      background-color: var(--light-500);
+      color: var(--white)
+    }
+  }
 }
 /* #endregion */
 /* LIGHT */

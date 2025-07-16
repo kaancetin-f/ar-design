@@ -75,6 +75,8 @@
   --dark-rgb: 52, 58, 64;
 }
 /* #endregion */
+
+@import url("./color-palette.css");
 /* Color Palette */
 
 /* #region Fonts */
@@ -133,7 +135,13 @@
   transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 
-@import url("./variants/filled/filled.css");
+@import url("./variants/filled/styles.css");
+
+.surface {
+  transition: border 250ms, box-shadow 250ms ease-in-out;
+}
+
+@import url("./variants/surface/styles.css");
 
 .outlined {
   background-color: transparent;
@@ -143,7 +151,7 @@
   transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 
-@import url("./variants/outlined/outlined.css");
+@import url("./variants/outlined/styles.css");
 
 .dashed {
   background-color: transparent;

@@ -98,7 +98,6 @@ const Steps = function <T extends object>({ children, steps = [], onChange, vali
         <div className="buttons">
           {currentStep > 0 && (
             <Button
-              status="light"
               onClick={() => {
                 setCurrentStep((prev) => prev - 1);
                 onChange(currentStep - 1);

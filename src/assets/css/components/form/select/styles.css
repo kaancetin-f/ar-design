@@ -87,8 +87,8 @@
 }
 .ar-select-wrapper > .ar-select > .selections > .items > span.placeholder {
   color: var(--dark);
+  font-weight: 400;
   font-family: var(--system);
-  /* -webkit-text-stroke: 0.25px var(--dark); */
 }
 .ar-select-wrapper > .ar-select > .selections > ul {
   display: flex;

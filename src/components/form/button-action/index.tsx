@@ -83,7 +83,7 @@ const ButtonAction: React.FC<IProps> = ({ buttons }) => {
       <span ref={_button}>
         <Button
           variant="borderless"
-          status="information"
+          color="teal"
           border={{ radius: "none" }}
           icon={{ element: <span className="dotted"></span> }}
           onClick={() => setOpen((prev) => !prev)}
@@ -94,7 +94,7 @@ const ButtonAction: React.FC<IProps> = ({ buttons }) => {
         ReactDOM.createPortal(
           <span ref={_list} className="ar-action-buttons">
             {buttons.map((button) => (
-              <Button variant="borderless" status="dark" onClick={button.onClick}>
+              <Button variant="borderless" onClick={button.onClick}>
                 {button.text}
               </Button>
             ))}

@@ -13,6 +13,7 @@ import ReactDOM from "react-dom";
 const Select: React.FC<Props> = ({
   variant = "outlined",
   status,
+  color,
   border = { radius: "sm" },
   options,
   value,
@@ -48,7 +49,15 @@ const Select: React.FC<Props> = ({
   const [navigationIndex, setNavigationIndex] = useState<number>(0);
 
   _selectionClassName.push(
-    ...Utils.GetClassName(variant, validation?.text ? "danger" : "light", border, undefined, undefined, undefined)
+    ...Utils.GetClassName(
+      variant,
+      undefined,
+      validation?.text ? "red" : "light",
+      border,
+      undefined,
+      undefined,
+      undefined
+    )
   );
 
   // methods
@@ -332,7 +341,7 @@ const Select: React.FC<Props> = ({
                   <Chip
                     key={index}
                     variant={status?.selected?.variant || "filled"}
-                    status={status?.selected?.color || status?.color}
+                    color={status?.selected?.color || status?.color}
                     text={_value.text}
                   />
                 ))
@@ -348,7 +357,8 @@ const Select: React.FC<Props> = ({
           <Input
             ref={_singleInput}
             variant={variant}
-            status={!Utils.IsNullOrEmpty(validation?.text) ? "danger" : status}
+            color={!Utils.IsNullOrEmpty(validation?.text) ? "red" : color}
+            // status={!Utils.IsNullOrEmpty(validation?.text) ? "danger" : status}
             border={{ radius: border.radius }}
             value={singleInputText}
             onClick={() => {
@@ -407,7 +417,6 @@ const Select: React.FC<Props> = ({
                 <Input
                   ref={_searchField}
                   variant="outlined"
-                  status="light"
                   placeholder="Search..."
                   value={searchText}
                   onChange={(event) => setSearchText(event.target.value)}
@@ -433,7 +442,7 @@ const Select: React.FC<Props> = ({
                         handleItemSelected(option);
                       }}
                     >
-                      {multiple && <Checkbox checked={isItem} status={isItem ? "primary" : "light"} disabled />}
+                      {multiple && <Checkbox checked={isItem} color={isItem ? "blue" : "light"} disabled />}
                       <span>{option.text}</span>
                     </li>
                   );

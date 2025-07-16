@@ -5,7 +5,7 @@ import "../../../assets/css/components/form/switch/styles.css";
 import IProps from "./IProps";
 import Utils from "../../../libs/infrastructure/shared/Utils";
 
-const Switch: React.FC<IProps> = ({ label, status = "primary", border = { radius: "pill" }, ...attributes }) => {
+const Switch: React.FC<IProps> = ({ label, color, border = { radius: "pill" }, ...attributes }) => {
   // refs
   let _switch = useRef<HTMLInputElement>(null);
   const _inputClassName: string[] = [];
@@ -17,8 +17,9 @@ const Switch: React.FC<IProps> = ({ label, status = "primary", border = { radius
   _inputClassName.push(attributes.checked ? "checked" : "unchecked");
   _switchClassName.push(
     ...Utils.GetClassName(
-      "filled",
-      attributes.checked ? status : "light",
+      undefined,
+      undefined,
+      attributes.checked ? color : "light",
       border,
       undefined,
       undefined,

@@ -10,8 +10,8 @@ const Button: React.FC<IProps> = ({
   children,
   variant = "filled",
   shape,
-  status = "primary",
-  border,
+  color = "light",
+  border = { radius: "sm" },
   size = "normal",
   tooltip,
   position,
@@ -24,7 +24,7 @@ const Button: React.FC<IProps> = ({
   const _button = useRef<HTMLButtonElement>(null);
   const _arButtonClassName: string[] = ["ar-button"];
 
-  _arButtonClassName.push(...Utils.GetClassName(variant, status, border, size, icon, attributes.className));
+  _arButtonClassName.push(...Utils.GetClassName(variant, undefined, color, border, size, icon, attributes.className));
 
   if (!children) _arButtonClassName.push("no-content");
   if (fullWidth) _arButtonClassName.push("full-width");

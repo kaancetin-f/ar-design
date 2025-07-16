@@ -8,6 +8,6 @@ interface IProps
     ISize,
     IUpperCase,
     IValidation,
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "size"> {}
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "size" | "color"> {}
 
 export default IProps;

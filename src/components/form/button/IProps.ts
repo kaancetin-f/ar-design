@@ -1,13 +1,13 @@
-import { IBorder, IIcon, ISize, IStatus, IUpperCase, IVariant } from "../../../libs/types/IGlobalProps";
+import { IBorder, IColors, IIcon, ISize, IUpperCase, IVariant } from "../../../libs/types/IGlobalProps";
 
 interface IProps
   extends IVariant,
-    IStatus,
+    IColors,
     IBorder,
     IIcon,
     ISize,
     IUpperCase,
-    React.ButtonHTMLAttributes<HTMLButtonElement> {
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color"> {
   /**
    * Bileşenin şekil varyantını belirtir ve genellikle sadece ikon için kullanılmalıdır.
    * İki seçenekten biri olabilir: "circle" veya "square".

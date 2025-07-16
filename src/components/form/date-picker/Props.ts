@@ -45,6 +45,6 @@ type Props = {
   IBorder &
   ISize &
   IValidation &
-  Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "onChange" | "size">;
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "onChange" | "size" | "color">;
 
 export default Props;

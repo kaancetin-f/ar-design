@@ -316,7 +316,7 @@ const Table = forwardRef(
                             ref={(element) => (_filterCheckboxItems.current[fIndex] = element)}
                             label={filter.text}
                             name={name}
-                            status="primary"
+                            color="blue"
                             value={filter.value as string}
                             checked={
                               Array.isArray(checkboxSelectedParams?.[name]) &&
@@ -480,7 +480,7 @@ const Table = forwardRef(
               <td className="sticky-left" data-sticky-position="left">
                 <Checkbox
                   ref={(element) => (_checkboxItems.current[index] = element)}
-                  status="primary"
+                  color="blue"
                   checked={selectionItems.some(
                     (selectionItem) => JSON.stringify(selectionItem) === JSON.stringify(item)
                   )}
@@ -776,7 +776,7 @@ const Table = forwardRef(
                     >
                       <Button
                         variant="outlined"
-                        status="success"
+                        color="green"
                         icon={{ element: <ARIcon icon="Import" size={16} /> }}
                         tooltip={{ text: actions.import.tooltip, direction: "top" }}
                       />
@@ -786,7 +786,6 @@ const Table = forwardRef(
                   {actions.create && (
                     <Button
                       variant="outlined"
-                      status="dark"
                       icon={{ element: <ARIcon icon="Add" size={16} /> }}
                       tooltip={{ text: actions.create.tooltip, direction: "top" }}
                       onClick={actions.create.onClick}
@@ -810,7 +809,7 @@ const Table = forwardRef(
                   <th className="selection-col sticky-left" data-sticky-position="left">
                     <Checkbox
                       variant="filled"
-                      status="primary"
+                      color="blue"
                       checked={selectAll}
                       onChange={(event) => {
                         if (_checkboxItems.current.length > 0) {
@@ -871,7 +870,6 @@ const Table = forwardRef(
                             <Input
                               ref={(element) => (_searchTextInputs.current[cIndex] = element)}
                               variant={c.key && !c.filters ? "outlined" : "filled"}
-                              status="light"
                               style={{ height: "2rem" }}
                               value={(config.isServerSide ? ssrValue : csrValue) ?? ""}
                               name={key}
@@ -911,7 +909,6 @@ const Table = forwardRef(
                             >
                               <Button
                                 variant="borderless"
-                                status="dark"
                                 icon={{
                                   element: (
                                     <ARIcon

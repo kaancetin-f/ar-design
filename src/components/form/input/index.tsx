@@ -10,7 +10,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
   (
     {
       variant = "outlined",
-      status = "light",
+      color = "light",
       size = "normal",
       icon,
       border = { radius: "sm" },
@@ -34,7 +34,8 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     _inputClassName.push(
       ...Utils.GetClassName(
         variant,
-        !Utils.IsNullOrEmpty(validation?.text) ? "danger" : status,
+        undefined,
+        !Utils.IsNullOrEmpty(validation?.text) ? "red" : color,
         border,
         size,
         icon,
@@ -144,9 +145,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
         {addon?.after && <span className={_addonAfterClassName.map((c) => c).join(" ")}>{addon?.after}</span>}
 
         {/* Button */}
-        {button && (
-          <Button {...button} status={status} border={{ radius: border.radius }} disabled={attributes.disabled} />
-        )}
+        {button && <Button {...button} border={{ radius: border.radius }} disabled={attributes.disabled} />}
       </div>
     );
   }

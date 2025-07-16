@@ -1,16 +1,16 @@
 import IButtonProps from "../button/IProps";
 import { Variants } from "../../../libs/types";
-import { IBorder, IIcon, ISize, IStatus, IUpperCase, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
+import { IBorder, IColors, IIcon, ISize, IUpperCase, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
 
 interface IProps
   extends IVariant,
-    IStatus,
+    IColors,
     IBorder,
     IIcon,
     ISize,
     IUpperCase,
     IValidation,
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "size"> {
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "size" | "color"> {
   /**
    * Bileşene entegre bir buton özelliği eklemek için kullanılır.
    *

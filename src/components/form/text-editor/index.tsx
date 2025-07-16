@@ -10,6 +10,7 @@ import Utils from "../../../libs/infrastructure/shared/Utils";
 import ReactDOM from "react-dom";
 
 const TextEditor = <T extends object>({
+  color = "light",
   name,
   value,
   onChange,
@@ -52,7 +53,8 @@ const TextEditor = <T extends object>({
   _iframeClassName.push(
     ...Utils.GetClassName(
       "outlined",
-      !Utils.IsNullOrEmpty(validation?.text) ? "danger" : "light",
+      undefined,
+      !Utils.IsNullOrEmpty(validation?.text) ? "red" : color,
       { radius: "sm" },
       undefined,
       undefined,
@@ -282,7 +284,7 @@ const TextEditor = <T extends object>({
             key={command}
             type="button"
             variant="borderless"
-            status="secondary"
+            color="teal"
             border={{ radius: "none" }}
             icon={{ element: <ARIcon icon={icon} size={18} fill="transparent" /> }}
             tooltip={{

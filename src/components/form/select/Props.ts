@@ -1,10 +1,10 @@
-import { Variants, Option, Status } from "../../../libs/types";
+import { Variants, Option, Status, Color } from "../../../libs/types";
 import {
   IBorder,
   IDisabled,
   IIcon,
   ISize,
-  IStatus,
+  IColors,
   IUpperCase,
   IValidation,
   IVariant,
@@ -34,10 +34,10 @@ export interface IMultiple {
    * ```
    */
   status?: {
-    color?: Status;
+    color?: Color;
     selected?: {
       variant?: Variants;
-      color?: Status;
+      color?: Color;
     };
   };
 
@@ -162,7 +162,7 @@ export type Props = {
   placeholder?: string;
 } & (IMultiple | ISingle) &
   IVariant &
-  IStatus &
+  IColors &
   IBorder &
   IIcon &
   ISize &

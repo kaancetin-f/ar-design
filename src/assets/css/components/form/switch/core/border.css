@@ -1,89 +1,208 @@
-/* #region Border Color -> PRIMARY */
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.primary {
-  box-shadow: 0 0 0 2.5px rgba(var(--primary-rgb), .1);
-}
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.primary > .handle {
-  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), .5);
-}
-/* #endregion */
-/* Border Color -> PRIMARY */
+/* #region Border Color -> BLUE */
+.ar-switch-wrapper {
+  > label {
+    > input[type="checkbox"] {
+      + span.blue {
+        background-color: var(--blue-500);
+      }
 
-/* #region Border Color -> PRIMARY-LIGHT */
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.primary-light {
-  box-shadow: 0 0 0 2.5px rgba(var(--primary-light-rgb), .1);
-}
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.primary-light > .handle {
-  box-shadow: 0 0 0 2px rgba(var(--primary-light-rgb), .5);
+      &.checked {
+        + .span.blue {
+          background-color: var(--blue-500);
+        }
+      }
+    }
+  }
 }
 /* #endregion */
-/* Border Color -> PRIMARY-LIGHT */
+/* Border Color -> BLUE */
 
-/* #region Border Color -> SECONDARY */
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.secondary {
-  box-shadow: 0 0 0 2.5px rgba(var(--secondary-rgb), .1);
-}
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.secondary > .handle {
-  box-shadow: 0 0 0 2px rgba(var(--secondary-rgb), .5);
-}
-/* #endregion */
-/* Border Color -> SECONDARY */
+/* #region Border Color -> PURPLE */
+.ar-switch-wrapper {
+  > label {
+    > input[type="checkbox"] {
+      + span.purple {
+        background-color: var(--purple-500);
+      }
 
-/* #region Border Color -> SUCCESS */
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.success {
-  box-shadow: 0 0 0 2.5px rgba(var(--success-rgb), .1);
-}
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.success > .handle {
-  box-shadow: 0 0 0 2px rgba(var(--success-rgb), .5);
+      &.checked {
+        + .span.purple {
+          background-color: var(--purple-500);
+        }
+      }
+    }
+  }
 }
 /* #endregion */
-/* Border Color -> SUCCESS */
+/* Border Color -> PURPLE */
 
-/* #region Border Color -> WARNING */
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.warning {
-  box-shadow: 0 0 0 2.5px rgba(var(--warning-rgb), .1);
-}
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.warning > .handle {
-  box-shadow: 0 0 0 2px rgba(var(--warning-rgb), .5);
-}
-/* #endregion */
-/* Border Color -> WARNING */
+/* #region Border Color -> PINK */
+.ar-switch-wrapper {
+  > label {
+    > input[type="checkbox"] {
+      + span.pink {
+        background-color: var(--pink-500);
+      }
 
-/* #region Border Color -> DANGER */
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.danger {
-  box-shadow: 0 0 0 2.5px rgba(var(--danger-rgb), .1);
-}
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.danger > .handle {
-  box-shadow: 0 0 0 2px rgba(var(--danger-rgb), .5);
+      &.checked {
+        + .span.pink {
+          background-color: var(--pink-500);
+        }
+      }
+    }
+  }
 }
 /* #endregion */
-/* Border Color -> DANGER */
+/* Border Color -> PINK */
 
-/* #region Border Color -> INFORMATION */
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.information {
-  box-shadow: 0 0 0 2.5px rgba(var(--information-rgb), .1);
-}
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.information > .handle {
-  box-shadow: 0 0 0 2px rgba(var(--information-rgb), .5);
-}
-/* #endregion */
-/* Border Color -> INFORMATION */
+/* #region Border Color -> RED */
+.ar-switch-wrapper {
+  > label {
+    > input[type="checkbox"] {
+      + span.red {
+        background-color: var(--red-500);
+      }
 
-/* #region Border Color -> DARK */
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.dark {
-  box-shadow: 0 0 0 2.5px rgba(var(--dark-rgb), .1);
-}
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.dark > .handle {
-  box-shadow: 0 0 0 2px rgba(var(--dark-rgb), .5);
+      &.checked {
+        + .span.red {
+          background-color: var(--red-500);
+        }
+      }
+    }
+  }
 }
 /* #endregion */
-/* Border Color -> DARK */
+/* Border Color -> RED */
+
+/* #region Border Color -> ORANGE */
+.ar-switch-wrapper {
+  > label {
+    > input[type="checkbox"] {
+      + span.orange {
+        background-color: var(--orange-500);
+      }
+
+      &.checked {
+        + .span.orange {
+          background-color: var(--orange-500);
+        }
+      }
+    }
+  }
+}
+/* #endregion */
+/* Border Color -> ORANGE */
+
+/* #region Border Color -> YELLOW */
+.ar-switch-wrapper {
+  > label {
+    > input[type="checkbox"] {
+      + span.yellow {
+        background-color: var(--yellow-500);
+      }
+
+      &.checked {
+        + .span.yellow {
+          background-color: var(--yellow-500);
+        }
+      }
+    }
+  }
+}
+/* #endregion */
+/* Border Color -> YELLOW */
+
+/* #region Border Color -> GREEN */
+.ar-switch-wrapper {
+  > label {
+    > input[type="checkbox"] {
+      + span.green {
+        background-color: var(--green-500);
+      }
+
+      &.checked {
+        + .span.green {
+          background-color: var(--green-500);
+        }
+      }
+    }
+  }
+}
+/* #endregion */
+/* Border Color -> GREEN */
+
+/* #region Border Color -> TEAL */
+.ar-switch-wrapper {
+  > label {
+    > input[type="checkbox"] {
+      + span.teal {
+        background-color: var(--teal-500);
+      }
+
+      &.checked {
+        + .span.teal {
+          background-color: var(--teal-500);
+        }
+      }
+    }
+  }
+}
+/* #endregion */
+/* Border Color -> TEAL */
+
+/* #region Border Color -> CYAN */
+.ar-switch-wrapper {
+  > label {
+    > input[type="checkbox"] {
+      + span.cyan {
+        background-color: var(--cyan-500);
+      }
+
+      &.checked {
+        + .span.cyan {
+          background-color: var(--cyan-500);
+        }
+      }
+    }
+  }
+}
+/* #endregion */
+/* Border Color -> CYAN */
+
+/* #region Border Color -> GRAY */
+.ar-switch-wrapper {
+  > label {
+    > input[type="checkbox"] {
+      + span.gray {
+        background-color: var(--gray-500);
+      }
+
+      &.checked {
+        + .span.gray {
+          background-color: var(--gray-500);
+        }
+      }
+    }
+  }
+}
+/* #endregion */
+/* Border Color -> GRAY */
 
 /* #region Border Color -> LIGHT */
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.light {
-  box-shadow: 0 0 0 2.5px rgba(var(--light-rgb), .1);
-}
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.light > .handle {
-  box-shadow: 0 0 0 2px rgba(var(--light-rgb), .5);
+.ar-switch-wrapper {
+  > label {
+    > input[type="checkbox"] {
+      + span.light {
+        background-color: var(--light-500);
+      }
+
+      &.checked {
+        + .span.light {
+          background-color: var(--light-500);
+        }
+      }
+    }
+  }
 }
 /* #endregion */
 /* Border Color -> LIGHT */

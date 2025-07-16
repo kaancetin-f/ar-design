@@ -1,13 +1,13 @@
-import { IBorder, ISize, IStatus, IUpperCase, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
+import { IBorder, IColors, ISize, IUpperCase, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
 
 interface IProps
   extends IVariant,
-    IStatus,
+    IColors,
     IBorder,
     ISize,
     IUpperCase,
     IValidation,
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "type" | "size"> {
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "type" | "size" | "color"> {
   /**
    * Bileşenin başlığı veya etiket metnidir.
    *

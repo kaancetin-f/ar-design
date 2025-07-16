@@ -2,17 +2,18 @@ const fs = require("fs");
 const path = require("path");
 
 const borderTypes = ["sm", "lg", "xl", "xxl", "pill"];
-const colors = [
-  "primary",
-  "primary-light",
-  "secondary",
-  "success",
-  "warning",
-  "danger",
-  "information",
-  "dark",
-  "light",
-];
+// const colors = [
+//   "primary",
+//   "primary-light",
+//   "secondary",
+//   "success",
+//   "warning",
+//   "danger",
+//   "information",
+//   "dark",
+//   "light",
+// ];
+const colors = ["blue", "purple", "pink", "red", "orange", "yellow", "green", "teal", "cyan", "gray", "light"];
 let customFontColor = "";
 let customFocusColor = "";
 
@@ -114,67 +115,26 @@ const _Input_CheckboxCss = () => {
   WriteCssFile(file, content);
 };
 
-// const _Input_RadioCss = () => {
-//   const file = path.join(__dirname, "../assets", "css", "components", "form", "radio", "border.css");
-
-//   const content = colors
-//     .map((color) => {
-//       switch (color) {
-//         case "warning":
-//           customFontColor = "dark";
-//           break;
-//         case "light":
-//           customFontColor = "dark";
-//           break;
-//         default:
-//           customFontColor = "white";
-//           break;
-//       }
-
-//       return `/* #region Border Color -> ${color.toUpperCase()} */
-// .ar-radio-wrapper > label > :is(input[type="radio"]):checked + span > .ar-radio.filled.${color}::before {
-//   border-right-color: var(--${customFontColor});
-//   border-bottom-color: var(--${customFontColor});
-// }
-// .ar-radio-wrapper > label > :is(input[type="radio"]):checked + span > .ar-radio.outlined.${color}::before {
-//   border-right-color: var(--${color});
-//   border-bottom-color: var(--${color});
-// }
-// .ar-radio-wrapper > label > :is(input[type="radio"]):checked + span > .ar-radio.borderless.${color}::before {
-//   border-right-color: var(--${color});
-//   border-bottom-color: var(--${color});
-// }
-// /* #endregion */
-// /* Border Color -> ${color.toUpperCase()} */`;
-//     })
-//     .join("\n\n");
-
-//   WriteCssFile(file, content);
-// };
-
 const _Input_SwitchCss = () => {
   const file = path.join(__dirname, "../assets", "css", "components", "form", "switch", "core", "border.css");
 
   const content = colors
     .map((color) => {
-      switch (color) {
-        case "warning":
-          customFontColor = "dark";
-          break;
-        case "light":
-          customFontColor = "dark";
-          break;
-        default:
-          customFontColor = "white";
-          break;
+      return `/* #region Border Color -> ${color.toUpperCase()} */
+.ar-switch-wrapper {
+  > label {
+    > input[type="checkbox"] {
+      + span.${color} {
+        background-color: var(--${color}-500);
       }
 
-      return `/* #region Border Color -> ${color.toUpperCase()} */
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.${color} {
-  box-shadow: 0 0 0 2.5px rgba(var(--${color}-rgb), .1);
-}
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch.${color} > .handle {
-  box-shadow: 0 0 0 2px rgba(var(--${color}-rgb), .5);
+      &.checked {
+        + .span.${color} {
+          background-color: var(--${color}-500);
+        }
+      }
+    }
+  }
 }
 /* #endregion */
 /* Border Color -> ${color.toUpperCase()} */`;
@@ -185,16 +145,14 @@ const _Input_SwitchCss = () => {
 };
 
 const _Variant_FilledCss = () => {
-  const file = path.join(__dirname, "../assets", "css", "core", "variants", "filled", "filled.css");
+  const file = path.join(__dirname, "../assets", "css", "core", "variants", "filled", "styles.css");
 
   const content = colors
     .map((color) => {
       switch (color) {
-        case "warning":
-          customFontColor = "dark";
-          break;
-        case "light":
-          customFontColor = "dark";
+        case "yellow":
+        case "gray":
+          customFontColor = "black";
           break;
         default:
           customFontColor = "white";
@@ -202,30 +160,75 @@ const _Variant_FilledCss = () => {
       }
 
       return `/* #region ${color.toUpperCase()} */
-.filled:not(.disabled).${color} {
-  background-color: var(--${color});
-  color: var(--${customFontColor})
+.filled:not(.disabled) {
+  &.${color} {
+    background-color: var(--${color}-500);
+    color: var(--${customFontColor});
+    
+    &.active {
+      animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
+    }
+  }
 }
-input.filled:not(.disabled).${color}:hover {
-  background-color: var(--${color}-active);
+
+input.filled:not(.disabled) {
+  &.${color} { 
+    background-color: var(--${color}-500);
+
+    &:hover {
+      background-color: var(--${color}-300);
+    }
+    &:focus,&.focused {
+      background-color: transparent;
+      border-color: var(--${color}-300);
+      box-shadow: 0 0 0 3.5px var(--${color}-100);
+    }
+  }
 }
-input.filled:not(.disabled).${color}:focus {
-  background-color: transparent;
-  border-color: var(--${color});
-  box-shadow: 0 0 0 3.5px rgba(var(--${color}-rgb), 0.25);
+
+button.filled:not(.disabled) {
+  &.${color} { 
+    background-color: var(--${color}-500);
+
+    &:hover,
+    &:focus {
+      background-color: var(--${color}-300);
+    }
+  }
 }
-input[type="checkbox"]:checked + span > .ar-checkbox.filled:not(.disabled).${color}{
-  box-shadow: 0 0 0 2.5px rgba(var(--${color}-rgb), 0.25);
+/* #endregion */
+/* ${color.toUpperCase()} */`;
+    })
+    .join("\n\n");
+
+  WriteCssFile(file, content);
+};
+
+const _Variant_SurfaceCss = () => {
+  const file = path.join(__dirname, "../assets", "css", "core", "variants", "surface", "styles.css");
+
+  const content = colors
+    .map((color) => {
+      return `/* #region ${color.toUpperCase()} */
+.surface:not(.disabled) {
+  &.${color} {
+    background-color: var(--${color}-100);
+    border:solid 1px var(--${color}-300);
+    color: var(--${color}-600);
+    
+    &.active {
+      animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
+    }
+  }
 }
-button.filled:not(.disabled).${color} {
-  color: var(--${customFontColor});
-}
-button.filled:not(.disabled).${color}:focus {
-  background-color: var(--${color});
-}
-.filled:not(.disabled).${color}.active {
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
+      
+button.surface:not(.disabled) {
+  &.${color} { 
+    &:hover,
+    &:focus {
+      background-color: var(--${color}-300);
+    }
+  }
 }
 /* #endregion */
 /* ${color.toUpperCase()} */`;
@@ -236,40 +239,52 @@ button.filled:not(.disabled).${color}:focus {
 };
 
 const _Variant_OutlinedCss = () => {
-  const file = path.join(__dirname, "../assets", "css", "core", "variants", "outlined", "outlined.css");
+  const file = path.join(__dirname, "../assets", "css", "core", "variants", "outlined", "styles.css");
 
   const content = colors
     .map((color) => {
       switch (color) {
         case "light":
-          customFontColor = "dark";
-          customFocusColor = "primary";
+          customFontColor = "black";
           break;
         default:
-          customFontColor = color;
-          customFocusColor = color;
+          customFontColor = `${color}-500`;
           break;
       }
 
       return `/* #region ${color.toUpperCase()} */
-.outlined:not(.disabled).${color} {
-  border-color: var(--${color});
-  /* color: var(--${customFontColor}); */
+.outlined:not(.disabled) {
+  &.${color} {
+    &.active {
+      animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
+    }
+  }
 }
-.outlined:not(.disabled).${color}:hover {
-  border-color: rgba(var(--${color}-rgb), 0.5);
+
+input.outlined:not(.disabled),
+iframe.outlined:not(.disabled),
+.ar-select > .selections.outlined:not(.disabled) {
+  &.${color} {
+    border: solid 1px var(--${color}-500);
+    color: var(--${customFontColor});
+
+    &:focus,
+    &.focused {
+      border-color: var(--${color}-300);
+      box-shadow: 0 0 0 3.5px var(--${color}-100);
+    }
+  }
 }
-input.outlined:not(.disabled).${color}:focus,
-iframe.outlined:not(.disabled).${color}.focused{
-  border-color: var(--${customFocusColor});
-  box-shadow: 0 0 0 3.5px rgba(var(--${customFocusColor}-rgb), 0.25);
-}
-input[type="checkbox"]:checked + span > .ar-checkbox.outlined:not(.disabled).${color}{
-  box-shadow: 0 0 0 2.5px rgba(var(--${color}-rgb), 0.1);
-}
-.outlined:not(.disabled).${color}.active {
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
+
+button.outlined:not(.disabled) {
+  &.${color} { 
+    color: var(--${color}-500);
+
+    &:hover,
+    &:focus {
+      background-color: var(--${color}-100);
+    }
+  }
 }
 /* #endregion */
 /* ${color.toUpperCase()} */`;
@@ -284,33 +299,36 @@ const _Variant_DashedCss = () => {
 
   const content = colors
     .map((color) => {
-      switch (color) {
-        case "light":
-          customFontColor = "dark";
-          break;
-        default:
-          customFontColor = color;
-          break;
-      }
-
       return `/* #region ${color.toUpperCase()} */
-.dashed:not(.disabled).${color} {
-  border-color: var(--${color});
-  color: var(--${customFontColor});
+.dashed:not(.disabled) {
+  &.${color} {
+    border: dashed 1px var(--${color}-500);
+    color: var(--${color}-500);
+
+    &.active {
+      animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
+    }
+  }
 }
-.dashed:not(.disabled).${color}:hover {
-  border-color: rgba(var(--${color}-rgb), 0.5);
+
+input.dashed:not(.disabled),
+iframe.dashed:not(.disabled) {
+  &.${color} {
+    &:focus,
+    &.focused {
+      border-color: var(--${customFocusColor});
+      box-shadow: 0 0 0 3.5px rgba(var(--${customFocusColor}-rgb), 0.25);
+    }
+  }
 }
-input.dashed:not(.disabled).${color}:focus{
-  border-color: var(--${color});
-  box-shadow: 0 0 0 3.5px rgba(var(--${color}-rgb), 0.25);
-}
-input[type="checkbox"]:checked + span > .ar-checkbox.dashed:not(.disabled).${color}{
-  box-shadow: 0 0 0 2.5px rgba(var(--${color}-rgb), 0.1);
-}
-.dashed:not(.disabled).${color}.active {
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
+
+button.dashed:not(.disabled) {
+  &.${color} { 
+    &:hover,
+    &:focus {
+      background-color: var(--${color}-100);
+    }
+  }
 }
 /* #endregion */
 /* ${color.toUpperCase()} */`;
@@ -325,30 +343,36 @@ const _Variant_BorderlessCss = () => {
 
   const content = colors
     .map((color) => {
-      switch (color) {
-        case "light":
-          customFontColor = "dark";
-          break;
-        default:
-          customFontColor = color;
-          break;
-      }
-
       return `/* #region ${color.toUpperCase()} */
-.borderless:not(.disabled).${color} {
-  color: var(--${customFontColor});
+.borderless:not(.disabled) {
+  &.${color} {
+    color: var(--${color}-500);
+
+    &.active {
+      animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
+    }
+  }
 }
-.borderless:not(.disabled).${color}:hover {
-  background-color: rgba(var(--${color}-rgb), 0.1);
+
+input.borderless:not(.disabled),
+iframe.borderless:not(.disabled) {
+  &.${color} {
+    &:focus,
+    &.focused {
+      border-color: var(--${customFocusColor});
+      box-shadow: 0 0 0 3.5px rgba(var(--${customFocusColor}-rgb), 0.25);
+    }
+  }
 }
-input.borderless:not(.disabled).${color}:focus {
-  border-color: var(--${color});
-  box-shadow: 0 0 0 3.5px rgba(var(--${color}-rgb), 0.1);
-}
-.borderless:not(.disabled).${color}.active {
-  background-color: transparent;
-  /* Sırasıyla; Ad, Süre, Hız, Gecikme Süresi, Tekrar Sayısı, Yön, Bitiş Süreci */
-  animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
+
+button.borderless:not(.disabled) {
+  &.${color} { 
+    &:hover,
+    &:focus {
+      background-color: var(--${color}-500);
+      color: var(--white)
+    }
+  }
 }
 /* #endregion */
 /* ${color.toUpperCase()} */`;
@@ -366,13 +390,13 @@ const _Animation_Css = () => {
       (color) => `/* #region Animation -> ${color.toUpperCase()} */
 @keyframes clicked-${color} {
   0% {
-    box-shadow: 0 0 0 0px rgba(var(--${color}-rgb), 0);
+    box-shadow: 0 0 0 0px var(--${color}-500);
   }
-  25% {
-    box-shadow: 0 0 0 5px rgba(var(--${color}-rgb), 0.25);
+  50% {
+    box-shadow: 0 0 0 5px var(--${color}-100);
   }
   100% {
-    box-shadow: 0 0 0 7.5px rgba(var(--${color}-rgb), 0);
+    box-shadow: 0 0 0 7.5px transparent;
   }
 }
 /* #endregion */
@@ -386,10 +410,10 @@ const _Animation_Css = () => {
 _Input_BorderCss();
 _Input_ButtonCss();
 _Input_CheckboxCss();
-// _Input_RadioCss();
 _Input_SwitchCss();
 
 _Variant_FilledCss();
+_Variant_SurfaceCss();
 _Variant_OutlinedCss();
 _Variant_DashedCss();
 _Variant_BorderlessCss();

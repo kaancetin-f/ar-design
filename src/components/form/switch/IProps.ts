@@ -1,9 +1,9 @@
 import {
   IBorder,
+  IColors,
   IDisabled,
   IIcon,
   ISize,
-  IStatus,
   IUpperCase,
   IValidation,
   IVariant,
@@ -11,14 +11,14 @@ import {
 
 interface IProps
   extends IVariant,
-    IStatus,
+    IColors,
     IBorder,
     IIcon,
     ISize,
     IUpperCase,
     IValidation,
     IDisabled,
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "size"> {
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "size" | "color"> {
   /**
    * Bileşenin başlığı veya etiket metnidir.
    *
