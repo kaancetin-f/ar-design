@@ -29,49 +29,24 @@
   --white-rgb: 255, 255, 255;
   --black: #000000;
   --black-rgb: 0, 0, 0;
-  --gray-100: #f8f9fa;
-  --gray-200: #e9ecef;
-  --gray-300: #dee2e6;
-  --gray-400: #ced4da;
-  --gray-500: #adb5bd;
-  --gray-600: #6c757d;
-  --gray-700: #495057;
-  --gray-800: #343a40;
-  --gray-900: #212529;
-  --gray-dark: #343a40;
-  --red: #ff0000;
-  --red-rgb: 255, 0, 0;
-  --green: #00ff00;
-  --green-rgb: 0, 255, 0;
-  --blue: #0000ff;
-  --blue-rgb: 0, 0, 255;
 
   /* ... */
-  --primary: #007bff;
-  --primary-active: #005abb;
+  --primary: var(--blue-500);
   --primary-light: #92c7ff;
-  --primary-rgb: 0, 123, 255;
-  --secondary: #6c757d;
-  --secondary-active: #495055;
+  --primary-rgb: 13, 110, 253;
+  --secondary: var(--gray-500);
   --secondary-rgb: 108, 117, 125;
-  --success: #28a745;
-  --success-active: #1c7a32;
+  --success: var(--green-500);
   --success-rgb: 40, 167, 69;
-  --warning: #ffc107;
-  --warning-active: #cf9c05;
+  --warning: var(--orange-500);
   --warning-rgb: 255, 193, 7;
-  --warning-font-color: #463500;
-  --danger: #dc3545;
-  --danger-active: #af2936;
+  --danger: var(--red-500);
   --danger-rgb: 220, 53, 69;
-  --information: #17a2b8;
-  --information-active: #107c8c;
+  --information: var(--cyan-500);
   --information-rgb: 23, 162, 184;
-  --light: #e4e6e9;
-  --light-active: #dde0e3;
+  --light: var(--light-500);
   --light-rgb: 222, 226, 230;
-  --dark: var(--gray-600);
-  --dark-active: var(--gray-700);
+  --dark: var(--gray-500);
   --dark-rgb: 52, 58, 64;
 }
 /* #endregion */
@@ -128,20 +103,20 @@
 /* Box Shadow */
 
 /* #region Variants */
-@import url("./variants/animation.css");
+@import url("./animation.css");
 
 .filled {
   border-color: transparent;
   transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 
-@import url("./variants/filled/styles.css");
+@import url("./variants/filled.css");
 
 .surface {
   transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 
-@import url("./variants/surface/styles.css");
+@import url("./variants/surface.css");
 
 .outlined {
   background-color: transparent;
@@ -151,7 +126,7 @@
   transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 
-@import url("./variants/outlined/styles.css");
+@import url("./variants/outlined.css");
 
 .dashed {
   background-color: transparent;
@@ -161,7 +136,7 @@
   transition: border 250ms, box-shadow 250ms ease-in-out;
 }
 
-@import url("./variants/dashed/dashed.css");
+@import url("./variants/dashed.css");
 
 .borderless {
   background-color: transparent;
@@ -176,8 +151,9 @@
   cursor: no-drop !important;
 }
 
-@import url("./variants/borderless/borderless.css");
+@import url("./variants/borderless.css");
 @import url("./variants/border.css");
+@import url("./statuses.css");
 
 :is(input) {
   border: solid 1px transparent;
@@ -195,18 +171,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 :is(input, button):disabled,
 :is(input[type="checkbox"]):disabled + span > .ar-checkbox:is(.filled, .outlined) {
-  /* background-color: var(--gray-100) !important; */
-  /* border: solid 1px var(--gray-500) !important; */
-  /* color: var(--gray-500) !important; */
   cursor: no-drop !important;
 }
-/* :is(input, button):is(.outlined):disabled {
-  background-color: transparent !important;
-} */
-/* :is(input, button):is(.dashed):disabled {
-  background-color: transparent !important;
-  border: dashed 1px var(--gray-500) !important;
-} */
 :is(input[type="checkbox"]):disabled + span > .ar-checkbox:is(.borderless) {
   background-color: var(--gray-100) !important;
   color: var(--gray-500) !important;

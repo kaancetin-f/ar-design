@@ -2,19 +2,21 @@ const fs = require("fs");
 const path = require("path");
 
 const borderTypes = ["sm", "lg", "xl", "xxl", "pill"];
-// const colors = [
-//   "primary",
-//   "primary-light",
-//   "secondary",
-//   "success",
-//   "warning",
-//   "danger",
-//   "information",
-//   "dark",
-//   "light",
-// ];
+const statuses = [
+  "primary",
+  "primary-light",
+  "secondary",
+  "success",
+  "warning",
+  "danger",
+  "information",
+  "dark",
+  "light",
+];
 const colors = ["blue", "purple", "pink", "red", "orange", "yellow", "green", "teal", "cyan", "gray", "light"];
-let customFontColor = "";
+let background = "";
+let borderColor = "";
+let fontColor = "";
 let customFocusColor = "";
 
 const WriteCssFile = (filePath, content) => {
@@ -27,7 +29,7 @@ const WriteCssFile = (filePath, content) => {
   }
 };
 
-const _Input_BorderCss = async () => {
+const _Input_BorderCss = () => {
   const file = path.join(__dirname, "../assets", "css", "components", "form", "input", "core", "border.css");
 
   const content = borderTypes
@@ -84,20 +86,20 @@ const _Input_CheckboxCss = () => {
     .map((color) => {
       switch (color) {
         case "warning":
-          customFontColor = "dark";
+          fontColor = "dark";
           break;
         case "light":
-          customFontColor = "dark";
+          fontColor = "dark";
           break;
         default:
-          customFontColor = "white";
+          fontColor = "white";
           break;
       }
 
       return `/* #region Border Color -> ${color.toUpperCase()} */
 .ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.filled.${color}::before {
-  border-right-color: var(--${customFontColor});
-  border-bottom-color: var(--${customFontColor});
+  border-right-color: var(--${fontColor});
+  border-bottom-color: var(--${fontColor});
 }
 .ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.outlined.${color}::before {
   border-right-color: var(--${color});
@@ -145,17 +147,17 @@ const _Input_SwitchCss = () => {
 };
 
 const _Variant_FilledCss = () => {
-  const file = path.join(__dirname, "../assets", "css", "core", "variants", "filled", "styles.css");
+  const file = path.join(__dirname, "../assets", "css", "core", "variants", "filled.css");
 
   const content = colors
     .map((color) => {
       switch (color) {
         case "yellow":
         case "gray":
-          customFontColor = "black";
+          fontColor = "black";
           break;
         default:
-          customFontColor = "white";
+          fontColor = "white";
           break;
       }
 
@@ -163,7 +165,7 @@ const _Variant_FilledCss = () => {
 .filled:not(.disabled) {
   &.${color} {
     background-color: var(--${color}-500);
-    color: var(--${customFontColor});
+    color: var(--${fontColor});
     
     &.active {
       animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
@@ -205,7 +207,7 @@ button.filled:not(.disabled) {
 };
 
 const _Variant_SurfaceCss = () => {
-  const file = path.join(__dirname, "../assets", "css", "core", "variants", "surface", "styles.css");
+  const file = path.join(__dirname, "../assets", "css", "core", "variants", "surface.css");
 
   const content = colors
     .map((color) => {
@@ -213,7 +215,7 @@ const _Variant_SurfaceCss = () => {
 .surface:not(.disabled) {
   &.${color} {
     background-color: var(--${color}-100);
-    border:solid 1px var(--${color}-300);
+    border: solid 1px var(--${color}-300);
     color: var(--${color}-600);
     
     &.active {
@@ -239,16 +241,16 @@ button.surface:not(.disabled) {
 };
 
 const _Variant_OutlinedCss = () => {
-  const file = path.join(__dirname, "../assets", "css", "core", "variants", "outlined", "styles.css");
+  const file = path.join(__dirname, "../assets", "css", "core", "variants", "outlined.css");
 
   const content = colors
     .map((color) => {
       switch (color) {
         case "light":
-          customFontColor = "black";
+          fontColor = "black";
           break;
         default:
-          customFontColor = `${color}-500`;
+          fontColor = `${color}-500`;
           break;
       }
 
@@ -266,7 +268,7 @@ iframe.outlined:not(.disabled),
 .ar-select > .selections.outlined:not(.disabled) {
   &.${color} {
     border: solid 1px var(--${color}-500);
-    color: var(--${customFontColor});
+    color: var(--${fontColor});
 
     &:focus,
     &.focused {
@@ -295,7 +297,7 @@ button.outlined:not(.disabled) {
 };
 
 const _Variant_DashedCss = () => {
-  const file = path.join(__dirname, "../assets", "css", "core", "variants", "dashed", "dashed.css");
+  const file = path.join(__dirname, "../assets", "css", "core", "variants", "dashed.css");
 
   const content = colors
     .map((color) => {
@@ -339,7 +341,7 @@ button.dashed:not(.disabled) {
 };
 
 const _Variant_BorderlessCss = () => {
-  const file = path.join(__dirname, "../assets", "css", "core", "variants", "borderless", "borderless.css");
+  const file = path.join(__dirname, "../assets", "css", "core", "variants", "borderless.css");
 
   const content = colors
     .map((color) => {
@@ -382,6 +384,64 @@ button.borderless:not(.disabled) {
   WriteCssFile(file, content);
 };
 
+const Statuses = () => {
+  const file = path.join(__dirname, "../assets", "css", "core", "statuses.css");
+
+  const content = statuses
+    .map((status) => {
+      switch (status) {
+        case "primary":
+          background = "var(--blue-100)";
+          borderColor = "var(--blue-300)";
+          fontColor = "var(--blue-700)";
+          break;
+        case "success":
+          background = "var(--green-100)";
+          borderColor = "var(--green-300)";
+          fontColor = "var(--green-700)";
+          break;
+        case "warning":
+          background = "var(--orange-100)";
+          borderColor = "var(--orange-300)";
+          fontColor = "var(--orange-700)";
+          break;
+        case "danger":
+          background = "var(--red-100)";
+          borderColor = "var(--red-300)";
+          fontColor = "var(--red-700)";
+          break;
+        default:
+          break;
+      }
+
+      return `/* #region ${status.toUpperCase()} */
+.filled {
+  &.${status} {
+    background-color: ${background};
+    color: ${fontColor};
+  }
+}
+.surface {
+  &.${status} {
+    background-color: ${background};
+    border: solid 1px ${borderColor};
+    color: ${fontColor};
+  }
+}
+.dashed {
+  &.${status} {
+    border: dashed 1px ${borderColor};
+    color: ${fontColor};
+  }
+}
+/* #endregion */
+/* ${status.toUpperCase()} */`;
+    })
+    .join("\n\n");
+
+  WriteCssFile(file, content);
+};
+
 const _Animation_Css = () => {
   const file = path.join(__dirname, "../assets", "css", "core", "variants", "animation.css");
 
@@ -417,5 +477,7 @@ _Variant_SurfaceCss();
 _Variant_OutlinedCss();
 _Variant_DashedCss();
 _Variant_BorderlessCss();
+
+Statuses();
 
 _Animation_Css();

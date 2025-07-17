@@ -3,18 +3,21 @@
 import React from "react";
 import "../../../assets/css/components/feedback/alert/alert.css";
 import IProps from "./IProps";
+import Utils from "../../../libs/infrastructure/shared/Utils";
 
-const Alert: React.FC<IProps> = ({ children, message, status = "primary", border = { radius: "sm" }, emphasize }) => {
-  // refs
-  let _className = "ar-alert";
+const Alert: React.FC<IProps> = ({
+  children,
+  message,
+  variant = "filled",
+  status = "primary",
+  border = { radius: "sm" },
+  emphasize,
+}) => {
+  const _className: string[] = ["ar-alert"];
 
-  // status
-  if (status) _className += ` ${status}`;
+  _className.push(...Utils.GetClassName(variant, status, undefined, border, undefined, undefined, undefined));
 
-  // border
-  _className += ` border-style-solid`;
-  _className += ` border-radius-${border.radius}`;
-
+  // methods
   const formattedTags = (message: string) => {
     // TODO: Şuan için sadece transparent olan alert tiplerinde çalışmakta.
     // TODO: Bu konu hakkında düşünüp karar verilecek.
@@ -84,7 +87,7 @@ const Alert: React.FC<IProps> = ({ children, message, status = "primary", border
   const cleanMessage = (message: string) => message.replace(/<\/?[^>]+>/g, "");
 
   return (
-    <div className={_className}>
+    <div className={_className.map((c) => c).join(" ")}>
       {message ? (
         Array.isArray(message) ? (
           createList(message)

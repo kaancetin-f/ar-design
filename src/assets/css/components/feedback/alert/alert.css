@@ -1,8 +1,9 @@
 .ar-alert {
-  padding: 1rem 1rem 1rem 1rem;
+  padding: 1rem;
   border-radius: var(--border-radius-sm);
   border: solid 1px transparent;
   font-family: var(--system);
+  font-weight: 400;
 }
 
 .ar-alert > p > .ar-alert-tag {
@@ -55,6 +56,3 @@
 .ar-alert ul li ul {
   margin-left: 0.1rem;
 }
-
-/* Core Css */
-@import url("./core/color.css");

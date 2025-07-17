@@ -1,8 +1,8 @@
-import { IBorder, IChildren, IStatus } from "../../../libs/types/IGlobalProps";
+import { IBorder, IChildren, IStatus, IVariant } from "../../../libs/types/IGlobalProps";
 
 type message = string | message[];
 
-interface IProps extends IChildren, IStatus, IBorder {
+interface IProps extends IChildren, IVariant<{ component: "alert" }>, IStatus<{ component: "alert" }>, IBorder {
   /**
    * Uyarı mesajı içeriğidir.
    *

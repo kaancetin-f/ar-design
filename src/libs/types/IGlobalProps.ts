@@ -25,7 +25,7 @@ export interface IChildren {
   children?: React.ReactNode;
 }
 
-export interface IVariant {
+export interface IVariant<T extends { component?: string } = {}> {
   /**
    * Bileşenin stil varyantını belirtir.
    *
@@ -42,10 +42,10 @@ export interface IVariant {
    * <Component variant="filled">Hello, World!</Component>
    * ```
    */
-  variant?: Variants;
+  variant?: T["component"] extends "alert" ? Exclude<Variants, "outlined" | "borderless"> : Variants;
 }
 
-export interface IStatus {
+export interface IStatus<T extends { component?: string } = {}> {
   /**
    * Bileşenin statü durumuna göre renk özelliğini belirtir.
    *
@@ -55,7 +55,9 @@ export interface IStatus {
    * <Component status="success">Hello, World!</Component>
    * ```
    */
-  status?: Status;
+  status?: T["component"] extends "alert"
+    ? Exclude<Status, "primary-light" | "secondary" | "information" | "dark" | "light">
+    : Status;
 }
 
 export interface IColors {

@@ -98,6 +98,7 @@ const Steps = function <T extends object>({ children, steps = [], onChange, vali
         <div className="buttons">
           {currentStep > 0 && (
             <Button
+              color="blue"
               onClick={() => {
                 setCurrentStep((prev) => prev - 1);
                 onChange(currentStep - 1);
@@ -111,6 +112,7 @@ const Steps = function <T extends object>({ children, steps = [], onChange, vali
 
           {currentStep < steps.length - 1 && (
             <Button
+              color="blue"
               onClick={() => {
                 if (validation) {
                   _onSubmit((result) => {
