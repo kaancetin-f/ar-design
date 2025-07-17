@@ -402,7 +402,7 @@ button.filled:not(.disabled) {
 .filled:not(.disabled) {
   &.light {
     background-color: var(--light-500);
-    color: var(--white);
+    color: var(--gray-500);
     
     &.active {
       animation: clicked-light ease-in-out 750ms 0s 1 normal both;

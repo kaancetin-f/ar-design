@@ -156,6 +156,9 @@ const _Variant_FilledCss = () => {
         case "gray":
           fontColor = "black";
           break;
+        case "light":
+          fontColor = "gray-500";
+          break;
         default:
           fontColor = "white";
           break;
@@ -216,7 +219,7 @@ const _Variant_SurfaceCss = () => {
   &.${color} {
     background-color: var(--${color}-100);
     border: solid 1px var(--${color}-300);
-    color: var(--${color}-600);
+    color: var(--${color}-500);
     
     &.active {
       animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
@@ -280,6 +283,7 @@ iframe.outlined:not(.disabled),
 
 button.outlined:not(.disabled) {
   &.${color} { 
+    border-color: var(--${color}-500);
     color: var(--${color}-500);
 
     &:hover,
@@ -391,24 +395,24 @@ const Statuses = () => {
     .map((status) => {
       switch (status) {
         case "primary":
-          background = "var(--blue-100)";
-          borderColor = "var(--blue-300)";
-          fontColor = "var(--blue-700)";
+          background = "blue-100";
+          borderColor = "blue-300";
+          fontColor = "blue-700";
           break;
         case "success":
-          background = "var(--green-100)";
-          borderColor = "var(--green-300)";
-          fontColor = "var(--green-700)";
+          background = "green-100";
+          borderColor = "green-300";
+          fontColor = "green-700";
           break;
         case "warning":
-          background = "var(--orange-100)";
-          borderColor = "var(--orange-300)";
-          fontColor = "var(--orange-700)";
+          background = "orange-100";
+          borderColor = "orange-300";
+          fontColor = "orange-700";
           break;
         case "danger":
-          background = "var(--red-100)";
-          borderColor = "var(--red-300)";
-          fontColor = "var(--red-700)";
+          background = "red-100";
+          borderColor = "red-300";
+          fontColor = "red-700";
           break;
         default:
           break;
@@ -417,21 +421,21 @@ const Statuses = () => {
       return `/* #region ${status.toUpperCase()} */
 .filled {
   &.${status} {
-    background-color: ${background};
-    color: ${fontColor};
+    background-color: var(--${background});
+    color: var(--${fontColor});
   }
 }
 .surface {
   &.${status} {
-    background-color: ${background};
-    border: solid 1px ${borderColor};
-    color: ${fontColor};
+    background-color: var(--${background});
+    border: solid 1px var(--${borderColor});
+    color: var(--${fontColor});
   }
 }
 .dashed {
   &.${status} {
-    border: dashed 1px ${borderColor};
-    color: ${fontColor};
+    border: dashed 1px var(--${borderColor});
+    color: var(--${fontColor});
   }
 }
 /* #endregion */

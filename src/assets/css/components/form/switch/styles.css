@@ -4,40 +4,54 @@
   align-items: center;
   width: 100%;
   height: var(--input-height);
-}
-.ar-switch-wrapper > label {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0 0.5rem;
-  user-select: none;
-}
-.ar-switch-wrapper > label > input[type="checkbox"] {
-  display: none;
-}
 
-.ar-switch-wrapper > label > .ar-switch {
-  position: relative;
-  display: inline-block;
-  width: 2.25rem;
-  height: 1.25rem;
-  transition: box-shadow 250ms ease-in-out;
-}
+  > label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0 0.5rem;
+    font-weight: 400;
+    user-select: none;
 
-.ar-switch-wrapper > label > input[type="checkbox"] + .ar-switch > .handle {
-  position: absolute;
-  top: 50%;
-  left: 0.15rem;
-  transform: translateY(-50%);
-  display: inline-block;
-  content: "";
-  background-color: var(--white);
-  width: 0.85rem;
-  height: 0.85rem;
-  transition: left 150ms, width 150ms 150ms, height 150ms 150ms, box-shadow 150ms 150ms ease-in-out;
-}
-.ar-switch-wrapper > label > input[type="checkbox"].checked + .ar-switch > .handle {
-  left: calc(2.25rem - 1rem);
+    > input[type="checkbox"] {
+      display: none;
+
+      + .ar-switch {
+        > .handle {
+          position: absolute;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+          display: inline-block;
+          content: "";
+          background-color: var(--white);
+          width: 1rem;
+          height: 1rem;
+          border: solid 1px var(--gray-300);
+          box-shadow: 0 0 0 0 rgba(var(--black-rgb), 0.2);
+          transition: left 150ms, width 150ms 150ms, height 150ms 150ms, box-shadow 150ms 150ms ease-in-out;
+        }
+      }
+
+      &.checked {
+        + .ar-switch {
+          > .handle {
+            left: calc(2.25rem - 1rem);
+            border: none;
+            box-shadow: 0 0 0 5px rgba(var(--black-rgb), 0.2);
+          }
+        }
+      }
+    }
+
+    > .ar-switch {
+      position: relative;
+      display: inline-block;
+      width: 2.25rem;
+      height: 1rem;
+      transition: box-shadow 250ms ease-in-out;
+    }
+  }
 }
 
 @import url("./core/border.css");

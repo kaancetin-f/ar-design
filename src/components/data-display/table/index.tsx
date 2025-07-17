@@ -776,8 +776,8 @@ const Table = forwardRef(
                     >
                       <Button
                         variant="outlined"
-                        color="green"
-                        icon={{ element: <ARIcon icon="Import" size={16} /> }}
+                        color="purple"
+                        icon={{ element: <ARIcon icon="Upload" /> }}
                         tooltip={{ text: actions.import.tooltip, direction: "top" }}
                       />
                     </Popover>
@@ -786,7 +786,8 @@ const Table = forwardRef(
                   {actions.create && (
                     <Button
                       variant="outlined"
-                      icon={{ element: <ARIcon icon="Add" size={16} /> }}
+                      color="green"
+                      icon={{ element: <ARIcon icon="Add" size={24} /> }}
                       tooltip={{ text: actions.create.tooltip, direction: "top" }}
                       onClick={actions.create.onClick}
                     />

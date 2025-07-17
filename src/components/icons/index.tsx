@@ -21,7 +21,7 @@ export const ARIcon: React.FC<{
   strokeWidth = 1,
   style,
 }) => {
-  const { Compiler } = new Icon(fill, stroke, strokeWidth);
+  const { Compiler } = new Icon(stroke, strokeWidth);
 
   return (
     <svg

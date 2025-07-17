@@ -24,6 +24,7 @@ iframe.outlined:not(.disabled),
 
 button.outlined:not(.disabled) {
   &.blue { 
+    border-color: var(--blue-500);
     color: var(--blue-500);
 
     &:hover,
@@ -61,6 +62,7 @@ iframe.outlined:not(.disabled),
 
 button.outlined:not(.disabled) {
   &.purple { 
+    border-color: var(--purple-500);
     color: var(--purple-500);
 
     &:hover,
@@ -98,6 +100,7 @@ iframe.outlined:not(.disabled),
 
 button.outlined:not(.disabled) {
   &.pink { 
+    border-color: var(--pink-500);
     color: var(--pink-500);
 
     &:hover,
@@ -135,6 +138,7 @@ iframe.outlined:not(.disabled),
 
 button.outlined:not(.disabled) {
   &.red { 
+    border-color: var(--red-500);
     color: var(--red-500);
 
     &:hover,
@@ -172,6 +176,7 @@ iframe.outlined:not(.disabled),
 
 button.outlined:not(.disabled) {
   &.orange { 
+    border-color: var(--orange-500);
     color: var(--orange-500);
 
     &:hover,
@@ -209,6 +214,7 @@ iframe.outlined:not(.disabled),
 
 button.outlined:not(.disabled) {
   &.yellow { 
+    border-color: var(--yellow-500);
     color: var(--yellow-500);
 
     &:hover,
@@ -246,6 +252,7 @@ iframe.outlined:not(.disabled),
 
 button.outlined:not(.disabled) {
   &.green { 
+    border-color: var(--green-500);
     color: var(--green-500);
 
     &:hover,
@@ -283,6 +290,7 @@ iframe.outlined:not(.disabled),
 
 button.outlined:not(.disabled) {
   &.teal { 
+    border-color: var(--teal-500);
     color: var(--teal-500);
 
     &:hover,
@@ -320,6 +328,7 @@ iframe.outlined:not(.disabled),
 
 button.outlined:not(.disabled) {
   &.cyan { 
+    border-color: var(--cyan-500);
     color: var(--cyan-500);
 
     &:hover,
@@ -357,6 +366,7 @@ iframe.outlined:not(.disabled),
 
 button.outlined:not(.disabled) {
   &.gray { 
+    border-color: var(--gray-500);
     color: var(--gray-500);
 
     &:hover,
@@ -394,6 +404,7 @@ iframe.outlined:not(.disabled),
 
 button.outlined:not(.disabled) {
   &.light { 
+    border-color: var(--light-500);
     color: var(--light-500);
 
     &:hover,

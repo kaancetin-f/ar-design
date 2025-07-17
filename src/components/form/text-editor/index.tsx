@@ -286,7 +286,7 @@ const TextEditor = <T extends object>({
             variant="borderless"
             color="teal"
             border={{ radius: "none" }}
-            icon={{ element: <ARIcon icon={icon} size={18} fill="transparent" /> }}
+            icon={{ element: <ARIcon icon={icon} /> }}
             tooltip={{
               text: tooltip,
             }}

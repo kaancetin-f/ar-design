@@ -40,13 +40,13 @@ const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
   const buttonIcons = () => {
     switch (status) {
       case "success":
-        return <ARIcon icon="Success" fill="transparent" stroke="var(--white)" size={48} />;
+        return <ARIcon icon="CheckAll" fill="var(--white)" size={64} />;
       case "warning":
-        return <ARIcon icon="Warning" fill="transparent" stroke="var(--white)" size={48} />;
+        return <ARIcon variant="fill" icon="ExclamationDiamond" fill="var(--white)" size={48} />;
       case "information":
         return "information";
       case "error":
-        return <ARIcon icon="CloseCircle" fill="transparent" stroke="var(--white)" size={48} />;
+        return <ARIcon variant="fill" icon="XCircle" fill="var(--white)" size={48} />;
 
       default:
         return "light";

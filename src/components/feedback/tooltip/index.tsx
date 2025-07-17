@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
 import ReactDOM from "react-dom";
 import "../../../assets/css/components/feedback/tooltip/styles.css";
@@ -14,12 +14,12 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
   const [mouseEnter, setMouseEnter] = useState<boolean>(false);
 
   // methods
-  const handlePosition = () => {
+  const handlePosition = useCallback(() => {
     if (_children.current && _arTooltip.current) {
-      const buttonR = _children.current.getBoundingClientRect();
-      const tooltipR = _arTooltip.current.getBoundingClientRect();
+      const childRect = _children.current.getBoundingClientRect();
+      const tooltipRect = _arTooltip.current.getBoundingClientRect();
 
-      if (buttonR) {
+      if (childRect) {
         const sx = window.scrollX || document.documentElement.scrollLeft;
         const sy = window.scrollY || document.documentElement.scrollTop;
 
@@ -31,42 +31,40 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
           _arTooltip.current.style.left = `${left + sx}px`;
         };
 
-        const positonT = buttonR.top;
-        const positonL = buttonR.left + (sx == 0 ? 5.5 : 0);
-        const centerBX = buttonR.width / 2;
-        const centerBY = buttonR.height / 2;
-        const centerV = positonL - tooltipR.width + tooltipR.width / 2 + centerBX;
         const margin = 17.5;
+
+        let top = 0;
+        let left = 0;
 
         switch (direction) {
           case "top":
             {
-              const top = positonT - tooltipR.height - margin;
-              const left = centerV;
+              top = childRect.top - tooltipRect.height - margin;
+              left = childRect.left + childRect.width / 2 - tooltipRect.width / 2;
 
               setTooltipPosition(top, left);
             }
             break;
           case "right":
             {
-              const top = positonT + centerBY - tooltipR.height / 2;
-              const left = positonL + buttonR.width + margin;
+              top = childRect.top + childRect.height / 2 - tooltipRect.height / 2;
+              left = childRect.right + margin;
 
               setTooltipPosition(top, left);
             }
             break;
           case "bottom":
             {
-              const top = positonT + buttonR.height + margin;
-              const left = centerV;
+              top = childRect.bottom + margin;
+              left = childRect.left + childRect.width / 2 - tooltipRect.width / 2;
 
               setTooltipPosition(top, left);
             }
             break;
           case "left":
             {
-              const top = positonT + centerBY - tooltipR.height / 2;
-              const left = positonL - tooltipR.width - margin;
+              top = childRect.top + childRect.height / 2 - tooltipRect.height / 2;
+              left = childRect.left - tooltipRect.width - margin;
 
               setTooltipPosition(top, left);
             }
@@ -74,7 +72,7 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
         }
       }
     }
-  };
+  }, []);
 
   //useEffects
   useEffect(() => {
@@ -82,7 +80,7 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
   }, [mouseEnter]);
 
   return (
-    <div ref={_arTooltip} className="ar-tooltip-wrapper">
+    <div className="ar-tooltip-wrapper">
       <div ref={_children} onMouseEnter={() => setMouseEnter(true)} onMouseLeave={() => setMouseEnter(false)}>
         {children}
       </div>
