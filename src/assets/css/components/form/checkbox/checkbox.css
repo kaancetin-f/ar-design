@@ -18,6 +18,9 @@
   min-width: 1rem;
   min-height: 1rem;
 }
+.ar-checkbox-wrapper > label > :is(input[type="checkbox"]):checked + span > .ar-checkbox {
+  z-index: 2;
+}
 .ar-checkbox-wrapper > label > :is(input[type="checkbox"]):checked + span > .ar-checkbox::before {
   position: absolute;
   top: 50%;
@@ -28,6 +31,21 @@
   width: 0.25rem;
   height: 0.5rem;
   border: solid 1px transparent;
+  border-right-color: var(--white);
+  border-bottom-color: var(--white);
+}
+
+.ar-checkbox-wrapper > label > span > .trace {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-block;
+  content: "";
+  width: 1rem;
+  height: 1rem;
+  border-radius: var(--border-radius-pill);
+  z-index: 1;
 }
 
 @import url("./core/border.css");

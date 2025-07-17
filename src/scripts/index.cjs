@@ -84,30 +84,58 @@ const _Input_CheckboxCss = () => {
 
   const content = colors
     .map((color) => {
-      switch (color) {
-        case "warning":
-          fontColor = "dark";
-          break;
-        case "light":
-          fontColor = "dark";
-          break;
-        default:
-          fontColor = "white";
-          break;
-      }
-
       return `/* #region Border Color -> ${color.toUpperCase()} */
-.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.filled.${color}::before {
-  border-right-color: var(--${fontColor});
-  border-bottom-color: var(--${fontColor});
+.ar-checkbox-wrapper {
+  > label {
+    > input[type="checkbox"] {
+      &:checked {
+        + span {
+          > .ar-checkbox.filled.${color}::before {
+            border-right-color: var(--white);
+            border-bottom-color: var(--white);
+          }
+
+          > .ar-checkbox.filled.${color} {
+            background-color: var(--${color}-500);
+            box-shadow: 0 0 0 3.5px var(--${color}-100);
+          }
+        }
+      }
+    }
+  }
 }
-.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.outlined.${color}::before {
-  border-right-color: var(--${color});
-  border-bottom-color: var(--${color});
-}
-.ar-checkbox-wrapper > label > :is(input[type="checkbox"], input[type="radio"]):checked + span > .ar-checkbox.borderless.${color}::before {
-  border-right-color: var(--${color});
-  border-bottom-color: var(--${color});
+/* #endregion */
+/* Border Color -> ${color.toUpperCase()} */`;
+    })
+    .join("\n\n");
+
+  WriteCssFile(file, content);
+};
+
+const _Input_RadioCss = () => {
+  const file = path.join(__dirname, "../assets", "css", "components", "form", "radio", "core", "border.css");
+
+  const content = colors
+    .map((color) => {
+      return `/* #region Border Color -> ${color.toUpperCase()} */
+.ar-radio-wrapper {
+  > label {
+    > input[type="radio"] {
+      &:checked {
+        + span {
+          > .ar-radio.filled.${color}::before {
+            border-right-color: var(--white);
+            border-bottom-color: var(--white);
+          }
+
+          > .ar-radio.filled.${color} {
+            background-color: var(--${color}-500);
+            box-shadow: 0 0 0 3.5px var(--${color}-100);
+          }
+        }
+      }
+    }
+  }
 }
 /* #endregion */
 /* Border Color -> ${color.toUpperCase()} */`;
@@ -474,6 +502,7 @@ const _Animation_Css = () => {
 _Input_BorderCss();
 _Input_ButtonCss();
 _Input_CheckboxCss();
+_Input_RadioCss();
 _Input_SwitchCss();
 
 _Variant_FilledCss();

@@ -1,18 +1,8 @@
-import {
-  IBorder,
-  IColors,
-  IIcon,
-  ISize,
-  IStatus,
-  IUpperCase,
-  IValidation,
-  IVariant,
-} from "../../../libs/types/IGlobalProps";
+import { IBorder, IColors, IIcon, ISize, IUpperCase, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
 import { Status } from "../../../libs/types";
 
 interface IProps
   extends IVariant,
-    IStatus,
     IColors,
     IBorder,
     IIcon,

@@ -6,14 +6,22 @@ import "../../../assets/css/components/form/radio/radio.css";
 import Utils from "../../../libs/infrastructure/shared/Utils";
 
 const Radio = forwardRef<HTMLInputElement, IProps>(
-  ({ label, size = "normal", status, color, border = { radius: "sm" }, trace, upperCase, ...attributes }, ref) => {
+  ({ label, size = "normal", color = "blue", border = { radius: "pill" }, trace, upperCase, ...attributes }, ref) => {
     // refs
     const _checkbox = useRef<HTMLInputElement>(null);
     const _checkboxClassName: string[] = ["ar-radio"];
     const _traceClassName: string[] = ["trace", "filled"];
 
     _checkboxClassName.push(
-      ...Utils.GetClassName("filled", status, color, border, size, undefined, attributes.className)
+      ...Utils.GetClassName(
+        "filled",
+        undefined,
+        attributes.checked ? color : "light",
+        border,
+        size,
+        undefined,
+        attributes.className
+      )
     );
 
     if (trace && Object.keys(trace).length > 0) _traceClassName.push(trace.color);

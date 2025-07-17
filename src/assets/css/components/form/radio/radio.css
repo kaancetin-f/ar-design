@@ -19,8 +19,6 @@
   min-height: 1rem;
 }
 .ar-radio-wrapper > label > :is(input[type="radio"]):checked + span > .ar-radio {
-  background-color: var(--primary);
-  box-shadow: 0 0 0 3.5px rgba(var(--primary-rgb), 0.25);
   z-index: 2;
 }
 .ar-radio-wrapper > label > :is(input[type="radio"]):checked + span > .ar-radio::before {
@@ -49,3 +47,5 @@
   border-radius: var(--border-radius-pill);
   z-index: 1;
 }
+
+@import url("./core/border.css");

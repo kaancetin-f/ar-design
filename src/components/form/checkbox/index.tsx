@@ -6,18 +6,16 @@ import IProps from "./IProps";
 import "../../../assets/css/components/form/checkbox/checkbox.css";
 
 const Checkbox = forwardRef<HTMLInputElement, IProps>(
-  ({ label, size = "normal", color, border = { radius: "sm" }, upperCase, ...attributes }, ref) => {
+  ({ label, size = "normal", color = "blue", border = { radius: "sm" }, upperCase, ...attributes }, ref) => {
     // refs
     const _checkbox = useRef<HTMLInputElement>(null);
     const _checkboxClassName: string[] = ["ar-checkbox"];
-
-    const isChecked = attributes.checked ?? false;
 
     _checkboxClassName.push(
       ...Utils.GetClassName(
         "filled",
         undefined,
-        isChecked ? color : "light",
+        attributes.checked ? color : "light",
         border,
         size,
         undefined,
@@ -35,7 +33,8 @@ const Checkbox = forwardRef<HTMLInputElement, IProps>(
             size={0}
             onChange={(event) => {
               // (() => {
-              //   attributes.onChange?.(event);
+              //   const _current = _checkbox.current;
+              //   if (!_current) return;
               // })();
 
               (() => attributes.onChange && attributes.onChange(event))();
@@ -44,6 +43,9 @@ const Checkbox = forwardRef<HTMLInputElement, IProps>(
 
           <span>
             <span ref={_checkbox} className={_checkboxClassName.map((c) => c).join(" ")}></span>
+            {/* {trace && Object.keys(trace).length > 0 && (
+              <span className={_traceClassName.map((c) => c).join(" ")}></span>
+            )} */}
             {label && <span className="label">{upperCase ? label.toUpperCase() : label}</span>}
           </span>
         </label>
