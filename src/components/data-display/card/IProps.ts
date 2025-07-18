@@ -1,6 +1,6 @@
-import { IChildren, IStatus } from "../../../libs/types/IGlobalProps";
+import { IChildren, IStatus, IVariant } from "../../../libs/types/IGlobalProps";
 
-interface IProps extends IChildren, IStatus {
+interface IProps extends IChildren, IVariant<{ component: "card" }>, IStatus<{ component: "card" }> {
   /**
    * Kart başlığı.
    *

@@ -1,22 +1,19 @@
 import React from "react";
-import Typography from "../typography";
 import "../../../assets/css/components/data-display/card/styles.css";
 import IProps from "./IProps";
 import Utils from "../../../libs/infrastructure/shared/Utils";
 
-const { Title } = Typography;
-
-const Card: React.FC<IProps> = ({ children, title = "", actions, status }) => {
+const Card: React.FC<IProps> = ({ children, title, actions, variant = "filled", status }) => {
   // variables
-  const _titleClassName: string[] = ["title"];
+  const _className: string[] = ["ar-card"];
 
-  _titleClassName.push(...Utils.GetClassName(undefined, status, undefined, undefined, undefined, undefined, undefined));
+  _className.push(...Utils.GetClassName(variant, status, undefined, undefined, undefined, undefined, undefined));
 
   return (
-    <div className="ar-card">
+    <div className={_className.map((c) => c).join(" ")}>
       {title && (
-        <div className={_titleClassName.map((c) => c).join(" ")}>
-          <Title Level="h4">{title}</Title>
+        <div className="title">
+          <h4>{title}</h4>
 
           <div>{actions}</div>
         </div>

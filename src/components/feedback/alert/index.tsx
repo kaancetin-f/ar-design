@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import "../../../assets/css/components/feedback/alert/alert.css";
+import "../../../assets/css/components/feedback/alert/styles.css";
 import IProps from "./IProps";
 import Utils from "../../../libs/infrastructure/shared/Utils";
 

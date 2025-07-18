@@ -1,9 +1,11 @@
 .ar-card {
   background-color: var(--white);
-  border: solid 1px var(--light);
+  border: solid 1px var(--light-400);
   border-radius: var(--border-radius-lg);
+  color: var(--gray-700);
   overflow: hidden;
 }
+
 .ar-card > .title {
   display: flex;
   flex-direction: row;
@@ -11,37 +13,14 @@
   align-items: center;
   padding: 0 1rem;
   height: 3rem;
-  border-bottom: solid 1px var(--light);
+  border-bottom: solid 1px var(--light-400);
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
+  font-weight: 400;
 }
-.ar-card > .title > .ar-typography-title {
-  margin-bottom: 0 !important;
-}
-.ar-card > .title.primary > .ar-typography-title {
-  color: var(--white);
-}
-.ar-card > .title.secondary > .ar-typography-title {
-  color: var(--white);
-}
-.ar-card > .title.success > .ar-typography-title {
-  color: var(--white);
-}
-.ar-card > .title.warning > .ar-typography-title {
-  color: var(--black);
-}
-.ar-card > .title.danger > .ar-typography-title {
-  color: var(--white);
-}
-.ar-card > .title.information > .ar-typography-title {
-  color: var(--black);
-}
-.ar-card > .title.dark > .ar-typography-title {
-  color: var(--white);
-}
-.ar-card > .title.light > .ar-typography-title {
-  color: var(--black);
-}
+
 .ar-card > .content {
   padding: 1rem;
 }
+
+@import url("./statuses.css");

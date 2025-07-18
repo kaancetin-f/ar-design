@@ -416,8 +416,8 @@ button.borderless:not(.disabled) {
   WriteCssFile(file, content);
 };
 
-const Statuses = () => {
-  const file = path.join(__dirname, "../assets", "css", "core", "statuses.css");
+const AlertStatuses = () => {
+  const file = path.join(__dirname, "../assets", "css", "components", "feedback", "alert", "statuses.css");
 
   const content = statuses
     .map((status) => {
@@ -447,23 +447,100 @@ const Statuses = () => {
       }
 
       return `/* #region ${status.toUpperCase()} */
-.filled {
-  &.${status} {
-    background-color: var(--${background});
-    color: var(--${fontColor});
+.ar-alert {
+  &.filled {
+    &.${status} {
+      background-color: var(--${background});
+      color: var(--${fontColor});
+    }
+  }
+  &.surface {
+    &.${status} {
+      background-color: var(--${background});
+      border: solid 1px var(--${borderColor});
+      color: var(--${fontColor});
+    }
+  }
+  &.dashed {
+    &.${status} {
+      border: dashed 1px var(--${borderColor});
+      color: var(--${fontColor});
+    }
   }
 }
-.surface {
-  &.${status} {
-    background-color: var(--${background});
-    border: solid 1px var(--${borderColor});
-    color: var(--${fontColor});
+/* #endregion */
+/* ${status.toUpperCase()} */`;
+    })
+    .join("\n\n");
+
+  WriteCssFile(file, content);
+};
+
+const CardStatuses = () => {
+  const file = path.join(__dirname, "../assets", "css", "components", "data-display", "card", "statuses.css");
+
+  const content = statuses
+    .map((status) => {
+      switch (status) {
+        case "primary":
+          background = "blue";
+          fontColor = "white";
+          break;
+        case "success":
+          background = "green";
+          fontColor = "white";
+          break;
+        case "warning":
+          background = "orange";
+          fontColor = "orange-700";
+          break;
+        case "danger":
+          background = "red";
+          fontColor = "white";
+          break;
+        default:
+          background = "light";
+          fontColor = "gray-700";
+          break;
+      }
+
+      return `/* #region ${status.toUpperCase()} */
+.ar-card {
+  &.filled {
+    &.${status} {
+      background-color: var(--${background}-400);
+      border: solid 1px var(--${background}-500) !important;
+      color: var(--${fontColor});
+
+      > .title {
+        border-bottom: solid 1px var(--${background}-500) !important;
+      }
+    }
   }
-}
-.dashed {
-  &.${status} {
-    border: dashed 1px var(--${borderColor});
-    color: var(--${fontColor});
+  &.surface {
+    &.${status} {
+      background-color: var(--white);
+      border: solid 1px var(--${background}-500) !important;
+      color: var(--gray-700);
+
+      > .title {
+        background-color: var(--${background}-100);
+        border-bottom: solid 1px var(--${background}-200) !important;
+        color: var(--${background}-500) !important;
+      }
+    }
+  }
+  &.outlined {
+    &.${status} {
+      background-color: transparent;
+      border: solid 1px var(--${background}-500);
+      color: var(--${background}-500);
+
+      > .title {
+        background-color: var(--gray-100);
+        border-bottom: solid 1px var(--${background}-100) !important;
+      }
+    }
   }
 }
 /* #endregion */
@@ -511,6 +588,7 @@ _Variant_OutlinedCss();
 _Variant_DashedCss();
 _Variant_BorderlessCss();
 
-Statuses();
+AlertStatuses();
+CardStatuses();
 
 _Animation_Css();

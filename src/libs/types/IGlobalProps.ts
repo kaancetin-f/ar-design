@@ -42,7 +42,11 @@ export interface IVariant<T extends { component?: string } = {}> {
    * <Component variant="filled">Hello, World!</Component>
    * ```
    */
-  variant?: T["component"] extends "alert" ? Exclude<Variants, "outlined" | "borderless"> : Variants;
+  variant?: T["component"] extends "alert"
+    ? Exclude<Variants, "outlined" | "borderless">
+    : T["component"] extends "card"
+    ? Exclude<Variants, "dashed" | "borderless">
+    : Variants;
 }
 
 export interface IStatus<T extends { component?: string } = {}> {
@@ -56,6 +60,8 @@ export interface IStatus<T extends { component?: string } = {}> {
    * ```
    */
   status?: T["component"] extends "alert"
+    ? Exclude<Status, "primary-light" | "secondary" | "information" | "dark" | "light">
+    : T["component"] extends "card"
     ? Exclude<Status, "primary-light" | "secondary" | "information" | "dark" | "light">
     : Status;
 }

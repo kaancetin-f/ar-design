@@ -153,7 +153,6 @@
 
 @import url("./variants/borderless.css");
 @import url("./variants/border.css");
-@import url("./statuses.css");
 
 :is(input) {
   border: solid 1px transparent;
