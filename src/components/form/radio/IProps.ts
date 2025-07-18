@@ -1,5 +1,5 @@
 import { IBorder, IColors, IIcon, ISize, IUpperCase, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
-import { Status } from "../../../libs/types";
+import { Color } from "../../../libs/types";
 
 interface IProps
   extends IVariant,
@@ -34,7 +34,7 @@ interface IProps
    * <Radio trace={{ color: "success" }} />
    * ```
    */
-  trace?: { color: Status };
+  trace?: { color: Color };
 }
 
 export default IProps;
