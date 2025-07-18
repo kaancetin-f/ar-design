@@ -16,8 +16,9 @@ const statuses = [
 const colors = ["blue", "purple", "pink", "red", "orange", "yellow", "green", "teal", "cyan", "gray", "light"];
 let background = "";
 let borderColor = "";
+let boxShadow = "";
 let fontColor = "";
-let customFocusColor = "";
+let focusColor = "";
 
 const WriteCssFile = (filePath, content) => {
   try {
@@ -279,9 +280,13 @@ const _Variant_OutlinedCss = () => {
       switch (color) {
         case "light":
           fontColor = "black";
+          borderColor = "gray-400";
+          boxShadow = "gray-100";
           break;
         default:
           fontColor = `${color}-500`;
+          borderColor = `${color}-300`;
+          boxShadow = `${color}-100`;
           break;
       }
 
@@ -303,8 +308,8 @@ iframe.outlined:not(.disabled),
 
     &:focus,
     &.focused {
-      border-color: var(--${color}-300);
-      box-shadow: 0 0 0 3.5px var(--${color}-100);
+      border-color: var(--${borderColor});
+      box-shadow: 0 0 0 3.5px var(--${boxShadow});
     }
   }
 }
@@ -350,8 +355,8 @@ iframe.dashed:not(.disabled) {
   &.${color} {
     &:focus,
     &.focused {
-      border-color: var(--${customFocusColor});
-      box-shadow: 0 0 0 3.5px rgba(var(--${customFocusColor}-rgb), 0.25);
+      border-color: var(--${focusColor});
+      box-shadow: 0 0 0 3.5px rgba(var(--${focusColor}-rgb), 0.25);
     }
   }
 }
@@ -393,8 +398,8 @@ iframe.borderless:not(.disabled) {
   &.${color} {
     &:focus,
     &.focused {
-      border-color: var(--${customFocusColor});
-      box-shadow: 0 0 0 3.5px rgba(var(--${customFocusColor}-rgb), 0.25);
+      border-color: var(--${focusColor});
+      box-shadow: 0 0 0 3.5px rgba(var(--${focusColor}-rgb), 0.25);
     }
   }
 }

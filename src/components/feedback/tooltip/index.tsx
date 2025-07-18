@@ -12,66 +12,58 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
 
   // states
   const [mouseEnter, setMouseEnter] = useState<boolean>(false);
+  const [_direction, setDirection] = useState<string>(direction);
 
   // methods
   const handlePosition = useCallback(() => {
-    if (_children.current && _arTooltip.current) {
-      const childRect = _children.current.getBoundingClientRect();
-      const tooltipRect = _arTooltip.current.getBoundingClientRect();
+    const child = _children.current;
+    const tooltip = _arTooltip.current;
 
-      if (childRect) {
-        const sx = window.scrollX || document.documentElement.scrollLeft;
-        const sy = window.scrollY || document.documentElement.scrollTop;
+    if (!child || !tooltip) return;
 
-        // Tooltip konumunu ayarlama için ortak bir fonksiyon.
-        const setTooltipPosition = (top: number, left: number) => {
-          if (!_arTooltip.current) return;
+    const margin = 17.5;
+    const windowWidth = window.innerWidth;
+    const screenCenterX = windowWidth / 2;
 
-          _arTooltip.current.style.top = `${top + sy}px`;
-          _arTooltip.current.style.left = `${left + sx}px`;
-        };
+    const childRect = child.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const isOnRight = childRect.left > screenCenterX;
 
-        const margin = 17.5;
+    const coordinate = isOnRight ? childRect.right + tooltipRect.width / 2 : childRect.left + tooltipRect.width;
 
-        let top = 0;
-        let left = 0;
-
-        switch (direction) {
-          case "top":
-            {
-              top = childRect.top - tooltipRect.height - margin;
-              left = childRect.left + childRect.width / 2 - tooltipRect.width / 2;
-
-              setTooltipPosition(top, left);
-            }
-            break;
-          case "right":
-            {
-              top = childRect.top + childRect.height / 2 - tooltipRect.height / 2;
-              left = childRect.right + margin;
-
-              setTooltipPosition(top, left);
-            }
-            break;
-          case "bottom":
-            {
-              top = childRect.bottom + margin;
-              left = childRect.left + childRect.width / 2 - tooltipRect.width / 2;
-
-              setTooltipPosition(top, left);
-            }
-            break;
-          case "left":
-            {
-              top = childRect.top + childRect.height / 2 - tooltipRect.height / 2;
-              left = childRect.left - tooltipRect.width - margin;
-
-              setTooltipPosition(top, left);
-            }
-            break;
-        }
+    if (direction === "top" || direction === "bottom") {
+      if (isOnRight && coordinate > windowWidth) {
+        direction = "left";
+      } else if (!isOnRight && coordinate < windowWidth) {
+        direction = "right";
       }
     }
+
+    let top = 0;
+    let left = 0;
+
+    switch (direction) {
+      case "top":
+        top = childRect.top - tooltipRect.height - margin;
+        left = childRect.left + childRect.width / 2 - tooltipRect.width / 2;
+        break;
+      case "right":
+        top = childRect.top + childRect.height / 2 - tooltipRect.height / 2;
+        left = childRect.right + margin;
+        break;
+      case "bottom":
+        top = childRect.bottom + margin;
+        left = childRect.left + childRect.width / 2 - tooltipRect.width / 2;
+        break;
+      case "left":
+        top = childRect.top + childRect.height / 2 - tooltipRect.height / 2;
+        left = childRect.left - tooltipRect.width - margin;
+        break;
+    }
+
+    tooltip.style.top = `${top}px`;
+    tooltip.style.left = `${left}px`;
+    setDirection(direction);
   }, []);
 
   //useEffects
@@ -87,7 +79,7 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
 
       {mouseEnter &&
         ReactDOM.createPortal(
-          <div ref={_arTooltip} className={`ar-tooltip ${direction}`}>
+          <div ref={_arTooltip} className={`ar-tooltip ${_direction}`}>
             {Array.isArray(text) ? (
               text.map((t) => (
                 <span className="text">

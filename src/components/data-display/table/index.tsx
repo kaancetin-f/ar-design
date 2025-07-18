@@ -733,7 +733,7 @@ const Table = forwardRef(
         {(title || description || actions || React.Children.count(children) > 0) && (
           <div className="header">
             <div className="title">
-              <h3>{title}</h3>
+              <h4>{title}</h4>
               {description && <h5>{description}</h5>}
             </div>
 

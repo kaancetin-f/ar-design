@@ -23,12 +23,12 @@
   flex-direction: column;
   row-gap: 0.5rem;
 }
-.ar-table > .header > .title > h3 {
+.ar-table > .header > .title > h4 {
   color: var(--gray-700);
-  /* -webkit-text-stroke: 0.25px var(--gray-700); */
 }
 .ar-table > .header > .title > h5 {
-  color: var(--gray-600);
+  color: var(--gray-400);
+  font-weight: normal !important;
 }
 .ar-table > .header > .actions {
   display: flex;

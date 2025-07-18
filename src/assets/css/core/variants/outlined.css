@@ -396,8 +396,8 @@ iframe.outlined:not(.disabled),
 
     &:focus,
     &.focused {
-      border-color: var(--light-300);
-      box-shadow: 0 0 0 3.5px var(--light-100);
+      border-color: var(--gray-400);
+      box-shadow: 0 0 0 3.5px var(--gray-100);
     }
   }
 }
