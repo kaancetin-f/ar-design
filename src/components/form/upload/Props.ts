@@ -117,6 +117,8 @@ type Props = {
    * ```
    */
   maxSize?: number;
+
+  type?: "list" | "dropzone";
 } & (IMultiple | ISingle) &
   IValidation &
   IDisabled;

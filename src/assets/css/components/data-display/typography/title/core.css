@@ -1,5 +1,5 @@
 .ar-typography-title {
   color: var(--gray-700);
   font-family: var(--system);
-  /* -webkit-text-stroke: 0.5px var(--gray-700); */
+  font-weight: 400;
 }

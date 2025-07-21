@@ -3,12 +3,13 @@ import Props from "./Props";
 import "../../../assets/css/components/form/upload/styles.css";
 import { MimeTypes } from "../../../libs/types";
 import { ARIcon } from "../../icons";
-import PreviewSelectedFile from "./PreviewSelectedFile";
-import PreviewSelectedFiles from "./PreviewSelectedFiles";
+import Dropzone from "./Dropzone";
+import Button from "../button";
+import List from "./List";
 
 export type ValidationError = { fileName: string; message: string };
 
-const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, multiple }) => {
+const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, type = "list", multiple }) => {
   // refs
   const _firstLoad = useRef<boolean>(false);
   const _input = useRef<HTMLInputElement>(null);
@@ -138,6 +139,21 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
     setClassName((prev) => prev.filter((c) => c !== "dragging"));
   }, []);
 
+  const renderUploadFile = (params: { children: React.ReactNode }) => {
+    return (
+      <div ref={_arUplaod} className="ar-upload">
+        <input
+          ref={_input}
+          type="file"
+          onChange={(event) => handleFileChange(event.target.files)}
+          multiple={multiple}
+        />
+
+        {params.children}
+      </div>
+    );
+  };
+
   // useEffects
   useEffect(() => {
     (async () => {
@@ -208,62 +224,79 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
   }, [file]);
 
   useEffect(() => {
-    if (multiple) setClassName((prev) => [...prev, "multiple"]);
+    if (type === "dropzone") setClassName((prev) => [...prev, "dropzone"]);
   }, []);
 
-  return (
-    <div ref={_arUplaod} className="ar-upload">
-      <input ref={_input} type="file" onChange={(event) => handleFileChange(event.target.files)} multiple={multiple} />
+  switch (type) {
+    case "list":
+      return renderUploadFile({
+        children: (
+          <>
+            <Button
+              variant="outlined"
+              color="gray"
+              icon={{ element: <ARIcon variant="fill" icon="CloudUpload" /> }}
+              onClick={() => {
+                if (_input.current) _input.current.click();
+              }}
+            >
+              {text && <span>{text}</span>}
+            </Button>
 
-      <div className="ar-upload-button">
-        <div
-          className={className.map((c) => c).join(" ")}
-          onDragEnter={handleDrag}
-          onDragLeave={handleDrag}
-          onDragOver={handleDrag}
-          onDrop={handleDrop}
-          onClick={() => {
-            if (_input.current) _input.current.click();
-          }}
-        >
-          {multiple ? (
-            <PreviewSelectedFiles
-              selectedFiles={selectedFiles}
+            <List
+              selectedFiles={selectedFiles.length === 0 && selectedFile ? [selectedFile] : selectedFiles}
               validationErrors={validationErrors}
               handleFileToBase64={handleFileToBase64}
               handleFileRemove={handleFileRemove}
             />
-          ) : (
-            <PreviewSelectedFile
-              selectedFile={selectedFile}
-              handleFileToBase64={handleFileToBase64}
-              handleFileRemove={handleFileRemove}
-            />
-          )}
+          </>
+        ),
+      });
+    case "dropzone":
+      return renderUploadFile({
+        children: (
+          <div className="ar-upload-button">
+            <div
+              className={className.map((c) => c).join(" ")}
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
+              onClick={() => {
+                if (_input.current) _input.current.click();
+              }}
+            >
+              <Dropzone
+                selectedFiles={selectedFiles.length === 0 && selectedFile ? [selectedFile] : selectedFiles}
+                validationErrors={validationErrors}
+                handleFileToBase64={handleFileToBase64}
+                handleFileRemove={handleFileRemove}
+              />
 
-          {!selectedFile && selectedFiles.length === 0 && (
-            <>
-              <div className="upload">
-                <ARIcon variant="fill" icon="CloudUpload" size={32} />
+              {!selectedFile && selectedFiles.length === 0 && (
+                <>
+                  <div className="upload">
+                    <ARIcon variant="fill" icon="CloudUpload" size={32} />
 
-                <div className="properies">
-                  {allowedTypes && (
-                    <div className="allow-types">
-                      {allowedTypes?.map((allowedType) => allowedType.split("/")[1].toLocaleUpperCase()).join(", ")}
+                    <div className="properies">
+                      {allowedTypes && (
+                        <div className="allow-types">
+                          {allowedTypes?.map((allowedType) => allowedType.split("/")[1].toLocaleUpperCase()).join(", ")}
+                        </div>
+                      )}
+
+                      {maxSize && <div className="max-size">up to {maxSize}MB</div>}
                     </div>
-                  )}
+                  </div>
 
-                  {maxSize && <div className="max-size">up to {maxSize}MB</div>}
-                </div>
-              </div>
-
-              {text && <span>{text}</span>}
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+                  {text && <span>{text}</span>}
+                </>
+              )}
+            </div>
+          </div>
+        ),
+      });
+  }
 };
 
 export default Upload;

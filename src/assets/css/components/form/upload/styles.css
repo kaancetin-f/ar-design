@@ -31,7 +31,7 @@
   user-select: none;
   transition: border 250ms, box-shadow 250ms ease-in-out;
 }
-.ar-upload-button > .button.multiple {
+.ar-upload-button > .button.dropzone {
   height: 12.5rem !important;
 }
 .ar-upload-button > .button.has-file {
@@ -40,11 +40,11 @@
   gap: 0 !important;
   align-items: flex-start !important;
 }
-.ar-upload-button > .button:not(.multiple):hover .preview > .informations {
+.ar-upload-button > .button:not(.dropzone):hover .preview > .informations {
   visibility: hidden;
   opacity: 0;
 }
-.ar-upload-button > .button:not(.multiple):has(.preview > img):hover {
+.ar-upload-button > .button:not(.dropzone):has(.preview > img):hover {
   border: solid 1px transparent !important;
 }
 .ar-upload-button > .button:has(.preview > img) {
@@ -163,5 +163,5 @@
   color: var(--gray-500);
 }
 
-@import url("./preview-selected-files.css");
-@import url("./animations.css");
+@import url("./list.css");
+@import url("./dropzone.css");
