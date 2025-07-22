@@ -29,12 +29,12 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
     const tooltipRect = tooltip.getBoundingClientRect();
     const isOnRight = childRect.left > screenCenterX;
 
-    const coordinate = isOnRight ? childRect.right + tooltipRect.width / 2 : childRect.left + tooltipRect.width;
+    console.log(tooltipRect.left);
 
     if (direction === "top" || direction === "bottom") {
-      if (isOnRight && coordinate > windowWidth) {
+      if (isOnRight && tooltipRect.right > windowWidth - 10) {
         direction = "left";
-      } else if (!isOnRight && coordinate < windowWidth) {
+      } else if (!isOnRight && tooltipRect.left < 10) {
         direction = "right";
       }
     }
@@ -67,6 +67,22 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
   }, []);
 
   //useEffects
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      handlePosition();
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   useEffect(() => {
     if (mouseEnter) setTimeout(() => handlePosition(), 0);
   }, [mouseEnter]);

@@ -26,32 +26,6 @@ interface IProps
   shape?: "circle" | "square";
 
   /**
-   * Bileşene açıklayıcı bir bilgi balonu (tooltip) eklemek için kullanılır.
-   *
-   * - `text`: Tooltip içerisinde gösterilecek açıklama metni.
-   * - `direction`: Tooltip’in hangi yönde görüneceğini belirtir. Varsayılan yön kullanılabilir.
-   *   - `top`: Tooltip yukarıda görünür.
-   *   - `right`: Tooltip sağda görünür.
-   *   - `left`: Tooltip solda görünür.
-   *   - `bottom`: Tooltip aşağıda görünür.
-   *
-   * Örneğin;
-   *
-   * ```jsx
-   * <Component
-   *   tooltip={{
-   *     text: "Bu bir açıklamadır.",
-   *     direction: "top"
-   *   }}
-   * />
-   * ```
-   */
-  tooltip?: {
-    text: string;
-    direction?: "top" | "right" | "left" | "bottom";
-  };
-
-  /**
    * Bileşenin konumlandırmasını belirlemek için kullanılır.
    *
    * - `type`: CSS `position` özelliği.

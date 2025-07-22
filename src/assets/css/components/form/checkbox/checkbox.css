@@ -1,6 +1,8 @@
 .ar-checkbox-wrapper {
   display: flex;
+  justify-content: center;
   align-items: center;
+  width: max-content;
   height: var(--input-height);
 }
 .ar-checkbox-wrapper > label > :is(input[type="checkbox"]) {

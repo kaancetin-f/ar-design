@@ -183,3 +183,5 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 /* #endregion */
 /* Variants */
+
+@import url("./utils.css");

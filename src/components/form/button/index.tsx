@@ -4,7 +4,6 @@ import React, { useRef } from "react";
 import "../../../assets/css/components/form/button/styles.css";
 import IProps from "./IProps";
 import Utils from "../../../libs/infrastructure/shared/Utils";
-import Tooltip from "../../feedback/tooltip";
 
 const Button: React.FC<IProps> = ({
   children,
@@ -13,7 +12,6 @@ const Button: React.FC<IProps> = ({
   color = "light",
   border = { radius: "sm" },
   size = "normal",
-  tooltip,
   position,
   fullWidth,
   icon,
@@ -34,7 +32,7 @@ const Button: React.FC<IProps> = ({
     _arButtonClassName.push(position.inset.map((_inset) => _inset).join(" "));
   }
 
-  const buttonElement: React.JSX.Element = (
+  return (
     <button
       ref={_button}
       {...attributes}
@@ -67,14 +65,6 @@ const Button: React.FC<IProps> = ({
         </span>
       </span>
     </button>
-  );
-
-  return !tooltip ? (
-    buttonElement
-  ) : (
-    <Tooltip text={tooltip.text} direction={tooltip.direction}>
-      {buttonElement}
-    </Tooltip>
   );
 };
 

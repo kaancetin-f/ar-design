@@ -27,6 +27,7 @@ import { FilterOperator } from "../../../libs/infrastructure/shared/Enums";
 import Select from "../../form/select";
 import Grid from "../grid-system";
 import THeadCell from "./THeadCell";
+import Tooltip from "../../feedback/tooltip";
 
 const filterOption: Option[] = [
   { value: FilterOperator.Contains, text: "İçerir" },
@@ -314,9 +315,10 @@ const Table = forwardRef(
                         <div>
                           <Checkbox
                             ref={(element) => (_filterCheckboxItems.current[fIndex] = element)}
+                            variant="filled"
+                            color="green"
                             label={filter.text}
                             name={name}
-                            color="blue"
                             value={filter.value as string}
                             checked={
                               Array.isArray(checkboxSelectedParams?.[name]) &&
@@ -477,10 +479,11 @@ const Table = forwardRef(
         <Fragment key={`row-${index}`}>
           <tr key={`row-${index}`}>
             {selections && (
-              <td className="sticky-left" data-sticky-position="left">
+              <td className="flex justify-content-center sticky-left" data-sticky-position="left">
                 <Checkbox
                   ref={(element) => (_checkboxItems.current[index] = element)}
-                  color="blue"
+                  variant="filled"
+                  color="green"
                   checked={selectionItems.some(
                     (selectionItem) => JSON.stringify(selectionItem) === JSON.stringify(item)
                   )}
@@ -774,23 +777,21 @@ const Table = forwardRef(
                       config={{ buttons: { okay: "Yükle", cancel: "İptal" } }}
                       windowBlur
                     >
-                      <Button
-                        variant="outlined"
-                        color="purple"
-                        icon={{ element: <ARIcon icon="Upload" /> }}
-                        tooltip={{ text: actions.import.tooltip, direction: "top" }}
-                      />
+                      <Tooltip text={actions.import.tooltip}>
+                        <Button variant="outlined" color="purple" icon={{ element: <ARIcon icon="Upload" /> }} />
+                      </Tooltip>
                     </Popover>
                   )}
 
                   {actions.create && (
-                    <Button
-                      variant="outlined"
-                      color="green"
-                      icon={{ element: <ARIcon icon="Add" size={24} /> }}
-                      tooltip={{ text: actions.create.tooltip, direction: "top" }}
-                      onClick={actions.create.onClick}
-                    />
+                    <Tooltip text={actions.create.tooltip}>
+                      <Button
+                        variant="outlined"
+                        color="green"
+                        icon={{ element: <ARIcon icon="Add" size={24} /> }}
+                        onClick={actions.create.onClick}
+                      />
+                    </Tooltip>
                   )}
                 </>
               )}
@@ -810,7 +811,7 @@ const Table = forwardRef(
                   <th className="selection-col sticky-left" data-sticky-position="left">
                     <Checkbox
                       variant="filled"
-                      color="blue"
+                      color="green"
                       checked={selectAll}
                       onChange={(event) => {
                         if (_checkboxItems.current.length > 0) {

@@ -41,6 +41,7 @@
       "@hooks/*": ["dist/libs/core/application/hooks"],
       "@locales/*": ["dist/libs/core/application/locales"],
       "@types/*": ["dist/libs/types"],
+      "@utils/*": ["dist/libs/infrastructure/shared"],
       "@styles/*": ["dist/assets/css/core"]
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,
     "rootDirs": ["./src"] /* Allow multiple folders to be treated as one when resolving modules. */,

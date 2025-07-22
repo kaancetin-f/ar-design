@@ -8,6 +8,7 @@ import IProps from "./IProps";
 import React, { useEffect, useRef, useState } from "react";
 import Utils from "../../../libs/infrastructure/shared/Utils";
 import ReactDOM from "react-dom";
+import Tooltip from "../../feedback/tooltip";
 
 const TextEditor = <T extends object>({
   color = "light",
@@ -280,18 +281,17 @@ const TextEditor = <T extends object>({
 
       <div className="toolbar">
         {toolbarButtons.map(({ command, icon, tooltip }) => (
-          <Button
-            key={command}
-            type="button"
-            variant="borderless"
-            color="teal"
-            border={{ radius: "none" }}
-            icon={{ element: <ARIcon icon={icon} /> }}
-            tooltip={{
-              text: tooltip,
-            }}
-            onClick={() => execCommand(command)}
-          />
+          <Tooltip text={tooltip}>
+            <Button
+              key={command}
+              type="button"
+              variant="borderless"
+              color="light"
+              border={{ radius: "none" }}
+              icon={{ element: <ARIcon icon={icon} /> }}
+              onClick={() => execCommand(command)}
+            />
+          </Tooltip>
         ))}
       </div>
 
