@@ -29,8 +29,7 @@ button.filled:not(.disabled) {
   &.blue { 
     background-color: var(--blue-500);
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--blue-300);
     }
   }
@@ -69,8 +68,7 @@ button.filled:not(.disabled) {
   &.purple { 
     background-color: var(--purple-500);
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--purple-300);
     }
   }
@@ -109,8 +107,7 @@ button.filled:not(.disabled) {
   &.pink { 
     background-color: var(--pink-500);
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--pink-300);
     }
   }
@@ -149,8 +146,7 @@ button.filled:not(.disabled) {
   &.red { 
     background-color: var(--red-500);
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--red-300);
     }
   }
@@ -189,8 +185,7 @@ button.filled:not(.disabled) {
   &.orange { 
     background-color: var(--orange-500);
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--orange-300);
     }
   }
@@ -229,8 +224,7 @@ button.filled:not(.disabled) {
   &.yellow { 
     background-color: var(--yellow-500);
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--yellow-300);
     }
   }
@@ -269,8 +263,7 @@ button.filled:not(.disabled) {
   &.green { 
     background-color: var(--green-500);
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--green-300);
     }
   }
@@ -309,8 +302,7 @@ button.filled:not(.disabled) {
   &.teal { 
     background-color: var(--teal-500);
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--teal-300);
     }
   }
@@ -349,8 +341,7 @@ button.filled:not(.disabled) {
   &.cyan { 
     background-color: var(--cyan-500);
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--cyan-300);
     }
   }
@@ -389,8 +380,7 @@ button.filled:not(.disabled) {
   &.gray { 
     background-color: var(--gray-500);
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--gray-300);
     }
   }
@@ -429,8 +419,7 @@ button.filled:not(.disabled) {
   &.light { 
     background-color: var(--light-500);
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--light-300);
     }
   }

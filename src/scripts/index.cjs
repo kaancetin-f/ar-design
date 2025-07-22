@@ -224,8 +224,7 @@ button.filled:not(.disabled) {
   &.${color} { 
     background-color: var(--${color}-500);
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--${color}-300);
     }
   }
