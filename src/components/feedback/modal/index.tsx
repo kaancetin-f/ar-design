@@ -7,7 +7,7 @@ import Typography from "../../data-display/typography";
 
 const { Title } = Typography;
 
-const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", footer }) => {
+const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", footer, ...attributes }) => {
   // refs
   const _arModal = useRef<HTMLDivElement>(null);
   const _modalWrapperClassName: string[] = ["ar-modal-wrapper"];
@@ -77,6 +77,10 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
     };
   }, [open.get]);
 
+  useEffect(() => {
+    if (attributes.className) _modalClassName.push(attributes.className);
+  }, [attributes.className]);
+
   return (
     <div className={_modalWrapperClassName.map((c) => c).join(" ")}>
       <div
@@ -89,7 +93,7 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
         }}
       ></div>
 
-      <div ref={_arModal} className={_modalClassName.map((c) => c).join(" ")} role="dialog">
+      <div ref={_arModal} {...attributes} className={_modalClassName.map((c) => c).join(" ")} role="dialog">
         {title && (
           <div className="header">
             <Title Level="h3">{title}</Title>

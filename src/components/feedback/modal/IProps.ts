@@ -1,6 +1,6 @@
 import { IChildren, ISize } from "../../../libs/types/IGlobalProps";
 
-interface IProps extends IChildren, ISize {
+interface IProps extends IChildren, ISize, React.HTMLAttributes<HTMLDivElement> {
   /**
    * Modal'ın açık olup olmadığını kontrol eden ve değiştiren değerler.
    *
