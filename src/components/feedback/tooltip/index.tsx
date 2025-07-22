@@ -29,8 +29,6 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
     const tooltipRect = tooltip.getBoundingClientRect();
     const isOnRight = childRect.left > screenCenterX;
 
-    console.log(tooltipRect.left);
-
     if (direction === "top" || direction === "bottom") {
       if (isOnRight && tooltipRect.right > windowWidth - 10) {
         direction = "left";
