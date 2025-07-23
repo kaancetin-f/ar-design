@@ -186,7 +186,7 @@ export const useValidation = function <TData extends object>(
       const key = getKey(param.subkey);
 
       if (param.where) {
-        if (s.type === "required" && !param.where(data)) {
+        if (s.type === "required" && param.where(data)) {
           Utils.IsNullOrEmpty(value) && setError(param.subkey ? key : param.key, s.message, param.step);
         }
       } else {
