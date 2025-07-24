@@ -13,6 +13,7 @@ const Radio = forwardRef<HTMLInputElement, IProps>(
       color = "blue",
       border = { radius: "pill" },
       trace,
+      pastTrace,
       upperCase,
       validation,
       ...attributes
@@ -23,6 +24,7 @@ const Radio = forwardRef<HTMLInputElement, IProps>(
     const _checkbox = useRef<HTMLInputElement>(null);
     const _checkboxClassName: string[] = ["ar-radio"];
     const _traceClassName: string[] = ["trace", "filled"];
+    const _pastTraceClassName: string[] = ["past-trace", "filled"];
 
     _checkboxClassName.push(
       ...Utils.GetClassName(
@@ -37,6 +39,7 @@ const Radio = forwardRef<HTMLInputElement, IProps>(
     );
 
     if (trace && Object.keys(trace).length > 0) _traceClassName.push(trace.color);
+    if (pastTrace && Object.keys(pastTrace).length > 0) _pastTraceClassName.push(pastTrace.color);
 
     return (
       <div className="ar-radio-wrapper">
@@ -60,6 +63,9 @@ const Radio = forwardRef<HTMLInputElement, IProps>(
             <span ref={_checkbox} className={_checkboxClassName.map((c) => c).join(" ")}></span>
             {trace && Object.keys(trace).length > 0 && (
               <span className={_traceClassName.map((c) => c).join(" ")}></span>
+            )}
+            {pastTrace && Object.keys(pastTrace).length > 0 && (
+              <span className={_pastTraceClassName.map((c) => c).join(" ")}></span>
             )}
             {label && <span className="label">{upperCase ? label.toUpperCase() : label}</span>}
           </span>

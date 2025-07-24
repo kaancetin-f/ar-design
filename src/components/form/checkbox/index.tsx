@@ -43,9 +43,7 @@ const Checkbox = forwardRef<HTMLInputElement, IProps>(
 
           <span>
             <span ref={_checkbox} className={_checkboxClassName.map((c) => c).join(" ")}></span>
-            {/* {trace && Object.keys(trace).length > 0 && (
-              <span className={_traceClassName.map((c) => c).join(" ")}></span>
-            )} */}
+
             {label && <span className="label">{upperCase ? label.toUpperCase() : label}</span>}
           </span>
         </label>

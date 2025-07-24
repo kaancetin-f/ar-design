@@ -35,6 +35,8 @@ interface IProps
    * ```
    */
   trace?: { color: Color };
+
+  pastTrace?: { color: Color };
 }
 
 export default IProps;
