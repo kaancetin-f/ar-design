@@ -6,7 +6,19 @@ import "../../../assets/css/components/form/radio/radio.css";
 import Utils from "../../../libs/infrastructure/shared/Utils";
 
 const Radio = forwardRef<HTMLInputElement, IProps>(
-  ({ label, size = "normal", color = "blue", border = { radius: "pill" }, trace, upperCase, ...attributes }, ref) => {
+  (
+    {
+      label,
+      size = "normal",
+      color = "blue",
+      border = { radius: "pill" },
+      trace,
+      upperCase,
+      validation,
+      ...attributes
+    },
+    ref
+  ) => {
     // refs
     const _checkbox = useRef<HTMLInputElement>(null);
     const _checkboxClassName: string[] = ["ar-radio"];
@@ -51,6 +63,8 @@ const Radio = forwardRef<HTMLInputElement, IProps>(
             )}
             {label && <span className="label">{upperCase ? label.toUpperCase() : label}</span>}
           </span>
+
+          {validation?.text && <span className="validation">{validation.text}</span>}
         </label>
       </div>
     );

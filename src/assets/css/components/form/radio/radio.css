@@ -48,4 +48,10 @@
   z-index: 1;
 }
 
+.ar-radio-wrapper > label > .validation {
+  color: var(--danger);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
 @import url("./core/border.css");

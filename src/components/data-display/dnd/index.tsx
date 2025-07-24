@@ -3,20 +3,22 @@
 import React, { useEffect, useRef } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/data-display/dnd/dnd.css";
+import { ARIcon } from "../../icons";
 
 const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
   // refs
   const _arDnD = useRef<HTMLDivElement>(null);
   const _dragItem = useRef<HTMLElement>();
 
+  // useEffects
   useEffect(() => {
     if (!_arDnD.current || data.length === 0) return;
 
     _arDnD.current.childNodes.forEach((item) => {
-      const targetItem = item as HTMLElement;
+      const _item = item as HTMLElement;
 
       // Events
-      targetItem.ondragstart = (event) => {
+      _item.ondragstart = (event) => {
         const dragItem = event.currentTarget as HTMLElement;
 
         _dragItem.current = dragItem;
@@ -35,7 +37,7 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
         }
       };
 
-      targetItem.ondragover = (event) => {
+      _item.ondragover = (event) => {
         event.preventDefault();
 
         const overItem = event.currentTarget as HTMLElement;
@@ -44,41 +46,24 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
         if (rect.top < 250) window.scrollBy(0, -20);
         if (rect.bottom > window.innerHeight - 150) window.scrollBy(0, 20);
 
-        if (!overItem.classList.contains("over-item")) {
-          overItem.classList.add("over-item");
-        }
-      };
-
-      targetItem.ondragleave = (event) => {
-        const leaveItem = event.currentTarget as HTMLElement;
-        leaveItem.classList.remove("over-item");
-      };
-
-      targetItem.ondrop = (event) => {
-        event.preventDefault();
-
-        const dropItem = event.currentTarget as HTMLElement;
-
-        // Cleaner...
-        dropItem.classList.remove("over-item");
+        // if (!overItem.classList.contains("over-item")) {
+        //   overItem.classList.add("over-item");
+        // }
 
         const nodes = document.querySelectorAll("[data-id='ar-firewall']");
         nodes.forEach((node) => node.remove());
 
-        if (_dragItem.current !== dropItem) {
+        if (_dragItem.current !== overItem) {
           if (_arDnD.current && _dragItem.current) {
             const dragItemIndex = [..._arDnD.current.children].indexOf(_dragItem.current!);
-            const dropItemIndex = [..._arDnD.current.children].indexOf(dropItem);
+            const dropItemIndex = [..._arDnD.current.children].indexOf(overItem);
 
             if (dragItemIndex < dropItemIndex) {
-              // Render Order
-              _arDnD.current.insertBefore(_dragItem.current, dropItem.nextSibling);
+              _arDnD.current.insertBefore(_dragItem.current, overItem.nextSibling);
             } else {
-              // Render Order
-              _arDnD.current.insertBefore(_dragItem.current, dropItem);
+              _arDnD.current.insertBefore(_dragItem.current, overItem);
             }
 
-            // Data Order
             data.splice(dropItemIndex, 0, data.splice(dragItemIndex, 1)[0]);
           }
 
@@ -86,12 +71,27 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
         }
       };
 
-      targetItem.ondragend = (event) => {
+      // _item.ondragleave = (event) => {
+      //   const leaveItem = event.currentTarget as HTMLElement;
+      //   leaveItem.classList.remove("over-item");
+      // };
+
+      // _item.ondrop = (event) => {
+      //   // const dropItem = event.currentTarget as HTMLElement;
+      //   // Temizlik...
+      //   // dropItem.classList.remove("over-item");
+      // };
+
+      _item.ondragend = (event) => {
         const item = event.currentTarget as HTMLElement;
         item.classList.remove("drag-item");
         item.classList.add("end-item");
 
-        setTimeout(() => item.classList.remove("end-item"), 1000);
+        setTimeout(() => {
+          item.classList.remove("end-item");
+
+          if (item.classList.length === 0) item.removeAttribute("class");
+        }, 1000);
       };
     });
 
@@ -103,9 +103,7 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
       {data.map((item, index) => (
         <div key={index} draggable>
           <div className="move">
-            <span></span>
-            <span></span>
-            <span></span>
+            <ARIcon icon={"GripVertical"} fill="var(--blue-500)" size={18} />
           </div>
           <div className="content">{renderItem(item, index)}</div>
         </div>

@@ -183,6 +183,7 @@ export type Icons =
   | "FileTypeZip"
   | "Filter"
   | "Folder"
+  | "GripVertical"
   | "Import"
   | "Italic"
   | "NumberList"

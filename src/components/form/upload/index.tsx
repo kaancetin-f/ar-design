@@ -165,7 +165,10 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
 
       if (_input.current) {
         if (multiple) {
-          if (selectedFiles.length === 0) return;
+          if (selectedFiles.length === 0) {
+            onChange(fileFormData, [], [], false);
+            return;
+          }
 
           // Seçilmiş olan dosyalar validasyona gönderiliyor.
           selectedFiles.forEach((f) => handleValidationFile(f));
@@ -201,6 +204,8 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
             // Input içerisine dosyalar aktarılıyor.
             dataTransfer.items.add(selectedFile);
             _input.current.files = dataTransfer.files;
+          } else {
+            onChange(undefined, null, "");
           }
         }
       }
@@ -208,16 +213,20 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
   }, [selectedFiles, selectedFile]);
 
   useEffect(() => {
-    if (_firstLoad.current) return;
+    if (_firstLoad.current) {
+      // if (multiple && file.length === 0) {
+      //   setSelectedFiles([]);
+      // } else {
+      //   if (!file) setSelectedFile(undefined);
+      // }
+
+      return;
+    }
 
     if (multiple) {
-      if (file.length === 0) return;
-
       setSelectedFiles(file);
       _firstLoad.current = true;
     } else {
-      if (!file) return;
-
       setSelectedFile(file);
       _firstLoad.current = true;
     }
