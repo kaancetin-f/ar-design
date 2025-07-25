@@ -1,3 +1,5 @@
+"use client";
+
 import React, { memo, useEffect, useState } from "react";
 import { ARIcon } from "../../icons";
 import { ValidationError } from ".";

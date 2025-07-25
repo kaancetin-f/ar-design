@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Props from "./Props";
 import "../../../assets/css/components/form/upload/styles.css";

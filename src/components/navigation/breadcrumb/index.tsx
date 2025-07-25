@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/navigation/breadcrumb/styles.css";

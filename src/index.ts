@@ -17,6 +17,7 @@ import Upload from "./components/form/upload";
 // Data Display
 import Card from "./components/data-display/card";
 import Chip from "./components/data-display/chip";
+import Diagram from "./components/data-display/diagram";
 import Divider from "./components/data-display/divider";
 import DnD from "./components/data-display/dnd";
 import Paper from "./components/data-display/paper";
@@ -60,6 +61,7 @@ export {
   // Data Display
   Card,
   Chip,
+  Diagram,
   Divider,
   DnD,
   Paper,

@@ -1,3 +1,5 @@
+"use client";
+
 import { useContext, useEffect, useRef, useState } from "react";
 import { ConfigContext } from "../contexts/Config";
 import { NotificationContext, PopupButtonProps, Status } from "../contexts/Notification";

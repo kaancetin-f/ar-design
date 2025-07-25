@@ -46,10 +46,6 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
         if (rect.top < 250) window.scrollBy(0, -20);
         if (rect.bottom > window.innerHeight - 150) window.scrollBy(0, 20);
 
-        // if (!overItem.classList.contains("over-item")) {
-        //   overItem.classList.add("over-item");
-        // }
-
         const nodes = document.querySelectorAll("[data-id='ar-firewall']");
         nodes.forEach((node) => node.remove());
 
@@ -70,17 +66,6 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
           onChange(data);
         }
       };
-
-      // _item.ondragleave = (event) => {
-      //   const leaveItem = event.currentTarget as HTMLElement;
-      //   leaveItem.classList.remove("over-item");
-      // };
-
-      // _item.ondrop = (event) => {
-      //   // const dropItem = event.currentTarget as HTMLElement;
-      //   // Temizlik...
-      //   // dropItem.classList.remove("over-item");
-      // };
 
       _item.ondragend = (event) => {
         const item = event.currentTarget as HTMLElement;

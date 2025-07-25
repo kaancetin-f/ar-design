@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/charts/pie/pie.css";

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { MutableRefObject, ReactNode, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 

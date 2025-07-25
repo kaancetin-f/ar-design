@@ -1,0 +1,107 @@
+.ar-diagram {
+  display: flex;
+  flex-direction: row;
+
+  > .asside {
+    position: relative;
+    background-color: var(--white);
+    width: 200px;
+  }
+
+  > .content {
+    position: absolute;
+    inset: 0;
+    background-color: var(--gray-100);
+    background-image: radial-gradient(circle, var(--gray-300) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-repeat: repeat;
+    height: 100%;
+    border: 1px solid var(--gray-200);
+    cursor: grab;
+    overflow: hidden;
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    .nodes-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      > .edges {
+        > .line {
+          position: absolute;
+          height: 2px;
+          background: repeating-linear-gradient(
+            90deg,
+            var(--purple-500) 0px,
+            var(--purple-500) 10px,
+            transparent 10px,
+            transparent 20px
+          );
+          animation: moveLine 1s linear infinite;
+          transform-origin: left center;
+          pointer-events: none;
+
+          > div {
+            position: absolute;
+            right: 0;
+          }
+        }
+      }
+
+      > .nodes {
+        > .item {
+          position: absolute;
+          background-color: var(--white);
+          padding: 0.5rem 1rem;
+          border-radius: var(--border-radius-sm);
+          box-shadow: 0px 10px 5px -5px rgba(var(--black-rgb), 0.1);
+          cursor: grab;
+          user-select: none;
+
+          &:active {
+            cursor: grabbing;
+          }
+
+          > .connect-top,
+          > .connect-bottom {
+            position: absolute;
+            top: -0.25rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: inline-block;
+            background-color: var(--white);
+            width: 0.5rem;
+            height: 0.5rem;
+            border: solid 1px var(--gray-300);
+            border-radius: var(--border-radius-pill);
+            cursor: crosshair;
+          }
+
+          > .connect-bottom {
+            top: auto;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -0.25rem;
+          }
+
+          > span {
+            color: var(--gray-700);
+            text-wrap: nowrap;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes moveLine {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 20px 0;
+  }
+}
