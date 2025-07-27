@@ -1,230 +1,146 @@
-"use client";
-
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import IProps, { EdgeData, NodeData } from "./IProps";
+import React, { useRef, useState } from "react";
 import "../../../assets/css/components/data-display/diagram/styles.css";
-import Utils from "../../../libs/infrastructure/shared/Utils";
+import IProps, { EdgeData, NodeData } from "./IProps";
 
 type Position = { x: number; y: number };
 
-const Diagram = ({ nodes, edges }: IProps) => {
+export default function Diagram({ nodes, edges }: IProps) {
   // refs
-  const _arDiagramContent = useRef<HTMLDivElement>(null);
-  const _arDiagramItems = useRef<(HTMLDivElement | null)[]>([]);
-  // refs -> Node
-  const _dragNodeIndex = useRef<number | null>(null);
+  const _arDiagram = useRef<HTMLDivElement | null>(null);
+  const _arNodes = useRef<Record<string, HTMLDivElement | null>>({});
+  // refs -> Start Position
   const _dragStartMousePosition = useRef<Position>({ x: 0, y: 0 });
   const _dragStartNodePosition = useRef<Position>({ x: 0, y: 0 });
-  // refs -> Pan Scroll
-  const _isPanning = useRef<boolean>(false);
-  const _panStartMousePosition = useRef<Position>({ x: 0, y: 0 });
-  const _panStartOffset = useRef<Position>({ x: 0, y: 0 });
-  // refs -> Connect
-  const _dragConnectIndex = useRef<number | null>(null);
 
   // states
   const [_nodes, setNodes] = useState<NodeData[]>(nodes);
-  const [_edges, setEdges] = useState<EdgeData[]>(edges);
-  const [edgeNodes, setEdgeNodes] = useState<(React.JSX.Element | null)[]>([]);
-  const [panOffset, setPanOffset] = useState<Position>({ x: 0, y: 0 });
+  const [_edges] = useState<EdgeData[]>(edges);
+  // states -> Pan
+  const [pan, setPan] = useState<Position>({ x: 0, y: 0 });
+  const [panning, setPanning] = useState<boolean>(false);
+  const [startPan, setStartPan] = useState<Position>({ x: 0, y: 0 });
+  // states -> Drag
+  const [draggedNode, setDraggedNode] = useState<string | null>(null);
 
-  // methods
-  const handlePanScrollMouseDown = useCallback(
-    (event: React.MouseEvent) => {
-      _isPanning.current = true;
-      _panStartMousePosition.current = { x: event.clientX, y: event.clientY };
-      _panStartOffset.current = { ...panOffset };
-    },
-    [panOffset]
-  );
+  // methods -> Pan
+  const onPanStart = (e: React.MouseEvent) => {
+    setPanning(true);
 
-  const handlePanScrollMouseMove = useCallback((event: React.MouseEvent) => {
-    if (_dragNodeIndex.current !== null) return;
-    if (!_isPanning.current) return;
-
-    const dx = event.clientX - _panStartMousePosition.current.x;
-    const dy = event.clientY - _panStartMousePosition.current.y;
-
-    setPanOffset({
-      x: _panStartOffset.current.x + dx,
-      y: _panStartOffset.current.y + dy,
-    });
-  }, []);
-
-  const handlePanMouseUp = useCallback(() => (_isPanning.current = false), []);
-
-  const handleMouseDown = useCallback((event: React.MouseEvent, index: number, node: Position) => {
-    _dragNodeIndex.current = index;
-    _dragStartMousePosition.current = { x: event.clientX, y: event.clientY };
-    _dragStartNodePosition.current = { x: node.x, y: node.y };
-  }, []);
-
-  const handleMouseMove = (event: React.MouseEvent) => {
-    if (_dragConnectIndex.current !== null) return;
-    if (_dragNodeIndex.current === null) return;
-
-    const deltaX = event.clientX - _dragStartMousePosition.current.x;
-    const deltaY = event.clientY - _dragStartMousePosition.current.y;
-
-    const newX = _dragStartNodePosition.current.x + deltaX;
-    const newY = _dragStartNodePosition.current.y + deltaY;
-
-    setNodes((prev) =>
-      prev.map((node, index) => (index === _dragNodeIndex.current ? { ...node, position: { x: newX, y: newY } } : node))
-    );
+    setStartPan({ x: e.clientX - pan.x, y: e.clientY - pan.y });
   };
 
-  const handleMouseUp = useCallback(() => {
-    _dragNodeIndex.current = null;
-    _dragConnectIndex.current = null;
+  const onPanMove = (e: React.MouseEvent) => {
+    if (panning) {
+      setPan({ x: e.clientX - startPan.x, y: e.clientY - startPan.y });
+    }
+  };
 
-    if (_edges.length === 0) return;
+  const onPanEnd = () => setPanning(false);
 
-    setNodes((prev) => [
-      ...prev,
-      {
-        id: Utils.RandomCharacterGenerator(20),
-        position: { x: _edges[_edges.length - 1].position.x2, y: _edges[_edges.length - 1].position.y2 },
-        data: { label: "Test" },
-      },
-    ]);
-  }, [, _edges]);
+  // methods -> Node
+  const onNodeMouseDown = (event: React.MouseEvent, id: string, node: Position) => {
+    event.stopPropagation();
 
-  // useEffects
-  useEffect(() => {
-    setEdgeNodes(
-      _edges.map((edge, index) => {
-        const { x1, y1, x2, y2 } = edge.position;
+    setDraggedNode(id);
+    _dragStartMousePosition.current = { x: event.clientX, y: event.clientY };
+    _dragStartNodePosition.current = { x: node.x, y: node.y };
+  };
 
-        const dx = x2 - x1;
-        const dy = y2 - y1;
-        const length = Math.sqrt(dx * dx + dy * dy);
-        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+  const onMouseMove = (event: React.MouseEvent) => {
+    if (draggedNode) {
+      const arDigramRect = _arDiagram.current?.getBoundingClientRect();
 
-        return (
-          <div
-            key={index}
-            className="line"
-            style={{
-              top: y1,
-              left: x1,
-              width: length,
-              transform: `rotate(${angle}deg)`,
-            }}
-          ></div>
-        );
-      })
-    );
-  }, [_nodes, _edges]);
+      if (!arDigramRect) return;
+
+      const deltaX = event.clientX - _dragStartMousePosition.current.x;
+      const deltaY = event.clientY - _dragStartMousePosition.current.y;
+
+      const newX = _dragStartNodePosition.current.x + deltaX;
+      const newY = _dragStartNodePosition.current.y + deltaY;
+
+      setNodes((prev) =>
+        prev.map((node) => (node.id === draggedNode ? { ...node, position: { x: newX, y: newY } } : node))
+      );
+    }
+  };
+
+  const onMouseUp = () => setDraggedNode(null);
+
+  const getNodeCenter = (id: number): Position | null => {
+    const el = _arNodes.current[id];
+    if (!el) return null;
+    const rect = el.getBoundingClientRect();
+    const wrapperRect = _arDiagram.current?.getBoundingClientRect();
+    if (!wrapperRect) return null;
+    return {
+      x: rect.left - wrapperRect.left + rect.width / 2 - pan.x,
+      y: rect.top - wrapperRect.top + rect.height / 2 - pan.y,
+    };
+  };
+
+  const renderEdges = () => {
+    return _edges.map((edge) => {
+      const from = getNodeCenter(edge.from);
+      const to = getNodeCenter(edge.to);
+
+      if (!from || !to) return null;
+
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+      const length = Math.sqrt(dx * dx + dy * dy);
+
+      return (
+        <div
+          key={edge.id}
+          style={{
+            left: from.x,
+            top: from.y,
+            width: length,
+            transform: `rotate(${angle}deg)`,
+            transformOrigin: "0 0",
+          }}
+        />
+      );
+    });
+  };
 
   return (
-    <div className="ar-diagram">
-      <div
-        ref={_arDiagramContent}
-        className="content"
-        style={{ backgroundPosition: `${panOffset.x}px ${panOffset.y}px` }}
-        onMouseDown={handlePanScrollMouseDown}
-        onMouseMove={(event) => {
-          handlePanScrollMouseMove(event);
-          handleMouseMove(event);
-
-          if (_dragConnectIndex.current !== null) {
-            const rect = _arDiagramContent.current?.getBoundingClientRect();
-            const x = event.clientX - (rect?.left || 0);
-            const y = event.clientY - (rect?.top || 0);
-
-            const fromIndex = _dragConnectIndex.current;
-            const connectElement = _arDiagramItems.current[fromIndex]?.querySelector(".connect-top") as HTMLDivElement;
-            const connectRect = connectElement?.getBoundingClientRect();
-
-            const x1 = connectRect.left - (rect?.left || 0) + connectRect.width / 2;
-            const y1 = connectRect.top - (rect?.top || 0) + connectRect.height / 2;
-
-            setEdges((prev) =>
-              prev.map((edge, i) => {
-                if (i === prev.length - 1) {
-                  return {
-                    ...edge,
-                    position: { x1, y1, x2: x, y2: y },
-                  };
-                }
-                return edge;
-              })
-            );
-          }
-
-          if (_dragNodeIndex.current !== null) {
-            const rect = _arDiagramContent.current?.getBoundingClientRect();
-
-            const fromIndex = _dragNodeIndex.current;
-            const connectElement = _arDiagramItems.current[fromIndex]?.querySelector(".connect-top") as HTMLDivElement;
-            const connectRect = connectElement?.getBoundingClientRect();
-
-            const x1 = connectRect.left - (rect?.left || 0) + connectRect.width / 2;
-            const y1 = connectRect.top - (rect?.top || 0) + connectRect.height / 2;
-
-            setEdges((prev) =>
-              prev.map((edge) => {
-                return {
-                  ...edge,
-                  position: { x1, y1, x2: edge.position.x2, y2: edge.position.y2 },
-                };
-              })
-            );
-          }
-        }}
-        onMouseUp={() => {
-          handlePanMouseUp();
-          handleMouseUp();
-        }}
-      >
+    <div
+      ref={_arDiagram}
+      className="ar-diagram"
+      onMouseDown={onPanStart}
+      onMouseMove={(e) => {
+        onPanMove(e);
+        onMouseMove(e);
+      }}
+      onMouseUp={() => {
+        onMouseUp();
+        onPanEnd();
+      }}
+    >
+      <div className="content" style={{ backgroundPosition: `${pan.x}px ${pan.y}px` }}>
         <div
           className="nodes-wrapper"
           style={{
-            transform: `translate(${panOffset.x}px, ${panOffset.y}px)`,
+            transform: `translate(${pan.x}px, ${pan.y}px)`,
           }}
         >
           {/* Edges */}
-          <div className="edges">{edgeNodes}</div>
+          <div className="edges">{renderEdges()}</div>
 
           {/* Nodes */}
           <div className="nodes">
-            {_nodes.map((node, index) => (
+            {_nodes.map((node) => (
               <div
-                key={index}
-                ref={(element) => {
-                  _arDiagramItems.current[index] = element;
-                }}
-                className="item"
-                onMouseDown={(event) => handleMouseDown(event, index, node.position)}
+                key={node.id}
+                ref={(el) => (_arNodes.current[node.id] = el)}
                 style={{
-                  top: node.position.y,
                   left: node.position.x,
+                  top: node.position.y,
                 }}
+                onMouseDown={(event) => onNodeMouseDown(event, node.id, node.position)}
               >
-                <div
-                  className="connect-top"
-                  onMouseDown={(event) => {
-                    _dragConnectIndex.current = index;
-
-                    const rect = _arDiagramContent.current?.getBoundingClientRect();
-                    const x = event.clientX - (rect?.left || 0);
-                    const y = event.clientY - (rect?.top || 0);
-
-                    setEdges((prev) => {
-                      return [
-                        ...prev,
-                        {
-                          id: Utils.RandomCharacterGenerator(20),
-                          from: index,
-                          position: { x1: x, y1: y, x2: x, y2: y },
-                        },
-                      ];
-                    });
-                  }}
-                ></div>
-                <div className="connect-bottom"></div>
-
                 <span>{node.data.label}</span>
               </div>
             ))}
@@ -233,6 +149,4 @@ const Diagram = ({ nodes, edges }: IProps) => {
       </div>
     </div>
   );
-};
-
-export default Diagram;
+}

@@ -1,12 +1,5 @@
 .ar-diagram {
-  display: flex;
-  flex-direction: row;
-
-  > .asside {
-    position: relative;
-    background-color: var(--white);
-    width: 200px;
-  }
+  overflow: hidden;
 
   > .content {
     position: absolute;
@@ -20,17 +13,19 @@
     cursor: grab;
     overflow: hidden;
 
-    &:active {
-      cursor: grabbing;
-    }
-
-    .nodes-wrapper {
+    > .nodes-wrapper {
       position: absolute;
       top: 0;
       left: 0;
 
       > .edges {
-        > .line {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        > div {
           position: absolute;
           height: 2px;
           background: repeating-linear-gradient(
@@ -43,16 +38,11 @@
           animation: moveLine 1s linear infinite;
           transform-origin: left center;
           pointer-events: none;
-
-          > div {
-            position: absolute;
-            right: 0;
-          }
         }
       }
 
       > .nodes {
-        > .item {
+        div {
           position: absolute;
           background-color: var(--white);
           padding: 0.5rem 1rem;
@@ -63,28 +53,6 @@
 
           &:active {
             cursor: grabbing;
-          }
-
-          > .connect-top,
-          > .connect-bottom {
-            position: absolute;
-            top: -0.25rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: inline-block;
-            background-color: var(--white);
-            width: 0.5rem;
-            height: 0.5rem;
-            border: solid 1px var(--gray-300);
-            border-radius: var(--border-radius-pill);
-            cursor: crosshair;
-          }
-
-          > .connect-bottom {
-            top: auto;
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: -0.25rem;
           }
 
           > span {

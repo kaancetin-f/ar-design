@@ -9,14 +9,8 @@ export type NodeData = {
 
 export type EdgeData = {
   id: string;
-  position: {
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-  };
   from: number;
-  to?: number;
+  to: number;
 };
 
 interface IProps {
