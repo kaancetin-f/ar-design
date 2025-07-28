@@ -5,13 +5,17 @@
     position: absolute;
     inset: 0;
     background-color: var(--gray-100);
-    background-image: radial-gradient(circle, var(--gray-300) 1px, transparent 1px);
+    background-image: radial-gradient(circle, var(--gray-400) 1px, transparent 1px);
     background-size: 20px 20px;
     background-repeat: repeat;
     height: 100%;
     border: 1px solid var(--gray-200);
     cursor: grab;
     overflow: hidden;
+
+    &:active {
+      cursor: grabbing;
+    }
 
     > .nodes-wrapper {
       position: absolute;
@@ -20,10 +24,7 @@
 
       > .edges {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        inset: 0;
 
         > div {
           position: absolute;
