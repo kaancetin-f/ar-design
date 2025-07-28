@@ -37,7 +37,7 @@
       }
 
       > .nodes {
-        div {
+        .node {
           position: absolute;
           background-color: var(--white);
           padding: 0.5rem 1rem;
@@ -60,6 +60,7 @@
             border: solid 1px var(--purple-500);
             border-radius: var(--border-radius-pill);
             z-index: 2;
+            cursor: crosshair;
 
             &.top {
               top: -5px;

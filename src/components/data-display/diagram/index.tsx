@@ -219,6 +219,7 @@ export default function Diagram({ nodes, edges }: IProps) {
             {_nodes.map((node, index) => (
               <div
                 key={index}
+                className="node"
                 style={{
                   left: node.position.x,
                   top: node.position.y,
