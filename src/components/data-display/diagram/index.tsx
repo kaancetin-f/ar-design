@@ -14,7 +14,8 @@ export default function Diagram({ nodes, edges }: IProps) {
   // refs
   const _arDiagram = useRef<HTMLDivElement | null>(null);
   const _content = useRef<HTMLDivElement | null>(null);
-  const _arNodes = useRef<Record<string, HTMLDivElement | null>>({});
+  const _arNodes = useRef<Record<string, HTMLSpanElement | null>>({});
+  const _path = useRef<SVGPathElement | null>(null);
   // refs -> Start Position
   const _dragStartMousePosition = useRef<Position>({ x: 0, y: 0 });
   const _dragStartNodePosition = useRef<Position>({ x: 0, y: 0 });
@@ -36,48 +37,65 @@ export default function Diagram({ nodes, edges }: IProps) {
   const [draggedNode, setDraggedNode] = useState<string | null>(null);
 
   // methods
-  const getNodeCenter = (id: number): Position | null => {
-    const node = _arNodes.current[id];
+  const getPortCenter = (id: number, port: "top" | "bottom"): Position | null => {
+    const node = _arNodes.current[`${id}_${port}`];
+    const diagram = _arDiagram.current;
 
-    if (!node || !_arDiagram.current) return null;
+    if (!node || !diagram) return null;
 
-    const arDiagramRect = _arDiagram.current.getBoundingClientRect();
+    const diagramRect = diagram.getBoundingClientRect();
     const nodeRect = node.getBoundingClientRect();
 
     return {
-      x: nodeRect.left - arDiagramRect.left + nodeRect.width / 2 - pan.x,
-      y: nodeRect.top - arDiagramRect.top + nodeRect.height / 2 - pan.y,
+      x: (nodeRect.left - diagramRect.left + nodeRect.width / 2 - pan.x) / scale,
+      y: (nodeRect.top - diagramRect.top + nodeRect.height / 2 - pan.y) / scale,
     };
   };
 
   const renderEdges = useMemo(() => {
     return _edges.map((edge, index) => {
-      const from = getNodeCenter(edge.from);
-      const to = getNodeCenter(edge.to);
+      const from = getPortCenter(edge.from.id, edge.from.port);
+      const to = getPortCenter(edge.to.id, edge.to.port);
 
       if (!from || !to) return null;
 
       const dx = to.x - from.x;
       const dy = to.y - from.y;
-      const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-      const length = Math.sqrt(dx * dx + dy * dy);
+      const distance = Math.hypot(dx, dy);
+      const offset = Math.min(40, distance * 0.25); // maksimum sapma sınırı
+
+      // S biçimli kontrol noktaları
+      const controlPoint1 = {
+        x: from.x,
+        y: from.y + (dy < 0 ? -offset : offset),
+      };
+
+      const controlPoint2 = {
+        x: to.x,
+        y: to.y + (dy < 0 ? offset : -offset),
+      };
+
+      const pathData = `M${from.x} ${from.y} C${controlPoint1.x} ${controlPoint1.y}, ${controlPoint2.x} ${controlPoint2.y}, ${to.x} ${to.y}`;
 
       return (
-        <div
-          key={index}
-          style={{
-            left: from.x / scale,
-            top: from.y / scale,
-            width: length / scale,
-            transform: `rotate(${angle}deg)`,
-            transformOrigin: "0 0",
-          }}
-        />
+        <svg key={index} className="edge">
+          <path
+            ref={_path}
+            d={pathData}
+            fill="none"
+            stroke="var(--purple-500)"
+            strokeWidth={2}
+            strokeDasharray={10}
+            strokeDashoffset={10}
+            strokeLinecap="round"
+          >
+            <animate attributeName="stroke-dashoffset" values={`${20 / scale};0`} dur="1s" repeatCount="indefinite" />
+          </path>
+        </svg>
       );
     });
-  }, [_nodes]);
+  }, [_nodes, _edges]);
 
-  // methods -> Pan
   const onPanStart = (e: React.MouseEvent) => {
     setPanning(true);
 
@@ -201,14 +219,30 @@ export default function Diagram({ nodes, edges }: IProps) {
             {_nodes.map((node, index) => (
               <div
                 key={index}
-                ref={(el) => (_arNodes.current[node.id] = el)}
                 style={{
                   left: node.position.x,
                   top: node.position.y,
                 }}
                 onMouseDown={(event) => onNodeMouseDown(event, node.id, node.position)}
               >
+                {/* Top Port */}
+                <span
+                  className="port top"
+                  ref={(el) => {
+                    _arNodes.current[`${node.id}_top`] = el;
+                  }}
+                ></span>
+
+                {/* Node Content */}
                 <span>{node.data.label}</span>
+
+                {/* Bottom Port */}
+                <span
+                  className="port bottom"
+                  ref={(el) => {
+                    _arNodes.current[`${node.id}_bottom`] = el;
+                  }}
+                ></span>
               </div>
             ))}
           </div>

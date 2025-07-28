@@ -29,19 +29,10 @@
         position: absolute;
         inset: 0;
 
-        > div {
+        > .edge {
           position: absolute;
-          height: 2px;
-          background: repeating-linear-gradient(
-            90deg,
-            var(--purple-500) 0px,
-            var(--purple-500) 10px,
-            transparent 10px,
-            transparent 20px
-          );
-          animation: moveLine 1s linear infinite;
-          transform-origin: left center;
           pointer-events: none;
+          overflow: visible;
         }
       }
 
@@ -59,8 +50,29 @@
             cursor: grabbing;
           }
 
+          > .port {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--white);
+            width: 0.5rem;
+            height: 0.5rem;
+            border: solid 1px var(--purple-500);
+            border-radius: var(--border-radius-pill);
+            z-index: 2;
+
+            &.top {
+              top: -5px;
+            }
+
+            &.bottom {
+              bottom: -5px;
+            }
+          }
+
           > span {
             color: var(--gray-700);
+            font-family: var(--system);
             text-wrap: nowrap;
           }
         }

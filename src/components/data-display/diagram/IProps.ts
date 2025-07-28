@@ -7,10 +7,18 @@ export type NodeData = {
   data: { label: string };
 };
 
+type Port = "top" | "bottom";
+
 export type EdgeData = {
   id: string;
-  from: number;
-  to: number;
+  from: {
+    id: number;
+    port: Port;
+  };
+  to: {
+    id: number;
+    port: Port;
+  };
 };
 
 interface IProps {
