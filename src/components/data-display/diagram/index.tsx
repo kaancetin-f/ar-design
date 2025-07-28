@@ -1,17 +1,27 @@
 import React, { useMemo, useRef, useState } from "react";
 import "../../../assets/css/components/data-display/diagram/styles.css";
 import IProps, { EdgeData, NodeData } from "./IProps";
+import Grid from "../grid-system";
+import Button from "../../form/button";
+import Tooltip from "../../feedback/tooltip";
+import { ARIcon } from "../../icons";
 
 type Position = { x: number; y: number };
+
+const { Box } = Grid;
 
 export default function Diagram({ nodes, edges }: IProps) {
   // refs
   const _arDiagram = useRef<HTMLDivElement | null>(null);
-  const _container = useRef<HTMLDivElement | null>(null);
+  const _content = useRef<HTMLDivElement | null>(null);
   const _arNodes = useRef<Record<string, HTMLDivElement | null>>({});
   // refs -> Start Position
   const _dragStartMousePosition = useRef<Position>({ x: 0, y: 0 });
   const _dragStartNodePosition = useRef<Position>({ x: 0, y: 0 });
+  // refs -> Zoom
+  const _zoomIntensity = 0.1;
+  const _maxScale = 4;
+  const _minScale = 0.1;
 
   // states
   const [_nodes, setNodes] = useState<NodeData[]>(nodes);
@@ -41,7 +51,7 @@ export default function Diagram({ nodes, edges }: IProps) {
   };
 
   const renderEdges = useMemo(() => {
-    return _edges.map((edge) => {
+    return _edges.map((edge, index) => {
       const from = getNodeCenter(edge.from);
       const to = getNodeCenter(edge.to);
 
@@ -54,7 +64,7 @@ export default function Diagram({ nodes, edges }: IProps) {
 
       return (
         <div
-          key={edge.id}
+          key={index}
           style={{
             left: from.x / scale,
             top: from.y / scale,
@@ -84,15 +94,13 @@ export default function Diagram({ nodes, edges }: IProps) {
 
   // methods -> Zoom
   const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
-    event.preventDefault();
-
-    const zoomIntensity = 0.1;
     const direction = event.deltaY > 0 ? -1 : 1;
 
-    const newScale = Math.max(0.1, scale + direction * zoomIntensity);
+    let newScale = scale + direction * _zoomIntensity;
+    newScale = Math.max(_minScale, Math.min(_maxScale, newScale));
 
     // Mouse'un container içindeki konumunu al.
-    const rect = _container.current!.getBoundingClientRect();
+    const rect = _content.current!.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
 
@@ -106,6 +114,32 @@ export default function Diagram({ nodes, edges }: IProps) {
 
     setScale(newScale);
     setPan({ x: newPanX, y: newPanY });
+  };
+
+  const handleZoom = (process: "increment" | "decrement") => {
+    let newScale: number = 0;
+
+    if (process === "increment") newScale = Math.max(_minScale, Math.min(_maxScale, scale + _zoomIntensity));
+    if (process === "decrement") newScale = Math.max(_minScale, Math.min(_maxScale, scale - _zoomIntensity));
+
+    if (_content.current && _content.current) {
+      const containerRect = _content.current.getBoundingClientRect();
+
+      // Ortadaki noktayı bul (container açısından)
+      const centerX = containerRect.width / 2;
+      const centerY = containerRect.height / 2;
+
+      // İçerik düzleminde bu noktaya karşılık gelen nokta
+      const zoomPointX = (centerX - pan.x) / scale;
+      const zoomPointY = (centerY - pan.y) / scale;
+
+      // Yeni pan hesapla ki center aynı yerde kalsın
+      const newPanX = centerX - zoomPointX * newScale;
+      const newPanY = centerY - zoomPointY * newScale;
+
+      setPan({ x: newPanX, y: newPanY });
+      setScale(newScale);
+    }
   };
 
   // methods -> Node
@@ -148,7 +182,7 @@ export default function Diagram({ nodes, edges }: IProps) {
       }}
     >
       <div
-        ref={_container}
+        ref={_content}
         className="content"
         style={{ backgroundPosition: `${pan.x}px ${pan.y}px` }}
         onWheel={handleWheel}
@@ -164,9 +198,9 @@ export default function Diagram({ nodes, edges }: IProps) {
 
           {/* Nodes */}
           <div className="nodes">
-            {_nodes.map((node) => (
+            {_nodes.map((node, index) => (
               <div
-                key={node.id}
+                key={index}
                 ref={(el) => (_arNodes.current[node.id] = el)}
                 style={{
                   left: node.position.x,
@@ -179,6 +213,30 @@ export default function Diagram({ nodes, edges }: IProps) {
             ))}
           </div>
         </div>
+      </div>
+
+      <div className="zoom-buttons" onMouseDown={(event) => event.stopPropagation()}>
+        <Box>
+          <Tooltip text={"Zoom Out"}>
+            <Button
+              variant="borderless"
+              color="light"
+              icon={{ element: <ARIcon icon={"Dash"} fill="currentColor" /> }}
+              onClick={() => handleZoom("decrement")}
+            />
+          </Tooltip>
+
+          <div className="zoom-percent">{Math.round(scale * 100)}%</div>
+
+          <Tooltip text={"Zoom In"}>
+            <Button
+              variant="borderless"
+              color="light"
+              icon={{ element: <ARIcon icon={"Add"} fill="currentColor" /> }}
+              onClick={() => handleZoom("increment")}
+            />
+          </Tooltip>
+        </Box>
       </div>
     </div>
   );

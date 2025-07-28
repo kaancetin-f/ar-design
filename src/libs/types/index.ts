@@ -162,6 +162,7 @@ export type Icons =
   | "CloseCircle"
   | "CloseSquare"
   | "CloudUpload"
+  | "Dash"
   | "Document"
   | "Download"
   | "ExclamationCircle"

@@ -23,8 +23,7 @@ iframe.dashed:not(.disabled) {
 
 button.dashed:not(.disabled) {
   &.blue { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--blue-100);
     }
   }
@@ -57,8 +56,7 @@ iframe.dashed:not(.disabled) {
 
 button.dashed:not(.disabled) {
   &.purple { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--purple-100);
     }
   }
@@ -91,8 +89,7 @@ iframe.dashed:not(.disabled) {
 
 button.dashed:not(.disabled) {
   &.pink { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--pink-100);
     }
   }
@@ -125,8 +122,7 @@ iframe.dashed:not(.disabled) {
 
 button.dashed:not(.disabled) {
   &.red { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--red-100);
     }
   }
@@ -159,8 +155,7 @@ iframe.dashed:not(.disabled) {
 
 button.dashed:not(.disabled) {
   &.orange { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--orange-100);
     }
   }
@@ -193,8 +188,7 @@ iframe.dashed:not(.disabled) {
 
 button.dashed:not(.disabled) {
   &.yellow { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--yellow-100);
     }
   }
@@ -227,8 +221,7 @@ iframe.dashed:not(.disabled) {
 
 button.dashed:not(.disabled) {
   &.green { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--green-100);
     }
   }
@@ -261,8 +254,7 @@ iframe.dashed:not(.disabled) {
 
 button.dashed:not(.disabled) {
   &.teal { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--teal-100);
     }
   }
@@ -295,8 +287,7 @@ iframe.dashed:not(.disabled) {
 
 button.dashed:not(.disabled) {
   &.cyan { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--cyan-100);
     }
   }
@@ -329,8 +320,7 @@ iframe.dashed:not(.disabled) {
 
 button.dashed:not(.disabled) {
   &.gray { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--gray-100);
     }
   }
@@ -363,8 +353,7 @@ iframe.dashed:not(.disabled) {
 
 button.dashed:not(.disabled) {
   &.light { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--light-100);
     }
   }

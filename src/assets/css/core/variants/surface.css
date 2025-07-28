@@ -13,8 +13,7 @@
       
 button.surface:not(.disabled) {
   &.blue { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--blue-300);
     }
   }
@@ -37,8 +36,7 @@ button.surface:not(.disabled) {
       
 button.surface:not(.disabled) {
   &.purple { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--purple-300);
     }
   }
@@ -61,8 +59,7 @@ button.surface:not(.disabled) {
       
 button.surface:not(.disabled) {
   &.pink { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--pink-300);
     }
   }
@@ -85,8 +82,7 @@ button.surface:not(.disabled) {
       
 button.surface:not(.disabled) {
   &.red { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--red-300);
     }
   }
@@ -109,8 +105,7 @@ button.surface:not(.disabled) {
       
 button.surface:not(.disabled) {
   &.orange { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--orange-300);
     }
   }
@@ -133,8 +128,7 @@ button.surface:not(.disabled) {
       
 button.surface:not(.disabled) {
   &.yellow { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--yellow-300);
     }
   }
@@ -157,8 +151,7 @@ button.surface:not(.disabled) {
       
 button.surface:not(.disabled) {
   &.green { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--green-300);
     }
   }
@@ -181,8 +174,7 @@ button.surface:not(.disabled) {
       
 button.surface:not(.disabled) {
   &.teal { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--teal-300);
     }
   }
@@ -205,8 +197,7 @@ button.surface:not(.disabled) {
       
 button.surface:not(.disabled) {
   &.cyan { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--cyan-300);
     }
   }
@@ -229,8 +220,7 @@ button.surface:not(.disabled) {
       
 button.surface:not(.disabled) {
   &.gray { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--gray-300);
     }
   }
@@ -253,8 +243,7 @@ button.surface:not(.disabled) {
       
 button.surface:not(.disabled) {
   &.light { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--light-300);
     }
   }

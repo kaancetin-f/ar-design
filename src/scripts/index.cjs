@@ -257,8 +257,7 @@ const _Variant_SurfaceCss = () => {
       
 button.surface:not(.disabled) {
   &.${color} { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--${color}-300);
     }
   }
@@ -318,8 +317,7 @@ button.outlined:not(.disabled) {
     border-color: var(--${color}-500);
     color: var(--${color}-500);
 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--${color}-100);
     }
   }
@@ -362,8 +360,7 @@ iframe.dashed:not(.disabled) {
 
 button.dashed:not(.disabled) {
   &.${color} { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--${color}-100);
     }
   }
@@ -381,10 +378,21 @@ const _Variant_BorderlessCss = () => {
 
   const content = colors
     .map((color) => {
+      switch (color) {
+        case "light":
+          fontColor = "gray-700";
+          focusColor = "gray-700";
+          break;
+        default:
+          fontColor = `${color}-500`;
+          focusColor = "white";
+          break;
+      }
+
       return `/* #region ${color.toUpperCase()} */
 .borderless:not(.disabled) {
   &.${color} {
-    color: var(--${color}-500);
+    color: var(--${fontColor}-500);
 
     &.active {
       animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
@@ -405,10 +413,9 @@ iframe.borderless:not(.disabled) {
 
 button.borderless:not(.disabled) {
   &.${color} { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--${color}-500);
-      color: var(--white)
+      color: var(--${focusColor})
     }
   }
 }

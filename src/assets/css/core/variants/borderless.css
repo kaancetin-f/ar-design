@@ -1,7 +1,7 @@
 /* #region BLUE */
 .borderless:not(.disabled) {
   &.blue {
-    color: var(--blue-500);
+    color: var(--blue-500-500);
 
     &.active {
       animation: clicked-blue ease-in-out 750ms 0s 1 normal both;
@@ -14,16 +14,15 @@ iframe.borderless:not(.disabled) {
   &.blue {
     &:focus,
     &.focused {
-      border-color: var(--);
-      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+      border-color: var(--white);
+      box-shadow: 0 0 0 3.5px rgba(var(--white-rgb), 0.25);
     }
   }
 }
 
 button.borderless:not(.disabled) {
   &.blue { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--blue-500);
       color: var(--white)
     }
@@ -35,7 +34,7 @@ button.borderless:not(.disabled) {
 /* #region PURPLE */
 .borderless:not(.disabled) {
   &.purple {
-    color: var(--purple-500);
+    color: var(--purple-500-500);
 
     &.active {
       animation: clicked-purple ease-in-out 750ms 0s 1 normal both;
@@ -48,16 +47,15 @@ iframe.borderless:not(.disabled) {
   &.purple {
     &:focus,
     &.focused {
-      border-color: var(--);
-      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+      border-color: var(--white);
+      box-shadow: 0 0 0 3.5px rgba(var(--white-rgb), 0.25);
     }
   }
 }
 
 button.borderless:not(.disabled) {
   &.purple { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--purple-500);
       color: var(--white)
     }
@@ -69,7 +67,7 @@ button.borderless:not(.disabled) {
 /* #region PINK */
 .borderless:not(.disabled) {
   &.pink {
-    color: var(--pink-500);
+    color: var(--pink-500-500);
 
     &.active {
       animation: clicked-pink ease-in-out 750ms 0s 1 normal both;
@@ -82,16 +80,15 @@ iframe.borderless:not(.disabled) {
   &.pink {
     &:focus,
     &.focused {
-      border-color: var(--);
-      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+      border-color: var(--white);
+      box-shadow: 0 0 0 3.5px rgba(var(--white-rgb), 0.25);
     }
   }
 }
 
 button.borderless:not(.disabled) {
   &.pink { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--pink-500);
       color: var(--white)
     }
@@ -103,7 +100,7 @@ button.borderless:not(.disabled) {
 /* #region RED */
 .borderless:not(.disabled) {
   &.red {
-    color: var(--red-500);
+    color: var(--red-500-500);
 
     &.active {
       animation: clicked-red ease-in-out 750ms 0s 1 normal both;
@@ -116,16 +113,15 @@ iframe.borderless:not(.disabled) {
   &.red {
     &:focus,
     &.focused {
-      border-color: var(--);
-      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+      border-color: var(--white);
+      box-shadow: 0 0 0 3.5px rgba(var(--white-rgb), 0.25);
     }
   }
 }
 
 button.borderless:not(.disabled) {
   &.red { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--red-500);
       color: var(--white)
     }
@@ -137,7 +133,7 @@ button.borderless:not(.disabled) {
 /* #region ORANGE */
 .borderless:not(.disabled) {
   &.orange {
-    color: var(--orange-500);
+    color: var(--orange-500-500);
 
     &.active {
       animation: clicked-orange ease-in-out 750ms 0s 1 normal both;
@@ -150,16 +146,15 @@ iframe.borderless:not(.disabled) {
   &.orange {
     &:focus,
     &.focused {
-      border-color: var(--);
-      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+      border-color: var(--white);
+      box-shadow: 0 0 0 3.5px rgba(var(--white-rgb), 0.25);
     }
   }
 }
 
 button.borderless:not(.disabled) {
   &.orange { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--orange-500);
       color: var(--white)
     }
@@ -171,7 +166,7 @@ button.borderless:not(.disabled) {
 /* #region YELLOW */
 .borderless:not(.disabled) {
   &.yellow {
-    color: var(--yellow-500);
+    color: var(--yellow-500-500);
 
     &.active {
       animation: clicked-yellow ease-in-out 750ms 0s 1 normal both;
@@ -184,16 +179,15 @@ iframe.borderless:not(.disabled) {
   &.yellow {
     &:focus,
     &.focused {
-      border-color: var(--);
-      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+      border-color: var(--white);
+      box-shadow: 0 0 0 3.5px rgba(var(--white-rgb), 0.25);
     }
   }
 }
 
 button.borderless:not(.disabled) {
   &.yellow { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--yellow-500);
       color: var(--white)
     }
@@ -205,7 +199,7 @@ button.borderless:not(.disabled) {
 /* #region GREEN */
 .borderless:not(.disabled) {
   &.green {
-    color: var(--green-500);
+    color: var(--green-500-500);
 
     &.active {
       animation: clicked-green ease-in-out 750ms 0s 1 normal both;
@@ -218,16 +212,15 @@ iframe.borderless:not(.disabled) {
   &.green {
     &:focus,
     &.focused {
-      border-color: var(--);
-      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+      border-color: var(--white);
+      box-shadow: 0 0 0 3.5px rgba(var(--white-rgb), 0.25);
     }
   }
 }
 
 button.borderless:not(.disabled) {
   &.green { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--green-500);
       color: var(--white)
     }
@@ -239,7 +232,7 @@ button.borderless:not(.disabled) {
 /* #region TEAL */
 .borderless:not(.disabled) {
   &.teal {
-    color: var(--teal-500);
+    color: var(--teal-500-500);
 
     &.active {
       animation: clicked-teal ease-in-out 750ms 0s 1 normal both;
@@ -252,16 +245,15 @@ iframe.borderless:not(.disabled) {
   &.teal {
     &:focus,
     &.focused {
-      border-color: var(--);
-      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+      border-color: var(--white);
+      box-shadow: 0 0 0 3.5px rgba(var(--white-rgb), 0.25);
     }
   }
 }
 
 button.borderless:not(.disabled) {
   &.teal { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--teal-500);
       color: var(--white)
     }
@@ -273,7 +265,7 @@ button.borderless:not(.disabled) {
 /* #region CYAN */
 .borderless:not(.disabled) {
   &.cyan {
-    color: var(--cyan-500);
+    color: var(--cyan-500-500);
 
     &.active {
       animation: clicked-cyan ease-in-out 750ms 0s 1 normal both;
@@ -286,16 +278,15 @@ iframe.borderless:not(.disabled) {
   &.cyan {
     &:focus,
     &.focused {
-      border-color: var(--);
-      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+      border-color: var(--white);
+      box-shadow: 0 0 0 3.5px rgba(var(--white-rgb), 0.25);
     }
   }
 }
 
 button.borderless:not(.disabled) {
   &.cyan { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--cyan-500);
       color: var(--white)
     }
@@ -307,7 +298,7 @@ button.borderless:not(.disabled) {
 /* #region GRAY */
 .borderless:not(.disabled) {
   &.gray {
-    color: var(--gray-500);
+    color: var(--gray-500-500);
 
     &.active {
       animation: clicked-gray ease-in-out 750ms 0s 1 normal both;
@@ -320,16 +311,15 @@ iframe.borderless:not(.disabled) {
   &.gray {
     &:focus,
     &.focused {
-      border-color: var(--);
-      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+      border-color: var(--white);
+      box-shadow: 0 0 0 3.5px rgba(var(--white-rgb), 0.25);
     }
   }
 }
 
 button.borderless:not(.disabled) {
   &.gray { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--gray-500);
       color: var(--white)
     }
@@ -341,7 +331,7 @@ button.borderless:not(.disabled) {
 /* #region LIGHT */
 .borderless:not(.disabled) {
   &.light {
-    color: var(--light-500);
+    color: var(--gray-700-500);
 
     &.active {
       animation: clicked-light ease-in-out 750ms 0s 1 normal both;
@@ -354,18 +344,17 @@ iframe.borderless:not(.disabled) {
   &.light {
     &:focus,
     &.focused {
-      border-color: var(--);
-      box-shadow: 0 0 0 3.5px rgba(var(---rgb), 0.25);
+      border-color: var(--gray-700);
+      box-shadow: 0 0 0 3.5px rgba(var(--gray-700-rgb), 0.25);
     }
   }
 }
 
 button.borderless:not(.disabled) {
   &.light { 
-    &:hover,
-    &:focus {
+    &:hover {
       background-color: var(--light-500);
-      color: var(--white)
+      color: var(--gray-700)
     }
   }
 }
