@@ -24,6 +24,7 @@ class Service {
 
       const { p_response, response } = await this._api.Get({
         input: endPoint,
+        init: values?.init,
       });
 
       return await this.Response(p_response, response);
