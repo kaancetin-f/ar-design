@@ -60,6 +60,30 @@ export default function Diagram({ nodes, edges }: IProps) {
     };
   };
 
+  const getClosestPort = (position: Position, threshold = 20): { id: number; port: "top" | "bottom" } | null => {
+    for (const key in _arNodes.current) {
+      const el = _arNodes.current[key];
+
+      if (!el) continue;
+
+      const [idStr, port] = key.split("_");
+      const id = parseInt(idStr, 10);
+      const rect = el.getBoundingClientRect();
+      const diagramRect = _arDiagram.current!.getBoundingClientRect();
+
+      const portCenter: Position = {
+        x: (rect.left - diagramRect.left + rect.width / 2 - pan.x) / scale,
+        y: (rect.top - diagramRect.top + rect.height / 2 - pan.y) / scale,
+      };
+
+      const distance = Math.hypot(position.x - portCenter.x, position.y - portCenter.y);
+
+      if (distance <= threshold) return { id, port: port as "top" | "bottom" };
+    }
+
+    return null;
+  };
+
   const renderEdges = useMemo(() => {
     return _edges.map((edge, index) => {
       const from = getPortCenter(edge.from.id, edge.from.port);
@@ -201,23 +225,38 @@ export default function Diagram({ nodes, edges }: IProps) {
 
   const onMouseUp = () => {
     if (drawingEdge && mousePos) {
-      // Yeni node oluştur
-      const newNode: NodeData = {
-        id: _nodes[_nodes.length - 1].id + 1,
-        position: mousePos,
-        data: { label: `Node - ${drawingEdge.id + 1}` },
-      };
+      const closest = getClosestPort(mousePos);
 
-      // Bağlantı yönü belirle
-      const newPort: "top" | "bottom" = mousePos.y < drawingEdge.start.y ? "bottom" : "top";
-      const newEdge: EdgeData = {
-        id: _edges[_edges.length - 1].id + 1,
-        from: { id: drawingEdge.id, port: drawingEdge.port },
-        to: { id: _nodes[_nodes.length - 1].id + 1, port: newPort },
-      };
+      if (closest) {
+        // Yakın port varsa, oraya bağla
+        const newEdge: EdgeData = {
+          id: _edges[_edges.length - 1]?.id + 1 || 1,
+          from: { id: drawingEdge.id, port: drawingEdge.port },
+          to: { id: closest.id, port: closest.port },
+        };
 
-      setNodes((prev) => [...prev, newNode]);
-      setEdges((prev) => [...prev, newEdge]);
+        setEdges((prev) => [...prev, newEdge]);
+      } else {
+        // Yakın port yoksa yeni node oluştur
+        const newNodeId = _nodes[_nodes.length - 1]?.id + 1 || 1;
+
+        const newNode: NodeData = {
+          id: newNodeId,
+          position: mousePos,
+          data: { label: `Node - ${newNodeId}` },
+        };
+
+        const newPort: "top" | "bottom" = mousePos.y < drawingEdge.start.y ? "bottom" : "top";
+
+        const newEdge: EdgeData = {
+          id: _edges[_edges.length - 1]?.id + 1 || 1,
+          from: { id: drawingEdge.id, port: drawingEdge.port },
+          to: { id: newNodeId, port: newPort },
+        };
+
+        setNodes((prev) => [...prev, newNode]);
+        setEdges((prev) => [...prev, newEdge]);
+      }
 
       setDrawingEdge(null);
       setMousePos(null);
