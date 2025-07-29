@@ -17,14 +17,13 @@ class Service {
     this._endPoint = values.endPoint;
   }
 
-  async Get<TResponse>(values?: { input?: string; headers?: HeadersInit | undefined }): Promise<Result<TResponse>> {
+  async Get<TResponse>(values?: { input?: string; init?: RequestInit }): Promise<Result<TResponse>> {
     try {
       let endPoint: string = `${this._endPoint}`;
       if (values?.input) endPoint += `/${values.input}`;
 
       const { p_response, response } = await this._api.Get({
         input: endPoint,
-        headers: values?.headers,
       });
 
       return await this.Response(p_response, response);
@@ -36,8 +35,7 @@ class Service {
   async Post<TResponse, TData>(values?: {
     input?: RequestInfo;
     data?: TData;
-    headers?: HeadersInit;
-    init?: RequestInit | undefined;
+    init?: RequestInit;
   }): Promise<Result<TResponse>> {
     try {
       let endPoint: string = `${this._endPoint}`;
@@ -46,7 +44,6 @@ class Service {
       const { p_response, response } = await this._api.Post({
         input: endPoint,
         data: values?.data,
-        headers: values?.headers,
         init: values?.init,
       });
 
@@ -59,8 +56,7 @@ class Service {
   async PostWithFormData<TResponse>(values?: {
     input?: RequestInfo;
     data?: FormData;
-    headers?: HeadersInit;
-    init?: Omit<RequestInit | undefined, "body">;
+    init?: Omit<RequestInit, "body">;
   }): Promise<Result<TResponse>> {
     try {
       let endPoint: string = `${this._endPoint}`;
@@ -69,7 +65,6 @@ class Service {
       const response = await this._api.PostWithFormData({
         input: endPoint,
         data: values?.data,
-        headers: values?.headers,
         init: values?.init,
       });
 
@@ -82,8 +77,7 @@ class Service {
   async Put<TResponse, TData>(values?: {
     input?: RequestInfo;
     data?: TData;
-    headers?: HeadersInit;
-    init?: Omit<RequestInit | undefined, "body">;
+    init?: Omit<RequestInit, "body">;
   }): Promise<Result<TResponse>> {
     try {
       let endPoint: string = `${this._endPoint}`;
@@ -92,7 +86,6 @@ class Service {
       const response = await this._api.Put({
         input: endPoint,
         data: values?.data,
-        headers: values?.headers,
         init: values?.init,
       });
 
@@ -102,14 +95,14 @@ class Service {
     }
   }
 
-  async Delete<TResponse>(values?: { input?: RequestInfo; headers?: HeadersInit }): Promise<Result<TResponse>> {
+  async Delete<TResponse>(values?: { input?: RequestInfo; init?: RequestInit }): Promise<Result<TResponse>> {
     try {
       let endPoint: string = `${this._endPoint}`;
       if (values?.input) endPoint += `/${values.input}`;
 
       const response = await this._api.Delete({
         input: endPoint,
-        headers: values?.headers,
+        init: values?.init,
       });
 
       return await this.Response(null, response);

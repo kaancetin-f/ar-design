@@ -120,6 +120,9 @@ export default function Diagram({ nodes, edges }: IProps) {
             strokeDasharray={10}
             strokeDashoffset={10}
             strokeLinecap="round"
+            onClick={() => {
+              setEdges((prev) => prev.filter((x) => x.id !== edge.id));
+            }}
           >
             <animate attributeName="stroke-dashoffset" values={`${20 / scale};0`} dur="1s" repeatCount="indefinite" />
           </path>

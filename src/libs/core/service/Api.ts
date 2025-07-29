@@ -13,7 +13,7 @@ class Api {
     this._url = `${this._host}/${this._core ? this._core + "/" : ""}`;
   }
 
-  async Get(values: { input?: RequestInfo | undefined; headers?: HeadersInit }): Promise<{
+  async Get(values: { input?: RequestInfo | undefined; init?: RequestInit }): Promise<{
     p_response: Promise<Response>;
     response: Response;
   }> {
@@ -23,9 +23,10 @@ class Api {
 
     const p_response = this.CustomFetch(`${this._url}${values.input}`, {
       method: "GET",
+      ...values.init,
       headers: {
         ...this.HeaderProperties(),
-        ...values.headers,
+        ...values.init?.headers,
       },
     });
 
@@ -38,8 +39,7 @@ class Api {
   async Post(values: {
     input?: RequestInfo;
     data?: any;
-    headers?: HeadersInit;
-    init?: Omit<RequestInit | undefined, "body">;
+    init?: Omit<RequestInit, "body">;
   }): Promise<{ p_response: Promise<Response>; response: Response }> {
     if (values.input && values.input.toString().includes("?")) {
       values.input = values.input.toString().replace(/\/(?=\?)/, "");
@@ -47,9 +47,12 @@ class Api {
 
     const p_response = this.CustomFetch(`${this._url}${values.input}`, {
       method: "POST",
-      headers: { ...this.HeaderProperties(), ...values.headers },
       body: JSON.stringify(values.data),
       ...values.init,
+      headers: {
+        ...this.HeaderProperties(),
+        ...values.init?.headers,
+      },
     });
 
     const clone = (await p_response).clone();
@@ -61,8 +64,7 @@ class Api {
   async PostWithFormData(values: {
     input?: RequestInfo;
     data?: FormData;
-    headers?: HeadersInit;
-    init?: Omit<RequestInit | undefined, "body">;
+    init?: Omit<RequestInit, "body">;
   }): Promise<Response> {
     if (values.input && values.input.toString().includes("?")) {
       values.input = values.input.toString().replace(/\/(?=\?)/, "");
@@ -70,47 +72,46 @@ class Api {
 
     const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "POST",
-      headers: { ...this.HeaderProperties(), ...values.headers },
       body: values.data,
       ...values.init,
+      headers: {
+        ...this.HeaderProperties(),
+        ...values.init?.headers,
+      },
     });
 
     return response;
   }
 
-  async Put(values: {
-    input?: RequestInfo;
-    data?: any;
-    headers?: HeadersInit;
-    init?: Omit<RequestInit | undefined, "body">;
-  }): Promise<Response> {
+  async Put(values: { input?: RequestInfo; data?: any; init?: Omit<RequestInit, "body"> }): Promise<Response> {
     if (values.input && values.input.toString().includes("?")) {
       values.input = values.input.toString().replace(/\/(?=\?)/, "");
     }
 
     const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "PUT",
-      headers: {
-        ...this.HeaderProperties(),
-        ...values.headers,
-      },
       body: JSON.stringify(values.data),
       ...values.init,
+      headers: {
+        ...this.HeaderProperties(),
+        ...values.init?.headers,
+      },
     });
 
     return response;
   }
 
-  async Delete(values: { input?: RequestInfo; headers?: HeadersInit }): Promise<Response> {
+  async Delete(values: { input?: RequestInfo; init?: RequestInit }): Promise<Response> {
     if (values.input && values.input.toString().includes("?")) {
       values.input = values.input.toString().replace(/\/(?=\?)/, "");
     }
 
     const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "DELETE",
+      ...values.init,
       headers: {
         ...this.HeaderProperties(),
-        ...values.headers,
+        ...values.init?.headers,
       },
     });
 
@@ -145,7 +146,7 @@ class Api {
    * @param init
    * @returns
    */
-  private async CustomFetch(input: RequestInfo, init: RequestInit | undefined): Promise<Response> {
+  private async CustomFetch(input: RequestInfo, init: RequestInit): Promise<Response> {
     try {
       // # Request Interceptor
 

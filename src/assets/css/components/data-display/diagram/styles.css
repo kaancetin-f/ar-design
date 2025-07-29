@@ -32,7 +32,6 @@
         > .edge,
         .edge-temp {
           position: absolute;
-          pointer-events: none;
           overflow: visible;
         }
       }
