@@ -1,5 +1,5 @@
 export type NodeData = {
-  id: string;
+  id: number;
   position: {
     x: number;
     y: number;
@@ -10,7 +10,7 @@ export type NodeData = {
 type Port = "top" | "bottom";
 
 export type EdgeData = {
-  id: string;
+  id: number;
   from: {
     id: number;
     port: Port;

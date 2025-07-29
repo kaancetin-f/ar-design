@@ -26,7 +26,8 @@ export default function Diagram({ nodes, edges }: IProps) {
 
   // states
   const [_nodes, setNodes] = useState<NodeData[]>(nodes);
-  const [_edges] = useState<EdgeData[]>(edges);
+  const [_edges, setEdges] = useState<EdgeData[]>(edges);
+  const [trigger, setTrigger] = useState<boolean>(false);
   // states -> Pan
   const [pan, setPan] = useState<Position>({ x: 0, y: 0 });
   const [panning, setPanning] = useState<boolean>(false);
@@ -34,7 +35,14 @@ export default function Diagram({ nodes, edges }: IProps) {
   // states -> Zoom
   const [scale, setScale] = useState<number>(1);
   // states -> Drag
-  const [draggedNode, setDraggedNode] = useState<string | null>(null);
+  const [draggedNode, setDraggedNode] = useState<number | null>(null);
+  // states -> Drawing
+  const [drawingEdge, setDrawingEdge] = useState<{
+    id: number;
+    port: "top" | "bottom";
+    start: Position;
+  } | null>(null);
+  const [mousePos, setMousePos] = useState<Position | null>(null);
 
   // methods
   const getPortCenter = (id: number, port: "top" | "bottom"): Position | null => {
@@ -94,7 +102,7 @@ export default function Diagram({ nodes, edges }: IProps) {
         </svg>
       );
     });
-  }, [_nodes, _edges]);
+  }, [_nodes, _edges, trigger]);
 
   const onPanStart = (e: React.MouseEvent) => {
     setPanning(true);
@@ -161,7 +169,7 @@ export default function Diagram({ nodes, edges }: IProps) {
   };
 
   // methods -> Node
-  const onNodeMouseDown = (event: React.MouseEvent, id: string, node: Position) => {
+  const onNodeMouseDown = (event: React.MouseEvent, id: number, node: Position) => {
     event.stopPropagation();
 
     setDraggedNode(id);
@@ -170,6 +178,14 @@ export default function Diagram({ nodes, edges }: IProps) {
   };
 
   const onMouseMove = (event: React.MouseEvent) => {
+    if (drawingEdge) {
+      const rect = _arDiagram.current!.getBoundingClientRect();
+      const x = (event.clientX - rect.left - pan.x) / scale;
+      const y = (event.clientY - rect.top - pan.y) / scale;
+
+      setMousePos({ x, y });
+    }
+
     if (draggedNode) {
       const deltaX = (event.clientX - _dragStartMousePosition.current.x) / scale;
       const deltaY = (event.clientY - _dragStartMousePosition.current.y) / scale;
@@ -183,7 +199,33 @@ export default function Diagram({ nodes, edges }: IProps) {
     }
   };
 
-  const onMouseUp = () => setDraggedNode(null);
+  const onMouseUp = () => {
+    if (drawingEdge && mousePos) {
+      // Yeni node oluştur
+      const newNode: NodeData = {
+        id: _nodes[_nodes.length - 1].id + 1,
+        position: mousePos,
+        data: { label: `Node - ${drawingEdge.id + 1}` },
+      };
+
+      // Bağlantı yönü belirle
+      const newPort: "top" | "bottom" = mousePos.y < drawingEdge.start.y ? "bottom" : "top";
+      const newEdge: EdgeData = {
+        id: _edges[_edges.length - 1].id + 1,
+        from: { id: drawingEdge.id, port: drawingEdge.port },
+        to: { id: _nodes[_nodes.length - 1].id + 1, port: newPort },
+      };
+
+      setNodes((prev) => [...prev, newNode]);
+      setEdges((prev) => [...prev, newEdge]);
+
+      setDrawingEdge(null);
+      setMousePos(null);
+    }
+
+    setDraggedNode(null);
+    setTrigger((prev) => !prev);
+  };
 
   return (
     <div
@@ -212,7 +254,24 @@ export default function Diagram({ nodes, edges }: IProps) {
           }}
         >
           {/* Edges */}
-          <div className="edges">{renderEdges}</div>
+          <div className="edges">
+            {renderEdges}
+
+            {drawingEdge && mousePos && (
+              <svg className="edge-temp">
+                <path
+                  ref={_path}
+                  d={`M${drawingEdge.start.x} ${drawingEdge.start.y} L${mousePos.x} ${mousePos.y}`}
+                  fill="none"
+                  stroke="var(--purple-500)"
+                  strokeWidth={2}
+                  strokeDasharray={10}
+                  strokeDashoffset={10}
+                  strokeLinecap="round"
+                />
+              </svg>
+            )}
+          </div>
 
           {/* Nodes */}
           <div className="nodes">
@@ -228,9 +287,23 @@ export default function Diagram({ nodes, edges }: IProps) {
               >
                 {/* Top Port */}
                 <span
-                  className="port top"
                   ref={(el) => {
                     _arNodes.current[`${node.id}_top`] = el;
+                  }}
+                  className="port top"
+                  onMouseDown={(event) => {
+                    event.stopPropagation();
+
+                    const port = "top";
+                    const from = getPortCenter(node.id, port);
+
+                    if (from) {
+                      setDrawingEdge({
+                        id: node.id,
+                        port,
+                        start: from,
+                      });
+                    }
                   }}
                 ></span>
 
@@ -239,9 +312,22 @@ export default function Diagram({ nodes, edges }: IProps) {
 
                 {/* Bottom Port */}
                 <span
-                  className="port bottom"
                   ref={(el) => {
                     _arNodes.current[`${node.id}_bottom`] = el;
+                  }}
+                  className="port bottom"
+                  onMouseDown={(event) => {
+                    event.stopPropagation();
+
+                    const from = getPortCenter(node.id, "bottom");
+
+                    if (from) {
+                      setDrawingEdge({
+                        id: node.id,
+                        port: "bottom",
+                        start: from,
+                      });
+                    }
                   }}
                 ></span>
               </div>
@@ -273,6 +359,8 @@ export default function Diagram({ nodes, edges }: IProps) {
           </Tooltip>
         </Box>
       </div>
+
+      <div style={{ zIndex: 555 }}>{JSON.stringify(drawingEdge)}</div>
     </div>
   );
 }
