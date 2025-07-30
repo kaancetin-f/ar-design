@@ -28,6 +28,7 @@ import Select from "../../form/select";
 import Grid from "../grid-system";
 import THeadCell from "./THeadCell";
 import Tooltip from "../../feedback/tooltip";
+import Editable from "./Editable";
 
 const filterOption: Option[] = [
   { value: FilterOperator.Contains, text: "İçerir" },
@@ -54,6 +55,7 @@ const Table = forwardRef(
       selections,
       previousSelections,
       searchedParams,
+      onEditable,
       pagination,
       config = { isSearchable: false },
     }: IProps<T>,
@@ -474,10 +476,12 @@ const Table = forwardRef(
 
     const renderRow = (item: T, index: number, deph: number) => {
       const isHasSubitems = _subrowSelector in item;
+
       // TODO: Keylere bakılacak...
       return (
         <Fragment key={`row-${index}`}>
           <tr key={`row-${index}`}>
+            {/* Checkboxes */}
             {selections && (
               <td className="flex justify-content-center sticky-left" data-sticky-position="left">
                 <Checkbox
@@ -584,7 +588,15 @@ const Table = forwardRef(
                 <div className="before"></div>
               </>
             )}
-            {React.isValidElement(render) ? render : String(render)}
+
+            {React.isValidElement(render) ? (
+              render
+            ) : c.editable && onEditable ? (
+              <Editable c={c} item={item} onEditable={onEditable} />
+            ) : (
+              render
+            )}
+
             {config.isTreeView && cIndex === 0 && (
               <div className="after">
                 <div className="circle"></div>

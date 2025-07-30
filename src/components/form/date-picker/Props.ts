@@ -1,4 +1,4 @@
-import { IBorder, ISize, IStatus, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
+import { IBorder, IColors, ISize, IStatus, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
 
 type Props = {
   /**
@@ -41,6 +41,7 @@ type Props = {
    */
   onChange: (value: string) => void;
 } & IVariant &
+  IColors &
   IStatus &
   IBorder &
   ISize &

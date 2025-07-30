@@ -26,7 +26,7 @@ const months = [
   { value: 11, text: "Aralık" },
 ];
 
-const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attributes }) => {
+const DatePicker: React.FC<Props> = ({ variant, color, onChange, isClock, validation, ...attributes }) => {
   // refs
   const _arCalendar = useRef<HTMLDivElement>(null);
   const _arClock = useRef<HTMLDivElement>(null);
@@ -350,6 +350,8 @@ const DatePicker: React.FC<Props> = ({ onChange, isClock, validation, ...attribu
 
       <Input
         ref={_beginDate}
+        variant={variant}
+        color={color}
         {...attributes}
         value={DATE.ParseValue(String(attributes.value), isClock)}
         type={isClock ? "datetime-local" : "date"}

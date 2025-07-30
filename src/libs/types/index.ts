@@ -63,6 +63,10 @@ export type TableColumnType<T> = {
   key?: keyof T | { field: keyof T; nestedKey: string };
   filters?: Option[];
   render?: (item: T) => React.ReactNode;
+  editable?: {
+    type: "string" | "number" | "date-picker" | "single-select" | "multiple-select";
+    options?: Option[];
+  };
   config?: {
     width?: number;
     alignContent?: "left" | "center" | "right";
