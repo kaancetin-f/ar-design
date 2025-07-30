@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useMemo, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import Input from "../input";
 import IProps from "./IProps";
 
@@ -11,7 +11,7 @@ const InputNumber: React.FC<IProps> = ({ ...attributes }: IProps) => {
   const _isInputTouch = useRef<boolean>(false);
 
   // states
-  const [value, setValue] = useState<string | null>(null);
+  const [value, setValue] = useState<string | number | readonly string[] | undefined>("");
 
   // methods
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -74,6 +74,11 @@ const InputNumber: React.FC<IProps> = ({ ...attributes }: IProps) => {
         maximumFractionDigits: isDecimals ? 2 : 0,
       });
   }, []);
+
+  // useEffects
+  useEffect(() => {
+    if (attributes.value !== undefined) setValue(attributes.value ?? "");
+  }, [attributes.value]);
 
   return (
     <Input
