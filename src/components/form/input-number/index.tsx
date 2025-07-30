@@ -6,6 +6,7 @@ import IProps from "./IProps";
 
 const InputNumber: React.FC<IProps> = ({ ...attributes }: IProps) => {
   // refs
+  const _firstLoad = useRef<boolean>(false);
   const _input = useRef<HTMLInputElement | null>(null);
   const _caretPosition = useRef<number | null>(null);
   const _isInputTouch = useRef<boolean>(false);
@@ -77,14 +78,22 @@ const InputNumber: React.FC<IProps> = ({ ...attributes }: IProps) => {
 
   // useEffects
   useEffect(() => {
-    if (attributes.value !== undefined) setValue(attributes.value ?? "");
+    if (_firstLoad.current) return;
+
+    if (attributes.value !== undefined && attributes.value !== "") {
+      const isDecimals = String(attributes.value).includes(",");
+      let formatted = formatter(isDecimals).format(parseFloat(String(attributes.value)));
+
+      setValue(formatted == "NaN" ? "" : formatted);
+      _firstLoad.current = true;
+    }
   }, [attributes.value]);
 
   return (
     <Input
       ref={_input}
       {...attributes}
-      value={value ?? attributes.value}
+      value={value ?? attributes.value ?? ""}
       onChange={(event) => {
         // Disabled gelmesi durumunda işlem yapmasına izin verme...
         if (attributes.disabled) return;

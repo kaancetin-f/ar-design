@@ -384,7 +384,7 @@ const _Variant_BorderlessCss = () => {
           focusColor = "gray-700";
           break;
         default:
-          fontColor = `${color}-500`;
+          fontColor = color;
           focusColor = "white";
           break;
       }

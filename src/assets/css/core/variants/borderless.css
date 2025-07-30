@@ -1,7 +1,7 @@
 /* #region BLUE */
 .borderless:not(.disabled) {
   &.blue {
-    color: var(--blue-500-500);
+    color: var(--blue-500);
 
     &.active {
       animation: clicked-blue ease-in-out 750ms 0s 1 normal both;
@@ -34,7 +34,7 @@ button.borderless:not(.disabled) {
 /* #region PURPLE */
 .borderless:not(.disabled) {
   &.purple {
-    color: var(--purple-500-500);
+    color: var(--purple-500);
 
     &.active {
       animation: clicked-purple ease-in-out 750ms 0s 1 normal both;
@@ -67,7 +67,7 @@ button.borderless:not(.disabled) {
 /* #region PINK */
 .borderless:not(.disabled) {
   &.pink {
-    color: var(--pink-500-500);
+    color: var(--pink-500);
 
     &.active {
       animation: clicked-pink ease-in-out 750ms 0s 1 normal both;
@@ -100,7 +100,7 @@ button.borderless:not(.disabled) {
 /* #region RED */
 .borderless:not(.disabled) {
   &.red {
-    color: var(--red-500-500);
+    color: var(--red-500);
 
     &.active {
       animation: clicked-red ease-in-out 750ms 0s 1 normal both;
@@ -133,7 +133,7 @@ button.borderless:not(.disabled) {
 /* #region ORANGE */
 .borderless:not(.disabled) {
   &.orange {
-    color: var(--orange-500-500);
+    color: var(--orange-500);
 
     &.active {
       animation: clicked-orange ease-in-out 750ms 0s 1 normal both;
@@ -166,7 +166,7 @@ button.borderless:not(.disabled) {
 /* #region YELLOW */
 .borderless:not(.disabled) {
   &.yellow {
-    color: var(--yellow-500-500);
+    color: var(--yellow-500);
 
     &.active {
       animation: clicked-yellow ease-in-out 750ms 0s 1 normal both;
@@ -199,7 +199,7 @@ button.borderless:not(.disabled) {
 /* #region GREEN */
 .borderless:not(.disabled) {
   &.green {
-    color: var(--green-500-500);
+    color: var(--green-500);
 
     &.active {
       animation: clicked-green ease-in-out 750ms 0s 1 normal both;
@@ -232,7 +232,7 @@ button.borderless:not(.disabled) {
 /* #region TEAL */
 .borderless:not(.disabled) {
   &.teal {
-    color: var(--teal-500-500);
+    color: var(--teal-500);
 
     &.active {
       animation: clicked-teal ease-in-out 750ms 0s 1 normal both;
@@ -265,7 +265,7 @@ button.borderless:not(.disabled) {
 /* #region CYAN */
 .borderless:not(.disabled) {
   &.cyan {
-    color: var(--cyan-500-500);
+    color: var(--cyan-500);
 
     &.active {
       animation: clicked-cyan ease-in-out 750ms 0s 1 normal both;
@@ -298,7 +298,7 @@ button.borderless:not(.disabled) {
 /* #region GRAY */
 .borderless:not(.disabled) {
   &.gray {
-    color: var(--gray-500-500);
+    color: var(--gray-500);
 
     &.active {
       animation: clicked-gray ease-in-out 750ms 0s 1 normal both;

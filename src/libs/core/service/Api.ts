@@ -1,14 +1,12 @@
 class Api {
   private _host?: string;
   private _core?: string;
-  private _token?: string;
   private _init?: RequestInit;
   private _url: string;
 
-  constructor(values: { host?: string; core?: string; token?: string; init?: RequestInit }) {
+  constructor(values: { host?: string; core?: string; init?: RequestInit }) {
     this._host = values.host || (typeof window !== "undefined" ? window.location.origin : "");
     this._core = values.core || "";
-    this._token = values.token;
     this._init = values.init;
 
     // Url
@@ -124,22 +122,7 @@ class Api {
     return {
       Accept: "application/json",
       "Content-Type": "application/json",
-      ...(this._token && { Authorization: `Bearer ${this.Cookies(this._token)}` }),
     };
-  };
-
-  private Cookies = (name: string) => {
-    if (typeof window === "undefined") return undefined;
-
-    const cookies = document.cookie.split("; ");
-    const cookieObject: { key: string; value: string }[] = [];
-
-    cookies.forEach((cookie) => {
-      const [key, value] = cookie.split("=");
-      cookieObject.push({ key: key, value: value });
-    });
-
-    return decodeURIComponent(cookieObject.find((x) => x.key === name)?.value ?? "");
   };
 
   /**
