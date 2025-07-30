@@ -2,12 +2,14 @@ class Api {
   private _host?: string;
   private _core?: string;
   private _token?: string;
+  private _init?: RequestInit;
   private _url: string;
 
-  constructor(values: { host?: string; core?: string; token?: string }) {
+  constructor(values: { host?: string; core?: string; token?: string; init?: RequestInit }) {
     this._host = values.host || (typeof window !== "undefined" ? window.location.origin : "");
     this._core = values.core || "";
     this._token = values.token;
+    this._init = values.init;
 
     // Url
     this._url = `${this._host}/${this._core ? this._core + "/" : ""}`;
@@ -150,7 +152,10 @@ class Api {
     try {
       // # Request Interceptor
 
-      const request = await fetch(input, init);
+      console.log(init);
+      console.log(this._init);
+
+      const request = await fetch(input, { ...init, ...this._init });
 
       // # Response Interceptor
 

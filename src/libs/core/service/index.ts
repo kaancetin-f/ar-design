@@ -12,8 +12,8 @@ class Service {
   private _api: Api;
   private _endPoint?: string;
 
-  constructor(values: { host?: string; core?: string; endPoint?: string; token?: string }) {
-    this._api = new Api({ host: values.host, core: values.core, token: values.token });
+  constructor(values: { host?: string; core?: string; endPoint?: string; token?: string; init?: RequestInit }) {
+    this._api = new Api({ host: values.host, core: values.core, token: values.token, init: values.init });
     this._endPoint = values.endPoint;
   }
 
