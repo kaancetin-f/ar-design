@@ -117,8 +117,8 @@ const Input = forwardRef<HTMLInputElement, IProps>(
               (() => {
                 if (attributes.onChange) {
                   // Mevcut değeri alın
-                  const _target = event.target;
-                  const currentValue = upperCase ? convertToUpperCase(_target.value) : _target.value;
+                  const { value } = event.target;
+                  const currentValue = upperCase ? convertToUpperCase(value) : value;
 
                   // Yeni değeri oluşturun ve onChange fonksiyonunu çağırın
                   const newValue = `${addon?.before ?? ""}${currentValue}${addon?.after ?? ""}`;
