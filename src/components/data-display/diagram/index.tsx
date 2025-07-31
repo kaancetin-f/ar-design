@@ -238,7 +238,16 @@ export default function Diagram({ nodes, edges }: IProps) {
           to: { id: closest.id, port: closest.port },
         };
 
-        setEdges((prev) => [...prev, newEdge]);
+        // Aynı edge daha önce eklenmiş mi kontrol et
+        const isDuplicate = _edges.some((edge) => {
+          const samePair =
+            (edge.from.id === newEdge.from.id && edge.to.id === newEdge.to.id) ||
+            (edge.from.id === newEdge.to.id && edge.to.id === newEdge.from.id);
+
+          return samePair;
+        });
+
+        if (!isDuplicate) setEdges((prev) => [...prev, newEdge]);
       } else {
         // Yakın port yoksa yeni node oluştur
         const newNodeId = _nodes[_nodes.length - 1]?.id + 1 || 1;

@@ -135,9 +135,6 @@ class Api {
     try {
       // # Request Interceptor
 
-      console.log(init);
-      console.log(this._init);
-
       const request = await fetch(input, { ...init, ...this._init });
 
       // # Response Interceptor
