@@ -21,6 +21,7 @@ import Chip from "./components/data-display/chip";
 import Diagram from "./components/data-display/diagram/index";
 import Divider from "./components/data-display/divider";
 import DnD from "./components/data-display/dnd";
+import KanbanBoard from "./components/data-display/kanban-board";
 import Paper from "./components/data-display/paper";
 import SyntaxHighlighter from "./components/data-display/syntax-highlighter";
 import Table from "./components/data-display/table";
@@ -66,6 +67,7 @@ export {
   Diagram,
   Divider,
   DnD,
+  KanbanBoard,
   Paper,
   SyntaxHighlighter,
   Table,

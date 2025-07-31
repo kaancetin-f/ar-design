@@ -5,7 +5,9 @@ import IProps from "./IProps";
 import "../../../assets/css/components/data-display/dnd/dnd.css";
 import { ARIcon } from "../../icons";
 
-const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
+let _fromColumn: string | undefined = undefined;
+
+const DnD = function <T>({ data, renderItem, columnKey, onChange }: IProps<T>) {
   // refs
   const _arDnD = useRef<HTMLDivElement>(null);
   const _dragItem = useRef<HTMLElement>();
@@ -24,6 +26,15 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
         _dragItem.current = dragItem;
         dragItem.classList.add("drag-item");
 
+        const index = [..._arDnD.current!.children].indexOf(dragItem);
+        const draggedData = data[index];
+
+        if (event.dataTransfer) {
+          event.dataTransfer.setData("item", JSON.stringify(draggedData));
+          event.dataTransfer.setData("fromColumn", columnKey ?? "");
+          _fromColumn = columnKey ?? undefined;
+        }
+
         // Korumaya başla
         if (_arDnD.current) {
           _arDnD.current.childNodes.forEach((item) => {
@@ -38,6 +49,8 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
       };
 
       _item.ondragover = (event) => {
+        if (columnKey && _fromColumn !== columnKey) return;
+
         event.preventDefault();
 
         const overItem = event.currentTarget as HTMLElement;
@@ -54,16 +67,22 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
             const dragItemIndex = [..._arDnD.current.children].indexOf(_dragItem.current!);
             const dropItemIndex = [..._arDnD.current.children].indexOf(overItem);
 
-            if (dragItemIndex < dropItemIndex) {
-              _arDnD.current.insertBefore(_dragItem.current, overItem.nextSibling);
-            } else {
-              _arDnD.current.insertBefore(_dragItem.current, overItem);
-            }
+            // invalid drag/drop durumlarını engelle
+            if (dragItemIndex === -1 || dropItemIndex === -1) return;
 
-            data.splice(dropItemIndex, 0, data.splice(dragItemIndex, 1)[0]);
+            _arDnD.current.insertBefore(
+              _dragItem.current,
+              dragItemIndex < dropItemIndex ? overItem.nextSibling : overItem
+            );
+
+            const cloned = [...data];
+            const movedItem = cloned.splice(dragItemIndex, 1)[0];
+
+            if (!movedItem) return;
+
+            cloned.splice(dropItemIndex, 0, movedItem);
+            onChange(cloned);
           }
-
-          onChange(data);
         }
       };
 
@@ -81,6 +100,15 @@ const DnD = function <T>({ data, renderItem, onChange }: IProps<T>) {
     });
 
     _arDnD.current.ondragover = (event) => event.preventDefault();
+
+    return () => {
+      _arDnD.current?.childNodes.forEach((item) => {
+        const _item = item as HTMLElement;
+        _item.ondragstart = null;
+        _item.ondragover = null;
+        _item.ondragend = null;
+      });
+    };
   }, [data]);
 
   return (

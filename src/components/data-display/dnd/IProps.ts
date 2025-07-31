@@ -26,6 +26,7 @@ interface IProps<T> {
    */
   renderItem: (item: T, index: number) => React.JSX.Element;
 
+  columnKey?: string;
   /**
    * Sıralama değiştiğinde tetiklenen olay.
    *

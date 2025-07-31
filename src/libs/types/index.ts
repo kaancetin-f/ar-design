@@ -89,6 +89,14 @@ export type TabProps = {
   config?: { canBeClosed: boolean };
 };
 
+// Kanban Board Types
+export type KanbanBoardColumnType<T> = {
+  title: string;
+  key: string;
+  items: T[];
+  renderItem: (item: T, index: number) => React.JSX.Element;
+};
+
 // Validation Types
 export type ValidationShape = {
   type: "required" | "minimum" | "maximum" | "email";

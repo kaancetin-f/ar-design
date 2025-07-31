@@ -10,7 +10,7 @@ type Position = { x: number; y: number };
 
 const { Box } = Grid;
 
-export default function Diagram({ nodes, edges }: IProps) {
+const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
   // refs
   const _arDiagram = useRef<HTMLDivElement | null>(null);
   const _content = useRef<HTMLDivElement | null>(null);
@@ -414,4 +414,6 @@ export default function Diagram({ nodes, edges }: IProps) {
       <div style={{ zIndex: 555 }}>{JSON.stringify(drawingEdge)}</div>
     </div>
   );
-}
+};
+
+export default Diagram;
