@@ -766,12 +766,12 @@ const Table = forwardRef(
                           <Upload
                             text="Belge Yükleyin"
                             allowedTypes={actions.import.allowedTypes}
-                            file={files}
+                            files={files}
                             onChange={(formData, files) => {
                               setFormData(formData);
                               setFiles(files);
                             }}
-                            multiple
+                            // multiple
                           />
 
                           {actions.import.suffixItem}

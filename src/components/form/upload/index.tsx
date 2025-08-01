@@ -11,7 +11,7 @@ import List from "./List";
 
 export type ValidationError = { fileName: string; message: string };
 
-const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, type = "list", multiple }) => {
+const Upload: React.FC<Props> = ({ text, files, onChange, allowedTypes, maxSize, type = "list", multiple }) => {
   // refs
   const _firstLoad = useRef<boolean>(false);
   const _input = useRef<HTMLInputElement>(null);
@@ -23,7 +23,6 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
   const [className, setClassName] = useState<string[]>(["button"]);
 
   // states
-  const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
 
@@ -31,40 +30,27 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
   const handleFileChange = useCallback((files: FileList | null) => {
     const _files = Array.from(files ?? []);
 
-    if (_files.length > 0) {
-      if (multiple) {
-        setSelectedFiles((prev) => {
-          const previousFileNames = prev.map((f) => f.name);
-          const newFiles = _files.filter((f) => !previousFileNames.includes(f.name)) ?? [];
+    setSelectedFiles((prev) => {
+      const previousFileNames = prev.map((f) => f.name);
+      const newFiles = _files.filter((f) => !previousFileNames.includes(f.name)) ?? [];
 
-          return [...prev, ...newFiles];
-        });
-      } else {
-        setSelectedFile(_files[0]);
-      }
-    } else {
-      multiple ? setSelectedFiles(file) : setSelectedFile(file);
-    }
+      return [...prev, ...newFiles];
+    });
   }, []);
 
   const handleFileRemove = useCallback((fileToRemove: File) => {
-    if (multiple) {
-      const dataTransfer = new DataTransfer();
+    const dataTransfer = new DataTransfer();
 
-      setSelectedFiles((prev) => {
-        const newList = prev.filter((x) => x.name !== fileToRemove.name);
-        newList.forEach((file) => dataTransfer.items.add(file));
+    setSelectedFiles((prev) => {
+      const newList = prev.filter((x) => x.name !== fileToRemove.name);
+      newList.forEach((file) => dataTransfer.items.add(file));
 
-        if (_input.current) _input.current.files = dataTransfer.files;
+      if (_input.current) _input.current.files = dataTransfer.files;
 
-        if (newList.length === 0) setClassName((prev) => prev.filter((c) => c !== "has-file"));
+      if (newList.length === 0) setClassName((prev) => prev.filter((c) => c !== "has-file"));
 
-        return newList;
-      });
-    } else {
-      setSelectedFile(undefined);
-      setClassName((prev) => prev.filter((c) => c !== "has-file"));
-    }
+      return newList;
+    });
   }, []);
 
   const handleValidationFile = useCallback((file: File) => {
@@ -129,14 +115,7 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
 
     const files = e.dataTransfer.files;
 
-    if (files && files.length > 0) {
-      if (multiple) {
-        setSelectedFiles(Array.from(files));
-      } else {
-        setSelectedFile(files[files.length - 1]);
-        _firstLoad.current = true;
-      }
-    }
+    if (files && files.length > 0) setSelectedFiles(Array.from(files));
 
     setClassName((prev) => prev.filter((c) => c !== "dragging"));
   }, []);
@@ -166,73 +145,45 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
       _validationErrors.current = [];
 
       if (_input.current) {
-        if (multiple) {
-          if (selectedFiles.length === 0) {
-            onChange(fileFormData, [], [], false);
-            return;
-          }
-
-          // Seçilmiş olan dosyalar validasyona gönderiliyor.
-          selectedFiles.forEach((f) => handleValidationFile(f));
-          const inValidFiles = Array.from(new Set(_validationErrors.current));
-          // Input içerisine dosyalar aktarılıyor.
-          selectedFiles.forEach((f) => dataTransfer.items.add(f));
-          _input.current.files = dataTransfer.files;
-
-          // Geçerli olan dosyalar alındı...
-          const validFiles = [...selectedFiles.filter((x) => !inValidFiles.includes(x.name))];
-          validFiles.forEach((f) => fileFormData.append("file", f));
-
-          // Geçerli olan dosyalar base64'e dönüştürülüyor...
-          const base64Array = await Promise.all(validFiles.map((validFile) => handleFileToBase64(validFile)));
-
-          onChange(fileFormData, validFiles, base64Array, _validationErrors.current.length === 0);
-
-          // Eğer dosya varsa.
-          setClassName((prev) => {
-            const index = prev.findIndex((c) => c === "has-file");
-
-            if (index === -1) return [...prev, "has-file"];
-
-            return prev;
-          });
-        } else {
-          if (selectedFile) {
-            handleValidationFile(selectedFile);
-            fileFormData.append("file", selectedFile);
-
-            onChange(fileFormData, selectedFile, await handleFileToBase64(selectedFile));
-
-            // Input içerisine dosyalar aktarılıyor.
-            dataTransfer.items.add(selectedFile);
-            _input.current.files = dataTransfer.files;
-          } else {
-            onChange(undefined, null, "");
-          }
+        if (selectedFiles.length === 0) {
+          onChange(fileFormData, [], [], false);
+          return;
         }
+
+        // Seçilmiş olan dosyalar validasyona gönderiliyor.
+        selectedFiles.forEach((f) => handleValidationFile(f));
+        const inValidFiles = Array.from(new Set(_validationErrors.current));
+        // Input içerisine dosyalar aktarılıyor.
+        selectedFiles.forEach((f) => dataTransfer.items.add(f));
+        _input.current.files = dataTransfer.files;
+
+        // Geçerli olan dosyalar alındı...
+        const validFiles = [...selectedFiles.filter((x) => !inValidFiles.includes(x.name))];
+        validFiles.forEach((f) => fileFormData.append("file", f));
+
+        // Geçerli olan dosyalar base64'e dönüştürülüyor...
+        const base64Array = await Promise.all(validFiles.map((validFile) => handleFileToBase64(validFile)));
+
+        onChange(fileFormData, validFiles, base64Array, _validationErrors.current.length === 0);
+
+        // Eğer dosya varsa.
+        setClassName((prev) => {
+          const index = prev.findIndex((c) => c === "has-file");
+
+          if (index === -1) return [...prev, "has-file"];
+
+          return prev;
+        });
       }
     })();
-  }, [selectedFiles, selectedFile]);
+  }, [selectedFiles]);
 
   useEffect(() => {
-    if (_firstLoad.current) {
-      // if (multiple && file.length === 0) {
-      //   setSelectedFiles([]);
-      // } else {
-      //   if (!file) setSelectedFile(undefined);
-      // }
+    if (_firstLoad.current) return;
 
-      return;
-    }
-
-    if (multiple) {
-      setSelectedFiles(file);
-      _firstLoad.current = true;
-    } else {
-      setSelectedFile(file);
-      _firstLoad.current = true;
-    }
-  }, [file]);
+    setSelectedFiles(files);
+    _firstLoad.current = true;
+  }, [files]);
 
   useEffect(() => {
     if (type === "dropzone") setClassName((prev) => [...prev, "dropzone"]);
@@ -255,7 +206,7 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
             </Button>
 
             <List
-              selectedFiles={selectedFiles.length === 0 && selectedFile ? [selectedFile] : selectedFiles}
+              selectedFiles={selectedFiles ?? []}
               validationErrors={validationErrors}
               handleFileToBase64={handleFileToBase64}
               handleFileRemove={handleFileRemove}
@@ -278,13 +229,13 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
               }}
             >
               <Dropzone
-                selectedFiles={selectedFiles.length === 0 && selectedFile ? [selectedFile] : selectedFiles}
+                selectedFiles={selectedFiles ?? []}
                 validationErrors={validationErrors}
                 handleFileToBase64={handleFileToBase64}
                 handleFileRemove={handleFileRemove}
               />
 
-              {!selectedFile && selectedFiles.length === 0 && (
+              {selectedFiles && selectedFiles.length === 0 && (
                 <>
                   <div className="upload">
                     <ARIcon icon="CloudUpload-Fill" size={32} />

@@ -61,8 +61,6 @@ const Dropzone = ({ selectedFiles, validationErrors = [], handleFileToBase64, ha
 
   // useEffects
   useEffect(() => {
-    if (selectedFiles.length === 0) return;
-
     (async () => {
       const newMap: Record<string, string> = {};
 
@@ -73,7 +71,7 @@ const Dropzone = ({ selectedFiles, validationErrors = [], handleFileToBase64, ha
 
       setFileBase64Map(newMap);
       setSelectedFile(selectedFiles[0]);
-      setSelectedFileBase64(newMap[selectedFiles[0].name]);
+      setSelectedFileBase64(newMap[selectedFiles[0]?.name]);
     })();
   }, [selectedFiles]);
 
@@ -85,6 +83,12 @@ const Dropzone = ({ selectedFiles, validationErrors = [], handleFileToBase64, ha
         ) : (
           "Önizleme Yok."
         )}
+
+        <Buttons
+          selectedFile={selectedFile}
+          handleFileToBase64={handleFileToBase64}
+          handleFileRemove={handleFileRemove}
+        />
 
         <div className="informations">
           <span className="file-name">{selectedFile.name}</span>

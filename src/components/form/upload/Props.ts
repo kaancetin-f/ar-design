@@ -15,7 +15,7 @@ interface IMultiple {
    * />
    * ```
    */
-  file: File[];
+  files: File[];
 
   /**
    * Dosya seçimi veya değişikliğinde tetiklenen fonksiyon.
@@ -44,46 +44,46 @@ interface IMultiple {
    * <Upload multiple={true} />
    * ```
    */
-  multiple: true;
+  // multiple: true;
 }
 
-interface ISingle {
-  /**
-   * Yüklenen tek dosya veya undefined.
-   *
-   * Örneğin;
-   *
-   * ```jsx
-   * <Upload file={selectedFile} />
-   * ```
-   */
-  file: File | undefined;
+// interface ISingle {
+//   /**
+//    * Yüklenen tek dosya veya undefined.
+//    *
+//    * Örneğin;
+//    *
+//    * ```jsx
+//    * <Upload file={selectedFile} />
+//    * ```
+//    */
+//   file: File | undefined;
 
-  /**
-   * Dosya seçimi veya değişikliğinde tetiklenen fonksiyon.
-   *
-   * @param formData - Dosyayla oluşturulmuş FormData nesnesi veya undefined.
-   * @param files - Seçilen dosya veya null.
-   *
-   * Örneğin;
-   *
-   * ```jsx
-   * <Upload onChange={(formData, file) => console.log(file)} />
-   * ```
-   */
-  onChange: (formData: FormData | undefined, files: File | null, base64: string) => void;
+//   /**
+//    * Dosya seçimi veya değişikliğinde tetiklenen fonksiyon.
+//    *
+//    * @param formData - Dosyayla oluşturulmuş FormData nesnesi veya undefined.
+//    * @param files - Seçilen dosya veya null.
+//    *
+//    * Örneğin;
+//    *
+//    * ```jsx
+//    * <Upload onChange={(formData, file) => console.log(file)} />
+//    * ```
+//    */
+//   onChange: (formData: FormData | undefined, files: File | null, base64: string) => void;
 
-  /**
-   * Çoklu dosya seçiminin devre dışı olduğunu belirtir.
-   *
-   * Örneğin;
-   *
-   * ```jsx
-   * <Upload multiple={false} />
-   * ```
-   */
-  multiple?: false;
-}
+//   /**
+//    * Çoklu dosya seçiminin devre dışı olduğunu belirtir.
+//    *
+//    * Örneğin;
+//    *
+//    * ```jsx
+//    * <Upload multiple={false} />
+//    * ```
+//    */
+//   multiple?: false;
+// }
 
 type Props = {
   /**
@@ -119,7 +119,9 @@ type Props = {
   maxSize?: number;
 
   type?: "list" | "dropzone";
-} & (IMultiple | ISingle) &
+
+  multiple?: boolean;
+} & IMultiple &
   IValidation &
   IDisabled;
 

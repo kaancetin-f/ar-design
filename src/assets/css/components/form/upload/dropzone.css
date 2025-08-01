@@ -103,6 +103,7 @@
   background-color: rgba(var(--black-rgb), 0.75);
   padding: 0.5rem;
   transition: visibility 250ms, opacity 250ms ease-in-out;
+  font-family: var(--system);
 }
 .ar-upload-button > .button.dropzone > .preview > .informations > .file-name {
   color: var(--white);
