@@ -946,9 +946,23 @@ const Table = forwardRef(
             </thead>
 
             <tbody>
-              {getData.map((item, index) => (
-                <React.Fragment key={index}>{renderRow(item, index, 1)}</React.Fragment>
-              ))}
+              {getData.length > 0 ? (
+                getData.map((item, index) => <React.Fragment key={index}>{renderRow(item, index, 1)}</React.Fragment>)
+              ) : (
+                <tr>
+                  <td colSpan={columns.length}>
+                    <div className="no-item">
+                      <ARIcon
+                        icon={"Inbox-Fill"}
+                        fill="var(--gray-300)"
+                        size={64}
+                        style={{ position: "relative", zIndex: 1 }}
+                      />
+                      <span>No Data</span>
+                    </div>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

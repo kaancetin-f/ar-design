@@ -1,26 +1,16 @@
 import React from "react";
 import Icon from "./Compiler";
-import { Icons, IconVariants } from "../../libs/types";
+import { Icons } from "../../libs/types";
 
 export const ARIcon: React.FC<{
   viewBox?: string;
   size?: string | number | undefined;
-  variant?: IconVariants;
   icon: Icons;
   fill?: string;
   stroke?: string;
   strokeWidth?: number;
   style?: React.CSSProperties | undefined;
-}> = ({
-  viewBox,
-  size = 16,
-  variant = "linear",
-  icon,
-  fill = "var(--dark)",
-  stroke = "var(--dark)",
-  strokeWidth = 1,
-  style,
-}) => {
+}> = ({ viewBox, size = 16, icon, fill = "var(--dark)", stroke = "var(--dark)", strokeWidth = 1, style }) => {
   const { Compiler } = new Icon(stroke, strokeWidth);
 
   return (
@@ -32,7 +22,7 @@ export const ARIcon: React.FC<{
       height={size}
       style={style}
     >
-      {Compiler(variant, icon)}
+      {Compiler(icon)}
     </svg>
   );
 };

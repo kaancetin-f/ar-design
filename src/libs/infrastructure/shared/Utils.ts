@@ -1,15 +1,4 @@
-import {
-  Border,
-  Color,
-  FileCategory,
-  Icon,
-  Icons,
-  IconVariants,
-  MimeTypes,
-  Sizes,
-  Status,
-  Variants,
-} from "../../types";
+import { Border, Color, FileCategory, Icon, Icons, MimeTypes, Sizes, Status, Variants } from "../../types";
 
 class Utils {
   public GetClassName = (
@@ -81,7 +70,6 @@ class Utils {
         category: FileCategory;
         readableType: string;
         commonExtensions: string[];
-        variant?: IconVariants;
         icon?: Icons;
         color?: string;
       }
@@ -331,8 +319,7 @@ class Utils {
         category: "binary",
         readableType: "Binary File",
         commonExtensions: [],
-        icon: "FileEarmark",
-        variant: "fill",
+        icon: "FileEarmark-Fill",
         color: "#607D8B",
       },
     };
@@ -342,8 +329,7 @@ class Utils {
         category: "other",
         readableType: "Unknown File Type",
         commonExtensions: [],
-        variant: "fill",
-        icon: "FileEarmark",
+        icon: "FileEarmark-Fill",
         color: "#9E9E9E",
       }
     );

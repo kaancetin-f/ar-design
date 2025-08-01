@@ -36,7 +36,7 @@ const Buttons = ({ selectedFile, handleFileToBase64, handleFileRemove }: IProps)
             variant="borderless"
             color="blue"
             type="button"
-            icon={{ element: <ARIcon variant="fill" icon={"Eye"} fill="currentColor" /> }}
+            icon={{ element: <ARIcon icon={"Eye-Fill"} fill="currentColor" /> }}
             onClick={async (e) => {
               e.stopPropagation();
 
@@ -52,7 +52,7 @@ const Buttons = ({ selectedFile, handleFileToBase64, handleFileRemove }: IProps)
           variant="borderless"
           color="red"
           type="button"
-          icon={{ element: <ARIcon variant="fill" icon={"Trash"} fill="currentColor" /> }}
+          icon={{ element: <ARIcon icon={"Trash-Fill"} fill="currentColor" /> }}
           onClick={(e) => {
             e.stopPropagation();
 

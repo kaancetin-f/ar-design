@@ -162,7 +162,6 @@ export type FileCategory =
   | "binary"
   | "other";
 // Icons
-export type IconVariants = "linear" | "fill";
 export type Icons =
   | "Add"
   | "ArrowLeft"
@@ -173,15 +172,15 @@ export type Icons =
   | "CheckAll"
   | "CloseCircle"
   | "CloseSquare"
-  | "CloudUpload"
+  | "CloudUpload-Fill"
   | "Dash"
   | "Document"
   | "Download"
   | "ExclamationCircle"
-  | "ExclamationDiamond"
-  | "Eye"
+  | "ExclamationDiamond-Fill"
+  | "Eye-Fill"
   | "File"
-  | "FileEarmark"
+  | "FileEarmark-Fill"
   | "FileTypeCsv"
   | "FileTypeDoc"
   | "FileTypeDocx"
@@ -196,8 +195,10 @@ export type Icons =
   | "FileTypeZip"
   | "Filter"
   | "Folder"
+  | "Front"
   | "GripVertical"
   | "Import"
+  | "Inbox-Fill"
   | "Italic"
   | "NumberList"
   | "Strikethrough"
@@ -205,11 +206,11 @@ export type Icons =
   | "TextAlingLeft"
   | "TextAlingRight"
   | "TickCircle"
-  | "Trash"
+  | "Trash-Fill"
   | "Underline"
   | "Upload"
   | "Warning"
-  | "XCircle";
+  | "XCircle-Fill";
 // Charts
 // Pie
 export type PieChartDataType = { value: number; text: string };

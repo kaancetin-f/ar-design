@@ -246,7 +246,7 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
             <Button
               variant="outlined"
               color="gray"
-              icon={{ element: <ARIcon variant="fill" icon="CloudUpload" /> }}
+              icon={{ element: <ARIcon icon="CloudUpload-Fill" /> }}
               onClick={() => {
                 if (_input.current) _input.current.click();
               }}
@@ -287,7 +287,7 @@ const Upload: React.FC<Props> = ({ text, file, onChange, allowedTypes, maxSize, 
               {!selectedFile && selectedFiles.length === 0 && (
                 <>
                   <div className="upload">
-                    <ARIcon variant="fill" icon="CloudUpload" size={32} />
+                    <ARIcon icon="CloudUpload-Fill" size={32} />
 
                     <div className="properies">
                       {allowedTypes && (

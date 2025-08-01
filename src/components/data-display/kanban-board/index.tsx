@@ -6,6 +6,7 @@ import Typography from "../typography";
 import { KanbanBoardColumnType } from "../../../libs/types";
 import "../../../assets/css/components/data-display/kanban-board/styles.css";
 import DnD from "../dnd";
+import { ARIcon } from "../../icons";
 
 const { Title } = Typography;
 
@@ -16,7 +17,7 @@ const KanbanBoard = function <T>({ columns }: IProps<T>) {
   // states
   const [boardData, setBoardData] = useState<KanbanBoardColumnType<T>[]>(columns);
 
-  const handleDrop = (event: React.DragEvent, toColumn: string) => {
+  const handleDrop = (toColumn: string) => (event: React.DragEvent) => {
     event.preventDefault();
 
     const item = JSON.parse(event.dataTransfer.getData("item"));
@@ -67,21 +68,25 @@ const KanbanBoard = function <T>({ columns }: IProps<T>) {
         <div
           key={cIndex}
           className="column"
-          onDragOver={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-
-            if (event.dataTransfer.getData("fromColumn") !== board.key) return;
-          }}
-          onDrop={(event) => handleDrop(event, board.key)}
+          onDragOver={(event) => event.preventDefault()}
+          onDrop={handleDrop(board.key)}
         >
           <div className="title">
             <Title Level="h5">{board.title}</Title>
+            {board.items.length > 0 && <span>{board.items.length}</span>}
           </div>
 
           <div className="items">
             {board.items.length === 0 ? (
-              <div>Henüz herhangi bir nesne yok!</div>
+              <div className="no-item">
+                <ARIcon
+                  icon={"Inbox-Fill"}
+                  fill="var(--gray-300)"
+                  size={64}
+                  style={{ position: "relative", zIndex: 1 }}
+                />
+                <span>No Data</span>
+              </div>
             ) : (
               <DnD
                 key={`${board.key}-${board.items.map((i) => i.updatedAt).join("_")}`}

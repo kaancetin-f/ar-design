@@ -7,6 +7,7 @@
   width: 1px;
   border-radius: var(--border-radius-lg);
   box-shadow: 0px 10px 15px -5px rgba(var(--black-rgb), 0.1);
+  font-family: var(--system);
   overflow: hidden;
 }
 .ar-table > .header {
@@ -184,6 +185,35 @@
   border-top-color: var(--gray-300);
   border-right-color: var(--gray-300);
   cursor: no-drop;
+}
+
+.ar-table > .content > table > tbody > tr > td {
+  > .no-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    border-bottom: solid 1px var(--gray-200);
+
+    &::after {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 82px;
+      content: "";
+      background-color: var(--gray-100);
+      width: 70px;
+      height: 16px;
+      border-radius: 100%;
+    }
+
+    > span {
+      color: var(--gray-500);
+      font-family: var(--system);
+    }
+  }
 }
 
 /* For Rows */
