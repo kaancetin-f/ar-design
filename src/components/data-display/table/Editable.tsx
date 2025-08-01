@@ -57,6 +57,7 @@ const Editable = function <T>({ c, item, onEditable }: IProps<T>) {
           variant="borderless"
           value={selectionItem}
           options={c.editable.options as Option[]}
+          onClick={async () => await c.editable?.method?.()}
           onChange={(option) => {
             setSelectionItem(option);
             onEditable({ ...item, [key]: option?.value } as T);
@@ -69,6 +70,7 @@ const Editable = function <T>({ c, item, onEditable }: IProps<T>) {
           variant="borderless"
           value={selectionItems}
           options={c.editable.options as Option[]}
+          onClick={async () => await c.editable?.method?.()}
           onChange={(options) => {
             setSelectionItems(options);
             onEditable({ ...item, [key]: options.map((option) => option.value) } as T);
@@ -76,7 +78,6 @@ const Editable = function <T>({ c, item, onEditable }: IProps<T>) {
           multiple
         />
       );
-
     default:
       return null;
   }

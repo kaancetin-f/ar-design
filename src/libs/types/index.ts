@@ -66,6 +66,7 @@ export type TableColumnType<T> = {
   editable?: {
     type: "string" | "number" | "date-picker" | "single-select" | "multiple-select";
     options?: Option[];
+    method?: () => void | Promise<void>;
   };
   config?: {
     width?: number;
