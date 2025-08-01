@@ -35,39 +35,57 @@ const DnD = function <T>({ data, renderItem, columnKey, onChange }: IProps<T>) {
           _fromColumn = columnKey ?? undefined;
         }
 
-        // Korumaya başla
+        // Korumaya başla.
         if (_arDnD.current) {
           _arDnD.current.childNodes.forEach((item) => {
-            const firewall = document.createElement("div");
-            firewall.setAttribute("data-id", "ar-firewall");
-            firewall.style.position = "absolute";
-            firewall.style.inset = "0";
+            const placeholder = document.createElement("div");
+            placeholder.setAttribute("data-id", "placeholder");
+            placeholder.style.position = "absolute";
+            placeholder.style.inset = "0";
 
-            item.appendChild(firewall);
+            item.appendChild(placeholder);
           });
         }
       };
 
       _item.ondragover = (event) => {
-        if (columnKey && _fromColumn !== columnKey) return;
-
         event.preventDefault();
 
         const overItem = event.currentTarget as HTMLElement;
         const rect = overItem.getBoundingClientRect();
 
+        // Otomatik scroll.
         if (rect.top < 250) window.scrollBy(0, -20);
         if (rect.bottom > window.innerHeight - 150) window.scrollBy(0, 20);
 
-        const nodes = document.querySelectorAll("[data-id='ar-firewall']");
-        nodes.forEach((node) => node.remove());
+        // Sadece aynı kolondaysa drag-drop yap.
+        if (columnKey && _fromColumn !== columnKey) {
+          // Placeholder'ı temizle
+          const nodes = document.querySelectorAll("[data-id='placeholder']");
+          nodes.forEach((node) => node.remove());
 
+          // Placeholder element oluştur.
+          const placeholder = document.createElement("div");
+          placeholder.setAttribute("data-id", "placeholder");
+          placeholder.classList.add("placeholder");
+
+          // Fare pozisyonuna göre yerleştir.
+          const isBelow = event.clientY > rect.top + rect.height / 2;
+          if (isBelow) {
+            overItem.parentNode?.insertBefore(placeholder, overItem.nextSibling);
+          } else {
+            overItem.parentNode?.insertBefore(placeholder, overItem);
+          }
+
+          return; // taşıma yapma ama placeholder gösterilsin.
+        }
+
+        // Gerçek taşıma işlemi.
         if (_dragItem.current !== overItem) {
           if (_arDnD.current && _dragItem.current) {
             const dragItemIndex = [..._arDnD.current.children].indexOf(_dragItem.current!);
             const dropItemIndex = [..._arDnD.current.children].indexOf(overItem);
 
-            // invalid drag/drop durumlarını engelle
             if (dragItemIndex === -1 || dropItemIndex === -1) return;
 
             _arDnD.current.insertBefore(
@@ -75,13 +93,12 @@ const DnD = function <T>({ data, renderItem, columnKey, onChange }: IProps<T>) {
               dragItemIndex < dropItemIndex ? overItem.nextSibling : overItem
             );
 
-            const cloned = [...data];
-            const movedItem = cloned.splice(dragItemIndex, 1)[0];
+            const movedItem = data.splice(dragItemIndex, 1)[0];
 
-            if (!movedItem) return;
-
-            cloned.splice(dropItemIndex, 0, movedItem);
-            onChange(cloned);
+            if (movedItem) {
+              data.splice(dropItemIndex, 0, movedItem);
+              onChange?.(data);
+            }
           }
         }
       };
@@ -102,19 +119,24 @@ const DnD = function <T>({ data, renderItem, columnKey, onChange }: IProps<T>) {
     _arDnD.current.ondragover = (event) => event.preventDefault();
 
     return () => {
-      _arDnD.current?.childNodes.forEach((item) => {
+      if (!_arDnD.current) return;
+
+      _arDnD.current.childNodes.forEach((item) => {
         const _item = item as HTMLElement;
+
         _item.ondragstart = null;
         _item.ondragover = null;
         _item.ondragend = null;
       });
+
+      _arDnD.current.ondragover = null;
     };
   }, [data]);
 
   return (
     <div ref={_arDnD} className="ar-dnd">
       {data.map((item, index) => (
-        <div key={index} draggable>
+        <div key={index} className="item" draggable>
           <div className="move">
             <ARIcon icon={"GripVertical"} fill="var(--blue-500)" size={18} />
           </div>

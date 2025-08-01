@@ -24,21 +24,25 @@ const KanbanBoard = function <T>({ columns }: IProps<T>) {
 
     if (!item || fromColumn === toColumn) return;
 
+    const now = Date.now();
+
     const updatedColumns = boardData.map((col) => {
       if (col.key === fromColumn) {
         return {
           ...col,
           items: col.items.filter((i: any) => i.id !== item.id),
+          updatedAt: now,
         };
       }
 
       if (col.key === toColumn) {
         const newItems = [...col.items];
-        const safeIndex = Math.min(_hoverItemIndex.current ?? Infinity, newItems.length); // son elemandan fazla olmasın
+        const safeIndex = Math.min(_hoverItemIndex.current ?? Infinity, newItems.length); // son elemandan fazla olmasın.
         newItems.splice(safeIndex, 0, item);
         return {
           ...col,
           items: newItems,
+          updatedAt: now,
         };
       }
 
@@ -47,9 +51,13 @@ const KanbanBoard = function <T>({ columns }: IProps<T>) {
 
     setBoardData(updatedColumns);
 
+    // Temizlik
     event.dataTransfer.clearData("item");
     event.dataTransfer.clearData("fromColumn");
     _hoverItemIndex.current = null;
+
+    const nodes = document.querySelectorAll("[data-id='placeholder']");
+    nodes.forEach((node) => node.remove());
   };
 
   // methods
@@ -63,14 +71,12 @@ const KanbanBoard = function <T>({ columns }: IProps<T>) {
             event.preventDefault();
             event.stopPropagation();
 
-            if (event.dataTransfer.getData("fromColumn") !== board.key) {
-              return; // Başka kolondan geldiyse reorder yapma!
-            }
+            if (event.dataTransfer.getData("fromColumn") !== board.key) return;
           }}
           onDrop={(event) => handleDrop(event, board.key)}
         >
           <div className="title">
-            <Title Level="h3">{board.title}</Title>
+            <Title Level="h5">{board.title}</Title>
           </div>
 
           <div className="items">
@@ -78,18 +84,35 @@ const KanbanBoard = function <T>({ columns }: IProps<T>) {
               <div>Henüz herhangi bir nesne yok!</div>
             ) : (
               <DnD
+                key={`${board.key}-${board.items.map((i) => i.updatedAt).join("_")}`}
                 data={board.items}
                 renderItem={(item, index) => {
                   return (
-                    <div key={index} className="item" onDragEnter={() => (_hoverItemIndex.current = index)}>
+                    <div
+                      key={index}
+                      className="item"
+                      onDragOver={(event) => {
+                        event.preventDefault();
+
+                        const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+                        const mouseY = event.clientY;
+                        const isBelow = mouseY > rect.top + rect.height / 2;
+
+                        _hoverItemIndex.current = isBelow ? index + 1 : index;
+                      }}
+                    >
                       {board.renderItem(item, index)}
                     </div>
                   );
                 }}
                 columnKey={board.key}
-                onChange={(data) => {
-                  console.log(data);
-                }}
+                // onChange={(data) => {
+                //   const now = Date.now();
+
+                //   setBoardData((prev) =>
+                //     prev.map((col) => (col.key === board.key ? { ...col, items: data, updatedAt: now } : col))
+                //   );
+                // }}
               />
             )}
           </div>

@@ -93,7 +93,7 @@ export type TabProps = {
 export type KanbanBoardColumnType<T> = {
   title: string;
   key: string;
-  items: T[];
+  items: Array<T & { updatedAt?: number }>;
   renderItem: (item: T, index: number) => React.JSX.Element;
 };
 

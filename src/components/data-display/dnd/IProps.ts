@@ -38,7 +38,7 @@ interface IProps<T> {
    * <DnD onChange={(data) => console.log("Yeni sıra:", data)} />
    * ```
    */
-  onChange: (data: T[]) => void;
+  onChange?: (data: T[]) => void;
 }
 
 export default IProps;
