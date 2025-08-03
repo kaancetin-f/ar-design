@@ -1,12 +1,26 @@
 .ar-kanban-board {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--white);
+  max-width: 100%;
+  min-width: 100%;
+  padding: 1rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0px 10px 15px -5px rgba(var(--black-rgb), 0.1);
+  overflow-x: hidden;
+
   > .columns {
     display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
     gap: 1rem;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
 
     > .column {
-      flex: 1;
       background-color: var(--gray-100);
+      flex-shrink: 0;
       max-width: 350px;
       min-width: 220px;
       border-radius: var(--border-radius-sm);

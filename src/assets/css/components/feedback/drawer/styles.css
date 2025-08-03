@@ -25,9 +25,9 @@
 
 .ar-drawer-wrapper > .ar-drawer {
   position: absolute;
-  right: -75%;
+  right: -85%;
   background-color: var(--white);
-  width: 75%;
+  width: 85%;
   height: 100%;
   border-top-left-radius: var(--border-radius-sm);
   border-bottom-left-radius: var(--border-radius-sm);

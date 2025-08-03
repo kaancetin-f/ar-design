@@ -2,4 +2,5 @@
   padding: 2rem;
   overflow-x: hidden;
   overflow-y: auto;
+  height: calc(100% - 3.5rem);
 }
