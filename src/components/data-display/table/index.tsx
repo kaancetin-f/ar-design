@@ -71,6 +71,8 @@ const Table = forwardRef(
     const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
     // refs -> Filter
     const _filterButton = useRef<(HTMLSpanElement | null)[]>([]);
+    // refs -> Previous Selection Items
+    const _hasInitialized = useRef(false);
 
     // variables
     const _subrowOpenAutomatically: boolean = config.subrow?.openAutomatically ?? false;
@@ -592,7 +594,7 @@ const Table = forwardRef(
             {React.isValidElement(render) ? (
               render
             ) : c.editable && onEditable ? (
-              <Editable c={c} item={item} onEditable={onEditable} />
+              <Editable c={c} item={item} index={index} onEditable={onEditable} />
             ) : (
               render
             )}
@@ -664,16 +666,16 @@ const Table = forwardRef(
 
     // useEffects
     useEffect(() => {
-      // Eğer `previousSelections` özelliğinden değer geliyorsa bu daha önce seçim yapılmış öğeleri gönderiyorum
-      // demektir ve otomatik olarak seçim yap demek anlamına gekmektedir.
+      if (_hasInitialized.current) return;
 
       if (previousSelections && previousSelections.length > 0) {
         const validSelections = data.filter((item) =>
           previousSelections.some((selected) => JSON.stringify(selected) === JSON.stringify(item))
         );
         setSelectionItems(validSelections);
+        _hasInitialized.current = true; // sadece bir kez ayarla
       }
-    }, [previousSelections]);
+    }, [previousSelections, data]);
 
     useEffect(() => {
       if (config?.isServerSide && searchedParams) {
@@ -723,16 +725,14 @@ const Table = forwardRef(
     }, [checkboxSelectedParams]);
 
     useEffect(() => {
-      if (!selections) return;
+      if (typeof selections === "function" && Array.isArray(selectionItems)) {
+        selections(selectionItems);
+      }
 
-      selections(selectionItems);
-    }, [selectionItems]);
+      if (Array.isArray(_checkboxItems.current) && _checkboxItems.current.length > 0) {
+        const allChecked = _checkboxItems.current.every((item) => item?.checked === true);
 
-    useEffect(() => {
-      if (!selections) return;
-
-      if (_checkboxItems.current.length > 0) {
-        setSelectAll(_checkboxItems.current.every((item) => item?.checked === true));
+        setSelectAll(allChecked);
       }
     }, [selectionItems, currentPage]);
 

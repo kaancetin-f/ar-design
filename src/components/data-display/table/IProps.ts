@@ -176,7 +176,7 @@ interface IProps<T> extends IChildren {
    */
   searchedParams?: (params: SearchedParam | null, query: string, operator: FilterOperator) => void;
 
-  onEditable?: (item: T) => void;
+  onEditable?: (item: T, index: number) => void;
 
   /**
    * Sayfalama ayarları.
