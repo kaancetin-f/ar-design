@@ -4,126 +4,109 @@ import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from "react"
 import Input from "../input";
 import IProps from "./IProps";
 
-const InputNumber: React.FC<IProps> = ({ ...attributes }: IProps) => {
+const InputNumber: React.FC<IProps> = ({ name, value, onChange, digits, placeholder, disabled }: IProps) => {
   // refs
   const _firstLoad = useRef<boolean>(false);
   const _input = useRef<HTMLInputElement | null>(null);
-  const _caretPosition = useRef<number | null>(null);
-  const _isInputTouch = useRef<boolean>(false);
 
   // states
-  const [value, setValue] = useState<string | number | readonly string[] | undefined>("");
+  const [_value, setValue] = useState<string | number | readonly string[] | undefined>("");
 
   // methods
+  const handleClick = () => {
+    const input = _input.current;
+
+    if (!input) return;
+
+    const caret = input.selectionStart ?? 0;
+    input.setSelectionRange(caret, caret + 1);
+  };
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const input = _input.current;
+
+    if (!input) return;
+
+    const caret = input.selectionStart ?? 0;
+
+    if (event.code === "ArrowRight") {
+      input.setSelectionRange(caret, caret + 1);
+    } else if (event.code === "ArrowLeft" && caret > 0) {
+      input.setSelectionRange(caret - 1, caret);
+    } else if (["ArrowUp", "ArrowDown"].includes(event.code)) {
+      input.setSelectionRange(caret, caret + 1);
+    }
+  };
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     let { value } = event.target;
-    const caret = _input.current?.selectionStart ?? 0;
-    _caretPosition.current = caret;
-
-    if (value.length === 0) _isInputTouch.current = false;
 
     // Temizle.
     const cleanedValue = (value = value.replace(/[^0-9,]/g, ""));
 
     // Numara olarak çevir.
-    const normalized = value.replace(/\./g, "").replace(",", ".");
-    const parsed = parseFloat(normalized);
-    const numberValue = isNaN(parsed) ? 0 : parsed;
+    const normalized = parseCurrencySmart(value);
+    const isDecimals = cleanedValue.includes(",");
+    const parsedDecimal = parseFloat(normalized);
+    const newValue = isNaN(parsedDecimal) ? 0 : parsedDecimal;
 
     // Formatla ve Kullanıcı , (virgül) girdiyse kuruş göster.
-    const isDecimals = cleanedValue.includes(",");
-    let formatted = numberValue === 0 && cleanedValue === "" ? "" : formatter(isDecimals).format(numberValue);
-
-    // if (isDecimals) {
-    //   const [_, digits] = formatted.split(",");
-
-    //   if (digits && digits.length > 2) formatted = formatted.slice(0, -1);
-    // }
+    let formatted = newValue === 0 && cleanedValue === "" ? "" : getFormatter(isDecimals).format(newValue);
 
     setValue(formatted);
-
-    setTimeout(() => {
-      requestAnimationFrame(() => {
-        if (!_input.current || _caretPosition.current == null) return;
-        if (isDecimals) _isInputTouch.current = false;
-
-        _caretPosition.current += formatted.length > value.length && !_isInputTouch.current ? 1 : 0;
-
-        _input.current?.setSelectionRange(_caretPosition.current, _caretPosition.current);
-      });
-    }, 0);
+    onChange?.({ ...event, target: { ...event.target, name: name, value: normalized } });
   };
 
-  const handleClick = () => {
-    const caret = _input.current?.selectionStart ?? 0;
-    _caretPosition.current = caret;
-
-    if (_input.current && _input.current.value.length > 3) _isInputTouch.current = true;
-  };
-
-  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"].includes(event.code)) return;
-
-    if (_input.current && _input.current.value.length > 3) _isInputTouch.current = true;
-  };
-
-  const formatter = useMemo(() => {
+  const getFormatter = useMemo(() => {
     return (isDecimals: boolean) =>
       new Intl.NumberFormat("tr-TR", {
         style: "decimal",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: isDecimals ? 2 : 0,
+        minimumFractionDigits: digits?.minimum ?? 0,
+        maximumFractionDigits: isDecimals ? digits?.maximum ?? 2 : 0,
       });
-  }, []);
+  }, [digits]);
+
+  const parseCurrencySmart = (input: string) => {
+    if (input.includes(",") && input.includes(".")) {
+      // Nokta binlik, virgül ondalık (tr-TR, de-DE gibi)
+      return input.replace(/\./g, "").replace(",", ".");
+    } else if (input.includes(",") && !input.includes(".")) {
+      // Virgül ondalık, binlik yok (fr-FR gibi)
+      return input.replace(",", ".");
+    } else if (input.includes(".") && !input.includes(",")) {
+      // Nokta ondalık, binlik yok veya US format
+      return input.replace(/,/g, "");
+    } else {
+      // Hiçbiri yok, zaten sayı
+      return input;
+    }
+  };
 
   // useEffects
   useEffect(() => {
-    if (_firstLoad.current) return;
-
-    if (attributes.value !== undefined && attributes.value !== "") {
-      const isDecimals = String(attributes.value).includes(",");
-      let formatted = formatter(isDecimals).format(parseFloat(String(attributes.value)));
-
-      setValue(formatted == "NaN" ? "" : formatted);
+    if (!_firstLoad.current && value !== undefined && value !== "") {
+      const isDecimals = String(value).includes(".");
+      setValue(getFormatter(isDecimals).format(Number(value)));
       _firstLoad.current = true;
     }
-  }, [attributes.value]);
+  }, [value]);
 
   return (
     <Input
       ref={_input}
-      {...attributes}
-      value={value ?? attributes.value ?? ""}
+      name={name}
+      value={_value ?? ""}
+      type="text"
+      inputMode="decimal"
       onChange={(event) => {
         // Disabled gelmesi durumunda işlem yapmasına izin verme...
-        if (attributes.disabled) return;
+        if (disabled) return;
 
-        (() => {
-          handleChange(event);
-        })();
-
-        (() => {
-          if (attributes.onChange) {
-            const { value } = event.target;
-            const newValue = value.replaceAll(".", "");
-
-            attributes.onChange({
-              ...event,
-              target: {
-                ...event.target,
-                id: event.target.id,
-                name: event.target.name,
-                value: newValue,
-                type: event.target.type,
-              },
-            });
-          }
-        })();
+        handleChange(event);
       }}
       onClick={handleClick}
       onKeyUp={handleKeyUp}
-      type="text"
-      inputMode="decimal"
+      placeholder={placeholder}
     />
   );
 };

@@ -1,11 +1,18 @@
-import { IBorder, IColors, IUpperCase, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
+import {
+  IBorder,
+  IColors,
+  IDisabled,
+  IPlaceholder,
+  IUpperCase,
+  IValidation,
+  IVariant,
+} from "../../../libs/types/IGlobalProps";
 
-interface IProps
-  extends IVariant,
-    IColors,
-    IBorder,
-    IUpperCase,
-    IValidation,
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "size" | "color" | "type"> {}
+interface IProps extends IVariant, IColors, IBorder, IUpperCase, IValidation, IPlaceholder, IDisabled {
+  name: string;
+  value: string | number | readonly string[] | undefined;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  digits?: { minimum?: number; maximum?: number };
+}
 
 export default IProps;

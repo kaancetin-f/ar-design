@@ -194,6 +194,19 @@ export interface IValidation {
   };
 }
 
+export interface IPlaceholder {
+  /**
+   * Bileşenin ne için olduğunu belirlemek için kullanılır.
+   *
+   * ```jsx
+   * <Component placeholder="...">
+   *  Example
+   * </Component>
+   * ```
+   */
+  placeholder?: string;
+}
+
 export interface IDisabled {
   /**
    * Bileşenin pasif (devre dışı) olup olmadığını belirtmek için kullanılır.
