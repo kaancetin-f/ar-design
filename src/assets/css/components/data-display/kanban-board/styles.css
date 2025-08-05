@@ -1,12 +1,12 @@
 .ar-kanban-board {
   display: flex;
   flex-direction: column;
-  background-color: var(--white);
+  /* background-color: var(--white); */
   max-width: 100%;
   min-width: 100%;
-  padding: 1rem;
+  /* padding: 1rem; */
   border-radius: var(--border-radius-lg);
-  box-shadow: 0px 10px 15px -5px rgba(var(--black-rgb), 0.1);
+  /* box-shadow: 0px 10px 15px -5px rgba(var(--black-rgb), 0.1); */
   overflow-x: hidden;
 
   > .columns {
@@ -21,8 +21,8 @@
     > .column {
       background-color: var(--gray-100);
       flex-shrink: 0;
-      max-width: 350px;
-      min-width: 220px;
+      max-width: 450px;
+      min-width: 320px;
       border-radius: var(--border-radius-sm);
       user-select: none;
 
@@ -34,11 +34,16 @@
         padding: 0.5rem 1rem;
 
         > span {
-          border: solid 1px var(--gray-100);
+          background-color: var(--orange-100);
+          width: 1.5rem;
+          height: 1.5rem;
           border-radius: var(--border-radius-pill);
-          color: var(--gray-700);
-          font-size: 0.8rem;
+          color: var(--orange-700);
+          font-size: 0.85rem;
           font-family: var(--system);
+          text-align: center;
+          line-height: 1.5rem;
+          box-shadow: 0 0 0 1px var(--orange-200);
         }
       }
 
