@@ -114,6 +114,8 @@ type CreateActionType = {
 };
 
 interface IProps<T> extends IChildren {
+  trackBy?: (item: T) => string;
+
   /**
    * Tablo başlığı.
    *

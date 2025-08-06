@@ -47,6 +47,7 @@ const Table = forwardRef(
   <T extends object>(
     {
       children,
+      trackBy,
       title,
       description,
       data,
@@ -490,9 +491,7 @@ const Table = forwardRef(
                   ref={(element) => (_checkboxItems.current[index] = element)}
                   variant="filled"
                   color="green"
-                  checked={selectionItems.some(
-                    (selectionItem) => JSON.stringify(selectionItem) === JSON.stringify(item)
-                  )}
+                  checked={selectionItems.some((selectionItem) => trackBy?.(selectionItem) === trackBy?.(item))}
                   onChange={(event) => {
                     if (event.target.checked) setSelectionItems((prev) => [...prev, item]);
                     else setSelectionItems((prev) => prev.filter((_item) => _item !== item));
@@ -670,7 +669,7 @@ const Table = forwardRef(
 
       if (previousSelections && previousSelections.length > 0) {
         const validSelections = data.filter((item) =>
-          previousSelections.some((selected) => JSON.stringify(selected) === JSON.stringify(item))
+          previousSelections.some((selected) => trackBy?.(selected) === trackBy?.(item))
         );
         setSelectionItems(validSelections);
         _hasInitialized.current = true; // sadece bir kez ayarla
