@@ -8,6 +8,7 @@ import { ARIcon } from "../../icons";
 import Dropzone from "./Dropzone";
 import Button from "../button";
 import List from "./List";
+import Utils from "../../../libs/infrastructure/shared/Utils";
 
 export type ValidationError = { fileName: string; message: string };
 
@@ -179,7 +180,8 @@ const Upload: React.FC<Props> = ({ text, files, onChange, allowedTypes, maxSize,
   }, [selectedFiles]);
 
   useEffect(() => {
-    if (_firstLoad.current) return;
+    if (!_firstLoad.current && files.length === 0) return;
+    if (Utils.DeepEqual(files, selectedFiles)) return;
 
     setSelectedFiles(files);
     _firstLoad.current = true;
