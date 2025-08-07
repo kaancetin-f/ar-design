@@ -9,6 +9,7 @@ class Api {
     this._host = values.host || (typeof window !== "undefined" ? window.location.origin : "");
     this._core = values.core || "";
     this._init = values.init;
+    this._token = values.token;
 
     // Url
     this._url = `${this._host}/${this._core ? this._core + "/" : ""}`;
