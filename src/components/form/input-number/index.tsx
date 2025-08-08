@@ -4,7 +4,17 @@ import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from "react"
 import Input from "../input";
 import IProps from "./IProps";
 
-const InputNumber: React.FC<IProps> = ({ name, value, onChange, digits, placeholder, disabled }: IProps) => {
+const InputNumber: React.FC<IProps> = ({
+  variant,
+  color,
+  name,
+  value,
+  onChange,
+  digits,
+  placeholder,
+  validation,
+  disabled,
+}: IProps) => {
   // refs
   const _firstLoad = useRef<boolean>(false);
   const _input = useRef<HTMLInputElement | null>(null);
@@ -95,6 +105,8 @@ const InputNumber: React.FC<IProps> = ({ name, value, onChange, digits, placehol
     <Input
       ref={_input}
       name={name}
+      variant={variant}
+      color={color}
       value={_value ?? ""}
       type="text"
       inputMode="decimal"
@@ -107,6 +119,7 @@ const InputNumber: React.FC<IProps> = ({ name, value, onChange, digits, placehol
       onClick={handleClick}
       onKeyUp={handleKeyUp}
       placeholder={placeholder}
+      validation={validation}
     />
   );
 };

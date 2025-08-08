@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  gap: 1rem;
+  gap: 0.75rem;
   width: 100%;
   height: 100%;
 
@@ -13,8 +13,15 @@
 
   > ul {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 0.75rem;
+
+    &.list {
+      flex-direction: column;
+    }
+    &.grid {
+      flex-direction: row;
+    }
 
     > li {
       position: relative;
@@ -39,7 +46,7 @@
         border: solid 1px transparent;
       }
       &:hover::before {
-        background-color: rgba(var(--black-rgb), 0.75);
+        background-color: rgba(var(--black-rgb), 0.25);
       }
 
       &:has(> .error) {
@@ -116,6 +123,7 @@
           color: var(--white);
           font-size: 0.65rem;
           font-weight: 700;
+          text-wrap: nowrap;
 
           > .size-type {
             background-color: rgba(var(--black-rgb), 0.5);
@@ -126,6 +134,7 @@
             color: var(--primary);
             font-size: 0.65rem;
             font-weight: 700;
+            text-wrap: nowrap;
           }
         }
 
@@ -136,6 +145,7 @@
           color: var(--black);
           font-size: 0.65rem;
           font-weight: 700;
+          text-wrap: nowrap;
         }
       }
     }

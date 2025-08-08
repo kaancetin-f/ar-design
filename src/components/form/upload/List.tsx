@@ -6,51 +6,50 @@ import { MimeTypes } from "../../../libs/types";
 import Buttons from "./Buttons";
 
 interface IProps {
+  type: "list" | "grid";
   selectedFiles: File[]; // Tekli de olabilir çoklu da
   validationErrors?: ValidationError[];
   handleFileToBase64: (file: File) => Promise<string>;
   handleFileRemove: (fileToRemove: File) => void;
 }
 
-const List = ({ selectedFiles, validationErrors = [], handleFileToBase64, handleFileRemove }: IProps) => {
+const List = ({ type, selectedFiles, validationErrors = [], handleFileToBase64, handleFileRemove }: IProps) => {
   return (
-    <>
-      <ul>
-        {selectedFiles.map((selectedFile) => {
-          const message = validationErrors.find((v) => v.fileName === selectedFile.name)?.message;
+    <ul className={type}>
+      {selectedFiles.map((selectedFile) => {
+        const message = validationErrors.find((v) => v.fileName === selectedFile.name)?.message;
 
-          return (
-            <li>
-              {message && (
-                <div className="error">
-                  <ARIcon icon={"ExclamationDiamond-Fill"} fill="var(--white)" />
-                  <span>{message}</span>
-                </div>
-              )}
-
-              <Buttons
-                selectedFile={selectedFile}
-                handleFileToBase64={handleFileToBase64}
-                handleFileRemove={handleFileRemove}
-              />
-
-              <span className="file-name">{selectedFile.name}</span>
-
-              <div>
-                <span className="file-size">
-                  {(selectedFile.size / 1024).toFixed(3)}
-                  <span className="size-type">KB</span>
-                </span>
-
-                <span className="file-type">
-                  {Utils.GetFileTypeInformation(selectedFile.type as MimeTypes).readableType}
-                </span>
+        return (
+          <li>
+            {message && (
+              <div className="error">
+                <ARIcon icon={"ExclamationDiamond-Fill"} fill="var(--white)" />
+                <span>{message}</span>
               </div>
-            </li>
-          );
-        })}
-      </ul>
-    </>
+            )}
+
+            <Buttons
+              selectedFile={selectedFile}
+              handleFileToBase64={handleFileToBase64}
+              handleFileRemove={handleFileRemove}
+            />
+
+            <span className="file-name">{selectedFile.name}</span>
+
+            <div>
+              <span className="file-size">
+                {(selectedFile.size / 1024).toFixed(3)}
+                <span className="size-type">KB</span>
+              </span>
+
+              <span className="file-type">
+                {Utils.GetFileTypeInformation(selectedFile.type as MimeTypes).readableType}
+              </span>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 };
 

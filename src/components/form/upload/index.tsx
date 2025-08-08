@@ -193,10 +193,12 @@ const Upload: React.FC<Props> = ({ text, files, onChange, allowedTypes, maxSize,
 
   switch (type) {
     case "list":
+    case "grid":
       return renderUploadFile({
         children: (
           <>
             <Button
+              type="button"
               variant="outlined"
               color="gray"
               icon={{ element: <ARIcon icon="CloudUpload-Fill" /> }}
@@ -208,6 +210,7 @@ const Upload: React.FC<Props> = ({ text, files, onChange, allowedTypes, maxSize,
             </Button>
 
             <List
+              type={type}
               selectedFiles={selectedFiles ?? []}
               validationErrors={validationErrors}
               handleFileToBase64={handleFileToBase64}
@@ -260,6 +263,8 @@ const Upload: React.FC<Props> = ({ text, files, onChange, allowedTypes, maxSize,
           </div>
         ),
       });
+    default:
+      return null;
   }
 };
 

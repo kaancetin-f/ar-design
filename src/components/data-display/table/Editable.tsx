@@ -5,6 +5,7 @@ import Input from "../../form/input";
 import DatePicker from "../../form/date-picker";
 import { Option, TableColumnType } from "../../../libs/types";
 import Select from "../../form/select";
+import InputNumber from "../../form/input-number";
 
 interface IProps<T> {
   c: TableColumnType<T>;
@@ -30,6 +31,20 @@ const Editable = function <T>({ c, item, index, onEditable }: IProps<T>) {
       return (
         <Input
           variant="borderless"
+          value={value}
+          onChange={(event) => {
+            const { value } = event.target;
+
+            setValue(value);
+            onEditable({ ...item, [key]: c.editable?.type === "number" ? Number(value) : value } as T, index);
+          }}
+        />
+      );
+    case "input-number":
+      return (
+        <InputNumber
+          variant="borderless"
+          name={c.key as string}
           value={value}
           onChange={(event) => {
             const { value } = event.target;

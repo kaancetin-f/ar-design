@@ -64,7 +64,7 @@ export type TableColumnType<T> = {
   filters?: Option[];
   render?: (item: T) => React.ReactNode;
   editable?: {
-    type: "string" | "number" | "date-picker" | "single-select" | "multiple-select";
+    type: "string" | "number" | "input-number" | "date-picker" | "single-select" | "multiple-select";
     options?: Option[];
     method?: () => void | Promise<void>;
   };

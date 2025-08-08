@@ -118,7 +118,7 @@ type Props = {
    */
   maxSize?: number;
 
-  type?: "list" | "dropzone";
+  type?: "list" | "grid" | "dropzone";
 
   multiple?: boolean;
 } & IMultiple &
