@@ -12,7 +12,17 @@ import Utils from "../../../libs/infrastructure/shared/Utils";
 
 export type ValidationError = { fileName: string; message: string };
 
-const Upload: React.FC<Props> = ({ text, files, onChange, allowedTypes, maxSize, type = "list", multiple }) => {
+const Upload: React.FC<Props> = ({
+  text,
+  files,
+  onChange,
+  allowedTypes,
+  maxSize,
+  type = "list",
+  size,
+  fullWidth,
+  multiple,
+}) => {
   // refs
   const _firstLoad = useRef<boolean>(false);
   const _input = useRef<HTMLInputElement>(null);
@@ -205,6 +215,8 @@ const Upload: React.FC<Props> = ({ text, files, onChange, allowedTypes, maxSize,
               onClick={() => {
                 if (_input.current) _input.current.click();
               }}
+              fullWidth={fullWidth}
+              size={size}
             >
               {text && <span>{text}</span>}
             </Button>

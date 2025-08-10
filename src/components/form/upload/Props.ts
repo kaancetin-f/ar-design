@@ -1,5 +1,5 @@
 import { MimeTypes } from "../../../libs/types";
-import { IDisabled, IValidation } from "../../../libs/types/IGlobalProps";
+import { IDisabled, ISize, IValidation } from "../../../libs/types/IGlobalProps";
 
 interface IMultiple {
   /**
@@ -120,8 +120,11 @@ type Props = {
 
   type?: "list" | "grid" | "dropzone";
 
+  fullWidth?: boolean;
+
   multiple?: boolean;
 } & IMultiple &
+  ISize &
   IValidation &
   IDisabled;
 

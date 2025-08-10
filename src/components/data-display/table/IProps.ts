@@ -76,6 +76,9 @@ type ImportActionType = {
    * Import butonunun üzerine gelindiğinde gösterilecek açıklayıcı metin.
    */
   tooltip: string;
+  title?: string;
+  message?: string;
+  buttonText?: string;
 
   /**
    * Kabul edilen dosya türleri.
@@ -98,7 +101,15 @@ type ImportActionType = {
    * @param formData - Dosyaları içeren FormData nesnesi (undefined olabilir).
    * @param files - Seçilen dosyalar dizisi.
    */
-  onClick: (formData: FormData | undefined, files: File[]) => void;
+  onClick: (formData: FormData | undefined, files: File[], base64: string[]) => void;
+};
+
+type ExportActionType = {
+  tooltip: string;
+  title?: string;
+  message?: string;
+  content?: React.JSX.Element;
+  onClick: () => void;
 };
 
 type CreateActionType = {
@@ -150,6 +161,8 @@ interface IProps<T> extends IChildren {
      * Dosya import işlemi için buton ayarları.
      */
     import?: ImportActionType;
+
+    export?: ExportActionType;
 
     /**
      * Yeni kayıt oluşturma butonu ayarları.

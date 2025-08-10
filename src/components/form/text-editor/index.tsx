@@ -233,7 +233,7 @@ const TextEditor = <T extends object>({
             ? _onChange.current(undefined)
             : _onChange.current(_iframeDocument.body.innerHTML);
         });
-      }, 750);
+      }, 250);
     });
 
     // Observer'ı body üzerinde başlat

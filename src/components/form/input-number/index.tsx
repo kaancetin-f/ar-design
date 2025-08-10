@@ -3,6 +3,7 @@
 import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import Input from "../input";
 import IProps from "./IProps";
+import { NUMBER } from "../../../libs/infrastructure/shared";
 
 const InputNumber: React.FC<IProps> = ({
   variant,
@@ -10,6 +11,7 @@ const InputNumber: React.FC<IProps> = ({
   name,
   value,
   onChange,
+  locale = "tr-TR",
   digits,
   placeholder,
   validation,
@@ -56,25 +58,18 @@ const InputNumber: React.FC<IProps> = ({
 
     // Numara olarak çevir.
     const normalized = parseCurrencySmart(value);
-    const isDecimals = cleanedValue.includes(",");
+    // const isDecimals = cleanedValue.includes(",");
     const parsedDecimal = parseFloat(normalized);
     const newValue = isNaN(parsedDecimal) ? 0 : parsedDecimal;
 
     // Formatla ve Kullanıcı , (virgül) girdiyse kuruş göster.
-    let formatted = newValue === 0 && cleanedValue === "" ? "" : getFormatter(isDecimals).format(newValue);
+    let formatted = newValue === 0 && cleanedValue === "" ? "" : getFormatter.format(newValue);
 
     setValue(formatted);
     onChange?.({ ...event, target: { ...event.target, name: name, value: normalized } });
   };
 
-  const getFormatter = useMemo(() => {
-    return (isDecimals: boolean) =>
-      new Intl.NumberFormat("tr-TR", {
-        style: "decimal",
-        minimumFractionDigits: digits?.minimum ?? 0,
-        maximumFractionDigits: isDecimals ? digits?.maximum ?? 2 : 0,
-      });
-  }, [digits]);
+  const getFormatter = useMemo(() => NUMBER.Decimal(locale, digits), [digits]);
 
   const parseCurrencySmart = (input: string) => {
     if (input.includes(",") && input.includes(".")) {
@@ -95,8 +90,8 @@ const InputNumber: React.FC<IProps> = ({
   // useEffects
   useEffect(() => {
     if (!_firstLoad.current && value !== undefined && value !== "") {
-      const isDecimals = String(value).includes(".");
-      setValue(getFormatter(isDecimals).format(Number(value)));
+      // const isDecimals = String(value).includes(".");
+      setValue(getFormatter.format(Number(value)));
       _firstLoad.current = true;
     }
   }, [value]);

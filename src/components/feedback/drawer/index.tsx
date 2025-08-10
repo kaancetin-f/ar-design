@@ -3,7 +3,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
 import Typography from "../../data-display/typography";
-import ReactDOM from "react-dom";
 import "../../../assets/css/components/feedback/drawer/styles.css";
 
 const { Title } = Typography;
@@ -25,11 +24,12 @@ const Drawer: React.FC<IProps> = ({ title, tabs = [], activeTab, open, onChange 
   // methods
   const handleKeys = (event: KeyboardEvent) => {
     const key = event.key;
+    const isArModal = document.getElementsByClassName("ar-modal-wrapper opened").length === 0;
     const isArSelectOptions = document.getElementsByClassName("ar-select-options").length === 0;
     const isArCalendar = document.getElementsByClassName("ar-date-calendar").length === 0;
     const isArPopover = document.getElementsByClassName("ar-popover").length === 0;
 
-    if (key === "Escape" && isArCalendar && isArSelectOptions && isArPopover) {
+    if (key === "Escape" && isArModal && isArCalendar && isArSelectOptions && isArPopover) {
       event.stopPropagation();
       open.set(false);
     }
@@ -50,7 +50,7 @@ const Drawer: React.FC<IProps> = ({ title, tabs = [], activeTab, open, onChange 
 
   useEffect(() => setCurrentTab(activeTab ?? 0), [activeTab]);
 
-  return ReactDOM.createPortal(
+  return (
     <div className={_drawerWrapperClassName.map((c) => c).join(" ")}>
       <div
         className="ar-drawer-bg"
@@ -90,15 +90,6 @@ const Drawer: React.FC<IProps> = ({ title, tabs = [], activeTab, open, onChange 
                     sessionStorage.setItem(key, String(index));
                   }}
                 >
-                  {/* <span
-                    className="close-button"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      onClose && onClose(index);
-                    }}
-                  >
-                    ✖
-                  </span> */}
                   <span>{tab.title}</span>
                 </div>
               );
@@ -107,8 +98,7 @@ const Drawer: React.FC<IProps> = ({ title, tabs = [], activeTab, open, onChange 
 
         <div className="content">{tabs.map((tab, index) => currentTab === index && tab.content)}</div>
       </div>
-    </div>,
-    document.body
+    </div>
   );
 };
 

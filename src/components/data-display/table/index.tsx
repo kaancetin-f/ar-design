@@ -88,8 +88,9 @@ const Table = forwardRef(
     const [selectionItems, setSelectionItems] = useState<T[]>([]);
     const [showSubitems, setShowSubitems] = useState<{ [key: string]: boolean }>({});
     // states -> File
-    const [files, setFiles] = useState<File[]>([]);
     const [formData, setFormData] = useState<FormData | undefined>(undefined);
+    const [files, setFiles] = useState<File[]>([]);
+    const [base64, setBase64] = useState<string[]>([]);
     // states -> Search
     const [searchedText, setSearchedText] = useState<SearchedParam | null>(null);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | null>(null);
@@ -756,20 +757,26 @@ const Table = forwardRef(
                 <>
                   {actions.import && (
                     <Popover
-                      title="İçeri Aktar"
-                      message="Seçtiğiniz dosyaları uygulamaya yükleyebilirsiniz. Bu işlem, dosyalardaki verileri sistemimize aktarır ve verilerle işlem yapmanıza olanak tanır."
+                      title={actions.import.title ?? "İçeri Aktar"}
+                      message={
+                        actions.import.message ??
+                        "Seçtiğiniz dosyaları uygulamaya yükleyebilirsiniz. Bu işlem, dosyalardaki verileri sistemimize aktarır ve verilerle işlem yapmanıza olanak tanır."
+                      }
                       content={
                         <>
                           {actions.import.prefixItem}
 
                           <Upload
-                            text="Belge Yükleyin"
+                            text={actions.import.buttonText ?? "Belge Yükleyin"}
                             allowedTypes={actions.import.allowedTypes}
                             files={files}
-                            onChange={(formData, files) => {
+                            onChange={(formData, files, base64) => {
                               setFormData(formData);
                               setFiles(files);
+                              setBase64(base64);
                             }}
+                            size="small"
+                            fullWidth
                             // multiple
                           />
 
@@ -783,13 +790,47 @@ const Table = forwardRef(
                           return;
                         }
 
-                        if (actions.import && actions.import.onClick) actions.import.onClick(formData, files);
+                        if (actions.import && actions.import.onClick) actions.import.onClick(formData, files, base64);
                       }}
                       config={{ buttons: { okay: "Yükle", cancel: "İptal" } }}
                       windowBlur
                     >
                       <Tooltip text={actions.import.tooltip}>
-                        <Button variant="outlined" color="purple" icon={{ element: <ARIcon icon="Upload" /> }} />
+                        <Button
+                          variant="outlined"
+                          color="purple"
+                          icon={{ element: <ARIcon icon="Upload" fill="currentcolor" /> }}
+                        />
+                      </Tooltip>
+                    </Popover>
+                  )}
+
+                  {actions.export && (
+                    <Popover
+                      title={actions.export.title ?? "Dışarı Aktar"}
+                      message={
+                        actions.export.message ??
+                        "Seçtiğiniz verileri bilgisayarınıza indirebilirsiniz. Bu işlem, sistemimizdeki verileri dosya olarak dışa aktarır ve verileri harici olarak kullanmanıza olanak tanır."
+                      }
+                      content={actions.export.content}
+                      onConfirm={(confirm) => {
+                        if (!confirm) {
+                          setFiles([]);
+
+                          return;
+                        }
+
+                        if (actions.export && actions.export.onClick) actions.export.onClick();
+                      }}
+                      config={{ buttons: { okay: "Dışarı Aktar", cancel: "İptal" } }}
+                      windowBlur
+                    >
+                      <Tooltip text={actions.export.tooltip}>
+                        <Button
+                          variant="outlined"
+                          color="blue"
+                          icon={{ element: <ARIcon icon="Download" fill="currentcolor" /> }}
+                        />
                       </Tooltip>
                     </Popover>
                   )}
