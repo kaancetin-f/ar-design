@@ -845,6 +845,29 @@ const Table = forwardRef(
                       />
                     </Tooltip>
                   )}
+
+                  {actions.delete && (
+                    <Popover
+                      title={actions.delete.title ?? "Siliniyor"}
+                      message={
+                        actions.delete.message ??
+                        "Seçtiğiniz verileri uygulamadan silebilirsiniz. Bu işlem, verilerin sistemimizden tamamen kaldırılmasını sağlar ve bu verilerle artık işlem yapılamaz."
+                      }
+                      onConfirm={(confirm) => {
+                        if (!confirm) return;
+
+                        if (actions.delete && actions.delete.onClick) actions.delete.onClick();
+                      }}
+                    >
+                      <Tooltip text={actions.delete.tooltip}>
+                        <Button
+                          variant="outlined"
+                          color="red"
+                          icon={{ element: <ARIcon icon="Trash-Fill" fill="currentcolor" /> }}
+                        />
+                      </Tooltip>
+                    </Popover>
+                  )}
                 </>
               )}
             </div>

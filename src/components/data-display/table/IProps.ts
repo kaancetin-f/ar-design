@@ -124,6 +124,13 @@ type CreateActionType = {
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
+type DeleteActionType = {
+  tooltip: string;
+  title?: string;
+  message?: string;
+  onClick: () => void;
+};
+
 interface IProps<T> extends IChildren {
   trackBy?: (item: T) => string;
 
@@ -168,6 +175,8 @@ interface IProps<T> extends IChildren {
      * Yeni kayıt oluşturma butonu ayarları.
      */
     create?: CreateActionType;
+
+    delete?: DeleteActionType;
   };
 
   /**
