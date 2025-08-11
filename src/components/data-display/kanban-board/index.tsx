@@ -2,13 +2,9 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
-import Typography from "../typography";
 import { KanbanBoardColumnType } from "../../../libs/types";
 import "../../../assets/css/components/data-display/kanban-board/styles.css";
 import DnD from "../dnd";
-import { ARIcon } from "../../icons";
-
-const { Title } = Typography;
 
 const KanbanBoard = function <T>({ trackBy, columns, onChange }: IProps<T>) {
   // refs
@@ -38,8 +34,6 @@ const KanbanBoard = function <T>({ trackBy, columns, onChange }: IProps<T>) {
         const newItems = [...board.items];
         const safeIndex = Math.min(_hoverItemIndex.current ?? Infinity, newItems.length); // son elemandan fazla olmasın.
         newItems.splice(safeIndex, 0, item);
-
-        console.log(board);
 
         onChange?.(item, board.key, safeIndex);
 
@@ -77,12 +71,12 @@ const KanbanBoard = function <T>({ trackBy, columns, onChange }: IProps<T>) {
             onDrop={handleDrop(board.key)}
           >
             <div className="title">
+              <h4>{board.title.toLocaleUpperCase("tr")}</h4>
               {board.items.length > 0 && <span>{board.items.length}</span>}
-              <Title Level="h4">{board.title}</Title>
             </div>
 
             <div className="items">
-              {board.items.length === 0 ? (
+              {/* {board.items.length === 0 ? (
                 <div className="no-item">
                   <ARIcon
                     icon={"Inbox-Fill"}
@@ -92,39 +86,40 @@ const KanbanBoard = function <T>({ trackBy, columns, onChange }: IProps<T>) {
                   />
                   <span>No Data</span>
                 </div>
-              ) : (
-                <DnD
-                  key={board.key}
-                  data={board.items}
-                  renderItem={(item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className="item"
-                        onDragOver={(event) => {
-                          event.preventDefault();
+              ) : ( */}
+              <DnD
+                key={board.key}
+                data={board.items}
+                renderItem={(item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="item"
+                      onDragOver={(event) => {
+                        event.preventDefault();
 
-                          const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-                          const mouseY = event.clientY;
-                          const isBelow = mouseY > rect.top + rect.height / 2;
+                        const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+                        const mouseY = event.clientY;
+                        const isBelow = mouseY > rect.top + rect.height / 2;
 
-                          _hoverItemIndex.current = isBelow ? index + 1 : index;
-                        }}
-                      >
-                        {board.renderItem(item, index)}
-                      </div>
-                    );
-                  }}
-                  columnKey={board.key}
-                  // onChange={(data) => {
-                  //   const now = Date.now();
+                        _hoverItemIndex.current = isBelow ? index + 1 : index;
+                      }}
+                    >
+                      {board.renderItem(item, index)}
+                    </div>
+                  );
+                }}
+                columnKey={board.key}
+                confing={{ isMoveIcon: false }}
+                // onChange={(data) => {
+                //   const now = Date.now();
 
-                  //   setBoardData((prev) =>
-                  //     prev.map((col) => (col.key === board.key ? { ...col, items: data,  } : col))
-                  //   );
-                  // }}
-                />
-              )}
+                //   setBoardData((prev) =>
+                //     prev.map((col) => (col.key === board.key ? { ...col, items: data,  } : col))
+                //   );
+                // }}
+              />
+              {/* )} */}
             </div>
           </div>
         ))}

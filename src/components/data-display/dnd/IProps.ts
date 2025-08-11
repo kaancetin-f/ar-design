@@ -39,6 +39,8 @@ interface IProps<T> {
    * ```
    */
   onChange?: (data: T[]) => void;
+
+  confing?: { isMoveIcon: boolean };
 }
 
 export default IProps;

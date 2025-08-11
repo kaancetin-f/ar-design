@@ -7,7 +7,7 @@ import { ARIcon } from "../../icons";
 
 let _fromColumn: string | undefined = undefined;
 
-const DnD = function <T>({ data, renderItem, columnKey, onChange }: IProps<T>) {
+const DnD = function <T>({ data, renderItem, columnKey, onChange, confing = { isMoveIcon: true } }: IProps<T>) {
   // refs
   const _arDnD = useRef<HTMLDivElement>(null);
   const _dragItem = useRef<HTMLElement>();
@@ -137,9 +137,11 @@ const DnD = function <T>({ data, renderItem, columnKey, onChange }: IProps<T>) {
     <div ref={_arDnD} className="ar-dnd">
       {data.map((item, index) => (
         <div key={index} className="item" draggable>
-          <div className="move">
-            <ARIcon icon={"GripVertical"} fill="var(--blue-500)" size={18} />
-          </div>
+          {confing?.isMoveIcon && (
+            <div className="move">
+              <ARIcon icon={"GripVertical"} fill="var(--blue-500)" size={18} />
+            </div>
+          )}
           <div className="content">{renderItem(item, index)}</div>
         </div>
       ))}

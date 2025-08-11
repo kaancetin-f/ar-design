@@ -5,12 +5,7 @@
 
   > .item {
     position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 0 0.5rem;
-    width: 100%;
+    min-width: 1px;
     cursor: move;
     overflow: hidden;
     transition: transform 0.3s ease, opacity 0.3s ease;
