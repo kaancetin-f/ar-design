@@ -12,7 +12,10 @@ type Props = {
   direction: Direction;
 };
 
-export type PopupButtonProps = { okay?: { text?: string; onClick?: () => void } };
+export type PopupButtonProps = {
+  okay?: { text?: string; onClick?: () => void };
+  cancel?: { text?: string; onClick?: () => void };
+};
 
 type NotificationContextProps = {
   setTitle: React.Dispatch<React.SetStateAction<string>>;

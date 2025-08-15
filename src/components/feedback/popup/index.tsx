@@ -8,6 +8,7 @@ import ReactDOM from "react-dom";
 import { NotificationContext } from "../../../libs/core/application/contexts/Notification";
 import { Color } from "../../../libs/types";
 import { ARIcon } from "../../icons";
+import Box from "../../data-display/grid-system/box/Box";
 
 const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
   // contexts
@@ -96,19 +97,35 @@ const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
             <span className="message">{message}</span>
           </div>
 
-          <Button
-            variant="filled"
-            color={buttonColor()}
-            onClick={() => {
-              (() => buttons?.okay?.onClick && buttons.okay?.onClick())();
+          <Box>
+            <Button
+              variant="filled"
+              color={buttonColor()}
+              onClick={() => {
+                (() => buttons?.okay?.onClick && buttons.okay?.onClick())();
 
-              (() => {
-                setIsPopupOpen && setIsPopupOpen((prev) => !prev);
-              })();
-            }}
-          >
-            {buttons?.okay?.text ?? "Tamam"}
-          </Button>
+                (() => {
+                  setIsPopupOpen && setIsPopupOpen((prev) => !prev);
+                })();
+              }}
+            >
+              {buttons?.okay?.text ?? "Tamam"}
+            </Button>
+
+            <Button
+              variant="filled"
+              color="light"
+              onClick={() => {
+                (() => buttons?.cancel?.onClick && buttons.cancel?.onClick())();
+
+                (() => {
+                  setIsPopupOpen && setIsPopupOpen((prev) => !prev);
+                })();
+              }}
+            >
+              {buttons?.cancel?.text ?? "İptal"}
+            </Button>
+          </Box>
         </div>
       </div>,
       document.body
