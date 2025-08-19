@@ -112,19 +112,21 @@ const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
               {buttons?.okay?.text ?? "Tamam"}
             </Button>
 
-            <Button
-              variant="filled"
-              color="light"
-              onClick={() => {
-                (() => buttons?.cancel?.onClick && buttons.cancel?.onClick())();
+            {buttons?.cancel && (
+              <Button
+                variant="filled"
+                color="light"
+                onClick={() => {
+                  (() => buttons?.cancel?.onClick && buttons.cancel?.onClick())();
 
-                (() => {
-                  setIsPopupOpen && setIsPopupOpen((prev) => !prev);
-                })();
-              }}
-            >
-              {buttons?.cancel?.text ?? "İptal"}
-            </Button>
+                  (() => {
+                    setIsPopupOpen && setIsPopupOpen((prev) => !prev);
+                  })();
+                }}
+              >
+                {buttons?.cancel?.text ?? "İptal"}
+              </Button>
+            )}
           </Box>
         </div>
       </div>,
