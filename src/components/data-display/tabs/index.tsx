@@ -16,6 +16,7 @@ const Tabs: React.FC<IProps> = ({ name, tabs = [], activeTab, onChange, onClose 
     const stored = sessionStorage.getItem(key);
 
     setCurrentTab(stored !== null ? Number(stored) : 0);
+    onChange?.(stored !== null ? Number(stored) : 0);
   }, []);
 
   return (
@@ -33,7 +34,7 @@ const Tabs: React.FC<IProps> = ({ name, tabs = [], activeTab, onChange, onClose 
                 className={className.map((c) => c).join(" ")}
                 onClick={() => {
                   setCurrentTab(index);
-                  onChange && onChange(index);
+                  onChange?.(index);
 
                   const key = `${window.location.pathname}::${name}`;
                   sessionStorage.setItem(key, String(index));
