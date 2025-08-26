@@ -59,15 +59,15 @@ const ButtonAction: React.FC<IProps> = ({ buttons }) => {
 
   // useEffects
   useEffect(() => {
-    if (open) {
-      setTimeout(() => handlePosition(), 0);
+    if (!open) return;
 
-      window.addEventListener("blur", () => setOpen(false));
-      window.addEventListener("resize", handleResizeEvent);
+    setTimeout(() => handlePosition(), 0);
 
-      document.addEventListener("click", handleClickOutSide);
-      document.addEventListener("keydown", handleKeys);
-    }
+    window.addEventListener("blur", () => setOpen(false));
+    window.addEventListener("resize", handleResizeEvent);
+
+    document.addEventListener("click", handleClickOutSide);
+    document.addEventListener("keydown", handleKeys);
 
     return () => {
       window.removeEventListener("blur", () => setOpen(false));
@@ -82,8 +82,8 @@ const ButtonAction: React.FC<IProps> = ({ buttons }) => {
     <div ref={_wrapper} className="ar-button-action">
       <span ref={_button}>
         <Button
-          variant="surface"
-          color="gray"
+          variant="borderless"
+          color="light"
           icon={{ element: <span className="dotted"></span> }}
           onClick={() => setOpen((prev) => !prev)}
         />
@@ -93,7 +93,14 @@ const ButtonAction: React.FC<IProps> = ({ buttons }) => {
         ReactDOM.createPortal(
           <span ref={_list} className="ar-action-buttons">
             {buttons.map((button) => (
-              <Button variant="borderless" color={button.color ?? "blue"} onClick={button.onClick}>
+              <Button
+                style={{ display: "flex", justifyContent: "flex-start" }}
+                variant="borderless"
+                color={button.color ?? "blue"}
+                size="small"
+                icon={button.icon}
+                onClick={button.onClick}
+              >
                 {button.text}
               </Button>
             ))}
