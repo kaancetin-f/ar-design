@@ -20,6 +20,9 @@ const KanbanBoard = function <T>({ trackBy, columns, onChange }: IProps<T>) {
     const item = JSON.parse(event.dataTransfer.getData("item"));
     const fromColumn = event.dataTransfer.getData("fromColumn");
 
+    const nodes = document.querySelectorAll("[data-id='placeholder']");
+    nodes.forEach((node) => node.remove());
+
     if (!item || fromColumn === toColumn) return;
 
     const updatedColumns = data.map((board) => {
@@ -52,9 +55,6 @@ const KanbanBoard = function <T>({ trackBy, columns, onChange }: IProps<T>) {
     event.dataTransfer.clearData("item");
     event.dataTransfer.clearData("fromColumn");
     _hoverItemIndex.current = null;
-
-    const nodes = document.querySelectorAll("[data-id='placeholder']");
-    nodes.forEach((node) => node.remove());
   };
 
   // useEffects
