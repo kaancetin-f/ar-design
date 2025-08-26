@@ -31,15 +31,15 @@ const KanbanBoard = function <T>({ trackBy, columns, onChange }: IProps<T>) {
       }
 
       if (board.key === toColumn) {
-        const newItems = [...board.items];
-        const safeIndex = Math.min(_hoverItemIndex.current ?? Infinity, newItems.length); // son elemandan fazla olmasın.
-        newItems.splice(safeIndex, 0, item);
+        const boardItems = [...board.items];
+        const safeIndex = Math.min(_hoverItemIndex.current ?? Infinity, boardItems.length); // son elemandan fazla olmasın.
+        boardItems.splice(safeIndex, 0, item);
 
         onChange?.(item, board.key, safeIndex);
 
         return {
           ...board,
-          items: newItems,
+          items: boardItems,
         };
       }
 
