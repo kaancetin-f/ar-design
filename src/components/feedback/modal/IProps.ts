@@ -1,4 +1,5 @@
 import { IChildren, ISize } from "../../../libs/types/IGlobalProps";
+import IPopoverProps from "../../feedback/popover/IProps";
 
 interface IProps extends IChildren, ISize, React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -19,6 +20,8 @@ interface IProps extends IChildren, ISize, React.HTMLAttributes<HTMLDivElement> 
     get: boolean;
     set: React.Dispatch<React.SetStateAction<boolean>>;
   };
+
+  closePopover?: IPopoverProps;
 
   /**
    * Modal başlığı.

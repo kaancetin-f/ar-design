@@ -4,10 +4,11 @@ import React, { useEffect, useRef } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/feedback/modal/styles.css";
 import Typography from "../../data-display/typography";
+import Popover from "../popover";
 
 const { Title } = Typography;
 
-const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", footer, ...attributes }) => {
+const Modal: React.FC<IProps> = ({ children, open, closePopover, title, size = "normal", footer, ...attributes }) => {
   // refs
   const _arModal = useRef<HTMLDivElement>(null);
   const _modalWrapperClassName: string[] = ["ar-modal-wrapper"];
@@ -98,7 +99,13 @@ const Modal: React.FC<IProps> = ({ children, open, title, size = "normal", foote
           <div className="header">
             <Title Level="h3">{title}</Title>
 
-            <div className="close" onClick={() => open.set((prev) => !prev)}></div>
+            {closePopover ? (
+              <Popover {...closePopover}>
+                <div className="close"></div>
+              </Popover>
+            ) : (
+              <div className="close" onClick={() => open.set((prev) => !prev)}></div>
+            )}
           </div>
         )}
 

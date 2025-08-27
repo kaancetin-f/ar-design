@@ -14,7 +14,7 @@
   overflow: hidden;
 }
 
-.ar-modal-wrapper > .ar-modal > .header > .close {
+.ar-modal-wrapper > .ar-modal > .header .close {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,8 +27,8 @@
   user-select: none;
   transition: background 250ms, border 250ms ease-in-out;
 }
-.ar-modal-wrapper > .ar-modal > .header > .close::before,
-.ar-modal-wrapper > .ar-modal > .header > .close::after {
+.ar-modal-wrapper > .ar-modal > .header .close::before,
+.ar-modal-wrapper > .ar-modal > .header .close::after {
   position: absolute;
   content: "";
   width: 2px;
@@ -38,19 +38,19 @@
   transform: rotate(-45deg);
   transition: transform 250ms ease-in-out;
 }
-.ar-modal-wrapper > .ar-modal > .header > .close::after {
+.ar-modal-wrapper > .ar-modal > .header .close::after {
   transform: rotate(45deg);
 }
-.ar-modal-wrapper > .ar-modal > .header > .close:hover {
+.ar-modal-wrapper > .ar-modal > .header .close:hover {
   background-color: rgba(var(--danger-rgb), 0.1);
   border: solid 1px var(--danger);
   color: rgba(var(--danger-rgb), 0.75);
 }
-.ar-modal-wrapper > .ar-modal > .header > .close:hover::before,
-.ar-modal-wrapper > .ar-modal > .header > .close:hover::after {
+.ar-modal-wrapper > .ar-modal > .header .close:hover::before,
+.ar-modal-wrapper > .ar-modal > .header .close:hover::after {
   background-color: var(--danger);
   transform: rotate(45deg);
 }
-.ar-modal-wrapper > .ar-modal > .header > .close:hover::after {
+.ar-modal-wrapper > .ar-modal > .header .close:hover::after {
   transform: rotate(-45deg);
 }
