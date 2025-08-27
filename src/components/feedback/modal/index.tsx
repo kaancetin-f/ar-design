@@ -8,7 +8,17 @@ import Popover from "../popover";
 
 const { Title } = Typography;
 
-const Modal: React.FC<IProps> = ({ children, open, closePopover, title, size = "normal", footer, ...attributes }) => {
+const Modal: React.FC<IProps> = ({
+  children,
+  open,
+  closePopover,
+  title,
+  size = "normal",
+  footer,
+  disableCloseOnBackdrop,
+  disableCloseOnEsc,
+  ...attributes
+}) => {
   // refs
   const _arModal = useRef<HTMLDivElement>(null);
   const _modalWrapperClassName: string[] = ["ar-modal-wrapper"];
@@ -19,6 +29,8 @@ const Modal: React.FC<IProps> = ({ children, open, closePopover, title, size = "
 
   // methods
   const handleKeys = (event: KeyboardEvent) => {
+    if (disableCloseOnEsc) return;
+
     const key = event.key;
     const isArSelectOptions = document.getElementsByClassName("ar-select-options").length === 0;
     const isArCalendar = document.getElementsByClassName("ar-date-calendar").length === 0;
@@ -87,6 +99,8 @@ const Modal: React.FC<IProps> = ({ children, open, closePopover, title, size = "
       <div
         className="ar-modal-bg"
         onMouseDown={(event) => {
+          if (disableCloseOnBackdrop) return;
+
           event.stopPropagation();
 
           const target = event.target as HTMLElement;

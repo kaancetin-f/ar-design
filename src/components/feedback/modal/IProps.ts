@@ -46,6 +46,10 @@ interface IProps extends IChildren, ISize, React.HTMLAttributes<HTMLDivElement> 
    * ```
    */
   footer?: React.ReactNode;
+
+  disableCloseOnBackdrop?: boolean;
+
+  disableCloseOnEsc?: boolean;
 }
 
 export default IProps;
