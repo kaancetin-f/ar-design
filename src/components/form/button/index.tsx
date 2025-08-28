@@ -36,6 +36,7 @@ const Button: React.FC<IProps> = ({
     <button
       ref={_button}
       {...attributes}
+      type={attributes.type ?? "button"}
       className={_arButtonClassName.map((c) => c).join(" ")}
       onClick={(event) => {
         // Disabled gelmesi durumunda işlem yapmasına izin verme...
