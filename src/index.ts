@@ -39,6 +39,7 @@ import Tooltip from "./components/feedback/tooltip";
 // Navigation
 import Breadcrumb from "./components/navigation/breadcrumb";
 import Menu from "./components/navigation/menu";
+import Pagination from "./components/navigation/pagination";
 import Steps from "./components/navigation/steps";
 
 // Layout
@@ -85,6 +86,7 @@ export {
   // Navigation
   Breadcrumb,
   Menu,
+  Pagination,
   Steps,
 
   // Layout

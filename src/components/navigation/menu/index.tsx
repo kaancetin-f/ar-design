@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import "../../../assets/css/components/navigation/menu/styles.css";
-import Divider from "../../data-display/divider";
 import { MenuItemVariants, MenuProps } from "../../../libs/types";
 import IProps from "./IProps";
 
@@ -22,7 +21,9 @@ const handleClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     const selectedItems = document.querySelectorAll(".selected");
     selectedItems.forEach((item) => item.classList.remove("selected"));
 
-    target.classList.add("selected");
+    if (!target.classList.contains("divider")) {
+      target.classList.add("selected");
+    }
   }
 };
 
@@ -49,10 +50,10 @@ const SubMenu: React.FC<{
       <div>
         {items.map((item, index) => {
           return (
-            <li key={index} onClick={handleClick}>
+            <li key={index} className={item.type === "divider" ? "divider" : ""} onClick={handleClick}>
               <div className="item-render">
-                <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
-                {item.type === "divider" ? <Divider /> : <span className="item">{item.render}</span>}
+                {item.type !== "divider" && <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>}
+                {item.type === "divider" ? <hr /> : <span className="item">{item.render}</span>}
                 {item.type === "group" && <span className="angel-down"></span>}
               </div>
 
@@ -83,31 +84,29 @@ const Menu: React.FC<IProps> = ({ data, variant = "vertical", ...attributes }) =
   return (
     <nav className="ar-menu" {...attributes}>
       <ul>
-        <div>
-          {data.map((item, index) => {
-            return (
-              <li key={index} onClick={handleClick}>
-                <div className="item-render">
-                  <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>
-                  {item.type === "divider" ? <Divider /> : <span className="item">{item.render}</span>}
-                  {item.type === "group" && <span className="angel-down"></span>}
-                </div>
+        {data.map((item, index) => {
+          return (
+            <li key={index} className={item.type === "divider" ? "divider" : ""} onClick={handleClick}>
+              <div className="item-render">
+                {item.type !== "divider" && <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>}
+                {item.type === "divider" ? <hr /> : <span className="item">{item.render}</span>}
+                {item.type === "group" && <span className="angel-down"></span>}
+              </div>
 
-                {/* Alt menü öğeleri */}
-                {item.submenu && (
-                  <SubMenu
-                    items={item.submenu}
-                    variant={variant}
-                    setSelectedMenu={setSelectedMenu}
-                    selectedMenu={selectedMenu}
-                    setSelectedItem={setSelectedItem}
-                    selectedItem={selectedItem}
-                  />
-                )}
-              </li>
-            );
-          })}
-        </div>
+              {/* Alt menü öğeleri */}
+              {item.submenu && (
+                <SubMenu
+                  items={item.submenu}
+                  variant={variant}
+                  setSelectedMenu={setSelectedMenu}
+                  selectedMenu={selectedMenu}
+                  setSelectedItem={setSelectedItem}
+                  selectedItem={selectedItem}
+                />
+              )}
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );

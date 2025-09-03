@@ -1,7 +1,3 @@
-import { MenuProps } from "../../../libs/types";
-
-interface IProps {
-  menus: MenuProps[];
-}
+interface IProps {}
 
 export default IProps;

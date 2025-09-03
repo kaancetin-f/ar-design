@@ -134,4 +134,5 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, currentPage, totalRe
   );
 };
 
+Pagination.displayName = "Pagination";
 export default Pagination;
