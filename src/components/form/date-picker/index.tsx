@@ -92,6 +92,7 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, isClock, valida
         const screenCenterY = window.innerHeight / 2;
         const sx = window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft;
         const sy = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+        const _isClock = InpuRect.left > screenCenterX ? -Math.abs(isClock ? 7.5 * 16.75 : 0) : 0;
 
         _arCalendar.current.style.visibility = "visible";
         _arCalendar.current.style.opacity = "1";
@@ -99,7 +100,7 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, isClock, valida
           (InpuRect.top > screenCenterY ? InpuRect.top - arCalendarRect.height : InpuRect.top + InpuRect.height) + sy
         }px`;
         _arCalendar.current.style.left = `${
-          (InpuRect.left > screenCenterX ? InpuRect.right - arCalendarRect.width : InpuRect.left) + sx
+          (InpuRect.left > screenCenterX ? InpuRect.right - arCalendarRect.width : InpuRect.left) + sx + _isClock
         }px`;
       }
     }
