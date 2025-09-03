@@ -33,158 +33,69 @@ yarn add ar-design
 - React >= 18.0.0
 - React DOM >= 18.0.0
 
-## 🎯 Hızlı Başlangıç
-
-```tsx
-import { Button, Input, Card } from 'ar-design';
-
-function App() {
-  return (
-    <div>
-      <Card>
-        <Input placeholder="Adınızı girin" />
-        <Button variant="filled" color="primary">
-          Gönder
-        </Button>
-      </Card>
-    </div>
-  );
-}
-```
-
 ## 📚 Bileşenler
 
-### Form Elemanları
+### Data Display (Veri Görüntüleme)
 
-- **Button** - Çoklu varyant ve boyut seçenekleri
-- **ButtonAction** - Aksiyon butonları
-- **ButtonGroup** - Buton grupları
-- **Checkbox** - Onay kutuları
-- **DatePicker** - Tarih seçici
-- **Input** - Metin giriş alanları
-- **InputTag** - Etiket giriş alanları
-- **Radio** - Radyo butonları
-- **Select** - Açılır liste
-- **Switch** - Anahtar düğmeleri
-- **TextEditor** - Zengin metin editörü
-- **Upload** - Dosya yükleme
+[📖 Detaylı Kullanım Kılavuzu](./docs/data-display-components.md)
 
-### Veri Görüntüleme
+- **Card**
+- **Chip**
+- **Diagram**
+- **Divider**
+- **DnD (Drag and Drop)**
+- **Grid System**
+- **Kanban Board**
+- **Paper**
+- **Table**
+- **Tabs**
+- **Typography**
 
-- **Card** - Kart bileşenleri
-- **Chip** - Etiket bileşenleri
-- **Divider** - Ayırıcı çizgiler
-- **DnD** - Sürükle-bırak
-- **Paper** - Kağıt bileşenleri
-- **SyntaxHighlighter** - Kod vurgulayıcı
-- **Table** - Tablo bileşenleri
-- **Tabs** - Sekme bileşenleri
-- **Typography** - Tipografi bileşenleri
+### (Feedback) Geri Bildirim
 
-### Geri Bildirim
+[📖 Detaylı Kullanım Kılavuzu](./docs/feedback-components.md)
 
-- **Alert** - Uyarı mesajları
-- **Drawer** - Çekmece bileşenleri
-- **Modal** - Modal pencereler
-- **Popover** - Açılır ipuçları
-- **Progress** - İlerleme çubukları
-- **Tooltip** - İpucu balonları
+- **Alert**
+- **Drawer**
+- **Loading**
+- **Modal**
+- **Notification**
+- **Popover**
+- **Popup**
+- **Progress**
+- **Tooltip**
+
+### (Form) Form Elemanları
+
+[📖 Detaylı Kullanım Kılavuzu](./docs/form-components.md)
+
+- **Button**
+- **Button Action**
+- **Button Group**
+- **Checkbox**
+- **Date Picker**
+- **Input**
+- **Input Number**
+- **Input Tag**
+- **Radio**
+- **Select**
+- **Switch**
+- **TextEditor**
+- **Upload**
+
+### Layout (Düzen)
+
+[📖 Detaylı Kullanım Kılavuzu](./docs/layout-components.md)
+
+- **Layout**
 
 ### Navigasyon
 
-- **Breadcrumb** - Gezinti kırıntıları
-- **Menu** - Menü bileşenleri
-- **Steps** - Adım göstergeleri
+[📖 Detaylı Kullanım Kılavuzu](./docs/navigation.md)
 
-### Düzen
-
-- **Layout** - Sayfa düzeni
-- **Grid** - Izgara sistemi
-
-## 📖 Detaylı Kullanım Kılavuzu
-
-Bileşenlerin detaylı kullanım örnekleri için aşağıdaki dokümantasyon dosyalarını inceleyin:
-
-- [Form Bileşenleri](./docs/form-components.md) - Button, Input, Select, DatePicker vb.
-- [Veri Görüntüleme Bileşenleri](./docs/data-display-components.md) - Table, Card, Typography vb.
-- [Geri Bildirim Bileşenleri](./docs/feedback-components.md) - Alert, Modal, Progress vb.
-- [Navigasyon Bileşenleri](./docs/navigation-components.md) - Menu, Breadcrumb, Steps vb.
-- [Düzen Bileşenleri](./docs/layout-components.md) - Layout, Grid vb.
-- [Grafik Bileşenleri](./docs/chart-components.md) - Pie Chart vb.
-- [Ortak Özellikler](./docs/common-properties.md) - Varyantlar, renkler, boyutlar vb.
-
-## 🎨 Tema ve Özelleştirme
-
-AR Design, CSS değişkenleri kullanarak kolay özelleştirme imkanı sunar:
-
-```css
-:root {
-  --primary: #007bff;
-  --secondary: #6c757d;
-  --success: #28a745;
-  --warning: #ffc107;
-  --danger: #dc3545;
-  --border-radius: 0.5rem;
-}
-```
-
-## 🔧 Geliştirme
-
-### Projeyi Klonlama
-
-```bash
-git clone https://github.com/kaancetin-f/ar-design.git
-cd ar-design
-npm install
-```
-
-### Build İşlemi
-
-```bash
-npm run build
-```
-
-### CSS Loader
-
-```bash
-npm run css-loader
-```
-
-## 📦 Modüler Import
-
-AR Design, modüler import desteği sunar:
-
-```tsx
-// Tüm bileşenler
-import { Button, Input, Card } from 'ar-design';
-
-// Sadece belirli kategoriler
-import { Button, Input } from 'ar-design';
-
-// Servis ve yardımcı fonksiyonlar
-import { Api } from 'ar-design/@service';
-import { Config } from 'ar-design/@config';
-import { useNotification } from 'ar-design/@hooks';
-
-// Stil dosyaları
-import 'ar-design/@styles';
-```
-
-## 🌍 Çoklu Dil Desteği
-
-AR Design, çoklu dil desteği sunar:
-
-```tsx
-import { LanguageProvider } from 'ar-design/@config';
-
-function App() {
-  return (
-    <LanguageProvider language="tr">
-      {/* Uygulama içeriği */}
-    </LanguageProvider>
-  );
-}
-```
+- **Menu**
+- **Pagination**
+- **Steps**
 
 ## 📄 Lisans
 
@@ -205,10 +116,6 @@ Bu proje [MIT Lisansı](LICENSE) altında lisanslanmıştır.
 4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
 5. Pull Request oluşturun
 
-## 📝 Changelog
-
-Detaylı değişiklik geçmişi için [CHANGELOG.md](CHANGELOG.md) dosyasını inceleyin.
-
 ## 🐛 Hata Bildirimi
 
 Hata bildirimi için [GitHub Issues](https://github.com/kaancetin-f/ar-design/issues) sayfasını kullanın.
@@ -216,6 +123,7 @@ Hata bildirimi için [GitHub Issues](https://github.com/kaancetin-f/ar-design/is
 ## 📞 Destek
 
 Sorularınız için:
+
 - GitHub Issues: [Issues](https://github.com/kaancetin-f/ar-design/issues)
 
 ---
