@@ -131,6 +131,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
                       name: event.target.name,
                       value: newValue,
                       type: event.target.type,
+                      dataset: event.target.dataset,
                     },
                   });
                 }
