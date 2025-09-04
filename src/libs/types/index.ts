@@ -212,6 +212,30 @@ export type Icons =
   | "Upload"
   | "Warning"
   | "XCircle-Fill";
+
 // Charts
 // Pie
 export type PieChartDataType = { value: number; text: string };
+
+// Diagram
+export type NodeData = {
+  id: number;
+  position: {
+    x: number;
+    y: number;
+  };
+  data: { label: string };
+};
+
+type Port = "top" | "bottom";
+export type EdgeData = {
+  id: number;
+  from: {
+    id: number;
+    port: Port;
+  };
+  to: {
+    id: number;
+    port: Port;
+  };
+};

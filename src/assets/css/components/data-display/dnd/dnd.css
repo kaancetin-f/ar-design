@@ -4,6 +4,7 @@
   gap: 1rem 0;
 
   > .item {
+    display: flex;
     position: relative;
     min-width: 1px;
     cursor: move;

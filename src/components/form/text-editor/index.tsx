@@ -280,8 +280,8 @@ const TextEditor = <T extends object>({
       <iframe ref={_arIframe} name={name} className={_iframeClassName.map((c) => c).join(" ")} height={height} />
 
       <div className="toolbar">
-        {toolbarButtons.map(({ command, icon, tooltip }) => (
-          <Tooltip text={tooltip}>
+        {toolbarButtons.map(({ command, icon, tooltip }, index) => (
+          <Tooltip key={`${command}-${index}`} text={tooltip}>
             <Button
               key={command}
               type="button"

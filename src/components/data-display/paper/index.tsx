@@ -1,14 +1,11 @@
 import React from "react";
 import Typography from "../typography";
 import "../../../assets/css/components/data-display/paper/styles.css";
+import IProps from "./IProps";
 
 const { Title } = Typography;
 
-const Paper: React.FC<{ children: React.ReactNode; title?: string; action?: React.ReactNode }> = ({
-  children,
-  title,
-  action,
-}) => {
+const Paper: React.FC<IProps> = ({ children, title, action }) => {
   return (
     <div className="ar-paper">
       {(title || action) && (

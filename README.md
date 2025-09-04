@@ -37,7 +37,7 @@ yarn add ar-design
 
 ### Data Display (Veri Görüntüleme)
 
-[📖 Detaylı Kullanım Kılavuzu](./docs/data-display-components.md)
+[📖 Detaylı Kullanım Kılavuzu](./docs/data-display.md)
 
 - **Card**
 - **Chip**

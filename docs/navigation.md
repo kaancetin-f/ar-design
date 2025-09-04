@@ -1,6 +1,4 @@
-# Navigasyon Bileşenleri
-
-AR Design kütüphanesindeki navigasyon bileşenleri, kullanıcı gezinmesi ve sayfa yapısı için tasarlanmıştır.
+# Navigation (Navigasyon Bileşenleri)
 
 ## Menu (Menü)
 

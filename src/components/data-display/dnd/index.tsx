@@ -36,7 +36,7 @@ const DnD = function <T>({ data, renderItem, columnKey, onChange, confing = { is
         }
 
         // Korumaya başla.
-        if (_arDnD.current) {
+        if (_arDnD.current && columnKey && _fromColumn !== columnKey) {
           _arDnD.current.childNodes.forEach((item) => {
             const placeholder = document.createElement("div");
             placeholder.setAttribute("data-id", "placeholder");

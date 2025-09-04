@@ -1,10 +1,11 @@
 import React, { useMemo, useRef, useState } from "react";
 import "../../../assets/css/components/data-display/diagram/styles.css";
-import IProps, { EdgeData, NodeData } from "./IProps";
 import Grid from "../grid-system";
 import Button from "../../form/button";
 import Tooltip from "../../feedback/tooltip";
 import { ARIcon } from "../../icons";
+import IProps from "./IProps";
+import { EdgeData, NodeData } from "../../../libs/types";
 
 type Position = { x: number; y: number };
 
