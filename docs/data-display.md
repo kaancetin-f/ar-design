@@ -294,8 +294,98 @@ export default Page;
 ## Table (Tablo)
 
 ```tsx
+import { Table } from "ar-design";
+import { TableColumnType } from "ar-design/@types";
 
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  role: "admin" | "editor" | "viewer";
+  status: "active" | "passive";
+};
+
+const users: User[] = [
+  {
+    id: "1",
+    name: "Ahmet Yılmaz",
+    email: "ahmet.yilmaz@example.com",
+    role: "admin",
+    status: "active",
+  },
+  {
+    id: "2",
+    name: "Ayşe Demir",
+    email: "ayse.demir@example.com",
+    role: "editor",
+    status: "active",
+  },
+  {
+    id: "3",
+    name: "Mehmet Kaya",
+    email: "mehmet.kaya@example.com",
+    role: "viewer",
+    status: "passive",
+  },
+  {
+    id: "4",
+    name: "Zeynep Çelik",
+    email: "zeynep.celik@example.com",
+    role: "editor",
+    status: "active",
+  },
+];
+
+const columns: TableColumnType<User>[] = [
+  { key: "name", title: "Ad Soyad" },
+  { key: "email", title: "E-posta", render: (u) => u.email },
+];
+
+const Page = () => {
+  return (
+    <Table
+      trackBy={(item) => item.id}
+      title="Kullanıcılar"
+      description="Sistemde kayıtlı kullanıcılar listesi"
+      data={users}
+      columns={columns}
+      actions={{
+        create: { tooltip: "Yeni Kullanıcı", onClick: () => console.log("create") },
+        delete: { tooltip: "Seçileni Sil", onClick: () => console.log("delete") },
+      }}
+      selections={(items) => console.log("Seçilenler:", items)}
+      pagination={{
+        totalRecords: 120,
+        perPage: 10,
+        onChange: (page) => console.log("Sayfa:", page),
+      }}
+      config={{
+        isSearchable: true,
+        scroll: { maxHeight: 400 },
+        subrow: { openAutomatically: false, button: true },
+      }}
+    />
+  );
+};
+
+export default Page;
 ```
+
+| Prop                 | Tip                                                                                | Açıklama                                                               |
+| -------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `trackBy`            | `(item: T) => string`                                                              | Her satırı benzersiz kılmak için ID üretici.                           |
+| `title`              | `string`                                                                           | Tablo başlığı.                                                         |
+| `description`        | `string`                                                                           | Başlık altı açıklama.                                                  |
+| `data`               | `T[]`                                                                              | Tabloya render edilecek veriler.                                       |
+| `columns`            | `TableColumnType<T>[]`                                                             | Tablo kolon tanımları.                                                 |
+| `actions`            | `{ import?, export?, create?, delete? }`                                           | Import, export, create, delete aksiyonları.                            |
+| `selections`         | `(selectionItems: T[]) => void`                                                    | Seçilen satırların callback’i.                                         |
+| `previousSelections` | `T[]`                                                                              | Daha önce seçilmiş satırlar.                                           |
+| `searchedParams`     | `(params: SearchedParam \| null, query: string, operator: FilterOperator) => void` | Arama/filtreleme callback’i.                                           |
+| `onEditable`         | `(item: T, index: number) => void`                                                 | Satırın düzenlenebilir olduğu durumda tetiklenir.                      |
+| `pagination`         | `{ totalRecords: number; perPage: number; onChange? }`                             | Sayfalama ayarları.                                                    |
+| `config`             | `Config`                                                                           | Tablo genel ayarları (server-side, search, scroll, subrow, tree view). |
+| `children`           | `React.ReactNode`                                                                  | Ek içerik (opsiyonel).                                                 |
 
 ## Tabs (Sekmeler)
 
