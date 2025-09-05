@@ -6,12 +6,12 @@ import { KanbanBoardColumnType } from "../../../libs/types";
 import "../../../assets/css/components/data-display/kanban-board/styles.css";
 import DnD from "../dnd";
 
-const KanbanBoard = function <T>({ trackBy, columns, onChange }: IProps<T>) {
+const KanbanBoard = function <T, TColumnProperties>({ trackBy, columns, onChange }: IProps<T, TColumnProperties>) {
   // refs
   const _hoverItemIndex = useRef<number | null>(null);
 
   // states
-  const [data, setData] = useState<KanbanBoardColumnType<T>[]>([]);
+  const [data, setData] = useState<KanbanBoardColumnType<T, TColumnProperties>[]>([]);
 
   // methods
   const handleDrop = (toColumn: string) => (event: React.DragEvent) => {
@@ -38,7 +38,7 @@ const KanbanBoard = function <T>({ trackBy, columns, onChange }: IProps<T>) {
         const safeIndex = Math.min(_hoverItemIndex.current ?? Infinity, boardItems.length); // son elemandan fazla olmasın.
         boardItems.splice(safeIndex, 0, item);
 
-        onChange?.(item, board.key, safeIndex);
+        onChange?.(item, board.key, board.columnProperties, safeIndex);
 
         return {
           ...board,
