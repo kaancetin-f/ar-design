@@ -8,6 +8,13 @@
   width: 100%;
 }
 
+.ar-select-wrapper > .ar-select > .ar-input-wrapper > .ar-input > input {
+  padding-right: 3rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .ar-select-wrapper > .ar-select > .angel-down {
   position: absolute;
   top: calc(var(--input-height) / 2);

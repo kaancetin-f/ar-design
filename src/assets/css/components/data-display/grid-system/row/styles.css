@@ -12,6 +12,7 @@
 .row > * {
   padding-top: 0.75rem;
   padding-left: 0.75rem;
+  min-height: 3rem;
 }
 .row > .col {
   position: relative;
@@ -20,7 +21,6 @@
   -webkit-box-flex: 1;
   -ms-flex-positive: 1;
   max-width: 100%;
-  min-height: 1px;
 }
 
 @media (width <= 575px) {

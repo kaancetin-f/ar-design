@@ -265,12 +265,6 @@ const Page = () => {
 export default Page;
 ```
 
-## InputTag (Etiket Girişi)
-
-```tsx
-
-```
-
 ## Radio (Radyo Buton)
 
 ```tsx
