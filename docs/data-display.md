@@ -257,7 +257,7 @@ export default Page;
 | Prop       | Tip                                                                    | Varsayılan | Açıklama                                                     |
 | ---------- | ---------------------------------------------------------------------- | ---------- | ------------------------------------------------------------ |
 | `trackBy`  | `(item: T) => string`                                                  | -          | Her öğeyi eşsiz olarak tanımlamak için kullanılan fonksiyon. |
-| `columns`  | `KanbanBoardColumnType<T>[]`                                           | -          | Sütun dizisi ve her sütunun öğeleri ile render fonksiyonu.   |
+| `columns`  | `KanbanBoardColumnType<T, TColumnProperties>[]`                        | -          | Sütun dizisi ve her sütunun öğeleri ile render fonksiyonu.   |
 | `onChange` | `(item: T, columnKey: string, hoverIndex: number) => void` (opsiyonel) | -          | Bir öğe sütun değiştirdiğinde çağrılır.                      |
 
 ### 🔧 KanbanBoardColumnType
@@ -517,7 +517,7 @@ export default Page;
 | `gray-800` | Daha koyu gri ton |
 | `gray-900` | En koyu gri ton   |
 
-### 🔧 Status
+### 🔧 Statuses
 
 | Status          | Açıklama                                       |
 | --------------- | ---------------------------------------------- |

@@ -24,6 +24,8 @@
 /* Height */
 
 /* #region Color Palette */
+@import url("./color-palette.css");
+
 :root {
   --white: #fff;
   --white-rgb: 255, 255, 255;
@@ -50,8 +52,6 @@
   --dark-rgb: 52, 58, 64;
 }
 /* #endregion */
-
-@import url("./color-palette.css");
 /* Color Palette */
 
 /* #region Fonts */

@@ -25,6 +25,7 @@ const Progress: React.FC<IProps> = ({ value, reverse, isVisibleValue = false }) 
         className={`ar-progress-value ${_arProgressClassName.map((c) => c).join(" ")}`}
         style={{
           width: `${value}%`,
+          transition: "width 250ms ease-in-out",
         }}
       >
         {!isVisibleValue && <span>%{value}</span>}

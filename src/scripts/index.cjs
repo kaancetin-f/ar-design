@@ -562,6 +562,54 @@ const CardStatuses = () => {
   WriteCssFile(file, content);
 };
 
+const ProgressStatuses = () => {
+  const file = path.join(__dirname, "../assets", "css", "components", "feedback", "progress", "statuses.css");
+
+  const content = statuses
+    .map((status) => {
+      switch (status) {
+        case "primary":
+          background = "blue";
+          break;
+        case "success":
+          background = "green";
+          break;
+        case "warning":
+          background = "orange";
+          break;
+        case "danger":
+          background = "red";
+          break;
+        default:
+          break;
+      }
+
+      return `/* #region ${status.toUpperCase()} */
+.ar-progress {
+  > .ar-progress-bar {
+    &.filled {
+      &.${status} {
+        background-color: var(--${background}-500);
+      }
+    }
+  }
+
+  > .ar-progress-value {
+    &.filled {
+      &.${status} {
+        background-color: var(--${background}-400);
+      }
+    }
+  }
+}
+/* #endregion */
+/* ${status.toUpperCase()} */`;
+    })
+    .join("\n\n");
+
+  WriteCssFile(file, content);
+};
+
 const _Animation_Css = () => {
   const file = path.join(__dirname, "../assets", "css", "core", "variants", "animation.css");
 
@@ -601,5 +649,6 @@ _Variant_BorderlessCss();
 
 AlertStatuses();
 CardStatuses();
+ProgressStatuses();
 
 _Animation_Css();

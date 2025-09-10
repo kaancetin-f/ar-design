@@ -37,11 +37,7 @@ const Alert: React.FC<IProps> = ({
         const lastValue = currentMessage.substring(endIndex);
 
         currentMessage = `${firstValue} <span class="ar-alert-tag">${originalTag}</span> ${lastValue}`;
-
-        // Update the lowerCaseMessage to reflect the change
         _lowerCaseMessage = currentMessage.toLocaleLowerCase();
-
-        // Find the next occurrence of the tag
         startIndex = _lowerCaseMessage.indexOf(
           _lowerCaseEmphasize,
           startIndex + `<span class="ar-alert-tag">${originalTag}</span>`.length
