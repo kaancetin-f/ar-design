@@ -8,8 +8,8 @@
 }
 .ar-upload-button > .button.dropzone > .preview > .selected-image {
   height: 100%;
-  object-fit: fill;
-  object-position: top;
+  object-fit: contain;
+  object-position: center;
 }
 
 .ar-upload-button > .button.dropzone > .items {
