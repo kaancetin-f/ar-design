@@ -92,8 +92,9 @@ const ButtonAction: React.FC<IProps> = ({ buttons }) => {
       {open &&
         ReactDOM.createPortal(
           <span ref={_list} className="ar-action-buttons">
-            {buttons.map((button) => (
+            {buttons.map((button, index) => (
               <Button
+                key={index}
                 style={{ display: "flex", justifyContent: "flex-start" }}
                 variant="borderless"
                 color={button.color ?? "blue"}

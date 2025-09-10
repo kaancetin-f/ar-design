@@ -1,3 +1,0 @@
-.ar-button-group > .ar-button:is(.outlined):not(:first-child) {
-  border-left: transparent !important;
-}

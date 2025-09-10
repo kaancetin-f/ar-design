@@ -6,6 +6,8 @@
 }
 .ar-button-group > .ar-button,
 .ar-button-group > .ar-button:is(.ar-button-shape) {
+  border: solid 1px transparent;
+  border-right-color: rgba(var(--black-rgb), 0.1);
   border-radius: 0;
 }
 .ar-button-group > .ar-button:first-child,
@@ -15,9 +17,10 @@
 }
 .ar-button-group > .ar-button:last-child,
 .ar-button-group .ar-button:is(.ar-button-shape):last-child {
+  border: none;
   border-top-right-radius: var(--border-radius-sm);
   border-bottom-right-radius: var(--border-radius-sm);
 }
 
-@import url("./variant/filled/core.css");
-@import url("./variant/outlined/core.css");
+/* @import url("./variant/filled/core.css");
+@import url("./variant/outlined/core.css"); */

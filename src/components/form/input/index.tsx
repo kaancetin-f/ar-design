@@ -27,9 +27,9 @@ const Input = forwardRef<HTMLInputElement, IProps>(
 
     // variables
     const _wrapperClassName: string[] = ["ar-input-wrapper"];
+    const _inputClassName: string[] = [];
     const _addonBeforeClassName: string[] = ["addon-before"];
     const _addonAfterClassName: string[] = ["addon-after"];
-    const _inputClassName: string[] = [];
 
     _inputClassName.push(
       ...Utils.GetClassName(
@@ -121,7 +121,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
                   const currentValue = upperCase ? convertToUpperCase(value) : value;
 
                   // Yeni değeri oluşturun ve onChange fonksiyonunu çağırın
-                  const newValue = `${addon?.before ?? ""}${currentValue}${addon?.after ?? ""}`;
+                  // const newValue = `${addon?.before ?? ""}${currentValue}${addon?.after ?? ""}`;
 
                   attributes.onChange({
                     ...event,
@@ -129,7 +129,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
                       ...event.target,
                       id: event.target.id,
                       name: event.target.name,
-                      value: newValue,
+                      value: currentValue,
                       type: event.target.type,
                       dataset: event.target.dataset,
                     },

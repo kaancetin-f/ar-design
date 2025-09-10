@@ -57,6 +57,26 @@ const KanbanBoard = function <T, TColumnProperties>({ trackBy, columns, onChange
     _hoverItemIndex.current = null;
   };
 
+  const darkenColor = (hex: string, percent: number) => {
+    let num = parseInt(hex.slice(1), 16),
+      amt = Math.round(2.55 * percent),
+      R = (num >> 16) - amt,
+      G = ((num >> 8) & 0x00ff) - amt,
+      B = (num & 0x0000ff) - amt;
+
+    return (
+      "#" +
+      (
+        0x1000000 +
+        (R < 255 ? (R < 0 ? 0 : R) : 255) * 0x10000 +
+        (G < 255 ? (G < 0 ? 0 : G) : 255) * 0x100 +
+        (B < 255 ? (B < 0 ? 0 : B) : 255)
+      )
+        .toString(16)
+        .slice(1)
+    );
+  };
+
   // useEffects
   useEffect(() => setData(columns), [columns]);
 
@@ -70,9 +90,16 @@ const KanbanBoard = function <T, TColumnProperties>({ trackBy, columns, onChange
             onDragOver={(event) => event.preventDefault()}
             onDrop={handleDrop(board.key)}
           >
-            <div className="title">
+            <div
+              className="title"
+              style={{
+                backgroundColor: board.titleColor ?? "transparent",
+                borderBottom: `solid 1px ${darkenColor(board.titleColor ?? "", 10)}`,
+                color: darkenColor(board.titleColor ?? "", 60),
+              }}
+            >
               <h4>{board.title.toLocaleUpperCase("tr")}</h4>
-              {board.items.length > 0 && <span>{board.items.length}</span>}
+              <span>{board.items.length > 0 ? board.items.length : ""}</span>
             </div>
 
             <div className="items">

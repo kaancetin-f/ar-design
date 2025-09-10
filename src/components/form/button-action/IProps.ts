@@ -1,12 +1,11 @@
-import { Color } from "../../../libs/types";
-import { IIcon } from "../../../libs/types/IGlobalProps";
+import { IColors, IIcon } from "../../../libs/types/IGlobalProps";
 
 interface IProps {
   buttons: ({
     text: string;
     onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    color?: Color;
-  } & IIcon)[];
+  } & IColors &
+    IIcon)[];
 }
 
 export default IProps;

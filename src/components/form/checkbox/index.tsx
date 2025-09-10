@@ -6,7 +6,7 @@ import IProps from "./IProps";
 import "../../../assets/css/components/form/checkbox/checkbox.css";
 
 const Checkbox = forwardRef<HTMLInputElement, IProps>(
-  ({ label, size = "normal", color = "blue", border = { radius: "sm" }, upperCase, ...attributes }, ref) => {
+  ({ label, color = "blue", border = { radius: "sm" }, upperCase, ...attributes }, ref) => {
     // refs
     const _checkbox = useRef<HTMLInputElement>(null);
     const _checkboxClassName: string[] = ["ar-checkbox"];
@@ -17,7 +17,7 @@ const Checkbox = forwardRef<HTMLInputElement, IProps>(
         undefined,
         attributes.checked ? color : "light",
         border,
-        size,
+        undefined,
         undefined,
         attributes.className
       )

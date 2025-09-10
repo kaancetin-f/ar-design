@@ -14,11 +14,11 @@
   z-index: 1051;
   transition: visibility 250ms, opacity 250ms;
 }
-.ar-action-buttons::after {
+/* .ar-action-buttons::after {
   position: absolute;
   top: 0.5rem;
   left: 100%;
   content: "";
   border: solid 10px transparent;
   border-left-color: var(--gray-200);
-}
+} */

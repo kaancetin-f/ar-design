@@ -92,11 +92,12 @@ export type TabProps = {
 
 // Kanban Board Types
 export type KanbanBoardColumnType<T, TColumnProperties> = {
-  title: string;
   key: string;
-  columnProperties: TColumnProperties;
+  title: string;
+  titleColor?: string;
   items: T[];
   renderItem: (item: T, index: number) => React.JSX.Element;
+  columnProperties: TColumnProperties;
 };
 
 // Validation Types

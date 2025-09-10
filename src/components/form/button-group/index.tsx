@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ReactElement, useEffect, useState } from "react";
-import "../../../assets/css/components/form/button-group/button-group.css";
+import "../../../assets/css/components/form/button-group/styles.css";
 import Button from "../button";
 import Alert from "../../feedback/alert";
 
@@ -14,11 +14,11 @@ const ButtonGroup: React.FC<{
   useEffect(() => {
     try {
       // Çocuk elemanların sadece `Button` bileşenleri olduğundan emin olun
-      // React.Children.forEach(children, (child) => {
-      //   if (!React.isValidElement(child) || child.type !== Button) {
-      //     throw new Error("ButtonGroup can only have Button elements as children.");
-      //   }
-      // });
+      React.Children.forEach(children, (child) => {
+        if (!React.isValidElement(child) || child.type !== Button) {
+          throw new Error("ButtonGroup can only have Button elements as children.");
+        }
+      });
 
       // Hata yoksa, error'u temizle
       setError(null);
@@ -31,11 +31,7 @@ const ButtonGroup: React.FC<{
     }
   }, [children]); // children değişirse kontrolü tekrar yap
 
-  return (
-    <div className="ar-button-group">
-      {error ? <Alert status="danger" message={error} /> : children}
-    </div>
-  );
+  return <div className="ar-button-group">{error ? <Alert status="danger" message={error} /> : children}</div>;
 };
 
 ButtonGroup.displayName = "ButtonGroup";

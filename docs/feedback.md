@@ -8,7 +8,7 @@ import { Alert } from "ar-design";
 const Page = () => {
   return (
     <>
-      {/* Basit kullanım */}
+      {/* Temel kullanım */}
       <Alert message="Bilgiler başarıyla kaydedildi." status="success" />
 
       {/* İç içe mesaj listesi */}
@@ -101,7 +101,7 @@ const Page = () => {
 
   return (
     <>
-      {/* Basit Modal */}
+      {/* Temel Kullanım */}
       <Modal open={{ get: open, set: setOpen }} title="Bilgilendirme">
         <p>Bu bir basit modal örneğidir.</p>
       </Modal>
@@ -162,7 +162,7 @@ import { Popover } from "ar-design";
 const Page = () => {
   return (
     <>
-      {/* Basit Modal */}
+      {/* Temel Kullanım */}
       <Popover
         title="Silme İşlemi"
         message="Bu kaydı silmek istediğinize emin misiniz?"
@@ -235,10 +235,10 @@ const Page = () => {
 
   return (
     <>
-      {/* Basit Progress */}
+      {/* Temel Kullanım */}
       <Progress value={80} />
 
-      {/* Reverse Mode */}
+      {/* Reverse Mod */}
       <Progress value={80} reverse />
 
       {/* Yüzdeyi Gizleme */}
@@ -280,7 +280,7 @@ import { Tooltip } from "ar-design";
 const Page = () => {
   return (
     <>
-      {/* Basit Tooltip */}
+      {/* Temel Kullanım */}
       <Tooltip text="Kaydetmek için tıkla">
         <button>Kaydet</button>
       </Tooltip>

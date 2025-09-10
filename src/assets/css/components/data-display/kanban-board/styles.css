@@ -3,7 +3,7 @@
   flex-direction: column;
   max-width: 100%;
   min-width: 100%;
-  border-radius: var(--border-radius-lg);
+  border-radius: var(--border-radius-sm);
   overflow-x: hidden;
 
   > .columns {
@@ -23,13 +23,14 @@
       min-width: 350px;
       border-radius: var(--border-radius-sm);
       user-select: none;
+      overflow: hidden;
 
       > .title {
         display: flex;
         flex-direction: row;
         align-items: center;
         padding: 0.5rem 1rem;
-        color: var(--gray-500);
+        color: var(--gray-700);
 
         > h4 {
           font-size: 0.7rem;
