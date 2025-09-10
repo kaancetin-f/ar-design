@@ -7,6 +7,7 @@
   height: 100%;
 }
 .ar-upload-button > .button.dropzone > .preview > .selected-image {
+  background-color: var(--black);
   height: 100%;
   object-fit: contain;
   object-position: center;
