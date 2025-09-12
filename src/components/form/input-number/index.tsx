@@ -115,6 +115,7 @@ const InputNumber: React.FC<IProps> = ({
       onKeyUp={handleKeyUp}
       placeholder={placeholder}
       validation={validation}
+      disabled={disabled}
     />
   );
 };
