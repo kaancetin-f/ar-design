@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Input from "../../form/input";
 import DatePicker from "../../form/date-picker";
-import { Option, TableColumnType } from "../../../libs/types";
+import { Errors, Option, TableColumnType } from "../../../libs/types";
 import Select from "../../form/select";
 import InputNumber from "../../form/input-number";
 
@@ -12,9 +12,10 @@ interface IProps<T> {
   item: T;
   index: number;
   onEditable: (item: T, index: number) => void;
+  validation?: Errors<T>;
 }
 
-const Editable = function <T>({ c, item, index, onEditable }: IProps<T>) {
+const Editable = function <T>({ c, item, index, onEditable, validation }: IProps<T>) {
   const key = c.key as keyof T;
   const itemValue = item[c.key as keyof T];
   const selectItem = c.editable?.options?.find((x) => x.value === itemValue);
@@ -24,6 +25,8 @@ const Editable = function <T>({ c, item, index, onEditable }: IProps<T>) {
 
   // states
   const [value, setValue] = useState<string | number | readonly string[] | undefined>(itemValue as string);
+
+  const _vText = validation?.[`${c.key as string}_${index}` as keyof typeof validation];
 
   switch (c.editable?.type) {
     case "string":
@@ -38,6 +41,7 @@ const Editable = function <T>({ c, item, index, onEditable }: IProps<T>) {
             setValue(value);
             onEditable({ ...item, [key]: c.editable?.type === "number" ? Number(value) : value } as T, index);
           }}
+          validation={{ text: _vText }}
         />
       );
     case "input-number":
@@ -52,6 +56,7 @@ const Editable = function <T>({ c, item, index, onEditable }: IProps<T>) {
             setValue(value);
             onEditable({ ...item, [key]: c.editable?.type === "number" ? Number(value) : value } as T, index);
           }}
+          validation={{ text: _vText }}
         />
       );
     case "date-picker":
@@ -63,6 +68,7 @@ const Editable = function <T>({ c, item, index, onEditable }: IProps<T>) {
             setValue(value);
             onEditable({ ...item, [key]: value } as T, index);
           }}
+          validation={{ text: _vText }}
         />
       );
     case "single-select":
@@ -75,6 +81,7 @@ const Editable = function <T>({ c, item, index, onEditable }: IProps<T>) {
           onChange={(option) => {
             onEditable({ ...item, [key]: option?.value } as T, index);
           }}
+          validation={{ text: _vText }}
         />
       );
     case "multiple-select":
@@ -87,6 +94,7 @@ const Editable = function <T>({ c, item, index, onEditable }: IProps<T>) {
           onChange={(options) => {
             onEditable({ ...item, [key]: options.map((option) => option.value) } as T, index);
           }}
+          validation={{ text: _vText }}
           multiple
         />
       );

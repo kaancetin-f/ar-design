@@ -594,7 +594,7 @@ const Table = forwardRef(
             {React.isValidElement(render) ? (
               render
             ) : c.editable && onEditable ? (
-              <Editable c={c} item={item} index={index} onEditable={onEditable} />
+              <Editable c={c} item={item} index={index} onEditable={onEditable} validation={config.validation} />
             ) : (
               render
             )}

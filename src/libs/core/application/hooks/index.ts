@@ -88,7 +88,7 @@ export const useValidation = function <TData extends object>(
   const onSubmit = (callback: (result: boolean) => void): void => {
     setSubmit(true);
 
-    setTimeout(() => {
+    queueMicrotask(() => {
       let result: boolean = true;
 
       if (!data || Object.keys(data).length === 0 || params.length === 0) result = false;
@@ -105,11 +105,13 @@ export const useValidation = function <TData extends object>(
       }
 
       callback(result);
-    }, 0);
+    });
   };
 
-  const setError = (key: keyof TData, message: string, step?: number) => {
-    const _key = step ? `${step}_${key as string}` : key;
+  const setError = (key: keyof TData, message: string, step?: number, index?: number) => {
+    let _key = step ? `${step}_${key as string}` : key;
+
+    if (index !== undefined) _key = `${_key as string}_${index}`;
 
     setErrors((prev) => ({ ...prev, [_key]: message }));
     _errors.current = { ..._errors.current, [_key]: message };
@@ -144,7 +146,7 @@ export const useValidation = function <TData extends object>(
           const extractedValues = value.map((item) => item?.[param.subkey as keyof typeof item]);
 
           // Elde edilen değerler topluca paramsShape'e gönderilebilir ya da başka bir şekilde işlenebilir.
-          extractedValues.map((extractedValue) => paramsShape(param, extractedValue));
+          extractedValues.map((extractedValue, index) => paramsShape(param, extractedValue, index));
         } else {
           // Value bir obje ise, subkey doğrudan kullanılır.
           paramsShape(param, value?.[param.subkey as keyof typeof value] as string);
@@ -156,7 +158,7 @@ export const useValidation = function <TData extends object>(
     }
   };
 
-  const paramsShape = (param: ValidationProperties<TData>, value: string | undefined) => {
+  const paramsShape = (param: ValidationProperties<TData>, value: string | undefined, index?: number) => {
     const vLenght = value ? value.length : 0;
 
     const getKey = (subkey: string | undefined) => {
@@ -168,19 +170,19 @@ export const useValidation = function <TData extends object>(
 
     const handleValidation = (key: keyof TData, s: ValidationShape) => {
       if (s.type === "required" && Utils.IsNullOrEmpty(value)) {
-        setError(key, s.message, param.step);
+        setError(key, s.message, param.step, index);
       }
 
       if (s.type === "minimum" && vLenght < (s.value as number)) {
-        setError(key, Utils.StringFormat(s.message, s.value), param.step);
+        setError(key, Utils.StringFormat(s.message, s.value), param.step, index);
       }
 
       if (s.type === "maximum" && vLenght > (s.value as number)) {
-        setError(key, Utils.StringFormat(s.message, s.value), param.step);
+        setError(key, Utils.StringFormat(s.message, s.value), param.step, index);
       }
 
       if (s.type === "email" && value && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
-        setError(key, s.message, param.step);
+        setError(key, s.message, param.step, index);
       }
     };
 

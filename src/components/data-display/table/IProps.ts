@@ -1,5 +1,5 @@
 import React from "react";
-import { MimeTypes, TableColumnType } from "../../../libs/types";
+import { Errors, MimeTypes, TableColumnType } from "../../../libs/types";
 import { IChildren } from "../../../libs/types/IGlobalProps";
 import { FilterOperator } from "../../../libs/infrastructure/shared/Enums";
 
@@ -20,7 +20,7 @@ export type FilterValue = {
 
 export type SearchedParam = { [key: string]: FilterValue | FilterValue[] };
 
-export type Config = {
+export type Config<T> = {
   isServerSide?: boolean;
   isSearchable?: boolean;
   scroll?: {
@@ -32,6 +32,7 @@ export type Config = {
     button?: boolean;
   };
   isTreeView?: boolean;
+  validation?: Errors<T>;
 };
 
 type ImportActionType = {
@@ -86,7 +87,7 @@ interface IProps<T> extends IChildren {
     perPage: number;
     onChange?: (currentPage: number) => void;
   };
-  config?: Config;
+  config?: Config<T>;
 }
 
 export default IProps;

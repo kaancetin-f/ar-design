@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
 import Typography from "../../data-display/typography";
 import "../../../assets/css/components/feedback/drawer/styles.css";
+import { useValidation } from "../../../libs/core/application/hooks";
+import { ValidationProperties } from "../../../libs/types";
 
 const { Title } = Typography;
 
-const Drawer: React.FC<IProps> = ({ title, tabs = [], activeTab, open, onChange }) => {
+const Drawer = function <T extends object>({ title, tabs = [], activeTab, open, validation, onChange }: IProps<T>) {
   // refs
   const _arDrawer = useRef<HTMLDivElement>(null);
   const _drawerWrapperClassName: string[] = ["ar-drawer-wrapper"];
@@ -19,34 +21,53 @@ const Drawer: React.FC<IProps> = ({ title, tabs = [], activeTab, open, onChange 
   // states
   const [currentTab, setCurrentTab] = useState<number>(0);
 
-  // useEffects
+  // hooks
+  const { errors, onSubmit, setSubmit } = useValidation(
+    validation?.data as T,
+    validation?.rules as ValidationProperties<T>[],
+    currentTab + 1
+  );
 
   // methods
-  const handleKeys = (event: KeyboardEvent) => {
-    const key = event.key;
-    const isArModal = document.getElementsByClassName("ar-modal-wrapper opened").length === 0;
-    const isArSelectOptions = document.getElementsByClassName("ar-select-options").length === 0;
-    const isArCalendar = document.getElementsByClassName("ar-date-calendar").length === 0;
-    const isArPopover = document.getElementsByClassName("ar-popover").length === 0;
+  const handleValidationControlForClose = useCallback(() => {
+    if (validation) {
+      onSubmit((result) => {
+        if (!result) return;
 
-    if (key === "Escape" && isArModal && isArCalendar && isArSelectOptions && isArPopover) {
-      event.stopPropagation();
+        open.set(false);
+        setSubmit(false);
+      });
+    } else {
       open.set(false);
     }
-  };
+  }, [errors, onSubmit, setSubmit]);
 
   // useEffects
   useEffect(() => {
-    if (open.get) {
-      document.body.style.overflow = "hidden";
-      document.addEventListener("keydown", handleKeys);
-    }
+    if (!open.get) return;
+
+    document.body.style.overflow = "hidden";
+
+    const handleKeys = (event: KeyboardEvent) => {
+      const key = event.key;
+      const isArModal = document.getElementsByClassName("ar-modal-wrapper opened").length === 0;
+      const isArSelectOptions = document.getElementsByClassName("ar-select-options").length === 0;
+      const isArCalendar = document.getElementsByClassName("ar-date-calendar").length === 0;
+      const isArPopover = document.getElementsByClassName("ar-popover").length === 0;
+
+      if (key === "Escape" && isArModal && isArCalendar && isArSelectOptions && isArPopover) {
+        event.stopPropagation();
+        handleValidationControlForClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeys);
 
     return () => {
       document.body.style.removeProperty("overflow");
       document.removeEventListener("keydown", handleKeys);
     };
-  }, [open.get]);
+  }, [open, handleValidationControlForClose]);
 
   useEffect(() => setCurrentTab(activeTab ?? 0), [activeTab]);
 
@@ -54,11 +75,11 @@ const Drawer: React.FC<IProps> = ({ title, tabs = [], activeTab, open, onChange 
     <div className={_drawerWrapperClassName.map((c) => c).join(" ")}>
       <div
         className="ar-drawer-bg"
-        onMouseDown={(event) => {
+        onClick={(event) => {
           event.stopPropagation();
 
           const target = event.target as HTMLElement;
-          if (_arDrawer.current && !_arDrawer.current.contains(target)) open.set(false);
+          if (_arDrawer.current && !_arDrawer.current.contains(target)) handleValidationControlForClose();
         }}
       ></div>
 
@@ -67,7 +88,7 @@ const Drawer: React.FC<IProps> = ({ title, tabs = [], activeTab, open, onChange 
           <div className="header">
             <Title Level="h3">{title}</Title>
 
-            <div className="close" onClick={() => open.set((prev) => !prev)}></div>
+            <div className="close" onClick={() => handleValidationControlForClose()}></div>
           </div>
         )}
 
@@ -96,7 +117,25 @@ const Drawer: React.FC<IProps> = ({ title, tabs = [], activeTab, open, onChange 
             })}
         </div>
 
-        <div className="content">{tabs.map((tab, index) => currentTab === index && tab.content)}</div>
+        <div className="content">
+          {tabs.map((tab, index) => {
+            return (
+              <div key={index}>
+                {React.Children.map(tab.content, (child) => {
+                  if (React.isValidElement(child) && index === currentTab) {
+                    return validation
+                      ? React.cloneElement(child as React.ReactElement, {
+                          errors: errors,
+                        })
+                      : child;
+                  }
+
+                  return null;
+                })}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
