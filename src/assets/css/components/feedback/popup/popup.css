@@ -62,6 +62,16 @@
   box-shadow: 0 0 0 5px rgba(var(--warning-rgb), 0.25);
 }
 
+.ar-notification-popup > .icon.information {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--information);
+  border-radius: var(--border-radius-pill);
+  box-shadow: 0 0 0 5px rgba(var(--information-rgb), 0.25);
+}
+
 .ar-notification-popup > .icon.error {
   position: relative;
   display: flex;

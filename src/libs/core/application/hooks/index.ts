@@ -39,15 +39,15 @@ export const useTranslation = function <TBaseLocale>(
 
 export const useNotification = () => {
   // contexts
-  const { setTitle, setMessage, setStatus, setTrigger, setIsPopupOpen, setPopupButtons } =
+  const { setTitle, setMessage, setStatus, setTrigger, setIsPopupOpen, setPopupButtons, setOnConfirm } =
     useContext(NotificationContext);
 
   // methods
   const notification = ({ title, message, status }: { title: string; message?: string; status: Status | number }) => {
-    setTitle && setTitle(title);
-    setMessage && setMessage(message ?? "");
-    setStatus && setStatus(status);
-    setTrigger && setTrigger((trigger) => !trigger);
+    setTitle?.(title);
+    setMessage?.(message ?? "");
+    setStatus?.(status);
+    setTrigger?.((trigger) => !trigger);
   };
 
   const popup = (
@@ -60,13 +60,15 @@ export const useNotification = () => {
       message?: string;
       status: Status | number;
     },
-    buttons?: PopupButtonProps | null
+    buttons?: PopupButtonProps | null,
+    onConfirm?: (confirm: boolean) => void
   ) => {
-    setTitle && setTitle(title);
-    setMessage && setMessage(message ?? "");
-    setStatus && setStatus(status);
-    setIsPopupOpen && setIsPopupOpen((trigger) => !trigger);
-    setPopupButtons && setPopupButtons(buttons ?? null);
+    setTitle?.(title);
+    setMessage?.(message ?? "");
+    setStatus?.(status);
+    setIsPopupOpen?.((trigger) => !trigger);
+    setPopupButtons?.(buttons ?? null);
+    setOnConfirm?.(() => onConfirm);
   };
 
   return { notification, popup };

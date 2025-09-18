@@ -24,6 +24,7 @@ type NotificationContextProps = {
   setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
   setIsPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setPopupButtons: React.Dispatch<React.SetStateAction<PopupButtonProps | null>>;
+  setOnConfirm: React.Dispatch<React.SetStateAction<((confirm: boolean) => void) | null>>;
 };
 
 const NotificationContext = createContext<Partial<NotificationContextProps>>({});
@@ -37,6 +38,7 @@ const NotificationProvider = ({ children, direction }: Props) => {
   const [trigger, setTrigger] = useState<boolean>(false);
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const [popupButtons, setPopupButtons] = useState<PopupButtonProps | null>(null);
+  const [onConfirm, setOnConfirm] = useState<((confirm: boolean) => void) | null>(null);
 
   return (
     <NotificationContext.Provider
@@ -47,12 +49,20 @@ const NotificationProvider = ({ children, direction }: Props) => {
         setTrigger,
         setIsPopupOpen,
         setPopupButtons,
+        setOnConfirm,
       }}
     >
       {children}
 
       <Notification title={title} message={message} status={status} direction={direction} trigger={trigger} />
-      <Popup title={title} message={message} status={status} isOpen={isPopupOpen} buttons={popupButtons} />
+      <Popup
+        title={title}
+        message={message}
+        status={status}
+        isOpen={isPopupOpen}
+        buttons={popupButtons}
+        onConfirm={onConfirm}
+      />
     </NotificationContext.Provider>
   );
 };

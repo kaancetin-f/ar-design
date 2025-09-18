@@ -10,7 +10,7 @@ import { Color } from "../../../libs/types";
 import { ARIcon } from "../../icons";
 import Box from "../../data-display/grid-system/box/Box";
 
-const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
+const Popup = ({ title, message, status, isOpen, buttons, onConfirm }: IProps) => {
   // contexts
   const { setIsPopupOpen } = useContext(NotificationContext);
 
@@ -30,7 +30,7 @@ const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
       case "warning":
         return "orange";
       case "information":
-        return "teal";
+        return "cyan";
       case "error":
         return "red";
 
@@ -38,6 +38,7 @@ const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
         return "light";
     }
   };
+
   const buttonIcons = () => {
     switch (status) {
       case "success":
@@ -45,7 +46,7 @@ const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
       case "warning":
         return <ARIcon icon="ExclamationDiamond-Fill" fill="var(--white)" size={48} />;
       case "information":
-        return "information";
+        return <ARIcon icon="Information-Circle-Fill" fill="var(--white)" size={48} />;
       case "error":
         return <ARIcon icon="XCircle-Fill" fill="var(--white)" size={48} />;
 
@@ -99,32 +100,29 @@ const Popup = ({ title, message, status, isOpen, buttons }: IProps) => {
 
           <Box>
             <Button
-              variant="filled"
+              type="button"
               color={buttonColor()}
               onClick={() => {
-                (() => buttons?.okay?.onClick && buttons.okay?.onClick())();
+                buttons?.okay?.onClick?.();
 
-                (() => {
-                  setIsPopupOpen && setIsPopupOpen((prev) => !prev);
-                })();
+                onConfirm?.(true);
+                setIsPopupOpen?.((prev) => !prev);
               }}
             >
-              {buttons?.okay?.text ?? "Tamam"}
+              {buttons?.okay?.text ?? "Evet"}
             </Button>
 
             {buttons?.cancel && (
               <Button
-                variant="filled"
-                color="light"
+                type="button"
                 onClick={() => {
-                  (() => buttons?.cancel?.onClick && buttons.cancel?.onClick())();
+                  buttons?.cancel?.onClick?.();
 
-                  (() => {
-                    setIsPopupOpen && setIsPopupOpen((prev) => !prev);
-                  })();
+                  onConfirm?.(false);
+                  setIsPopupOpen?.((prev) => !prev);
                 }}
               >
-                {buttons?.cancel?.text ?? "İptal"}
+                {buttons?.cancel?.text ?? "Hayır"}
               </Button>
             )}
           </Box>

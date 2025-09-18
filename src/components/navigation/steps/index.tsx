@@ -6,25 +6,20 @@ import "../../../assets/css/components/navigation/steps/styles.css";
 import Typography from "../../data-display/typography";
 import Button from "../../form/button";
 import { useValidation } from "../../../libs/core/application/hooks";
-import { Errors } from "../../../libs/types";
+import { ValidationProperties } from "../../../libs/types";
 
 const { Title } = Typography;
 
-const Steps = function <T extends object>({ children, steps = [], onChange, validation }: IProps<T>) {
+const Steps = function <T extends object>({ children, name, steps = [], onChange, validation }: IProps<T>) {
   // states
   const [currentStep, setCurrentStep] = useState<number>(0);
 
-  let _errors: Errors<T>;
-  let _onSubmit: (callback: (result: boolean) => void) => void;
-  let _setSubmit: React.Dispatch<React.SetStateAction<boolean>>;
-
-  if (validation) {
-    const { errors, onSubmit, setSubmit } = useValidation(validation.data, validation.rules, currentStep + 1);
-
-    _errors = errors;
-    _onSubmit = onSubmit;
-    _setSubmit = setSubmit;
-  }
+  // hooks
+  const { errors, onSubmit, setSubmit } = useValidation(
+    validation?.data as T,
+    validation?.rules as ValidationProperties<T>[],
+    currentStep + 1
+  );
 
   // methods
   const getStepIconStatus = (currentStep: number, index: number) => {
@@ -34,7 +29,13 @@ const Steps = function <T extends object>({ children, steps = [], onChange, vali
   };
 
   // useEffects
-  useEffect(() => onChange(0), []);
+  useEffect(() => {
+    const key = `${window.location.pathname}::${name}`;
+    const stored = sessionStorage.getItem(key);
+
+    setCurrentStep(stored !== null ? Number(stored) : 0);
+    onChange?.(stored !== null ? Number(stored) : 0);
+  }, []);
 
   return (
     <div className="ar-steps">
@@ -51,17 +52,20 @@ const Steps = function <T extends object>({ children, steps = [], onChange, vali
                 className="item"
                 onClick={() => {
                   if (validation) {
-                    _onSubmit((result) => {
+                    onSubmit((result) => {
                       if (!result) return;
 
                       setCurrentStep(index);
                       onChange(index);
-                      _setSubmit(false);
+                      setSubmit(false);
                     });
                   } else {
                     setCurrentStep(index);
                     onChange(index);
                   }
+
+                  const key = `${window.location.pathname}::${name}`;
+                  sessionStorage.setItem(key, String(index));
                 }}
               >
                 <div className={itemIcon.map((c) => c).join(" ")}>
@@ -84,7 +88,7 @@ const Steps = function <T extends object>({ children, steps = [], onChange, vali
                 if (React.isValidElement(child) && stepIndex === currentStep) {
                   return validation
                     ? React.cloneElement(child as React.ReactElement, {
-                        errors: _errors,
+                        errors: errors,
                       })
                     : child;
                 }
@@ -115,18 +119,20 @@ const Steps = function <T extends object>({ children, steps = [], onChange, vali
               color="blue"
               onClick={() => {
                 if (validation) {
-                  _onSubmit((result) => {
+                  onSubmit((result) => {
                     if (!result) return;
 
                     setCurrentStep((prev) => prev + 1);
                     onChange(currentStep + 1);
-
-                    _setSubmit(false);
+                    setSubmit(false);
                   });
                 } else {
                   setCurrentStep((prev) => prev + 1);
                   onChange(currentStep + 1);
                 }
+
+                const key = `${window.location.pathname}::${name}`;
+                sessionStorage.setItem(key, String(currentStep + 1));
               }}
             >
               İleri

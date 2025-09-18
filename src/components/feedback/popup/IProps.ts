@@ -6,6 +6,7 @@ interface IProps {
   status: Status | number;
   isOpen: boolean;
   buttons?: PopupButtonProps | null;
+  onConfirm?: ((confirm: boolean) => void) | null;
 }
 
 export default IProps;

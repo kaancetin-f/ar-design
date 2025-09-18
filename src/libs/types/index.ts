@@ -202,6 +202,7 @@ export type Icons =
   | "GripVertical"
   | "Import"
   | "Inbox-Fill"
+  | "Information-Circle-Fill"
   | "Italic"
   | "NumberList"
   | "Strikethrough"
