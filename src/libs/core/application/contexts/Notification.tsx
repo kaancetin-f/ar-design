@@ -2,7 +2,8 @@
 
 import React, { ReactNode, createContext, useState } from "react";
 import Notification from "../../../../components/feedback/notification";
-import Popup from "../../../../components/feedback/popup";
+import PopupConfirm from "../../../../components/feedback/popup-confirm";
+import IButtonProps from "../../../../components/form/button/IProps";
 
 export type Status = "success" | "warning" | "information" | "error";
 export type Direction = "top-left" | "top-right" | "bottom-left" | "bottom-right";
@@ -12,18 +13,19 @@ type Props = {
   direction: Direction;
 };
 
-export type PopupButtonProps = {
-  okay?: { text?: string; onClick?: () => void };
-  cancel?: { text?: string; onClick?: () => void };
+export type PopupButtonConfig = {
+  okay?: IButtonProps;
+  cancel?: IButtonProps;
 };
 
 type NotificationContextProps = {
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   setMessage: React.Dispatch<React.SetStateAction<string>>;
   setStatus: React.Dispatch<React.SetStateAction<Status | number>>;
+  setPopupStatus: React.Dispatch<React.SetStateAction<(Status | "save" | "delete") | number>>;
   setTrigger: React.Dispatch<React.SetStateAction<boolean>>;
   setIsPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setPopupButtons: React.Dispatch<React.SetStateAction<PopupButtonProps | null>>;
+  setPopupButtons: React.Dispatch<React.SetStateAction<PopupButtonConfig | null>>;
   setOnConfirm: React.Dispatch<React.SetStateAction<((confirm: boolean) => void) | null>>;
 };
 
@@ -35,9 +37,10 @@ const NotificationProvider = ({ children, direction }: Props) => {
     "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir."
   );
   const [status, setStatus] = useState<Status | number>("success");
+  const [popupStatus, setPopupStatus] = useState<(Status | "save" | "delete") | number>("success");
   const [trigger, setTrigger] = useState<boolean>(false);
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
-  const [popupButtons, setPopupButtons] = useState<PopupButtonProps | null>(null);
+  const [popupButtons, setPopupButtons] = useState<PopupButtonConfig | null>(null);
   const [onConfirm, setOnConfirm] = useState<((confirm: boolean) => void) | null>(null);
 
   return (
@@ -46,6 +49,7 @@ const NotificationProvider = ({ children, direction }: Props) => {
         setTitle,
         setMessage,
         setStatus,
+        setPopupStatus,
         setTrigger,
         setIsPopupOpen,
         setPopupButtons,
@@ -55,10 +59,10 @@ const NotificationProvider = ({ children, direction }: Props) => {
       {children}
 
       <Notification title={title} message={message} status={status} direction={direction} trigger={trigger} />
-      <Popup
+      <PopupConfirm
         title={title}
         message={message}
-        status={status}
+        status={popupStatus}
         isOpen={isPopupOpen}
         buttons={popupButtons}
         onConfirm={onConfirm}

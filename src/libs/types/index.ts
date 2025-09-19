@@ -197,6 +197,7 @@ export type Icons =
   | "FileTypeXml"
   | "FileTypeZip"
   | "Filter"
+  | "Floppy-Fill"
   | "Folder"
   | "Front"
   | "GripVertical"

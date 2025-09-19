@@ -2,7 +2,7 @@
 
 import { useContext, useEffect, useRef, useState } from "react";
 import { ConfigContext } from "../contexts/Config";
-import { NotificationContext, PopupButtonProps, Status } from "../contexts/Notification";
+import { NotificationContext, PopupButtonConfig, Status } from "../contexts/Notification";
 import Utils from "../../../infrastructure/shared/Utils";
 import { Errors, ValidationProperties, ValidationShape } from "../../../types";
 import { LanguageContext } from "../contexts/Language";
@@ -39,7 +39,7 @@ export const useTranslation = function <TBaseLocale>(
 
 export const useNotification = () => {
   // contexts
-  const { setTitle, setMessage, setStatus, setTrigger, setIsPopupOpen, setPopupButtons, setOnConfirm } =
+  const { setTitle, setMessage, setStatus, setPopupStatus, setTrigger, setIsPopupOpen, setPopupButtons, setOnConfirm } =
     useContext(NotificationContext);
 
   // methods
@@ -50,28 +50,28 @@ export const useNotification = () => {
     setTrigger?.((trigger) => !trigger);
   };
 
-  const popup = (
-    {
-      title,
-      message,
-      status,
-    }: {
-      title: string;
-      message?: string;
-      status: Status | number;
-    },
-    buttons?: PopupButtonProps | null,
-    onConfirm?: (confirm: boolean) => void
-  ) => {
+  const popupConfirm = ({
+    title,
+    message,
+    status,
+    buttons,
+    onConfirm,
+  }: {
+    title: string;
+    message?: string;
+    status: (Status | "save" | "delete") | number;
+    buttons?: PopupButtonConfig | null;
+    onConfirm?: (confirm: boolean) => void;
+  }) => {
     setTitle?.(title);
     setMessage?.(message ?? "");
-    setStatus?.(status);
+    setPopupStatus?.(status);
     setIsPopupOpen?.((trigger) => !trigger);
     setPopupButtons?.(buttons ?? null);
     setOnConfirm?.(() => onConfirm);
   };
 
-  return { notification, popup };
+  return { notification, popupConfirm };
 };
 
 export const useValidation = function <TData extends object>(

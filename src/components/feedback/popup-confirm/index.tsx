@@ -2,15 +2,16 @@
 
 import React, { useContext, useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
-import "../../../assets/css/components/feedback/popup/popup.css";
+import "../../../assets/css/components/feedback/popup-confirm/styles.css";
 import Button from "../../form/button";
 import ReactDOM from "react-dom";
 import { NotificationContext } from "../../../libs/core/application/contexts/Notification";
 import { Color } from "../../../libs/types";
 import { ARIcon } from "../../icons";
-import Box from "../../data-display/grid-system/box/Box";
+import Row from "../../data-display/grid-system/row/Row";
+import Column from "../../data-display/grid-system/column/Column";
 
-const Popup = ({ title, message, status, isOpen, buttons, onConfirm }: IProps) => {
+const PopupConfirm = ({ title, message, status, isOpen, buttons, onConfirm }: IProps) => {
   // contexts
   const { setIsPopupOpen } = useContext(NotificationContext);
 
@@ -26,12 +27,14 @@ const Popup = ({ title, message, status, isOpen, buttons, onConfirm }: IProps) =
   const buttonColor = (): Color => {
     switch (status) {
       case "success":
+      case "save":
         return "green";
       case "warning":
         return "orange";
       case "information":
         return "cyan";
       case "error":
+      case "delete":
         return "red";
 
       default:
@@ -42,13 +45,17 @@ const Popup = ({ title, message, status, isOpen, buttons, onConfirm }: IProps) =
   const buttonIcons = () => {
     switch (status) {
       case "success":
-        return <ARIcon icon="CheckAll" fill="var(--white)" size={64} />;
+        return <ARIcon icon="CheckAll" fill="var(--success)" size={24} />;
+      case "save":
+        return <ARIcon icon="Floppy-Fill" fill="var(--success)" size={24} />;
       case "warning":
-        return <ARIcon icon="ExclamationDiamond-Fill" fill="var(--white)" size={48} />;
+        return <ARIcon icon="ExclamationDiamond-Fill" fill="var(--warning)" size={24} />;
       case "information":
-        return <ARIcon icon="Information-Circle-Fill" fill="var(--white)" size={48} />;
+        return <ARIcon icon="Information-Circle-Fill" fill="var(--information)" size={24} />;
       case "error":
-        return <ARIcon icon="XCircle-Fill" fill="var(--white)" size={48} />;
+        return <ARIcon icon="XCircle-Fill" fill="var(--danger)" size={24} />;
+      case "delete":
+        return <ARIcon icon="Trash-Fill" fill="var(--danger)" size={24} />;
 
       default:
         return "light";
@@ -94,38 +101,46 @@ const Popup = ({ title, message, status, isOpen, buttons, onConfirm }: IProps) =
           <div className={`icon ${status}`}>{buttonIcons()}</div>
 
           <div className="content">
-            <span className={`title ${status}`}>{title}!</span>
+            <span className={`title ${status}`}>{title}</span>
             <span className="message">{message}</span>
           </div>
 
-          <Box>
-            <Button
-              type="button"
-              color={buttonColor()}
-              onClick={() => {
-                buttons?.okay?.onClick?.();
+          <div className="footer">
+            <Row>
+              <Column size={buttons?.cancel ? 6 : 12}>
+                <Button
+                  color={buttonColor()}
+                  onClick={(event) => {
+                    buttons?.okay?.onClick?.(event);
 
-                onConfirm?.(true);
-                setIsPopupOpen?.((prev) => !prev);
-              }}
-            >
-              {buttons?.okay?.text ?? "Evet"}
-            </Button>
+                    onConfirm?.(true);
+                    setIsPopupOpen?.((prev) => !prev);
+                  }}
+                  fullWidth
+                >
+                  {buttons?.okay?.children ?? "Tamam"}
+                </Button>
+              </Column>
 
-            {buttons?.cancel && (
-              <Button
-                type="button"
-                onClick={() => {
-                  buttons?.cancel?.onClick?.();
+              {buttons?.cancel && (
+                <Column size={6}>
+                  <Button
+                    variant="outlined"
+                    color={buttons.cancel.color ?? "gray"}
+                    onClick={(event) => {
+                      buttons?.cancel?.onClick?.(event);
 
-                  onConfirm?.(false);
-                  setIsPopupOpen?.((prev) => !prev);
-                }}
-              >
-                {buttons?.cancel?.text ?? "Hayır"}
-              </Button>
-            )}
-          </Box>
+                      onConfirm?.(false);
+                      setIsPopupOpen?.((prev) => !prev);
+                    }}
+                    fullWidth
+                  >
+                    {buttons.cancel.children ?? "Vazgeç"}
+                  </Button>
+                </Column>
+              )}
+            </Row>
+          </div>
         </div>
       </div>,
       document.body
@@ -133,4 +148,4 @@ const Popup = ({ title, message, status, isOpen, buttons, onConfirm }: IProps) =
   );
 };
 
-export default Popup;
+export default PopupConfirm;
