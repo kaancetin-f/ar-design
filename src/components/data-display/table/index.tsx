@@ -13,6 +13,7 @@ import React, {
   memo,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -65,6 +66,7 @@ const Table = forwardRef(
     // refs
     const _tableWrapper = useRef<HTMLDivElement>(null);
     const _tableContent = useRef<HTMLDivElement>(null);
+    const _tBodyTR = useRef<(HTMLTableRowElement | null)[]>([]);
     const _checkboxItems = useRef<(HTMLInputElement | null)[]>([]);
     const _filterCheckboxItems = useRef<(HTMLInputElement | null)[]>([]);
     // refs -> Search
@@ -87,6 +89,7 @@ const Table = forwardRef(
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [selectionItems, setSelectionItems] = useState<T[]>([]);
     const [showSubitems, setShowSubitems] = useState<{ [key: string]: boolean }>({});
+    const [rowHeights, setRowHeights] = useState<number[]>([]);
     // states -> File
     const [formData, setFormData] = useState<FormData | undefined>(undefined);
     const [files, setFiles] = useState<File[]>([]);
@@ -484,7 +487,12 @@ const Table = forwardRef(
       // TODO: Keylere bakılacak...
       return (
         <Fragment key={`row-${index}`}>
-          <tr key={`row-${index}`}>
+          <tr
+            key={`row-${index}`}
+            ref={(element) => {
+              _tBodyTR.current[index] = element;
+            }}
+          >
             {/* Checkboxes */}
             {selections && (
               <td className="flex justify-content-center sticky-left" data-sticky-position="left">
@@ -521,7 +529,17 @@ const Table = forwardRef(
               <td style={{ width: 0, minWidth: 0 }}></td>
             ) : null}
 
-            {columns.map((c, cIndex) => renderCell(item, c, cIndex, index, deph * (config.isTreeView ? 1.75 : 0), 0))}
+            {columns.map((c, cIndex) => {
+              return renderCell(
+                item,
+                c,
+                cIndex,
+                index,
+                deph * (config.isTreeView ? 1.75 : 0),
+                0,
+                rowHeights[index] ?? 0
+              );
+            })}
           </tr>
 
           {/* Alt satırları burada listele */}
@@ -544,6 +562,7 @@ const Table = forwardRef(
       index: number,
       depth: number,
       level: number,
+      height: number = 0,
       isSubrows: boolean = false
     ) => {
       let render: any;
@@ -573,7 +592,10 @@ const Table = forwardRef(
         <td
           key={`cell-${index}-${cIndex}`}
           className={_className.join(" ")}
-          style={c.config?.width ? { minWidth: c.config.width, maxWidth: c.config.width } : {}}
+          style={{
+            ...(c.config?.sticky ? { height } : {}),
+            ...(c.config?.width ? { width: c.config.width, minWidth: c.config.width, maxWidth: c.config.width } : {}),
+          }}
           data-sticky-position={c.config?.sticky}
         >
           <div style={{ paddingLeft: `${depth == 0 ? 1 : depth}rem` }} className="table-cell">
@@ -590,7 +612,6 @@ const Table = forwardRef(
                 <div className="before"></div>
               </>
             )}
-
             {React.isValidElement(render) ? (
               render
             ) : c.editable && onEditable ? (
@@ -598,7 +619,6 @@ const Table = forwardRef(
             ) : (
               render
             )}
-
             {config.isTreeView && cIndex === 0 && (
               <div className="after">
                 <div className="circle"></div>
@@ -645,7 +665,7 @@ const Table = forwardRef(
               ) : null}
 
               {columns.map((c: TableColumnType<T>, cIndex: number) =>
-                renderCell(subitem, c, cIndex, subindex, depth * (config.isTreeView ? 2.25 : 1.75), level, true)
+                renderCell(subitem, c, cIndex, subindex, depth * (config.isTreeView ? 2.25 : 1.75), level, 0, true)
               )}
             </tr>
 
@@ -742,6 +762,12 @@ const Table = forwardRef(
         handleFilterPopupContent(filterCurrentColumn, filterCurrentDataType, filterCurrentIndex);
       }
     }, [checkboxSelectedParams, filterPopupOption, filterPopupOptionSearchText]);
+
+    useLayoutEffect(() => {
+      const heights = _tBodyTR.current.map((el) => (el ? el.getBoundingClientRect().height : 0));
+
+      setRowHeights(heights);
+    }, [data]);
 
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>

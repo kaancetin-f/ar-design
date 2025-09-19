@@ -63,6 +63,11 @@
 .ar-table > .content > table > tbody > tr > td > .table-cell {
   padding: 0 1rem;
 }
+.ar-table > .content > table > tbody > tr > td > .table-cell {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
 
 .ar-table > .content > table > thead > tr > th.min-w,
 .ar-table > .content > table > tbody > tr > td.min-w {
