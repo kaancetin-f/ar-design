@@ -49,6 +49,7 @@ export type Option = { value: string | number | null; text: string };
 
 // Menu Types
 export type MenuProps = {
+  key: string | number;
   render?: string | React.JSX.Element;
   type?: MenuItemType;
   icon?: React.ReactElement<SVGElement | HTMLImageElement>;
