@@ -64,13 +64,15 @@ const Menu: React.FC<IProps> = ({ data, variant = "vertical", ...attributes }) =
 
   // useEffects
   useEffect(() => {
-    const stored = JSON.parse(sessionStorage.getItem(sessionStorageKey) ?? "{}");
+    if (data.length === 0) return;
 
-    if (stored) setSelectedItem(stored);
-    else setSelectedItem(data[0]);
+    const stored = JSON.parse(sessionStorage.getItem(sessionStorageKey) ?? "{}");
+    const _menuItem = (Object.keys(stored).length > 0 ? stored : data[0]) as MenuProps;
+
+    setSelectedItem(_menuItem);
 
     // DOM üzerinde seçili li elementini bul ve üst menüleri aç
-    const li = document.querySelector(`li[data-menu-id="ar-menu-${stored.key}"]`) as HTMLLIElement;
+    const li = document.querySelector(`li[data-menu-id="ar-menu-${_menuItem.key}"]`) as HTMLLIElement;
     openParentMenusDOM(li);
   }, [data]);
 
