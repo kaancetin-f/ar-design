@@ -24,7 +24,6 @@ const Upload: React.FC<Props> = ({
   multiple,
 }) => {
   // refs
-  const _firstLoad = useRef<boolean>(false);
   const _input = useRef<HTMLInputElement>(null);
   const _arUplaod = useRef<HTMLDivElement>(null);
   // refs -> File Data
@@ -190,11 +189,9 @@ const Upload: React.FC<Props> = ({
   }, [selectedFiles]);
 
   useEffect(() => {
-    if (!_firstLoad.current && files.length === 0) return;
     if (Utils.DeepEqual(files, selectedFiles)) return;
 
     setSelectedFiles(files);
-    _firstLoad.current = true;
   }, [files]);
 
   useEffect(() => {
