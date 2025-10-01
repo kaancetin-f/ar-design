@@ -74,8 +74,6 @@ const Table = forwardRef(
     const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
     // refs -> Filter
     const _filterButton = useRef<(HTMLSpanElement | null)[]>([]);
-    // refs -> Previous Selection Items
-    const _hasInitialized = useRef(false);
 
     // variables
     const _subrowOpenAutomatically: boolean = config.subrow?.openAutomatically ?? false;
@@ -686,14 +684,15 @@ const Table = forwardRef(
 
     // useEffects
     useEffect(() => {
-      if (_hasInitialized.current) return;
+      if (Utils.DeepEqual(previousSelections, selectionItems)) return;
 
       if (previousSelections && previousSelections.length > 0) {
         const validSelections = data.filter((item) =>
           previousSelections.some((selected) => trackBy?.(selected) === trackBy?.(item))
         );
         setSelectionItems(validSelections);
-        _hasInitialized.current = true; // sadece bir kez ayarla
+      } else {
+        setSelectionItems([]);
       }
     }, [previousSelections, data]);
 
