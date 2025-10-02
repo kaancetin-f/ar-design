@@ -85,6 +85,7 @@ interface IProps<T> extends IChildren {
   pagination?: {
     totalRecords: number;
     perPage: number;
+    currentPage?: number;
     onChange?: (currentPage: number) => void;
   };
   config?: Config<T>;

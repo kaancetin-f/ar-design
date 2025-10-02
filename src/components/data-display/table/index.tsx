@@ -473,9 +473,6 @@ const Table = forwardRef(
         _data = _data.slice(indexOfFirstRow, indexOfLastRow);
       }
 
-      // Veriler yenilenmesi durumunda tablo üzerindeki hesaplamalar tekrar yapılacaktır.
-      setTimeout(() => handleScroll(), 0);
-
       return _data;
     }, [data, searchedText, currentPage]);
 
@@ -632,14 +629,9 @@ const Table = forwardRef(
         const _subitem = subitem[_subrowSelector as keyof typeof subitem];
         const isHasSubitems = _subrowSelector in subitem;
 
-        // TODO: Keylere bakılacak...
         return (
           <Fragment key={`subitem-${index}-${subindex}-${Math.random()}`}>
-            <tr
-              key={`subitem-${index}-${subindex}-${Math.random()}`}
-              className={`subrow-item ${_subrowButton ? "type-b" : "type-a"}`}
-              data-level={level}
-            >
+            <tr className={`subrow-item ${_subrowButton ? "type-b" : "type-a"}`} data-level={level}>
               {isHasSubitems && _subrowButton ? (
                 <td>
                   <div className="subitem-open-button-wrapper">
@@ -669,7 +661,6 @@ const Table = forwardRef(
 
             {showSubitems[`${index}.${subindex}`] && _subitem && (
               <SubitemList
-                key={`subitem-${index}-${subindex}-${Math.random()}`} // TODO: Daha sonra tekrar bakılacak...
                 items={_subitem as T[]}
                 columns={columns}
                 index={subindex}
@@ -765,8 +756,16 @@ const Table = forwardRef(
     useLayoutEffect(() => {
       const heights = _tBodyTR.current.map((el) => (el ? el.getBoundingClientRect().height : 0));
 
+      setTimeout(() => handleScroll(), 0);
       setRowHeights(heights);
     }, [data]);
+
+    useLayoutEffect(() => {
+      if (!pagination?.currentPage) return;
+
+      setTimeout(() => handleScroll(), 0);
+      setCurrentPage(pagination?.currentPage ?? 1);
+    }, [pagination?.currentPage]);
 
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
@@ -1073,7 +1072,9 @@ const Table = forwardRef(
               onChange={(currentPage) => {
                 if (config.isServerSide && pagination && pagination.onChange) pagination.onChange(currentPage);
 
+                setTimeout(() => handleScroll(), 0);
                 setCurrentPage(currentPage);
+                pagination.onChange?.(currentPage);
               }}
             />
           </div>
@@ -1088,6 +1089,7 @@ export default memo(Table, <T extends object>(prevProps: IProps<T>, nextProps: I
   const columns = Utils.DeepEqual(prevProps.columns, nextProps.columns);
   const actions = Utils.DeepEqual(prevProps.actions, nextProps.actions);
   const previousSelections = Utils.DeepEqual(prevProps.previousSelections, nextProps.previousSelections);
+  const pagination = Utils.DeepEqual(prevProps.pagination, nextProps.pagination);
 
-  return data && columns && actions && previousSelections;
+  return data && columns && actions && previousSelections && pagination;
 }) as <T extends object>(props: IProps<T> & { ref?: React.Ref<HTMLTableElement> }) => JSX.Element;

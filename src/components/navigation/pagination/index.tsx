@@ -5,16 +5,18 @@ import IProps from "./IProps";
 import "../../../assets/css/components/navigation/pagination/pagination.css";
 import { ConfigContext } from "../../../libs/core/application/contexts/Config";
 
-const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, currentPage, totalRecords, perPage, onChange }) => {
+const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onChange }) => {
   // context
   const { config } = useContext(ConfigContext);
 
   // states
   const [pages, setPages] = useState<React.JSX.Element[]>([]);
-  const [_currentPage, setCurrentPage] = useState<number>(defaultCurrent);
   const [totalPageCount, setTotalPageCount] = useState<number>(0);
 
-  // useEffect
+  // methods
+  const handlePageChange = (page: number) => onChange(page);
+
+  // useEffects
   useEffect(() => {
     if (totalRecords === 0) return;
 
@@ -22,83 +24,42 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, currentPage, totalRe
     const _totalPageCount = Math.ceil(totalRecords / (perPage ?? config.perPage));
     setTotalPageCount(_totalPageCount);
 
+    // currentPage prop'unu kullanın
+    const activePage = currentPage || 1;
+
     // Başlangıç ve bitiş aralığını hesapla.
-    const startPage = Math.max(1, _currentPage - 1);
-    const endPage = Math.min(_totalPageCount, _currentPage + 1);
+    const startPage = Math.max(1, activePage - 1);
+    const endPage = Math.min(_totalPageCount, activePage + 1);
 
-    // İlk sayfa ve ... eklemek.
-    if (startPage > 1) {
-      liItems.push(
-        <li key={1} onClick={() => setCurrentPage(1)}>
-          1
-        </li>
-      );
-
-      if (startPage > 2) {
-        liItems.push(
-          <li key="start-ellipsis" className="start-ellipsis">
-            ...
-          </li>
-        );
-      }
-    }
-
-    // Sayfa aralığını eklemek.
+    // Sayfalama mantığı...
     for (let i = startPage; i <= endPage; i++) {
       liItems.push(
-        <li key={i} className={i === _currentPage ? "selection-page" : ""} onClick={() => setCurrentPage(i)}>
+        <li key={i} className={i === activePage ? "selection-page" : ""} onClick={() => handlePageChange(i)}>
           {i}
         </li>
       );
     }
 
-    // Son sayfa ve ... eklemek.
-    if (endPage < _totalPageCount) {
-      if (endPage < _totalPageCount - 1) {
-        liItems.push(
-          <li key="end-ellipsis" className="end-ellipsis">
-            ...
-          </li>
-        );
-      }
-
-      liItems.push(
-        <li key={_totalPageCount} onClick={() => setCurrentPage(_totalPageCount)}>
-          {_totalPageCount}
-        </li>
-      );
-    }
-
     setPages(liItems);
-    onChange(_currentPage);
-  }, [totalRecords, _currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(currentPage);
-  }, [currentPage]);
+  }, [totalRecords, currentPage, perPage, config.perPage]);
 
   return (
     <div className="ar-pagination">
       <ul>
         <li
-          className={_currentPage === 1 ? "passive" : ""}
+          className={currentPage === 1 ? "passive" : ""}
           onClick={() => {
-            if (_currentPage === 1) return;
-
-            setCurrentPage(1);
+            if (currentPage === 1) return;
+            handlePageChange(1);
           }}
         >
           <span>{"«"}</span>
         </li>
         <li
-          className={_currentPage === 1 ? "passive" : ""}
+          className={currentPage === 1 ? "passive" : ""}
           onClick={() => {
-            if (_currentPage === 1) return;
-
-            setCurrentPage((prev) => {
-              if (prev === 1) return prev;
-              return (prev -= 1);
-            });
+            if (currentPage === 1) return;
+            handlePageChange(currentPage - 1);
           }}
         >
           <span>{"‹"}</span>
@@ -107,24 +68,19 @@ const Pagination: React.FC<IProps> = ({ defaultCurrent = 1, currentPage, totalRe
         {pages}
 
         <li
-          className={totalPageCount === _currentPage ? "passive" : ""}
+          className={totalPageCount === currentPage ? "passive" : ""}
           onClick={() => {
-            if (totalPageCount === _currentPage) return;
-
-            setCurrentPage((prev) => {
-              if (prev === totalPageCount) return prev;
-              return (prev += 1);
-            });
+            if (totalPageCount === currentPage) return;
+            handlePageChange(currentPage + 1);
           }}
         >
           <span>{"›"}</span>
         </li>
         <li
-          className={totalPageCount === _currentPage ? "passive" : ""}
+          className={totalPageCount === currentPage ? "passive" : ""}
           onClick={() => {
-            if (totalPageCount === _currentPage) return;
-
-            setCurrentPage(totalPageCount);
+            if (totalPageCount === currentPage) return;
+            handlePageChange(totalPageCount);
           }}
         >
           <span>{"»"}</span>
