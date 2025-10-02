@@ -1,3 +1,9 @@
+.ar-pagination {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0 0.5rem;
+}
 .ar-pagination > ul {
   display: flex;
   flex-direction: row;
@@ -9,7 +15,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 1.75rem;
+  min-width: 1.75rem;
   height: 100%;
   border-radius: var(--border-radius-pill);
   box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.1);

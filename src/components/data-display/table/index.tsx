@@ -112,6 +112,7 @@ const Table = forwardRef(
     // states -> Pagination
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [selectedPerPage, setSelectedPerPage] = useState<number>(pagination?.perPage ?? 10);
 
     if (config && Object.keys(config.scroll || {}).length > 0) {
       if (_tableContent.current && config.scroll) {
@@ -467,14 +468,14 @@ const Table = forwardRef(
       }
 
       if (pagination && !config.isServerSide) {
-        const indexOfLastRow = currentPage * pagination.perPage;
-        const indexOfFirstRow = indexOfLastRow - pagination.perPage;
+        const indexOfLastRow = currentPage * selectedPerPage;
+        const indexOfFirstRow = indexOfLastRow - selectedPerPage;
 
         _data = _data.slice(indexOfFirstRow, indexOfLastRow);
       }
 
       return _data;
-    }, [data, searchedText, currentPage]);
+    }, [data, searchedText, currentPage, selectedPerPage]);
 
     const renderRow = (item: T, index: number, deph: number) => {
       const isHasSubitems = _subrowSelector in item;
@@ -766,6 +767,11 @@ const Table = forwardRef(
       setTimeout(() => handleScroll(), 0);
       setCurrentPage(pagination?.currentPage ?? 1);
     }, [pagination?.currentPage]);
+
+    useLayoutEffect(() => {
+      setCurrentPage(1);
+      setTimeout(() => handleScroll(), 0);
+    }, [selectedPerPage]);
 
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
@@ -1061,14 +1067,14 @@ const Table = forwardRef(
         {pagination && pagination.totalRecords > pagination.perPage && (
           <div className="footer">
             <span>
-              <strong>Showing {getData.length}</strong>{" "}
-              <span>of {pagination?.perPage ?? getData.length} agreement</span>
+              <strong>Showing {getData.length}</strong> <span>of {selectedPerPage ?? getData.length} agreement</span>
             </span>
 
             <Pagination
               totalRecords={config.isServerSide ? pagination.totalRecords : totalRecords ?? 0}
               currentPage={currentPage}
-              perPage={pagination.perPage}
+              perPage={selectedPerPage}
+              onPerPageChange={(perPage) => setSelectedPerPage(perPage)}
               onChange={(currentPage) => {
                 if (config.isServerSide && pagination && pagination.onChange) pagination.onChange(currentPage);
 

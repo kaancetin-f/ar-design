@@ -2,16 +2,30 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import IProps from "./IProps";
-import "../../../assets/css/components/navigation/pagination/pagination.css";
+import "../../../assets/css/components/navigation/pagination/styles.css";
 import { ConfigContext } from "../../../libs/core/application/contexts/Config";
+import Select from "../../form/select";
+import { Option } from "../../../libs/types";
 
-const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onChange }) => {
+const perPageOptions: Option[] = [
+  { value: 5, text: "5" },
+  { value: 10, text: "10" },
+  { value: 15, text: "15" },
+  { value: 50, text: "50" },
+  { value: 75, text: "75" },
+  { value: 100, text: "100" },
+];
+
+const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onPerPageChange, onChange }) => {
   // context
   const { config } = useContext(ConfigContext);
 
   // states
   const [pages, setPages] = useState<React.JSX.Element[]>([]);
   const [totalPageCount, setTotalPageCount] = useState<number>(0);
+  const [selectedPerPage, setSelectedPerPage] = useState<Option | undefined>(
+    perPageOptions.find((x) => x.value === 10)
+  );
 
   // methods
   const handlePageChange = (page: number) => onChange(page);
@@ -45,6 +59,15 @@ const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onCh
 
   return (
     <div className="ar-pagination">
+      <Select
+        value={selectedPerPage}
+        options={[...perPageOptions, { value: totalRecords, text: "Tümü" }]}
+        onChange={(option) => {
+          setSelectedPerPage(option);
+          onPerPageChange(option?.value as number);
+        }}
+      />
+
       <ul>
         <li
           className={currentPage === 1 ? "passive" : ""}
