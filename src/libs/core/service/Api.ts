@@ -4,10 +4,12 @@ class Api {
   private _host?: string;
   private _core?: string;
   private _url: string;
+  private _init?: RequestInit;
 
   constructor(values: { host?: string; core?: string; init?: RequestInit }) {
     this._host = values.host || (typeof window !== "undefined" ? window.location.origin : "");
     this._core = values.core || "";
+    this._init = values.init;
 
     // Url
     this._url = `${this._host}/${this._core ? this._core + "/" : ""}`;
@@ -24,6 +26,7 @@ class Api {
     const p_response = this.CustomFetch(`${this._url}${values.input}`, {
       method: "GET",
       ...values.init,
+      ...this._init,
     });
 
     const clone = (await p_response).clone();
@@ -45,6 +48,7 @@ class Api {
       method: "POST",
       body: JSON.stringify(values.data),
       ...values.init,
+      ...this._init,
     });
 
     const clone = (await p_response).clone();
@@ -66,6 +70,7 @@ class Api {
       method: "POST",
       body: values.data,
       ...values.init,
+      ...this._init,
     });
 
     return response;
@@ -80,6 +85,7 @@ class Api {
       method: "PUT",
       body: JSON.stringify(values.data),
       ...values.init,
+      ...this._init,
     });
 
     return response;
@@ -93,6 +99,7 @@ class Api {
     const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "DELETE",
       ...values.init,
+      ...this._init,
     });
 
     return response;
