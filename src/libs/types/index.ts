@@ -224,23 +224,23 @@ export type PieChartDataType = { value: number; text: string };
 
 // Diagram
 export type NodeData = {
-  id: number;
+  id: string | number;
   position: {
     x: number;
     y: number;
   };
-  data: { label: string };
+  data: React.ReactNode;
 };
 
 type Port = "top" | "bottom";
 export type EdgeData = {
-  id: number;
+  id: string | number;
   from: {
-    id: number;
+    id: string | number;
     port: Port;
   };
   to: {
-    id: number;
+    id: string | number;
     port: Port;
   };
 };

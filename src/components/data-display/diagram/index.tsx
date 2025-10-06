@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../../../assets/css/components/data-display/diagram/styles.css";
 import Grid from "../grid-system";
 import Button from "../../form/button";
@@ -15,7 +15,7 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
   // refs
   const _arDiagram = useRef<HTMLDivElement | null>(null);
   const _content = useRef<HTMLDivElement | null>(null);
-  const _arNodes = useRef<Record<string, HTMLSpanElement | null>>({});
+  const _arNodes = useRef<Record<string, HTMLSpanElement>>({});
   const _path = useRef<SVGPathElement | null>(null);
   // refs -> Start Position
   const _dragStartMousePosition = useRef<Position>({ x: 0, y: 0 });
@@ -36,17 +36,17 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
   // states -> Zoom
   const [scale, setScale] = useState<number>(1);
   // states -> Drag
-  const [draggedNode, setDraggedNode] = useState<number | null>(null);
+  const [draggedNode, setDraggedNode] = useState<string | number | null>(null);
   // states -> Drawing
   const [drawingEdge, setDrawingEdge] = useState<{
-    id: number;
+    id: string | number;
     port: "top" | "bottom";
     start: Position;
   } | null>(null);
   const [mousePos, setMousePos] = useState<Position | null>(null);
 
   // methods
-  const getPortCenter = (id: number, port: "top" | "bottom"): Position | null => {
+  const getPortCenter = (id: string | number, port: "top" | "bottom"): Position | null => {
     const node = _arNodes.current[`${id}_${port}`];
     const diagram = _arDiagram.current;
 
@@ -61,7 +61,10 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
     };
   };
 
-  const getClosestPort = (position: Position, threshold = 20): { id: number; port: "top" | "bottom" } | null => {
+  const getClosestPort = (
+    position: Position,
+    threshold = 20
+  ): { id: string | number; port: "top" | "bottom" } | null => {
     for (const key in _arNodes.current) {
       const el = _arNodes.current[key];
 
@@ -121,9 +124,6 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
             strokeDasharray={10}
             strokeDashoffset={10}
             strokeLinecap="round"
-            onClick={() => {
-              setEdges((prev) => prev.filter((x) => x.id !== edge.id));
-            }}
           >
             <animate attributeName="stroke-dashoffset" values={`${20 / scale};0`} dur="1s" repeatCount="indefinite" />
           </path>
@@ -133,8 +133,10 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
   }, [_nodes, _edges, trigger]);
 
   const onPanStart = (e: React.MouseEvent) => {
-    setPanning(true);
+    // Node sürükleniyorsa pan başlatma.
+    if (draggedNode) return;
 
+    setPanning(true);
     setStartPan({ x: e.clientX - pan.x, y: e.clientY - pan.y });
   };
 
@@ -197,7 +199,7 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
   };
 
   // methods -> Node
-  const onNodeMouseDown = (event: React.MouseEvent, id: number, node: Position) => {
+  const onNodeMouseDown = (event: React.MouseEvent, id: string | number, node: Position) => {
     event.stopPropagation();
 
     setDraggedNode(id);
@@ -234,7 +236,7 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
       if (closest) {
         // Yakın port varsa, oraya bağla
         const newEdge: EdgeData = {
-          id: _edges[_edges.length - 1]?.id + 1 || 1,
+          id: crypto.randomUUID(), // _edges[_edges.length - 1]?.id + 1 || 1,
           from: { id: drawingEdge.id, port: drawingEdge.port },
           to: { id: closest.id, port: closest.port },
         };
@@ -251,18 +253,18 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
         if (!isDuplicate) setEdges((prev) => [...prev, newEdge]);
       } else {
         // Yakın port yoksa yeni node oluştur
-        const newNodeId = _nodes[_nodes.length - 1]?.id + 1 || 1;
+        const newNodeId = crypto.randomUUID(); // _nodes[_nodes.length - 1]?.id + 1 || 1;
 
         const newNode: NodeData = {
           id: newNodeId,
           position: mousePos,
-          data: { label: `Node - ${newNodeId}` },
+          data: <></>,
         };
 
         const newPort: "top" | "bottom" = mousePos.y < drawingEdge.start.y ? "bottom" : "top";
 
         const newEdge: EdgeData = {
-          id: _edges[_edges.length - 1]?.id + 1 || 1,
+          id: crypto.randomUUID(), // _edges[_edges.length - 1]?.id + 1 || 1,
           from: { id: drawingEdge.id, port: drawingEdge.port },
           to: { id: newNodeId, port: newPort },
         };
@@ -278,6 +280,11 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
     setDraggedNode(null);
     setTrigger((prev) => !prev);
   };
+
+  // useEffects
+  useEffect(() => {
+    setEdges([...edges]);
+  }, []);
 
   return (
     <div
@@ -340,6 +347,8 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
                 {/* Top Port */}
                 <span
                   ref={(el) => {
+                    if (!el) return;
+
                     _arNodes.current[`${node.id}_top`] = el;
                   }}
                   className="port top"
@@ -360,11 +369,13 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
                 ></span>
 
                 {/* Node Content */}
-                <span>{node.data.label}</span>
+                <span>{node.data}</span>
 
                 {/* Bottom Port */}
                 <span
                   ref={(el) => {
+                    if (!el) return;
+
                     _arNodes.current[`${node.id}_bottom`] = el;
                   }}
                   className="port bottom"
