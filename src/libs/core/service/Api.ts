@@ -1,15 +1,13 @@
+import { getApiConfig } from "./Config";
+
 class Api {
   private _host?: string;
   private _core?: string;
-  private _init?: RequestInit;
-  private _token?: string;
   private _url: string;
 
-  constructor(values: { host?: string; core?: string; init?: RequestInit; token?: string }) {
+  constructor(values: { host?: string; core?: string; init?: RequestInit }) {
     this._host = values.host || (typeof window !== "undefined" ? window.location.origin : "");
     this._core = values.core || "";
-    this._init = values.init;
-    this._token = values.token;
 
     // Url
     this._url = `${this._host}/${this._core ? this._core + "/" : ""}`;
@@ -26,10 +24,6 @@ class Api {
     const p_response = this.CustomFetch(`${this._url}${values.input}`, {
       method: "GET",
       ...values.init,
-      headers: {
-        ...this.HeaderProperties(),
-        ...values.init?.headers,
-      },
     });
 
     const clone = (await p_response).clone();
@@ -51,10 +45,6 @@ class Api {
       method: "POST",
       body: JSON.stringify(values.data),
       ...values.init,
-      headers: {
-        ...this.HeaderProperties(),
-        ...values.init?.headers,
-      },
     });
 
     const clone = (await p_response).clone();
@@ -76,10 +66,6 @@ class Api {
       method: "POST",
       body: values.data,
       ...values.init,
-      headers: {
-        ...this.HeaderProperties(),
-        ...values.init?.headers,
-      },
     });
 
     return response;
@@ -94,10 +80,6 @@ class Api {
       method: "PUT",
       body: JSON.stringify(values.data),
       ...values.init,
-      headers: {
-        ...this.HeaderProperties(),
-        ...values.init?.headers,
-      },
     });
 
     return response;
@@ -111,36 +93,10 @@ class Api {
     const response = await this.CustomFetch(`${this._url}${values.input}`, {
       method: "DELETE",
       ...values.init,
-      headers: {
-        ...this.HeaderProperties(),
-        ...values.init?.headers,
-      },
     });
 
     return response;
   }
-
-  private HeaderProperties = (): HeadersInit => {
-    return {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...(this._token && { Authorization: `Bearer ${this.Cookies(this._token)}` }),
-    };
-  };
-
-  private Cookies = (name: string) => {
-    if (typeof window === "undefined") return undefined;
-
-    const cookies = document.cookie.split("; ");
-    const cookieObject: { key: string; value: string }[] = [];
-
-    cookies.forEach((cookie) => {
-      const [key, value] = cookie.split("=");
-      cookieObject.push({ key: key, value: value });
-    });
-
-    return decodeURIComponent(cookieObject.find((x) => x.key === name)?.value ?? "");
-  };
 
   /**
    * Burada bir fetch işlemi gerçekleştirilmekte fakat farklı olarak burayı `interceptor` olarak kullanmaktayız.
@@ -148,35 +104,51 @@ class Api {
    * @param init
    * @returns
    */
-  private async CustomFetch(input: RequestInfo, init: RequestInit): Promise<Response> {
+  private async CustomFetch(input: RequestInfo, init: RequestInit = {}): Promise<Response> {
     try {
-      // # Request Interceptor
+      const config = getApiConfig();
 
-      const request = await fetch(input, { ...init, ...this._init });
+      // Request merge: init + headers + global config
+      let requestInit: RequestInit = {
+        ...init,
+        headers: {
+          ...config.headers,
+          ...init.headers,
+        },
+      };
 
-      // # Response Interceptor
+      // Request interceptor (runtime'da eklenmiş olabilir.)
+      if (config.requestInterceptor) [input, requestInit] = await config.requestInterceptor(input, requestInit);
 
-      // Error Handling
-      if (!request.ok) {
-        switch (request.status) {
+      // Fetch çağrısı.
+      const response = await fetch(input, requestInit);
+
+      // Response interceptor.
+      if (config.responseInterceptor) return await config.responseInterceptor(response);
+
+      // Error handling
+      if (!response.ok) {
+        let message = `HTTP Error ${response.status}: ${response.statusText}`;
+        switch (response.status) {
           case 400:
-            console.error("400");
+            console.error("400 Bad Request");
             break;
           case 401:
-            console.error("401");
+            console.error("401 Unauthorized");
             break;
           case 404:
-            console.error("404");
+            console.error("404 Not Found");
             break;
           default:
-            console.error(`Unexpected Error: ${request.status}`);
+            console.error(message);
         }
+        throw new Error(message);
       }
 
-      // Return
-      return request;
+      return response;
     } catch (error) {
-      throw error;
+      // Network hatası veya fetch exception
+      throw new Error(error instanceof Error ? error.message : "Network Error");
     }
   }
 }
