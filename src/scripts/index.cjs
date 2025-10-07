@@ -14,6 +14,7 @@ const statuses = [
   "light",
 ];
 const colors = ["blue", "purple", "pink", "red", "orange", "yellow", "green", "teal", "cyan", "gray", "light"];
+const columnsSizes = ["large", "medium", "small", "x-large", "x-small"];
 let background = "";
 let borderColor = "";
 let boxShadow = "";
@@ -635,6 +636,63 @@ const _Animation_Css = () => {
   WriteCssFile(file, content);
 };
 
+// Columns
+const Columns = () => {
+  const file = path.join(
+    __dirname,
+    "../assets",
+    "css",
+    "components",
+    "data-display",
+    "grid-system",
+    "column",
+    "styles.css"
+  );
+  const breakpoints = {
+    "x-small": { max: 575 },
+    small: { min: 576, max: 767 },
+    medium: { min: 768, max: 991 },
+    large: { min: 992, max: 1199 },
+    "x-large": { min: 1200 },
+  };
+  const prefixMap = {
+    "x-small": "xs",
+    small: "sm",
+    medium: "md",
+    large: "lg",
+    "x-large": "xl",
+  };
+
+  const content = columnsSizes
+    .map((size) => {
+      const { min, max } = breakpoints[size];
+      const prefix = prefixMap[size];
+      let query = "";
+
+      if (min && max) query = `@media (${min}px <= width <= ${max}px)`;
+      else if (min) query = `@media (width >= ${min}px)`;
+      else if (max) query = `@media (width <= ${max}px)`;
+
+      const columns = Array.from({ length: 12 }, (_, i) => {
+        const number = i + 1;
+        return `
+    > .col-${prefix}-${number} {
+      flex: 0 0 calc(100% * ${number} / 12);
+      max-width: calc(100% * ${number} / 12);
+      -webkit-box-flex: 0;
+      -ms-flex: 0 0 calc(100% * ${number} / 12);
+    }`;
+      }).join("");
+
+      return `${query} {
+  .row {${columns}}
+}`;
+    })
+    .join("\n\n");
+
+  WriteCssFile(file, content);
+};
+
 _Input_BorderCss();
 _Input_ButtonCss();
 _Input_CheckboxCss();
@@ -652,3 +710,5 @@ CardStatuses();
 ProgressStatuses();
 
 _Animation_Css();
+
+Columns();

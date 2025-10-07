@@ -1,8 +1,13 @@
-.ar-typography-paragraph.large {
-  font-size: 1.25rem;
-}
-.ar-typography-paragraph.normal {
-}
-.ar-typography-paragraph.small {
-  font-size: 0.75rem;
+.ar-typography-paragraph {
+  &.large {
+    font-size: 1.25rem;
+  }
+
+  &.normal {
+    font-size: 1rem;
+  }
+
+  &.small {
+    font-size: 0.75rem;
+  }
 }

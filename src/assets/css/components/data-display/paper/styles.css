@@ -3,18 +3,13 @@
   padding: 1rem;
   border-radius: var(--border-radius-lg);
   box-shadow: 0px 10px 15px -5px rgba(var(--black-rgb), 0.1);
-}
-.ar-paper > .header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background-color: transparent;
-  margin-bottom: 0.75rem;
-}
-/* .ar-paper > .header > h3 {
-  color: var(--gray-700);
-} */
 
-.ar-paper > .content {
+  > .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent;
+    margin-bottom: 0.75rem;
+  }
 }

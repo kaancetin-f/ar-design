@@ -1,9 +1,13 @@
-.ar-typography-paragraph.left {
-  text-align: left;
-}
-.ar-typography-paragraph.center {
-  text-align: center;
-}
-.ar-typography-paragraph.right {
-  text-align: right;
+.ar-typography-paragraph {
+  &.left {
+    text-align: left;
+  }
+
+  &.center {
+    text-align: center;
+  }
+
+  &.right {
+    text-align: right;
+  }
 }

@@ -3,8 +3,4 @@
 
 /* Column Css */
 @import url("./column/styles.css");
-@import url("./column/x-large.css");
-@import url("./column/large.css");
-@import url("./column/medium.css");
-@import url("./column/small.css");
-@import url("./column/x-small.css");
+@import url("./column/position.css");

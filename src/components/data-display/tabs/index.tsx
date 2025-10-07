@@ -3,10 +3,13 @@
 import React, { useEffect, useState } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/data-display/tabs/tabs.css";
+import Skeleton from "./skeleton";
 
 const Tabs: React.FC<IProps> = ({ name, tabs = [], activeTab, onChange, onClose }) => {
   // states
   const [currentTab, setCurrentTab] = useState<number>(0);
+  // states -> Loading
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // useEffects
   useEffect(() => setCurrentTab(activeTab ?? 0), [activeTab]);
@@ -17,7 +20,11 @@ const Tabs: React.FC<IProps> = ({ name, tabs = [], activeTab, onChange, onClose 
 
     setCurrentTab(stored !== null ? Number(stored) : 0);
     onChange?.(stored !== null ? Number(stored) : 0);
+
+    setIsLoading(false);
   }, []);
+
+  if (isLoading) return <Skeleton name={name} tabs={tabs} />;
 
   return (
     <div className="ar-tabs">
