@@ -134,23 +134,7 @@ class Api {
       if (config.responseInterceptor) return await config.responseInterceptor(response);
 
       // Error handling
-      if (!response.ok) {
-        let message = `HTTP Error ${response.status}: ${response.statusText}`;
-        switch (response.status) {
-          case 400:
-            console.error("400 Bad Request");
-            break;
-          case 401:
-            console.error("401 Unauthorized");
-            break;
-          case 404:
-            console.error("404 Not Found");
-            break;
-          default:
-            console.error(message);
-        }
-        throw new Error(message);
-      }
+      if (!response.ok) console.error(`HTTP Error ${response.status}: ${response.statusText}`);
 
       return response;
     } catch (error) {
