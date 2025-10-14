@@ -174,6 +174,8 @@ export type Icons =
   | "BulletList"
   | "CameraReels"
   | "CheckAll"
+  | "ChevronDown"
+  | "ChevronUp"
   | "CloseCircle"
   | "CloseSquare"
   | "CloudUpload-Fill"

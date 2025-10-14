@@ -4,45 +4,100 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-}
-.ar-input-wrapper > .ar-input {
-  position: relative;
-  width: 100%;
-}
-.ar-input-wrapper > .ar-input > label {
-  visibility: hidden;
-  opacity: 0;
-  position: absolute;
-  top: 0.5rem;
-  left: 0.55rem;
-  color: var(--gray-600);
-  letter-spacing: 1px;
-  transition: top 250ms ease-in-out;
-}
-.ar-input-wrapper > .ar-input > label.visible {
-  visibility: visible;
-  opacity: 1;
-  top: -0.5rem;
-  left: 0.55rem;
-  background-color: var(--white);
-  padding: 0 0.5rem;
-  font-size: 0.75rem;
-}
-.ar-input-wrapper > .ar-input > input {
-  background-color: transparent;
-  width: 100%;
-  height: var(--input-height);
-  padding: 0 0.5rem;
-  font-family: var(--system);
-  font-size: 1rem;
-  outline: none;
-  box-sizing: border-box;
-  transition: background 250ms, border 250ms, box-shadow 250ms ease-in-out;
-}
-.ar-input-wrapper > .ar-input > .validation {
-  color: var(--danger);
-  font-size: 0.8rem;
-  font-weight: 400;
+
+  > .ar-input {
+    position: relative;
+    width: 100%;
+
+    > label {
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      top: 0.5rem;
+      left: 0.55rem;
+      color: var(--gray-600);
+      letter-spacing: 1px;
+      transition: top 250ms ease-in-out;
+
+      &.visible {
+        visibility: visible;
+        opacity: 1;
+        top: -0.5rem;
+        left: 0.55rem;
+        background-color: var(--white);
+        padding: 0 0.5rem;
+        font-size: 0.75rem;
+      }
+    }
+
+    > .input {
+      position: relative;
+      user-select: none;
+
+      &:hover {
+        > .handle-number-button {
+          visibility: visible;
+          opacity: 1;
+          width: 1rem;
+        }
+      }
+
+      > input {
+        background-color: transparent;
+        width: 100%;
+        height: var(--input-height);
+        padding: 0 0.5rem;
+        font-family: var(--system);
+        font-size: 1rem;
+        outline: none;
+        box-sizing: border-box;
+        transition: background 250ms, border 250ms, box-shadow 250ms ease-in-out;
+      }
+
+      .handle-number-button {
+        visibility: hidden;
+        opacity: 0;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 1px;
+        right: 1px;
+        background-color: var(--gray-200);
+        width: 0rem;
+        height: calc(100% - 2px);
+        border-left: solid 1px var(--gray-300);
+        border-top-right-radius: 0.18rem;
+        border-bottom-right-radius: 0.18rem;
+        overflow: hidden;
+        transition: width 250ms ease-in-out;
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          background-color: var(--gray-300);
+          width: 100%;
+          height: 1px;
+        }
+
+        > span {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          height: 50%;
+          cursor: pointer;
+        }
+      }
+    }
+
+    > .validation {
+      color: var(--danger);
+      font-size: 0.8rem;
+      font-weight: 400;
+    }
+  }
 }
 
 /* Core Css */

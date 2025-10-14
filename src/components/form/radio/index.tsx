@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, useRef } from "react";
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import IProps from "./IProps";
 import "../../../assets/css/components/form/radio/radio.css";
 import Utils from "../../../libs/infrastructure/shared/Utils";
@@ -21,10 +21,15 @@ const Radio = forwardRef<HTMLInputElement, IProps>(
     ref
   ) => {
     // refs
+    const _innerRef = useRef<HTMLInputElement>(null);
     const _checkbox = useRef<HTMLInputElement>(null);
     const _checkboxClassName: string[] = ["ar-radio"];
     const _traceClassName: string[] = ["trace", "filled"];
     const _pastTraceClassName: string[] = ["past-trace", "filled"];
+
+    // hooks
+    // Dışarıdan gelen ref'i _innerRef'e bağla.
+    useImperativeHandle(ref, () => _innerRef.current as HTMLInputElement);
 
     _checkboxClassName.push(
       ...Utils.GetClassName(
@@ -45,7 +50,7 @@ const Radio = forwardRef<HTMLInputElement, IProps>(
       <div className="ar-radio-wrapper">
         <label>
           <input
-            ref={ref}
+            ref={_innerRef}
             type={"radio"}
             {...attributes}
             size={0}

@@ -78,6 +78,7 @@ interface IProps<T> extends IChildren {
     create?: CreateActionType;
     delete?: DeleteActionType;
   };
+  rowBackgroundColor?: (item: T) => string;
   selections?: (selectionItems: T[]) => void;
   previousSelections?: T[];
   searchedParams?: (params: SearchedParam | null, query: string, operator: FilterOperator) => void;

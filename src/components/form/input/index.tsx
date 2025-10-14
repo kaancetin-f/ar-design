@@ -1,10 +1,11 @@
 "use client";
 
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import "../../../assets/css/components/form/input/input.css";
 import Button from "../button";
 import IProps from "./IProps";
 import Utils from "../../../libs/infrastructure/shared/Utils";
+import { ARIcon } from "../../icons";
 
 const Input = forwardRef<HTMLInputElement, IProps>(
   (
@@ -22,8 +23,15 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     },
     ref
   ) => {
+    // refs
+    const _innerRef = useRef<HTMLInputElement>(null);
+
     // states
     const [value, setValue] = useState<string | number | readonly string[] | undefined>("");
+
+    // hooks
+    // Dışarıdan gelen ref'i _innerRef'e bağla.
+    useImperativeHandle(ref, () => _innerRef.current as HTMLInputElement);
 
     // variables
     const _wrapperClassName: string[] = ["ar-input-wrapper"];
@@ -58,6 +66,25 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     }
 
     // methods
+
+    const handleNumberChange = (delta: number) => {
+      const current = Number(value) || 0;
+      const newValue = current + delta;
+      const dataset = (_innerRef.current as HTMLInputElement | null)?.dataset ?? {};
+
+      setValue(newValue);
+
+      attributes.onChange?.({
+        target: {
+          id: attributes.id ?? "",
+          name: attributes.name ?? "",
+          value: String(newValue),
+          type: attributes.type ?? "number",
+          dataset: dataset,
+        },
+      } as unknown as ChangeEvent<HTMLInputElement>);
+    };
+
     // Özel büyük harfe dönüştürme işlevi.
     const convertToUpperCase = (str: string) => {
       return str
@@ -98,46 +125,71 @@ const Input = forwardRef<HTMLInputElement, IProps>(
           )}
 
           {/* Input */}
-          <input
-            ref={ref}
-            {...attributes}
-            placeholder={`${validation ? "* " : ""}${attributes.placeholder ?? ""}`}
-            value={value ?? attributes.value} // `value` varsa onu kullan, yoksa `internalValue`'yu kullan
-            size={20}
-            className={_inputClassName.map((c) => c).join(" ")}
-            onChange={(event) => {
-              // Disabled gelmesi durumunda işlem yapmasına izin verme...
-              if (attributes.disabled) return;
+          <div className="input">
+            <input
+              ref={_innerRef}
+              {...attributes}
+              type={attributes.type === "number" ? "text" : attributes.type}
+              placeholder={`${validation ? "* " : ""}${attributes.placeholder ?? ""}`}
+              value={value ?? attributes.value} // `value` varsa onu kullan, yoksa `internalValue`'yu kullan
+              size={20}
+              className={_inputClassName.map((c) => c).join(" ")}
+              {...(attributes.type === "number"
+                ? {
+                    onKeyDown: (event) => {
+                      const allowedKeys = ["Backspace", "Tab", "ArrowLeft", "ArrowRight", "Delete"];
+                      const isNumberKey = /^[0-9]$/.test(event.key);
 
-              (() => {
-                if (upperCase) event.target.value = convertToUpperCase(event.target.value);
-                setValue(event.target.value);
-              })();
-
-              (() => {
-                if (attributes.onChange) {
-                  // Mevcut değeri alın
-                  const { value } = event.target;
-                  const currentValue = upperCase ? convertToUpperCase(value) : value;
-
-                  // Yeni değeri oluşturun ve onChange fonksiyonunu çağırın
-                  // const newValue = `${addon?.before ?? ""}${currentValue}${addon?.after ?? ""}`;
-
-                  attributes.onChange({
-                    ...event,
-                    target: {
-                      ...event.target,
-                      id: event.target.id,
-                      name: event.target.name,
-                      value: currentValue,
-                      type: event.target.type,
-                      dataset: event.target.dataset,
+                      if (!isNumberKey && !allowedKeys.includes(event.key)) event.preventDefault();
                     },
-                  });
-                }
-              })();
-            }}
-          />
+                  }
+                : {})}
+              onChange={(event) => {
+                // Disabled gelmesi durumunda işlem yapmasına izin verme...
+                if (attributes.disabled) return;
+
+                (() => {
+                  if (upperCase) event.target.value = convertToUpperCase(event.target.value);
+                  setValue(event.target.value);
+                })();
+
+                (() => {
+                  if (attributes.onChange) {
+                    // Mevcut değeri alın
+                    const { value } = event.target;
+                    const currentValue = upperCase ? convertToUpperCase(value) : value;
+
+                    // Yeni değeri oluşturun ve onChange fonksiyonunu çağırın
+                    // const newValue = `${addon?.before ?? ""}${currentValue}${addon?.after ?? ""}`;
+
+                    attributes.onChange({
+                      ...event,
+                      target: {
+                        ...event.target,
+                        id: event.target.id,
+                        name: event.target.name,
+                        value: currentValue,
+                        type: event.target.type,
+                        dataset: event.target.dataset,
+                      },
+                    });
+                  }
+                })();
+              }}
+            />
+
+            {attributes.type === "number" && (
+              <div className="handle-number-button">
+                <span onClick={() => handleNumberChange(1)}>
+                  <ARIcon icon="ChevronUp" size={12} fill="var(--gray-500)" />
+                </span>
+
+                <span onClick={() => handleNumberChange(-1)}>
+                  <ARIcon icon="ChevronDown" size={12} fill="var(--gray-500)" />
+                </span>
+              </div>
+            )}
+          </div>
 
           {validation?.text && <span className="validation">{validation.text}</span>}
         </div>

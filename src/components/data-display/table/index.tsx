@@ -8,11 +8,13 @@ import IProps, { FilterValue, SearchedParam } from "./IProps";
 import Pagination from "../../navigation/pagination";
 import React, {
   ChangeEvent,
+  CSSProperties,
   forwardRef,
   Fragment,
   memo,
   useCallback,
   useEffect,
+  useImperativeHandle,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -54,6 +56,7 @@ const Table = forwardRef(
       data,
       columns,
       actions,
+      rowBackgroundColor,
       selections,
       previousSelections,
       searchedParams,
@@ -64,6 +67,7 @@ const Table = forwardRef(
     ref: React.ForwardedRef<HTMLTableElementWithCustomAttributes>
   ) => {
     // refs
+    const _innerRef = useRef<HTMLTableElementWithCustomAttributes>(null);
     const _tableWrapper = useRef<HTMLDivElement>(null);
     const _tableContent = useRef<HTMLDivElement>(null);
     const _tBodyTR = useRef<(HTMLTableRowElement | null)[]>([]);
@@ -113,6 +117,10 @@ const Table = forwardRef(
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [selectedPerPage, setSelectedPerPage] = useState<number>(pagination?.perPage ?? 10);
+
+    // hooks
+    // Dışarıdan gelen ref'i _innerRef'e bağla.
+    useImperativeHandle(ref, () => _innerRef.current as HTMLTableElementWithCustomAttributes);
 
     if (config && Object.keys(config.scroll || {}).length > 0) {
       if (_tableContent.current && config.scroll) {
@@ -479,6 +487,9 @@ const Table = forwardRef(
 
     const renderRow = (item: T, index: number, deph: number) => {
       const isHasSubitems = _subrowSelector in item;
+      let _rowColor: CSSProperties = {};
+
+      if (rowBackgroundColor) _rowColor = { backgroundColor: rowBackgroundColor(item) };
 
       // TODO: Keylere bakılacak...
       return (
@@ -488,6 +499,7 @@ const Table = forwardRef(
             ref={(element) => {
               _tBodyTR.current[index] = element;
             }}
+            style={{ ..._rowColor }}
           >
             {/* Checkboxes */}
             {selections && (
@@ -580,6 +592,7 @@ const Table = forwardRef(
       }
 
       const _className: string[] = [];
+
       if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
       if (c.config?.alignContent) _className.push(`align-content-${c.config.alignContent}`);
       if (c.config?.textWrap) _className.push(`text-${c.config.textWrap}`);
@@ -905,7 +918,7 @@ const Table = forwardRef(
         )}
 
         <div ref={_tableContent} className="content" onScroll={handleScroll}>
-          <table ref={ref}>
+          <table ref={_innerRef}>
             <thead>
               <tr key="selection">
                 {data.some((item) => _subrowSelector in item) && _subrowButton && (
@@ -1076,11 +1089,10 @@ const Table = forwardRef(
               perPage={selectedPerPage}
               onPerPageChange={(perPage) => setSelectedPerPage(perPage)}
               onChange={(currentPage) => {
-                if (config.isServerSide && pagination && pagination.onChange) pagination.onChange(currentPage);
-
-                setTimeout(() => handleScroll(), 0);
                 setCurrentPage(currentPage);
                 pagination.onChange?.(currentPage);
+
+                setTimeout(() => handleScroll(), 0);
               }}
             />
           </div>
