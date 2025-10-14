@@ -126,6 +126,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
 
           {/* Input */}
           <div className="input">
+            <div className={`clip-path border-radius-${border.radius}`}></div>
             <input
               ref={_innerRef}
               {...attributes}
