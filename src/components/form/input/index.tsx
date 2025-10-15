@@ -25,6 +25,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
   ) => {
     // refs
     const _innerRef = useRef<HTMLInputElement>(null);
+    const _label = useRef<HTMLLabelElement>(null);
 
     // states
     const [value, setValue] = useState<string | number | readonly string[] | undefined>("");
@@ -118,7 +119,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
           {icon?.element && <span className="icon-element">{icon.element}</span>}
 
           {attributes.placeholder && (
-            <label className={value ? "visible" : "hidden"}>
+            <label ref={_label} className={value ? "visible" : "hidden"}>
               {validation && "* "}
               {attributes.placeholder}
             </label>
@@ -126,7 +127,6 @@ const Input = forwardRef<HTMLInputElement, IProps>(
 
           {/* Input */}
           <div className="input">
-            <div className={`clip-path border-radius-${border.radius}`}></div>
             <input
               ref={_innerRef}
               {...attributes}
@@ -142,6 +142,22 @@ const Input = forwardRef<HTMLInputElement, IProps>(
                       const isNumberKey = /^[0-9]$/.test(event.key);
 
                       if (!isNumberKey && !allowedKeys.includes(event.key)) event.preventDefault();
+                    },
+                  }
+                : {})}
+              {...(value
+                ? {
+                    style: {
+                      clipPath: `polygon(
+                            -15px 0,
+                            10px -5px,
+                            10px 5px,
+                            calc(${_label.current?.getBoundingClientRect().width}px + 7px) 15px,
+                            calc(${_label.current?.getBoundingClientRect().width}px + 7px) -15px,
+                            100% -70px,
+                            calc(100% + 5px) calc(100% + 5px),
+                            -5px calc(100% + 5px)
+                          )`,
                     },
                   }
                 : {})}

@@ -27,26 +27,6 @@
         left: 0.55rem;
         padding: 0 0.5rem;
         font-size: 0.75rem;
-
-        + .input {
-          > input {
-            clip-path: polygon(
-              -5px 0,
-              /* sol üst */ 10px -5px,
-              /* label öncesi düz kenar */ 10px 6px,
-              /* label alt kenar başlangıcı */ 95px 6px,
-              /* label genişliği kadar törpü */ 95px -5px,
-              100% -5px,
-              /* sağ üst */ calc(100% + 5px) calc(100% + 5px),
-              /* sağ alt */ -5px calc(100% + 5px) /* sol alt */
-            );
-          }
-
-          > .clip-path {
-            position: absolute;
-            inset: 0;
-          }
-        }
       }
     }
 
@@ -72,7 +52,7 @@
         font-size: 1rem;
         outline: none;
         box-sizing: border-box;
-        transition: background 250ms, border 250ms, box-shadow 250ms, clip-path 250ms ease-in-out;
+        transition: background 250ms, border 250ms, box-shadow 250ms ease-in-out;
       }
 
       .handle-number-button {
