@@ -195,7 +195,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
               }}
             />
 
-            {attributes.type === "number" && (
+            {!attributes.disabled && attributes.type === "number" && (
               <div className="handle-number-button">
                 <span onClick={() => handleNumberChange(1)}>
                   <ARIcon icon="ChevronUp" size={12} fill="var(--gray-500)" />
