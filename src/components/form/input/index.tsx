@@ -152,8 +152,8 @@ const Input = forwardRef<HTMLInputElement, IProps>(
                             -15px 0,
                             10px -5px,
                             10px 5px,
-                            calc(${_label.current?.getBoundingClientRect().width}px + 7px) 15px,
-                            calc(${_label.current?.getBoundingClientRect().width}px + 7px) -15px,
+                            calc(${_label.current?.getBoundingClientRect().width}px + 7px) 5px,
+                            calc(${_label.current?.getBoundingClientRect().width}px + 7px) -5px,
                             100% -70px,
                             calc(100% + 5px) calc(100% + 5px),
                             -5px calc(100% + 5px)
