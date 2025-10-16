@@ -336,11 +336,10 @@ class Utils {
   };
 
   public StringFormat = (value: string, ...args: any[]): string => {
-    if (args[0].length === 0) return value;
+    if (!args || args.length === 0) return value;
 
     return value.replace(/{(\d+)}/g, (match: string, number: string) => {
       const index = parseInt(number, 10);
-
       return typeof args[index] !== "undefined" ? args[index] : match;
     });
   };

@@ -31,7 +31,7 @@ export const useTranslation = function <TBaseLocale>(
   };
 
   const t = (key: keyof TBaseLocale | keyof INotificationLocale, ...args: any[]) => {
-    return Utils.StringFormat(merged[currentLanguage ?? "tr"][key], args) ?? "";
+    return Utils.StringFormat(merged[currentLanguage ?? "tr"][key], ...args) ?? "";
   };
 
   return { t, currentLanguage };

@@ -95,6 +95,7 @@ export type TabProps = {
 export type KanbanBoardColumnType<T, TColumnProperties> = {
   key: string;
   title: string;
+  description?: string;
   titleColor?: string;
   items: T[];
   renderItem: (item: T, index: number) => React.JSX.Element;
