@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import IProps from "./IProps";
-import "../../../assets/css/components/data-display/dnd/dnd.css";
+import "../../../assets/css/components/data-display/dnd/styles.css";
 import { ARIcon } from "../../icons";
 
 let _fromColumn: string | undefined = undefined;
@@ -30,6 +30,19 @@ const DnD = function <T>({ data, renderItem, columnKey, onChange, confing = { is
         const draggedData = data[index];
 
         if (event.dataTransfer) {
+          const shadow = document.createElement("div");
+
+          shadow.innerHTML = `
+            <div class="ar-dnd-shadow">
+              <i class="bi bi-gear-wide-connected"></i>
+              <span>Dragging...</span>
+            </div>
+          `;
+          shadow.style.position = "absolute";
+          shadow.style.top = "-9999px";
+          document.body.appendChild(shadow);
+          event.dataTransfer.setDragImage(shadow, 0, 0);
+
           event.dataTransfer.setData("item", JSON.stringify(draggedData));
           event.dataTransfer.setData("fromColumn", columnKey ?? "");
           _fromColumn = columnKey ?? undefined;

@@ -12,7 +12,7 @@
     transition: transform 0.3s ease, opacity 0.3s ease;
 
     &.drag-item {
-      opacity: 0.5;
+      opacity: 0.25;
     }
 
     &.over-item {
@@ -66,3 +66,4 @@
 }
 
 @import url("./animations.css");
+@import url("./shadow.css");
