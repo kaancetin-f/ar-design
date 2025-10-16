@@ -3,7 +3,7 @@
   flex-direction: column;
   max-width: 100%;
   min-width: 100%;
-  border-radius: var(--border-radius-lg);
+  border-radius: 4%;
   padding-bottom: 1rem;
   overflow-x: auto;
 
