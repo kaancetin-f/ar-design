@@ -30,6 +30,7 @@ const DnD = function <T>({ data, renderItem, columnKey, onChange, confing = { is
         const draggedData = data[index];
 
         if (event.dataTransfer) {
+          // #region Shadow
           const shadow = document.createElement("div");
 
           shadow.innerHTML = `
@@ -42,6 +43,7 @@ const DnD = function <T>({ data, renderItem, columnKey, onChange, confing = { is
           shadow.style.top = "-9999px";
           document.body.appendChild(shadow);
           event.dataTransfer.setDragImage(shadow, 0, 0);
+          // #endregion
 
           event.dataTransfer.setData("item", JSON.stringify(draggedData));
           event.dataTransfer.setData("fromColumn", columnKey ?? "");

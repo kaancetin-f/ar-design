@@ -93,15 +93,41 @@
       }
 
       > .items {
+        position: relative;
         background-color: var(--white);
         padding: 1rem;
         height: calc(100% - 1rem);
+        border: dashed 0 transparent;
         border-radius: var(--border-radius-lg);
+        transition: transform 250ms, border 250ms ease-in-out;
 
         &:has(> .no-item) {
           display: flex;
           justify-content: center;
           align-items: center;
+        }
+
+        &.dragging {
+          border: dashed 2.5px var(--blue-200);
+          border-radius: var(--border-radius-lg);
+          transform: scaleX(1) scaleY(1);
+          overflow: hidden;
+
+          /* &::before {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            content: "\F488";
+            color: var(--blue-100);
+            font-family: "bootstrap-icons" !important;
+            font-size: 4rem;
+            text-shadow: 2px 2px var(--blue-200);
+            z-index: 5;
+          } */
         }
 
         > .no-item {
