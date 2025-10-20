@@ -156,7 +156,9 @@ const Upload: React.FC<Props> = ({
 
       if (_input.current) {
         if (selectedFiles.length === 0) {
+          if (_input.current) _input.current.files = dataTransfer.files;
           onChange(fileFormData, [], [], false);
+
           return;
         }
 
