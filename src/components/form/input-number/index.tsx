@@ -18,7 +18,7 @@ const InputNumber: React.FC<IProps> = ({
   disabled,
 }: IProps) => {
   // refs
-  const _firstLoad = useRef<boolean>(false);
+  // const _firstLoad = useRef<boolean>(false);
   const _input = useRef<HTMLInputElement | null>(null);
 
   // states
@@ -89,11 +89,13 @@ const InputNumber: React.FC<IProps> = ({
 
   // useEffects
   useEffect(() => {
-    if (!_firstLoad.current && value !== undefined && value !== "") {
-      // const isDecimals = String(value).includes(".");
-      setValue(getFormatter.format(Number(value)));
-      _firstLoad.current = true;
-    }
+    // if (!_firstLoad.current && value !== undefined && value !== "") {
+    //   // const isDecimals = String(value).includes(".");
+    //   setValue(getFormatter.format(Number(value)));
+    //   _firstLoad.current = true;
+    // }
+
+    setValue(getFormatter.format(Number(value)));
   }, [value]);
 
   return (
