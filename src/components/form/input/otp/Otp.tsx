@@ -38,7 +38,15 @@ const Otp = ({ character, onChange, ...attributes }: IProps) => {
     (index: number) => (event: React.KeyboardEvent<HTMLInputElement>) => {
       const { value } = event.currentTarget;
 
-      if (value.length >= 1 && event.key !== "Backspace") {
+      if (value.length >= 1 && event.key >= "0" && event.key <= "9") {
+        _inputs.current[index + 1]?.focus();
+        _inputs.current[index + 1]?.select();
+      }
+
+      if (event.key === "ArrowLeft") {
+        _inputs.current[index - 1]?.focus();
+        _inputs.current[index - 1]?.select();
+      } else if (event.key === "ArrowRight") {
         _inputs.current[index + 1]?.focus();
         _inputs.current[index + 1]?.select();
       }
@@ -48,11 +56,6 @@ const Otp = ({ character, onChange, ...attributes }: IProps) => {
         _inputs.current[index - 1]?.select();
       }
     },
-    []
-  );
-
-  const handleFocus = useCallback(
-    (event: React.FocusEvent<HTMLInputElement>) => requestAnimationFrame(() => event.target.select()),
     []
   );
 
@@ -74,7 +77,7 @@ const Otp = ({ character, onChange, ...attributes }: IProps) => {
             value={_value.current[index] ?? ""}
             onChange={handleChange(index)}
             onKeyUp={handleKeyUp(index)}
-            onFocus={handleFocus}
+            onFocus={(event) => event.target.select()}
             onClick={handleClick}
             size={1}
             placeholder={undefined}
