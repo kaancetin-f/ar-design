@@ -1,11 +1,11 @@
 "use client";
 
 import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
-import Input from "../input";
+import Input from "..";
+import { NUMBER } from "../../../../libs/infrastructure/shared";
 import IProps from "./IProps";
-import { NUMBER } from "../../../libs/infrastructure/shared";
 
-const InputNumber: React.FC<IProps> = ({
+const Num: React.FC<IProps> = ({
   variant,
   color,
   name,
@@ -95,7 +95,7 @@ const InputNumber: React.FC<IProps> = ({
     //   _firstLoad.current = true;
     // }
 
-    setValue(getFormatter.format(Number(value)));
+    setValue(getFormatter.format(window.Number(value)));
   }, [value]);
 
   return (
@@ -122,4 +122,4 @@ const InputNumber: React.FC<IProps> = ({
   );
 };
 
-export default InputNumber;
+export default Num;

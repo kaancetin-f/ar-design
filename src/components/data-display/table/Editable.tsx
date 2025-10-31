@@ -5,7 +5,6 @@ import Input from "../../form/input";
 import DatePicker from "../../form/date-picker";
 import { Errors, Option, TableColumnType } from "../../../libs/types";
 import Select from "../../form/select";
-import InputNumber from "../../form/input-number";
 
 interface IProps<T> {
   c: TableColumnType<T>;
@@ -46,7 +45,7 @@ const Editable = function <T>({ c, item, index, onEditable, validation }: IProps
       );
     case "input-number":
       return (
-        <InputNumber
+        <Input.Number
           variant="borderless"
           name={c.key as string}
           value={value}

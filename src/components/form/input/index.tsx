@@ -1,18 +1,19 @@
 "use client";
 
 import React, { ChangeEvent, forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
-import "../../../assets/css/components/form/input/input.css";
+import "../../../assets/css/components/form/input/styles.css";
 import Button from "../button";
 import IProps from "./IProps";
 import Utils from "../../../libs/infrastructure/shared/Utils";
 import { ARIcon } from "../../icons";
+import Otp from "./otp/Otp";
+import Num from "./num";
 
-const Input = forwardRef<HTMLInputElement, IProps>(
+const BaseInput = forwardRef<HTMLInputElement, IProps>(
   (
     {
       variant = "outlined",
       color = "light",
-      size = "normal",
       icon,
       border = { radius: "sm" },
       button,
@@ -46,7 +47,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
         undefined,
         !Utils.IsNullOrEmpty(validation?.text) ? "red" : color,
         border,
-        size,
+        undefined,
         icon,
         attributes.className
       )
@@ -67,7 +68,6 @@ const Input = forwardRef<HTMLInputElement, IProps>(
     }
 
     // methods
-
     const handleNumberChange = (delta: number) => {
       const current = Number(value) || 0;
       const newValue = current + delta;
@@ -133,7 +133,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
               type={attributes.type === "number" ? "text" : attributes.type}
               placeholder={`${validation ? "* " : ""}${attributes.placeholder ?? ""}`}
               value={value ?? attributes.value} // `value` varsa onu kullan, yoksa `internalValue`'yu kullan
-              size={20}
+              size={attributes.size || 20}
               className={_inputClassName.map((c) => c).join(" ")}
               {...(attributes.type === "number"
                 ? {
@@ -221,6 +221,14 @@ const Input = forwardRef<HTMLInputElement, IProps>(
   }
 );
 
-Input.displayName = "Input";
+interface InputCompound extends React.ForwardRefExoticComponent<IProps & React.RefAttributes<HTMLInputElement>> {
+  Number: typeof Num;
+  Otp: typeof Otp;
+}
 
+const Input = BaseInput as InputCompound;
+Input.Otp = Otp;
+Input.Number = Num;
+
+BaseInput.displayName = "Input";
 export default Input;

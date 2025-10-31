@@ -6,7 +6,7 @@ import {
   IUpperCase,
   IValidation,
   IVariant,
-} from "../../../libs/types/IGlobalProps";
+} from "../../../../libs/types/IGlobalProps";
 
 interface IProps extends IVariant, IColors, IBorder, IUpperCase, IValidation, IPlaceholder, IDisabled {
   name: string;

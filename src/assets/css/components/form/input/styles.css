@@ -101,6 +101,9 @@
   }
 }
 
+/* OTP */
+@import url("./otp/styles.css");
+
 /* Core Css */
 @import url("./core/icon.css");
 @import url("./core/border.css");

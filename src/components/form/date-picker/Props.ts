@@ -1,4 +1,4 @@
-import { IBorder, IColors, ISize, IStatus, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
+import { IBorder, IColors, IStatus, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
 
 type Props = {
   label?: string;
@@ -8,8 +8,7 @@ type Props = {
   IColors &
   IStatus &
   IBorder &
-  ISize &
   IValidation &
-  Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "onChange" | "size" | "color">;
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, "children" | "onChange" | "color">;
 
 export default Props;
