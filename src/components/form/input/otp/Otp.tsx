@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useRef, useCallback } from "react";
+import React, { useRef, useCallback, FormEvent } from "react";
 import Input from "..";
 import IProps from "./IProps";
 
@@ -10,19 +10,22 @@ const Otp = ({ character, onChange, ...attributes }: IProps) => {
   const _value = useRef<Record<number, string>>({});
 
   // methods
-  const handleChange = useCallback(
-    (index: number) => (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInput = useCallback(
+    (index: number) => (event: FormEvent<HTMLInputElement>) => {
       if (attributes.disabled) return;
 
-      let { value } = event.target;
-      value = value.replace(/\D/g, "");
-
+      let { value } = event.currentTarget;
       _value.current = { ..._value.current, [index]: value };
+
+      if (value.length >= 1) {
+        _inputs.current[index + 1]?.focus();
+        _inputs.current[index + 1]?.select();
+      }
 
       onChange?.({
         ...event,
         target: {
-          ...event.target,
+          ...event.currentTarget,
           name: attributes.name ?? "",
           value: Object.keys(_value.current)
             .sort((a, b) => Number(a) - Number(b))
@@ -36,20 +39,11 @@ const Otp = ({ character, onChange, ...attributes }: IProps) => {
 
   const handleKeyUp = useCallback(
     (index: number) => (event: React.KeyboardEvent<HTMLInputElement>) => {
-      const { value } = event.currentTarget;
+      const input = event.currentTarget;
+      const { value } = input;
+      const lastChar = value.slice(-1);
 
-      if (value.length >= 1 && event.key >= "0" && event.key <= "9") {
-        _inputs.current[index + 1]?.focus();
-        _inputs.current[index + 1]?.select();
-      }
-
-      if (event.key === "ArrowLeft") {
-        _inputs.current[index - 1]?.focus();
-        _inputs.current[index - 1]?.select();
-      } else if (event.key === "ArrowRight") {
-        _inputs.current[index + 1]?.focus();
-        _inputs.current[index + 1]?.select();
-      }
+      event.currentTarget.value = lastChar;
 
       if (event.key === "Backspace" && value.length === 0) {
         _inputs.current[index - 1]?.focus();
@@ -58,6 +52,21 @@ const Otp = ({ character, onChange, ...attributes }: IProps) => {
     },
     []
   );
+
+  const handleKeyDown = (index: number) => (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (index === 0 && (event.key === "ArrowDown" || event.key === "ArrowLeft")) event.preventDefault();
+    if (index + 1 >= character && (event.key === "ArrowUp" || event.key === "ArrowRight")) event.preventDefault();
+
+    if (!/[0-9]/.test(event.key) && event.key.length === 1) event.preventDefault();
+
+    if (event.key === "ArrowDown" || event.key === "ArrowLeft") {
+      _inputs.current[index - 1]?.focus();
+      setTimeout(() => _inputs.current[index - 1]?.select(), 0);
+    } else if (event.key === "ArrowUp" || event.key === "ArrowRight") {
+      _inputs.current[index + 1]?.focus();
+      setTimeout(() => _inputs.current[index + 1]?.select(), 0);
+    }
+  };
 
   const handleClick = useCallback((event: React.MouseEvent<HTMLInputElement>) => {
     const input = event.currentTarget;
@@ -75,8 +84,9 @@ const Otp = ({ character, onChange, ...attributes }: IProps) => {
             }}
             {...attributes}
             value={_value.current[index] ?? ""}
-            onChange={handleChange(index)}
+            onInput={handleInput(index)}
             onKeyUp={handleKeyUp(index)}
+            onKeyDown={handleKeyDown(index)}
             onFocus={(event) => event.target.select()}
             onClick={handleClick}
             size={1}
