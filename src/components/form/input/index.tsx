@@ -7,7 +7,7 @@ import IProps from "./IProps";
 import Utils from "../../../libs/infrastructure/shared/Utils";
 import { ARIcon } from "../../icons";
 import Otp from "./otp/Otp";
-import Num from "./num";
+import Num from "./num/Num";
 
 const BaseInput = forwardRef<HTMLInputElement, IProps>(
   (

@@ -23,11 +23,9 @@ const Otp = ({ character, onChange, ...attributes }: IProps) => {
         if (!_inputs.current[index + 1]) {
           _inputs.current[character - 1]?.focus();
           _inputs.current[character - 1]?.select();
-
-          return;
+        } else {
+          _inputs.current[index + 1]?.focus();
         }
-
-        _inputs.current[index + 1]?.focus();
       }
 
       onChange?.({
@@ -62,6 +60,19 @@ const Otp = ({ character, onChange, ...attributes }: IProps) => {
 
           if (input) {
             input.value = chars[i];
+            _value.current = { ..._value.current, [i]: chars[i] };
+
+            onChange?.({
+              ...event,
+              target: {
+                ...event.currentTarget,
+                name: attributes.name ?? "",
+                value: Object.keys(_value.current)
+                  .sort((a, b) => Number(a) - Number(b))
+                  .map((key) => _value.current[Number(key)])
+                  .join(""),
+              },
+            });
             input.focus();
           }
 
