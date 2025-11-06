@@ -2,8 +2,11 @@ import { IBorder, IColors, IStatus, IValidation, IVariant } from "../../../libs/
 
 type Props = {
   label?: string;
-  isClock?: boolean;
   onChange: (value: string) => void;
+  config?: {
+    isClock?: boolean;
+    isFooterButton?: boolean;
+  };
 } & IVariant &
   IColors &
   IStatus &

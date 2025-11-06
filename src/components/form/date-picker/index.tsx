@@ -26,7 +26,7 @@ const months = [
   { value: 11, text: "Aralık" },
 ];
 
-const DatePicker: React.FC<Props> = ({ variant, color, onChange, isClock, validation, ...attributes }) => {
+const DatePicker: React.FC<Props> = ({ variant, color, onChange, config, validation, ...attributes }) => {
   // refs
   const _arCalendar = useRef<HTMLDivElement>(null);
   const _arClock = useRef<HTMLDivElement>(null);
@@ -92,7 +92,7 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, isClock, valida
         const screenCenterY = window.innerHeight / 2;
         const sx = window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft;
         const sy = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
-        const _isClock = InpuRect.left > screenCenterX ? -Math.abs(isClock ? 7.5 * 16.75 : 0) : 0;
+        const _isClock = InpuRect.left > screenCenterX ? -Math.abs(config?.isClock ? 7.5 * 16.75 : 0) : 0;
 
         _arCalendar.current.style.visibility = "visible";
         _arCalendar.current.style.opacity = "1";
@@ -136,8 +136,8 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, isClock, valida
         _year.current,
         _month.current,
         _day.current,
-        !isClock ? 0 : _hours.current,
-        !isClock ? 0 : _minutes.current,
+        !config?.isClock ? 0 : _hours.current,
+        !config?.isClock ? 0 : _minutes.current,
         0
       )
     );
@@ -171,8 +171,8 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, isClock, valida
         now.getFullYear(),
         now.getMonth(),
         now.getDate(),
-        !isClock ? 0 : now.getHours(),
-        !isClock ? 0 : now.getMinutes(),
+        !config?.isClock ? 0 : now.getHours(),
+        !config?.isClock ? 0 : now.getMinutes(),
         0
       )
     );
@@ -189,7 +189,7 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, isClock, valida
   };
 
   const closeCalendar = () => {
-    const { year, month, day, hours, minutes } = DATE.Parse(String(attributes.value), isClock);
+    const { year, month, day, hours, minutes } = DATE.Parse(String(attributes.value), config?.isClock);
 
     _year.current = attributes.value ? year : selectedYear;
     _month.current = attributes.value ? month - 1 : selectedMonth;
@@ -300,7 +300,7 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, isClock, valida
     generateList(24, _hours.current, setHours);
     generateList(60, _minutes.current, setMinutes);
 
-    if (!isClock) return;
+    if (!config?.isClock) return;
     if (calendarIsOpen) handleHeight();
 
     // Seçim sonrasında en yukarı getirme işlemi için aşağıda yer alan kodlar yazılmıştır
@@ -320,7 +320,7 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, isClock, valida
         behavior: "smooth",
       });
     }
-  }, [timeChanged, calendarIsOpen, isClock]);
+  }, [timeChanged, calendarIsOpen, config?.isClock]);
 
   useEffect(() => {
     if (isNaN(_year.current)) return;
@@ -354,8 +354,8 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, isClock, valida
         variant={variant}
         color={color}
         {...attributes}
-        value={DATE.ParseValue(String(attributes.value), isClock)}
-        type={isClock ? "datetime-local" : "date"}
+        value={DATE.ParseValue(String(attributes.value), config?.isClock)}
+        type={config?.isClock ? "datetime-local" : "date"}
         onKeyDown={(event) => {
           if (event.code === "Space") event.preventDefault();
           else if (event.code === "Enter") handleOk();
@@ -482,19 +482,21 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, isClock, valida
               )}
             </div>
 
-            <div ref={_calendarFooter} className="footer">
-              <div>
-                <Button variant="borderless" onClick={() => setNowButton()}>
-                  Şimdi
-                </Button>
-              </div>
+            {config?.isFooterButton && (
+              <div ref={_calendarFooter} className="footer">
+                <div>
+                  <Button variant="borderless" onClick={() => setNowButton()}>
+                    Şimdi
+                  </Button>
+                </div>
 
-              <div>{!isClock && okayButton()}</div>
-            </div>
+                <div>{!config?.isClock && okayButton()}</div>
+              </div>
+            )}
             {/* :End: Calendar */}
 
             {/* :Begin: Clock */}
-            {isClock && (
+            {config?.isClock && (
               <div ref={_arClock} className="clock">
                 <div ref={_clockHeader} className="header">
                   {_hours.current.toString().padStart(2, "0")}

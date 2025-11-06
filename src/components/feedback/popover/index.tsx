@@ -24,14 +24,18 @@ const Popover: React.FC<IProps> = ({ children, title, message, content, onConfir
   // methods
   const handleClickOutSide = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
+    const isArSelectOptions = document.getElementsByClassName("ar-select-options").length === 0;
+    const isArCalendar = document.getElementsByClassName("ar-date-calendar").length === 0;
 
-    if (_arPopover.current && !_arPopover.current.contains(target)) setOpen(false);
+    if (_arPopover.current && !_arPopover.current.contains(target) && isArCalendar && isArSelectOptions) setOpen(false);
   };
 
   const handleKeys = (event: KeyboardEvent) => {
     const key = event.key;
+    const isArSelectOptions = document.getElementsByClassName("ar-select-options").length === 0;
+    const isArCalendar = document.getElementsByClassName("ar-date-calendar").length === 0;
 
-    if (key === "Escape") setOpen(false);
+    if (key === "Escape" && isArCalendar && isArSelectOptions) setOpen(false);
   };
 
   const handlePosition = () => {
