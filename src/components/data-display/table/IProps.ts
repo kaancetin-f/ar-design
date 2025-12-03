@@ -30,6 +30,10 @@ export type Config<T> = {
     openAutomatically?: boolean;
     selector?: string;
     button?: boolean;
+    render?: {
+      styles: React.CSSProperties;
+      element: (item: any[]) => React.JSX.Element;
+    };
   };
   isTreeView?: boolean;
   validation?: Errors<T>;

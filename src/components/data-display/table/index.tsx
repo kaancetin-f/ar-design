@@ -639,6 +639,21 @@ const Table = forwardRef(
     };
 
     const SubitemList = ({ items, columns, index, depth, level = 1 }: any) => {
+      if (config.subrow?.render) {
+        return (
+          <tr className={`subrow-item ${_subrowButton ? "type-b" : "type-a"}`} data-level={level}>
+            {_subrowButton && <td style={{ ...config.subrow.render.styles, width: 0, minWidth: 0 }}></td>}
+
+            <td
+              colSpan={columns.length || 1}
+              style={{ ...config.subrow.render.styles, padding: "7.5px 7.5px 7.5px 0" }}
+            >
+              {config.subrow?.render.element(items) ?? <></>}
+            </td>
+          </tr>
+        );
+      }
+
       return items.map((subitem: T, subindex: number) => {
         const _subitem = subitem[_subrowSelector as keyof typeof subitem];
         const isHasSubitems = _subrowSelector in subitem;
@@ -668,8 +683,12 @@ const Table = forwardRef(
                 <td style={{ width: 0, minWidth: 0 }}></td>
               ) : null}
 
-              {columns.map((c: TableColumnType<T>, cIndex: number) =>
-                renderCell(subitem, c, cIndex, subindex, depth * (config.isTreeView ? 2.25 : 1.75), level, 0, true)
+              {!config.subrow?.render ? (
+                columns.map((c: TableColumnType<T>, cIndex: number) =>
+                  renderCell(subitem, c, cIndex, subindex, depth * (config.isTreeView ? 2.25 : 1.75), level, 0, true)
+                )
+              ) : (
+                <td colSpan={columns.length || 1}>{config.subrow?.render.element(items) ?? <></>}</td>
               )}
             </tr>
 

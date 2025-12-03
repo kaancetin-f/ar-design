@@ -40,13 +40,13 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
   // states -> Drawing
   const [drawingEdge, setDrawingEdge] = useState<{
     id: string | number;
-    port: "top" | "bottom";
+    port: "top" | "right" | "bottom" | "left";
     start: Position;
   } | null>(null);
   const [mousePos, setMousePos] = useState<Position | null>(null);
 
   // methods
-  const getPortCenter = (id: string | number, port: "top" | "bottom"): Position | null => {
+  const getPortCenter = (id: string | number, port: "top" | "right" | "bottom" | "left"): Position | null => {
     const node = _arNodes.current[`${id}_${port}`];
     const diagram = _arDiagram.current;
 
@@ -368,8 +368,40 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
                   }}
                 ></span>
 
+                {/* Left Port */}
+                <span
+                  ref={(el) => {
+                    if (!el) return;
+                    _arNodes.current[`${node.id}_left`] = el;
+                  }}
+                  className="port left"
+                  onMouseDown={(event) => {
+                    event.stopPropagation();
+                    const from = getPortCenter(node.id, "left");
+                    if (from) {
+                      setDrawingEdge({ id: node.id, port: "left", start: from });
+                    }
+                  }}
+                ></span>
+
                 {/* Node Content */}
                 <span>{node.data}</span>
+
+                {/* Right Port */}
+                <span
+                  ref={(el) => {
+                    if (!el) return;
+                    _arNodes.current[`${node.id}_right`] = el;
+                  }}
+                  className="port right"
+                  onMouseDown={(event) => {
+                    event.stopPropagation();
+                    const from = getPortCenter(node.id, "right");
+                    if (from) {
+                      setDrawingEdge({ id: node.id, port: "right", start: from });
+                    }
+                  }}
+                ></span>
 
                 {/* Bottom Port */}
                 <span

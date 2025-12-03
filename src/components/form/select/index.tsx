@@ -397,8 +397,10 @@ const Select: React.FC<Props> = ({
         ></span>
 
         <span
-          className={`angel-down ${optionsOpen ? "opened" : "closed"}`}
+          className={`angel-down ${!disabled && optionsOpen ? "opened" : "closed"}`}
           onClick={(event) => {
+            if (disabled) return;
+
             event.stopPropagation();
             setOptionsOpen((x) => !x);
           }}
@@ -409,7 +411,8 @@ const Select: React.FC<Props> = ({
       {/* :End: Select and Multiple Select Field */}
 
       {/* :Begin: Options Field */}
-      {optionsOpen &&
+      {!disabled &&
+        optionsOpen &&
         ReactDOM.createPortal(
           <div ref={_options} className="ar-select-options">
             {multiple && (

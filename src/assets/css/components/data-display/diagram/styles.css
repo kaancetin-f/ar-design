@@ -65,8 +65,21 @@
               top: -5px;
             }
 
+            &.right {
+              right: -5px;
+              top: 50%;
+              left: auto;
+              transform: translateY(-50%);
+            }
+
             &.bottom {
               bottom: -5px;
+            }
+
+            &.left {
+              left: -5px;
+              top: 50%;
+              transform: translateY(-50%);
             }
           }
 

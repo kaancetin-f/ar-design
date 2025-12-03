@@ -235,7 +235,7 @@ export type NodeData = {
   data: React.ReactNode;
 };
 
-type Port = "top" | "bottom";
+type Port = "top" | "right" | "bottom" | "left";
 export type EdgeData = {
   id: string | number;
   from: {
