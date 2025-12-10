@@ -292,6 +292,9 @@ const _Variant_OutlinedCss = () => {
       return `/* #region ${color.toUpperCase()} */
 .outlined:not(.disabled) {
   &.${color} {
+    border: solid 1px var(--${color}-500);
+    color: var(--black);
+
     &.active {
       animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
     }

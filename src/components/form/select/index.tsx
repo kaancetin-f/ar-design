@@ -33,6 +33,7 @@ const Select: React.FC<Props> = ({
   const _arSelect = useRef<HTMLDivElement>(null);
   const _singleInput = useRef<HTMLInputElement>(null);
   const _multipleInput = useRef<HTMLDivElement>(null);
+  const _placeholder = useRef<HTMLSpanElement>(null);
   const _options = useRef<HTMLDivElement>(null);
   const _optionItems = useRef<(HTMLLIElement | null)[]>([]);
   const _searchField = useRef<HTMLInputElement>(null);
@@ -325,33 +326,49 @@ const Select: React.FC<Props> = ({
       {/* :Begin: Select and Multiple Select Field */}
       <div ref={_multipleInput} className="ar-select">
         {multiple ? (
-          <div
-            className={_selectionClassName.map((c) => c).join(" ")}
-            onClick={() => {
-              onClick && onClick();
+          <div className="wrapper">
+            <div
+              {...(value.length > 0
+                ? {
+                    style: {
+                      clipPath: `polygon(
+                            -15px 0,
+                            10px -5px,
+                            10px 5px,
+                            calc(${_placeholder.current?.getBoundingClientRect().width}px + 7px) 5px,
+                            calc(${_placeholder.current?.getBoundingClientRect().width}px + 7px) -5px,
+                            100% -70px,
+                            calc(100% + 5px) calc(100% + 5px),
+                            -5px calc(100% + 5px)
+                          )`,
+                    },
+                  }
+                : {})}
+              className={_selectionClassName.map((c) => c).join(" ")}
+              onClick={() => {
+                onClick && onClick();
 
-              (() => {
-                setOptionsOpen((prev) => !prev);
-              })();
-            }}
-          >
-            <div className="items">
-              {value.length > 0 ? (
-                value.map((_value, index) => (
+                (() => {
+                  setOptionsOpen((prev) => !prev);
+                })();
+              }}
+            >
+              <div className="items">
+                {value.map((_value, index) => (
                   <Chip
                     key={index}
                     variant={status?.selected?.variant || "filled"}
                     color={status?.selected?.color || status?.color}
                     text={_value.text}
                   />
-                ))
-              ) : (
-                <span className="placeholder">
-                  {validation ? "* " : ""}
-                  {placeholder}
-                </span>
-              )}
+                ))}
+              </div>
             </div>
+
+            <span ref={_placeholder} className={`placeholder ${value.length > 0 ? "visible" : "hidden"}`}>
+              {validation ? "* " : ""}
+              {placeholder}
+            </span>
           </div>
         ) : (
           <Input

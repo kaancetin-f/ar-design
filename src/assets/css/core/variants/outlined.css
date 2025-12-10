@@ -1,6 +1,9 @@
 /* #region BLUE */
 .outlined:not(.disabled) {
   &.blue {
+    border: solid 1px var(--blue-500);
+    color: var(--black);
+
     &.active {
       animation: clicked-blue ease-in-out 750ms 0s 1 normal both;
     }
@@ -38,6 +41,9 @@ button.outlined:not(.disabled) {
 /* #region PURPLE */
 .outlined:not(.disabled) {
   &.purple {
+    border: solid 1px var(--purple-500);
+    color: var(--black);
+
     &.active {
       animation: clicked-purple ease-in-out 750ms 0s 1 normal both;
     }
@@ -75,6 +81,9 @@ button.outlined:not(.disabled) {
 /* #region PINK */
 .outlined:not(.disabled) {
   &.pink {
+    border: solid 1px var(--pink-500);
+    color: var(--black);
+
     &.active {
       animation: clicked-pink ease-in-out 750ms 0s 1 normal both;
     }
@@ -112,6 +121,9 @@ button.outlined:not(.disabled) {
 /* #region RED */
 .outlined:not(.disabled) {
   &.red {
+    border: solid 1px var(--red-500);
+    color: var(--black);
+
     &.active {
       animation: clicked-red ease-in-out 750ms 0s 1 normal both;
     }
@@ -149,6 +161,9 @@ button.outlined:not(.disabled) {
 /* #region ORANGE */
 .outlined:not(.disabled) {
   &.orange {
+    border: solid 1px var(--orange-500);
+    color: var(--black);
+
     &.active {
       animation: clicked-orange ease-in-out 750ms 0s 1 normal both;
     }
@@ -186,6 +201,9 @@ button.outlined:not(.disabled) {
 /* #region YELLOW */
 .outlined:not(.disabled) {
   &.yellow {
+    border: solid 1px var(--yellow-500);
+    color: var(--black);
+
     &.active {
       animation: clicked-yellow ease-in-out 750ms 0s 1 normal both;
     }
@@ -223,6 +241,9 @@ button.outlined:not(.disabled) {
 /* #region GREEN */
 .outlined:not(.disabled) {
   &.green {
+    border: solid 1px var(--green-500);
+    color: var(--black);
+
     &.active {
       animation: clicked-green ease-in-out 750ms 0s 1 normal both;
     }
@@ -260,6 +281,9 @@ button.outlined:not(.disabled) {
 /* #region TEAL */
 .outlined:not(.disabled) {
   &.teal {
+    border: solid 1px var(--teal-500);
+    color: var(--black);
+
     &.active {
       animation: clicked-teal ease-in-out 750ms 0s 1 normal both;
     }
@@ -297,6 +321,9 @@ button.outlined:not(.disabled) {
 /* #region CYAN */
 .outlined:not(.disabled) {
   &.cyan {
+    border: solid 1px var(--cyan-500);
+    color: var(--black);
+
     &.active {
       animation: clicked-cyan ease-in-out 750ms 0s 1 normal both;
     }
@@ -334,6 +361,9 @@ button.outlined:not(.disabled) {
 /* #region GRAY */
 .outlined:not(.disabled) {
   &.gray {
+    border: solid 1px var(--gray-500);
+    color: var(--black);
+
     &.active {
       animation: clicked-gray ease-in-out 750ms 0s 1 normal both;
     }
@@ -371,6 +401,9 @@ button.outlined:not(.disabled) {
 /* #region LIGHT */
 .outlined:not(.disabled) {
   &.light {
+    border: solid 1px var(--light-500);
+    color: var(--black);
+
     &.active {
       animation: clicked-light ease-in-out 750ms 0s 1 normal both;
     }
