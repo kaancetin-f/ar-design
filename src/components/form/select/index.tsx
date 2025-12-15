@@ -403,25 +403,27 @@ const Select: React.FC<Props> = ({
           />
         )}
 
-        <span
-          className={`button-clear ${!disabled && (multiple ? value.length > 0 : value) ? "opened" : "closed"}`}
-          onClick={(event) => {
-            if (disabled) return;
+        <div className="buttons">
+          <span
+            className={`button-clear ${!disabled && (multiple ? value.length > 0 : value) ? "opened" : "closed"}`}
+            onClick={(event) => {
+              if (disabled) return;
 
-            event.stopPropagation();
-            handleCleanSelection();
-          }}
-        ></span>
+              event.stopPropagation();
+              handleCleanSelection();
+            }}
+          ></span>
 
-        <span
-          className={`angel-down ${!disabled && optionsOpen ? "opened" : "closed"}`}
-          onClick={(event) => {
-            if (disabled) return;
+          <span
+            className={`angel-down ${!disabled && optionsOpen ? "opened" : "closed"}`}
+            onClick={(event) => {
+              if (disabled) return;
 
-            event.stopPropagation();
-            setOptionsOpen((x) => !x);
-          }}
-        ></span>
+              event.stopPropagation();
+              setOptionsOpen((x) => !x);
+            }}
+          ></span>
+        </div>
 
         {multiple && validation && <span className="validation">{validation.text}</span>}
       </div>
