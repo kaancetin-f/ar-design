@@ -183,7 +183,25 @@ export const useValidation = function <TData extends object>(
         setError(key, Utils.StringFormat(s.message, s.value), param.step, index);
       }
 
-      if (s.type === "email" && value && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+      // Regexes
+      const phoneRegex = /^((\+90|0)?([2-5]\d{2})\d{7}|\+[1-9]\d{7,14})$/;
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const ibanRegex = /^TR\d{24}$/;
+      const accountNumberRegex = /^\d{6,16}$/;
+
+      if (s.type === "phone" && value && !phoneRegex.test(value)) {
+        setError(key, s.message, param.step, index);
+      }
+
+      if (s.type === "email" && value && !emailRegex.test(value)) {
+        setError(key, s.message, param.step, index);
+      }
+
+      if (s.type === "iban" && value && !ibanRegex.test(value.replace(/\s/g, ""))) {
+        setError(key, s.message, param.step, index);
+      }
+
+      if (s.type === "account-number" && value && !accountNumberRegex.test(value)) {
         setError(key, s.message, param.step, index);
       }
     };

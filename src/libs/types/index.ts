@@ -104,7 +104,7 @@ export type KanbanBoardColumnType<T, TColumnProperties> = {
 
 // Validation Types
 export type ValidationShape = {
-  type: "required" | "minimum" | "maximum" | "email";
+  type: "required" | "minimum" | "maximum" | "email" | "phone" | "iban" | "account-number";
   value?: string | number;
   message: string;
 };
