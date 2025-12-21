@@ -22,7 +22,7 @@ const Tabs: React.FC<IProps> = ({ name, tabs = [], activeTab, onChange, onClose 
     onChange?.(stored !== null ? Number(stored) : 0);
 
     setIsLoading(false);
-  }, []);
+  }, [name]);
 
   if (isLoading) return <Skeleton name={name} tabs={tabs} />;
 
