@@ -15,6 +15,7 @@ const Select: React.FC<Props> = ({
   status,
   color,
   border = { radius: "sm" },
+  style,
   options,
   value,
   onChange,
@@ -373,6 +374,7 @@ const Select: React.FC<Props> = ({
         ) : (
           <Input
             ref={_singleInput}
+            style={style}
             variant={variant}
             color={!Utils.IsNullOrEmpty(validation?.text) ? "red" : color}
             // status={!Utils.IsNullOrEmpty(validation?.text) ? "danger" : status}

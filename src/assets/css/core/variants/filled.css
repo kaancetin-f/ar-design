@@ -1,8 +1,8 @@
 /* #region BLUE */
 .filled:not(.disabled) {
   &.blue {
-    background-color: var(--blue-500);
-    color: var(--white);
+    background-color: var(--blue-500) !important;
+    color: var(--white) !important;
     
     &.active {
       animation: clicked-blue ease-in-out 750ms 0s 1 normal both;
@@ -40,8 +40,8 @@ button.filled:not(.disabled) {
 /* #region PURPLE */
 .filled:not(.disabled) {
   &.purple {
-    background-color: var(--purple-500);
-    color: var(--white);
+    background-color: var(--purple-500) !important;
+    color: var(--white) !important;
     
     &.active {
       animation: clicked-purple ease-in-out 750ms 0s 1 normal both;
@@ -79,8 +79,8 @@ button.filled:not(.disabled) {
 /* #region PINK */
 .filled:not(.disabled) {
   &.pink {
-    background-color: var(--pink-500);
-    color: var(--white);
+    background-color: var(--pink-500) !important;
+    color: var(--white) !important;
     
     &.active {
       animation: clicked-pink ease-in-out 750ms 0s 1 normal both;
@@ -118,8 +118,8 @@ button.filled:not(.disabled) {
 /* #region RED */
 .filled:not(.disabled) {
   &.red {
-    background-color: var(--red-500);
-    color: var(--white);
+    background-color: var(--red-500) !important;
+    color: var(--white) !important;
     
     &.active {
       animation: clicked-red ease-in-out 750ms 0s 1 normal both;
@@ -157,8 +157,8 @@ button.filled:not(.disabled) {
 /* #region ORANGE */
 .filled:not(.disabled) {
   &.orange {
-    background-color: var(--orange-500);
-    color: var(--white);
+    background-color: var(--orange-500) !important;
+    color: var(--white) !important;
     
     &.active {
       animation: clicked-orange ease-in-out 750ms 0s 1 normal both;
@@ -196,8 +196,8 @@ button.filled:not(.disabled) {
 /* #region YELLOW */
 .filled:not(.disabled) {
   &.yellow {
-    background-color: var(--yellow-500);
-    color: var(--black);
+    background-color: var(--yellow-500) !important;
+    color: var(--black) !important;
     
     &.active {
       animation: clicked-yellow ease-in-out 750ms 0s 1 normal both;
@@ -235,8 +235,8 @@ button.filled:not(.disabled) {
 /* #region GREEN */
 .filled:not(.disabled) {
   &.green {
-    background-color: var(--green-500);
-    color: var(--white);
+    background-color: var(--green-500) !important;
+    color: var(--white) !important;
     
     &.active {
       animation: clicked-green ease-in-out 750ms 0s 1 normal both;
@@ -274,8 +274,8 @@ button.filled:not(.disabled) {
 /* #region TEAL */
 .filled:not(.disabled) {
   &.teal {
-    background-color: var(--teal-500);
-    color: var(--white);
+    background-color: var(--teal-500) !important;
+    color: var(--white) !important;
     
     &.active {
       animation: clicked-teal ease-in-out 750ms 0s 1 normal both;
@@ -313,8 +313,8 @@ button.filled:not(.disabled) {
 /* #region CYAN */
 .filled:not(.disabled) {
   &.cyan {
-    background-color: var(--cyan-500);
-    color: var(--white);
+    background-color: var(--cyan-500) !important;
+    color: var(--white) !important;
     
     &.active {
       animation: clicked-cyan ease-in-out 750ms 0s 1 normal both;
@@ -352,8 +352,8 @@ button.filled:not(.disabled) {
 /* #region GRAY */
 .filled:not(.disabled) {
   &.gray {
-    background-color: var(--gray-500);
-    color: var(--black);
+    background-color: var(--gray-500) !important;
+    color: var(--black) !important;
     
     &.active {
       animation: clicked-gray ease-in-out 750ms 0s 1 normal both;
@@ -391,8 +391,8 @@ button.filled:not(.disabled) {
 /* #region LIGHT */
 .filled:not(.disabled) {
   &.light {
-    background-color: var(--light-500);
-    color: var(--gray-500);
+    background-color: var(--light-500) !important;
+    color: var(--gray-500) !important;
     
     &.active {
       animation: clicked-light ease-in-out 750ms 0s 1 normal both;

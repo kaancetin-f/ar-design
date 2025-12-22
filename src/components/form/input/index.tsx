@@ -8,6 +8,7 @@ import Utils from "../../../libs/infrastructure/shared/Utils";
 import { ARIcon } from "../../icons";
 import Otp from "./otp/Otp";
 import Num from "./num/Num";
+import Phone from "./phone/Phone";
 
 const BaseInput = forwardRef<HTMLInputElement, IProps>(
   (
@@ -148,6 +149,7 @@ const BaseInput = forwardRef<HTMLInputElement, IProps>(
               {...(value
                 ? {
                     style: {
+                      ...attributes.style,
                       clipPath: `polygon(
                             -15px 0,
                             10px -5px,
@@ -160,7 +162,7 @@ const BaseInput = forwardRef<HTMLInputElement, IProps>(
                           )`,
                     },
                   }
-                : {})}
+                : { style: { ...attributes.style } })}
               onChange={(event) => {
                 // Disabled gelmesi durumunda işlem yapmasına izin verme...
                 if (attributes.disabled) return;
@@ -223,12 +225,14 @@ const BaseInput = forwardRef<HTMLInputElement, IProps>(
 
 interface InputCompound extends React.ForwardRefExoticComponent<IProps & React.RefAttributes<HTMLInputElement>> {
   Number: typeof Num;
+  Phone: typeof Phone;
   Otp: typeof Otp;
 }
 
 const Input = BaseInput as InputCompound;
-Input.Otp = Otp;
 Input.Number = Num;
+Input.Phone = Phone;
+Input.Otp = Otp;
 
 BaseInput.displayName = "Input";
 export default Input;

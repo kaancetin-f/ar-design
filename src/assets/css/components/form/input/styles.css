@@ -101,6 +101,8 @@
   }
 }
 
+/* PHONE */
+@import url("./phone/styles.css");
 /* OTP */
 @import url("./otp/styles.css");
 

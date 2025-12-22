@@ -184,7 +184,8 @@ export const useValidation = function <TData extends object>(
       }
 
       // Regexes
-      const phoneRegex = /^((\+90|0)?([2-5]\d{2})\d{7}|\+[1-9]\d{7,14})$/;
+      // const phoneRegex = /^((\+90|0)?([2-5]\d{2})\d{7}|\+[1-9]\d{7,14})$/;
+      const phoneRegex = /^\d{7,14}$/;
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       const ibanRegex = /^TR\d{24}$/;
       const accountNumberRegex = /^\d{6,16}$/;

@@ -95,7 +95,7 @@ const Num: React.FC<IProps> = ({
     //   _firstLoad.current = true;
     // }
 
-    setValue(getFormatter.format(window.Number(value)));
+    setValue(getFormatter.format(Number(value)));
   }, [value]);
 
   return (

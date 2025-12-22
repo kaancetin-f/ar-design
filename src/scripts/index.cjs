@@ -197,8 +197,8 @@ const _Variant_FilledCss = () => {
       return `/* #region ${color.toUpperCase()} */
 .filled:not(.disabled) {
   &.${color} {
-    background-color: var(--${color}-500);
-    color: var(--${fontColor});
+    background-color: var(--${color}-500) !important;
+    color: var(--${fontColor}) !important;
     
     &.active {
       animation: clicked-${color} ease-in-out 750ms 0s 1 normal both;
