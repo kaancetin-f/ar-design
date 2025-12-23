@@ -61,6 +61,7 @@ const Table = forwardRef(
       previousSelections,
       searchedParams,
       onEditable,
+      onDnD,
       pagination,
       config = { isSearchable: false },
     }: IProps<T>,
@@ -70,7 +71,9 @@ const Table = forwardRef(
     const _innerRef = useRef<HTMLTableElementWithCustomAttributes>(null);
     const _tableWrapper = useRef<HTMLDivElement>(null);
     const _tableContent = useRef<HTMLDivElement>(null);
+    const _tBody = useRef<HTMLTableSectionElement>(null);
     const _tBodyTR = useRef<(HTMLTableRowElement | null)[]>([]);
+    const _dragItem = useRef<HTMLElement>();
     const _checkboxItems = useRef<(HTMLInputElement | null)[]>([]);
     const _filterCheckboxItems = useRef<(HTMLInputElement | null)[]>([]);
     // refs -> Search
@@ -500,6 +503,7 @@ const Table = forwardRef(
               _tBodyTR.current[index] = element;
             }}
             style={{ ..._rowColor }}
+            {...(onDnD && data.length > 1 ? { className: "draggable", draggable: true } : {})}
           >
             {/* Checkboxes */}
             {selections && (
@@ -706,6 +710,26 @@ const Table = forwardRef(
       });
     };
 
+    const renderTBody = useMemo(() => {
+      return getData.length > 0 ? (
+        getData.map((item, index) => <React.Fragment key={index}>{renderRow(item, index, 1)}</React.Fragment>)
+      ) : (
+        <tr>
+          <td colSpan={columns.length || 1}>
+            <div className="no-item">
+              <ARIcon
+                icon={"Inbox-Fill"}
+                fill="var(--gray-300)"
+                size={64}
+                style={{ position: "relative", zIndex: 1 }}
+              />
+              <span>No Data</span>
+            </div>
+          </td>
+        </tr>
+      );
+    }, [getData, showSubitems, columns]);
+
     // useEffects
     useEffect(() => {
       if (Utils.DeepEqual(previousSelections, selectionItems)) return;
@@ -785,6 +809,101 @@ const Table = forwardRef(
         handleFilterPopupContent(filterCurrentColumn, filterCurrentDataType, filterCurrentIndex);
       }
     }, [checkboxSelectedParams, filterPopupOption, filterPopupOptionSearchText]);
+
+    useLayoutEffect(() => {
+      // @DND
+      if (!onDnD || !_tBody.current || data.length === 0) return;
+
+      _tBody.current.childNodes.forEach((item) => {
+        const _item = item as HTMLElement;
+
+        // Events
+        _item.ondragstart = (event) => {
+          const dragItem = event.currentTarget as HTMLElement;
+
+          _dragItem.current = dragItem;
+          dragItem.classList.add("drag-item");
+
+          if (event.dataTransfer) {
+            // #region Shadow
+            const shadow = document.createElement("div");
+
+            shadow.innerHTML = `
+            <div class="ar-dnd-shadow">
+              <i class="bi bi-gear-wide-connected"></i>
+              <span>Dragging...</span>
+            </div>
+          `;
+            shadow.style.position = "absolute";
+            shadow.style.top = "-9999px";
+            document.body.appendChild(shadow);
+            event.dataTransfer.setDragImage(shadow, 0, 0);
+            // #endregion
+          }
+        };
+
+        _item.ondragover = (event) => {
+          event.preventDefault();
+
+          const overItem = event.currentTarget as HTMLElement;
+          const rect = overItem.getBoundingClientRect();
+
+          // Otomatik scroll.
+          if (rect.top < 250) window.scrollBy(0, -20);
+          if (rect.bottom > window.innerHeight - 150) window.scrollBy(0, 20);
+
+          // Gerçek taşıma işlemi.
+          if (_dragItem.current !== overItem) {
+            if (_tBody.current && _dragItem.current) {
+              const dragItemIndex = [..._tBody.current.children].indexOf(_dragItem.current!);
+              const dropItemIndex = [..._tBody.current.children].indexOf(overItem);
+
+              if (dragItemIndex === -1 || dropItemIndex === -1) return;
+
+              _tBody.current.insertBefore(
+                _dragItem.current,
+                dragItemIndex < dropItemIndex ? overItem.nextSibling : overItem
+              );
+
+              const movedItem = data.splice(dragItemIndex, 1)[0];
+
+              if (movedItem) {
+                data.splice(dropItemIndex, 0, movedItem);
+                onDnD?.(data);
+              }
+            }
+          }
+        };
+
+        _item.ondragend = (event) => {
+          const item = event.currentTarget as HTMLElement;
+          item.classList.remove("drag-item");
+          item.classList.add("end-item");
+
+          setTimeout(() => {
+            item.classList.remove("end-item");
+
+            if (item.classList.length === 0) item.removeAttribute("class");
+          }, 1000);
+        };
+      });
+
+      _tBody.current.ondragover = (event) => event.preventDefault();
+
+      return () => {
+        if (!_tBody.current) return;
+
+        _tBody.current.childNodes.forEach((item) => {
+          const _item = item as HTMLElement;
+
+          _item.ondragstart = null;
+          _item.ondragover = null;
+          _item.ondragend = null;
+        });
+
+        _tBody.current.ondragover = null;
+      };
+    }, [data]);
 
     useLayoutEffect(() => {
       const heights = _tBodyTR.current.map((el) => (el ? el.getBoundingClientRect().height : 0));
@@ -1070,25 +1189,7 @@ const Table = forwardRef(
               )}
             </thead>
 
-            <tbody>
-              {getData.length > 0 ? (
-                getData.map((item, index) => <React.Fragment key={index}>{renderRow(item, index, 1)}</React.Fragment>)
-              ) : (
-                <tr>
-                  <td colSpan={columns.length}>
-                    <div className="no-item">
-                      <ARIcon
-                        icon={"Inbox-Fill"}
-                        fill="var(--gray-300)"
-                        size={64}
-                        style={{ position: "relative", zIndex: 1 }}
-                      />
-                      <span>No Data</span>
-                    </div>
-                  </td>
-                </tr>
-              )}
-            </tbody>
+            <tbody ref={_tBody}>{renderTBody}</tbody>
           </table>
         </div>
 

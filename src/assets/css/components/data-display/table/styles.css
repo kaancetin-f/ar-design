@@ -51,6 +51,7 @@
 }
 
 .ar-table > .content > table {
+  display: table;
   border-collapse: collapse;
   width: 100%;
 }
@@ -139,6 +140,23 @@
 
 .ar-table > .content > table > tbody > tr {
   border-bottom: solid 1px var(--gray-200);
+
+  &.draggable {
+    > td:first-child {
+      position: relative;
+      padding-left: 20px;
+
+      &:first-child::before {
+        content: "⋮⋮";
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray-400);
+        cursor: move;
+      }
+    }
+  }
 }
 .ar-table > .content > table > tbody > tr:last-child {
   border-bottom: none;
