@@ -728,7 +728,7 @@ const Table = forwardRef(
           </td>
         </tr>
       );
-    }, [getData, showSubitems, columns]);
+    }, [getData, columns, showSubitems, rowHeights]);
 
     // useEffects
     useEffect(() => {
