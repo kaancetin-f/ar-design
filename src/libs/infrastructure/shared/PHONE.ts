@@ -1,4 +1,4 @@
-class PhoneMask {
+class PHONE {
   public FormatByMask = (code: string, value: string) => {
     const mask = this.GetMaskByCountry(code ?? "+90");
     const digits = value.replace(/\D/g, "");
@@ -63,4 +63,4 @@ class PhoneMask {
   }
 }
 
-export default new PhoneMask();
+export default new PHONE();
