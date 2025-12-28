@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../../form/input";
 import DatePicker from "../../form/date-picker";
 import { Errors, Option, TableColumnType } from "../../../libs/types";
@@ -15,17 +15,20 @@ interface IProps<T> {
 }
 
 const Editable = function <T>({ c, item, index, onEditable, validation }: IProps<T>) {
+  // variables
   const key = c.key as keyof T;
   const itemValue = item[c.key as keyof T];
   const selectItem = c.editable?.options?.find((x) => x.value === itemValue);
   const selectItems = Array.isArray(itemValue)
     ? (c.editable?.options?.filter((x) => itemValue.includes(x.value)) as Option[])
     : [];
+  const _vText = validation?.[`${c.key as string}_${index}` as keyof typeof validation];
 
   // states
   const [value, setValue] = useState<string | number | readonly string[] | undefined>(itemValue as string);
 
-  const _vText = validation?.[`${c.key as string}_${index}` as keyof typeof validation];
+  // useEffects
+  useEffect(() => setValue(itemValue as string), [item]);
 
   switch (c.editable?.type) {
     case "string":
