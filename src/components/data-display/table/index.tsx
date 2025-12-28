@@ -217,7 +217,8 @@ const Table = forwardRef(
               ...prev,
               [name]: { value: value, operator: operator },
             }));
-            if (pagination && pagination.onChange) pagination.onChange(1);
+
+            if (pagination) pagination.onChange?.(1, selectedPerPage);
           }, 750);
         } else {
           setSearchedText((prev) => {
@@ -788,7 +789,7 @@ const Table = forwardRef(
       }
 
       setCurrentPage(1);
-      if (pagination && pagination.onChange) pagination.onChange(1);
+      if (pagination) pagination.onChange?.(1, selectedPerPage);
     }, [checkboxSelectedParams]);
 
     useEffect(() => {
@@ -801,7 +802,7 @@ const Table = forwardRef(
 
         setSelectAll(allChecked);
       }
-    }, [selectionItems, currentPage]);
+    }, [selectionItems, currentPage, selectedPerPage]);
 
     useEffect(() => {
       // Filter Content alanı re-render işlemi.
@@ -1207,10 +1208,10 @@ const Table = forwardRef(
               totalRecords={config.isServerSide ? pagination.totalRecords : totalRecords ?? 0}
               currentPage={currentPage}
               perPage={selectedPerPage}
-              onPerPageChange={(perPage) => setSelectedPerPage(perPage)}
-              onChange={(currentPage) => {
+              onChange={(currentPage, perPage) => {
                 setCurrentPage(currentPage);
-                pagination.onChange?.(currentPage);
+                setSelectedPerPage(perPage);
+                pagination.onChange?.(currentPage, perPage);
 
                 setTimeout(() => handleScroll(), 0);
               }}

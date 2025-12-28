@@ -92,7 +92,7 @@ interface IProps<T> extends IChildren {
     totalRecords: number;
     perPage: number;
     currentPage?: number;
-    onChange?: (currentPage: number) => void;
+    onChange?: (currentPage: number, perPage: number) => void;
   };
   config?: Config<T>;
 }

@@ -16,7 +16,7 @@ const perPageOptions: Option[] = [
   { value: 100, text: "100" },
 ];
 
-const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onPerPageChange, onChange }) => {
+const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onChange }) => {
   // context
   const { config } = useContext(ConfigContext);
 
@@ -28,7 +28,7 @@ const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onPe
   );
 
   // methods
-  const handlePageChange = (page: number) => onChange(page);
+  const handlePageChange = (page: number, perPage: number) => onChange(page, perPage);
 
   // useEffects
   useEffect(() => {
@@ -48,7 +48,11 @@ const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onPe
     // Sayfalama mantığı...
     for (let i = startPage; i <= endPage; i++) {
       liItems.push(
-        <li key={i} className={i === activePage ? "selection-page" : ""} onClick={() => handlePageChange(i)}>
+        <li
+          key={i}
+          className={i === activePage ? "selection-page" : ""}
+          onClick={() => handlePageChange(i, selectedPerPage?.value as number)}
+        >
           {i}
         </li>
       );
@@ -64,7 +68,7 @@ const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onPe
         options={[...perPageOptions, { value: totalRecords, text: "Tümü" }]}
         onChange={(option) => {
           setSelectedPerPage(option);
-          onPerPageChange(option?.value as number);
+          handlePageChange(1, option?.value as number);
         }}
       />
 
@@ -73,7 +77,7 @@ const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onPe
           className={currentPage === 1 ? "passive" : ""}
           onClick={() => {
             if (currentPage === 1) return;
-            handlePageChange(1);
+            handlePageChange(1, selectedPerPage?.value as number);
           }}
         >
           <span>{"«"}</span>
@@ -82,7 +86,7 @@ const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onPe
           className={currentPage === 1 ? "passive" : ""}
           onClick={() => {
             if (currentPage === 1) return;
-            handlePageChange(currentPage - 1);
+            handlePageChange(currentPage - 1, selectedPerPage?.value as number);
           }}
         >
           <span>{"‹"}</span>
@@ -94,7 +98,7 @@ const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onPe
           className={totalPageCount === currentPage ? "passive" : ""}
           onClick={() => {
             if (totalPageCount === currentPage) return;
-            handlePageChange(currentPage + 1);
+            handlePageChange(currentPage + 1, selectedPerPage?.value as number);
           }}
         >
           <span>{"›"}</span>
@@ -103,7 +107,7 @@ const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onPe
           className={totalPageCount === currentPage ? "passive" : ""}
           onClick={() => {
             if (totalPageCount === currentPage) return;
-            handlePageChange(totalPageCount);
+            handlePageChange(totalPageCount, selectedPerPage?.value as number);
           }}
         >
           <span>{"»"}</span>
