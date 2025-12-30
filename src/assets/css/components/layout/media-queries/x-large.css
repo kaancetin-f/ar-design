@@ -1,10 +1,5 @@
 /* X-Large (Standart Laptop & Küçük Desktop) */
 @media (min-width: 992px) and (max-width: 1199px) {
-  .ar-layout > aside.ar-aside.left {
-    min-width: 280px;
-    max-width: 280px;
-    padding: 0 1rem;
-  }
   .ar-layout > aside.ar-aside.left > .logo {
     height: 5rem;
     margin-bottom: 1rem;

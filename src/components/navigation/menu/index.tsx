@@ -5,11 +5,14 @@ import "../../../assets/css/components/navigation/menu/styles.css";
 import { MenuProps } from "../../../libs/types";
 import IProps from "./IProps";
 import SubMenu from "./SubMenu";
+import { DispatchEvent, SessionStorage } from "../../../libs/infrastructure/shared/Enums";
 
-const Menu: React.FC<IProps> = ({ data, variant = "vertical", ...attributes }) => {
+const Menu: React.FC<IProps> = ({ data, variant = "vertical", config, ...attributes }) => {
   // states
   const [selectedMenu, setSelectedMenu] = useState<MenuProps[]>([]);
   const [selectedItem, setSelectedItem] = useState<MenuProps | null>(null);
+  // states -> Session Storage
+  const [isMenuLocked, setIsMenuLocked] = useState<boolean>(true);
 
   // variables
   const sessionStorageKey: string = "selected-menu-item";
@@ -76,6 +79,31 @@ const Menu: React.FC<IProps> = ({ data, variant = "vertical", ...attributes }) =
     openParentMenusDOM(li);
   }, [data]);
 
+  useEffect(() => {
+    const onStorageChange = () => {
+      setIsMenuLocked(JSON.parse(sessionStorage.getItem(SessionStorage.MenuIsLocked) ?? "true"));
+    };
+
+    window.addEventListener(DispatchEvent.MenuLock, onStorageChange);
+    window.addEventListener("storage", onStorageChange);
+
+    //#af0041
+    const styles = document.createElement("style");
+    styles.innerHTML = `
+    :root {
+      --selected-icon-color: ${config?.icon?.selectedColor};
+      --selected-icon-bg-color: ${config?.icon?.selectedBackgroundColor};
+      --selected-icon-bg-color-rgb: ${config?.icon?.selectedBackgroundBorderColor};
+      }
+    `;
+    document.head.appendChild(styles);
+
+    return () => {
+      window.removeEventListener(DispatchEvent.MenuLock, onStorageChange);
+      window.removeEventListener("storage", onStorageChange);
+    };
+  }, []);
+
   return (
     <nav className="ar-menu" {...attributes}>
       <ul>
@@ -89,9 +117,11 @@ const Menu: React.FC<IProps> = ({ data, variant = "vertical", ...attributes }) =
               }`}
               onClick={(event) => handleClick(event, item, setSelectedItem)}
             >
-              <div className="item-render">
-                {item.type !== "divider" && <span>{item.icon ? item.icon : <span className="no-icon"></span>}</span>}
-                {item.type === "divider" ? <hr /> : <span className="item">{item.render}</span>}
+              <div className={`item-render ${isMenuLocked ? "align-left" : "align-center"}`}>
+                {item.type !== "divider" && (
+                  <span className="icon">{item.icon ? item.icon : <span className="no-icon"></span>}</span>
+                )}
+                {isMenuLocked ? item.type === "divider" ? <hr /> : <span className="item">{item.render}</span> : null}
                 {item.type === "group" && <span className="angel-down"></span>}
               </div>
 

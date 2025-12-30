@@ -1,11 +1,6 @@
 /* XXX-Large (Büyük Ekranlar: TV, Ultra Geniş Monitörler) */
 
 @media (min-width: 1400px) {
-  .ar-layout > aside.ar-aside.left {
-    min-width: 280px;
-    max-width: 280px;
-    padding: 0 1rem;
-  }
   .ar-layout > aside.ar-aside.left > .logo {
     height: 5rem;
     margin-bottom: 1rem;

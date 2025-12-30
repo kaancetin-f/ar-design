@@ -8,3 +8,11 @@ export enum FilterOperator {
   Blank = 7,
   NotBlank = 8,
 }
+
+export enum SessionStorage {
+  MenuIsLocked = "is-menu-locked",
+}
+
+export enum DispatchEvent {
+  MenuLock = "menuLock",
+}

@@ -1,15 +1,5 @@
 /* Medium (Tablet Dikey & Büyük Telefonlar) */
 @media (min-width: 576px) and (max-width: 767px) {
-  .ar-layout > aside.ar-aside.left {
-    min-width: 3.85rem;
-    max-width: 3.85rem;
-    padding: 0 1rem;
-    overflow: hidden;
-  }
-  .ar-layout > aside.ar-aside.left:hover {
-    min-width: 280px;
-    max-width: 280px;
-  }
   .ar-layout > aside.ar-aside.left > .logo {
     visibility: hidden;
     opacity: 0;

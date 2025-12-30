@@ -1169,15 +1169,7 @@ const Table = forwardRef(
                               <Button
                                 variant="borderless"
                                 icon={{
-                                  element: (
-                                    <ARIcon
-                                      viewBox="0 0 16 16"
-                                      size={24}
-                                      icon="Filter"
-                                      fill="var(--dark)"
-                                      strokeWidth={0}
-                                    />
-                                  ),
+                                  element: <ARIcon size={24} icon="Filter" fill="var(--dark)" strokeWidth={0} />,
                                 }}
                               />
                             </span>
