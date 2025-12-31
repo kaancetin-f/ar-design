@@ -19,7 +19,7 @@
     max-width: 280px;
     border-right: solid 1px var(--gray-200);
     user-select: none;
-    transition: all 150ms ease-in-out;
+    transition: all 250ms ease-in-out;
     z-index: 11;
 
     &.un-locked {
