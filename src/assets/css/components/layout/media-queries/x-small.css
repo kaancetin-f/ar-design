@@ -1,9 +1,3 @@
 /* X-Small (Ekstra Küçük Telefonlar, Saat vb.) */
 @media (max-width: 320px) {
-  .ar-layout > aside.ar-aside.left > .logo {
-    visibility: hidden;
-    opacity: 0;
-    height: 5rem;
-    margin-bottom: 1rem;
-  }
 }

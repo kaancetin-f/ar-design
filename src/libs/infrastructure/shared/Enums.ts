@@ -10,6 +10,7 @@ export enum FilterOperator {
 }
 
 export enum SessionStorage {
+  SelectedMenuItem = "selected-menu-item",
   MenuIsLocked = "is-menu-locked",
 }
 

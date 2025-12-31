@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLayout } from "../../libs/core/application/hooks";
 import { ILSiderProps } from "./IProps";
-import Title from "../data-display/typography/title/Title";
 import Paragraph from "../data-display/typography/paragraph/Paragraph";
 import { ARIcon } from "../icons";
 import { DispatchEvent, SessionStorage } from "../../libs/infrastructure/shared/Enums";
 
-const LSider: React.FC<ILSiderProps> = ({ image, text, footer, ...attributes }) => {
+const LSider: React.FC<ILSiderProps> = ({ logo, footer, ...attributes }) => {
   // states
   const [isLocked, setIsLocked] = useState<boolean>(true);
+  const [isLockedSessionStorage, setIsLockedSessionStorage] = useState<boolean>(true);
 
   // variables
   const _className: string[] = ["ar-aside", "left", isLocked ? "locked" : "un-locked"];
@@ -22,6 +22,21 @@ const LSider: React.FC<ILSiderProps> = ({ image, text, footer, ...attributes }) 
   const sider = config.layout.sider.left;
 
   if (!sider?.active) return null;
+
+  // useEffects
+  useEffect(() => {
+    const onStorageChange = () => {
+      setIsLockedSessionStorage(JSON.parse(sessionStorage.getItem(SessionStorage.MenuIsLocked) ?? "true"));
+    };
+
+    window.addEventListener(DispatchEvent.MenuLock, onStorageChange);
+    window.addEventListener("storage", onStorageChange);
+
+    return () => {
+      window.removeEventListener(DispatchEvent.MenuLock, onStorageChange);
+      window.removeEventListener("storage", onStorageChange);
+    };
+  }, []);
 
   return (
     <aside
@@ -40,13 +55,7 @@ const LSider: React.FC<ILSiderProps> = ({ image, text, footer, ...attributes }) 
         <ARIcon size={20} strokeWidth={0} fill="currentColor" icon={isLocked ? "ChevronBarLeft" : "ChevronBarRight"} />
       </span>
 
-      <div className="logo">
-        {image}
-
-        <Title Level="h4" align="center">
-          {text}
-        </Title>
-      </div>
+      <div className="logo">{isLockedSessionStorage ? logo?.default : logo?.mini}</div>
 
       <div>{sider.element}</div>
 
