@@ -9,6 +9,7 @@ export interface ILSiderProps extends React.HTMLAttributes<HTMLElement> {
   logo?: {
     default: React.ReactElement<SVGElement | HTMLImageElement>;
     mini: React.ReactElement<SVGElement | HTMLImageElement>;
+    onClick?: () => void;
   };
   footer?: string;
 }

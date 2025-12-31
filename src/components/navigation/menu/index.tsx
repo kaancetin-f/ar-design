@@ -63,12 +63,16 @@ const Menu: React.FC<IProps> = ({ data, variant = "vertical", config, ...attribu
   }, [data]);
 
   useEffect(() => {
-    const onStorageChange = () => {
+    const onStorageChangeSelectedMenuItem = () => {
+      setSelectedKey(JSON.parse(sessionStorage.getItem(SessionStorage.SelectedMenuItem) ?? ""));
+    };
+
+    const onStorageChangeMenuLock = () => {
       setIsMenuLocked(JSON.parse(sessionStorage.getItem(SessionStorage.MenuIsLocked) ?? "true"));
     };
 
-    window.addEventListener(DispatchEvent.MenuLock, onStorageChange);
-    window.addEventListener("storage", onStorageChange);
+    window.addEventListener(DispatchEvent.SelectedMenuItem, onStorageChangeSelectedMenuItem);
+    window.addEventListener(DispatchEvent.MenuLock, onStorageChangeMenuLock);
 
     const styles = document.createElement("style");
     styles.innerHTML = `
@@ -81,10 +85,12 @@ const Menu: React.FC<IProps> = ({ data, variant = "vertical", config, ...attribu
     document.head.appendChild(styles);
 
     return () => {
-      window.removeEventListener(DispatchEvent.MenuLock, onStorageChange);
-      window.removeEventListener("storage", onStorageChange);
+      window.removeEventListener(DispatchEvent.SelectedMenuItem, onStorageChangeSelectedMenuItem);
+      window.removeEventListener(DispatchEvent.MenuLock, onStorageChangeMenuLock);
     };
   }, []);
+
+  console.log(selectedKey);
 
   return (
     <nav className="ar-menu" {...attributes}>

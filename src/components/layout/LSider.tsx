@@ -55,7 +55,18 @@ const LSider: React.FC<ILSiderProps> = ({ logo, footer, ...attributes }) => {
         <ARIcon size={20} strokeWidth={0} fill="currentColor" icon={isLocked ? "ChevronBarLeft" : "ChevronBarRight"} />
       </span>
 
-      <div className="logo">{isLockedSessionStorage ? logo?.default : logo?.mini}</div>
+      <div
+        className="logo"
+        onClick={() => {
+          if (!logo?.onClick) return;
+
+          logo?.onClick();
+          sessionStorage.setItem(SessionStorage.SelectedMenuItem, "null");
+          window.dispatchEvent(new Event(DispatchEvent.SelectedMenuItem));
+        }}
+      >
+        {isLockedSessionStorage ? logo?.default : logo?.mini}
+      </div>
 
       <div>{sider.element}</div>
 

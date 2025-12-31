@@ -15,5 +15,6 @@ export enum SessionStorage {
 }
 
 export enum DispatchEvent {
+  SelectedMenuItem = "selectedMenuItem",
   MenuLock = "menuLock",
 }
