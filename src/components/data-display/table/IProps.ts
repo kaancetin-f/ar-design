@@ -36,6 +36,9 @@ export type Config<T> = {
     };
   };
   isTreeView?: boolean;
+  dnd?: {
+    renderItem: React.JSX.Element;
+  };
   validation?: Errors<T>;
 };
 

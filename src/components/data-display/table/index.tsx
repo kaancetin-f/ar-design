@@ -32,6 +32,8 @@ import Grid from "../grid-system";
 import THeadCell from "./THeadCell";
 import Tooltip from "../../feedback/tooltip";
 import Editable from "./Editable";
+import { flushSync } from "react-dom";
+import { createRoot } from "react-dom/client";
 
 const filterOption: Option[] = [
   { value: FilterOperator.Contains, text: "İçerir" },
@@ -826,20 +828,41 @@ const Table = forwardRef(
           dragItem.classList.add("drag-item");
 
           if (event.dataTransfer) {
-            // #region Shadow
-            const shadow = document.createElement("div");
+            // 1. Geçici bir kapsayıcı oluştur
+            const shadowContainer = document.createElement("div");
+            shadowContainer.style.position = "absolute";
+            shadowContainer.style.top = "-9999px";
+            shadowContainer.style.left = "-9999px";
+            document.body.appendChild(shadowContainer);
 
-            shadow.innerHTML = `
-            <div class="ar-dnd-shadow">
-              <i class="bi bi-gear-wide-connected"></i>
-              <span>Dragging...</span>
-            </div>
-          `;
-            shadow.style.position = "absolute";
-            shadow.style.top = "-9999px";
-            document.body.appendChild(shadow);
-            event.dataTransfer.setDragImage(shadow, 0, 0);
-            // #endregion
+            if (config.dnd?.renderItem) {
+              // 2a. React Node varsa: createRoot ile render et
+              const root = createRoot(shadowContainer);
+
+              // flushSync kullanıyoruz çünkü setDragImage çağrılmadan önce
+              // DOM'un hemen güncellenmesi gerekiyor.
+              flushSync(() => {
+                root.render(config.dnd?.renderItem);
+              });
+            } else {
+              // 2b. React Node yoksa: Varsayılan HTML string
+              shadowContainer.innerHTML = `
+                <div class="ar-dnd-shadow" style="background: white; padding: 10px; border: 1px solid #ccc;">
+                  <i class="bi bi-gear-wide-connected"></i>
+                  <span>Dragging...</span>
+                </div>
+              `;
+            }
+
+            // 3. Tarayıcıya bu elementi sürükleme görseli yapmasını söyle
+            // (0, 0) koordinatları mouse'un görselin neresinde duracağını belirler
+            event.dataTransfer.setDragImage(shadowContainer, 20, 20);
+
+            // 4. Temizlik: Görsel hafızaya alındıktan sonra DOM'dan kaldırabiliriz
+            // Bir sonraki event loop'ta silmek en güvenlisidir
+            setTimeout(() => {
+              document.body.removeChild(shadowContainer);
+            }, 0);
           }
         };
 
