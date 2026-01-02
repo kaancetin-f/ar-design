@@ -35,10 +35,10 @@ export type Config<T> = {
       element: (item: any[]) => React.JSX.Element;
     };
   };
-  isTreeView?: boolean;
   dnd?: {
     renderItem: React.JSX.Element;
   };
+  isTreeView?: boolean;
   validation?: Errors<T>;
 };
 
