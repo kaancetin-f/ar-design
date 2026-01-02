@@ -14,13 +14,11 @@
   visibility: visible;
   opacity: 1;
   transition: visibility 250ms, opacity 250ms ease-in-out;
-  z-index: 100;
 }
 .ar-modal-wrapper.closed {
   visibility: hidden;
   opacity: 0;
   transition: visibility 250ms, opacity 250ms ease-in-out;
-  z-index: 99;
 }
 /* #endregion */
 /* Open or Close */
