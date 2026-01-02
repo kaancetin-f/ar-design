@@ -366,7 +366,11 @@ const Select: React.FC<Props> = ({
               </div>
             </div>
 
-            <span ref={_placeholder} className={`placeholder ${value.length > 0 ? "visible" : "hidden"}`}>
+            <span
+              ref={_placeholder}
+              className={`placeholder ${value.length > 0 ? "visible" : "hidden"}`}
+              onClick={() => setOptionsOpen((prev) => !prev)}
+            >
               {validation ? "* " : ""}
               {placeholder}
             </span>

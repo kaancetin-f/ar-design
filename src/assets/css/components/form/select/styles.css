@@ -5,7 +5,8 @@
 
   > .ar-select {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    gap: 0.25rem;
     position: relative;
     width: 100%;
 
@@ -98,7 +99,8 @@
     }
 
     .buttons {
-      position: relative;
+      position: absolute;
+      right: 0;
       display: flex;
       flex-direction: row;
 
