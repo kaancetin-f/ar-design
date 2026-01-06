@@ -120,7 +120,11 @@ const BaseInput = forwardRef<HTMLInputElement, IProps>(
           {icon?.element && <span className="icon-element">{icon.element}</span>}
 
           {attributes.placeholder && (
-            <label ref={_label} className={value ? "visible" : "hidden"}>
+            <label
+              ref={_label}
+              className={value ? "visible" : "hidden"}
+              {...(value ? { style: { maxWidth: _innerRef.current?.getBoundingClientRect().width } } : {})}
+            >
               {validation && "* "}
               {attributes.placeholder}
             </label>

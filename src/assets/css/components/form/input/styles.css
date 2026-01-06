@@ -27,6 +27,10 @@
         left: 0.55rem;
         padding: 0 0.5rem;
         font-size: 0.75rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
       }
     }
 
