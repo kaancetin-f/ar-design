@@ -190,7 +190,7 @@ export const useValidation = function <TData extends object>(
       const ibanRegex = /^TR\d{24}$/;
       const accountNumberRegex = /^\d{6,16}$/;
 
-      if (s.type === "phone" && value && !phoneRegex.test(value)) {
+      if (s.type === "phone" && value && !phoneRegex.test(value.replace(/\D/g, ""))) {
         setError(key, s.message, param.step, index);
       }
 
