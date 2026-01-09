@@ -742,8 +742,8 @@ const Table = forwardRef(
           previousSelections.some((selected) => trackBy?.(selected) === trackBy?.(item))
         );
         setSelectionItems(validSelections);
-      } else {
-        setSelectionItems([]);
+
+        return;
       }
     }, [previousSelections, data]);
 

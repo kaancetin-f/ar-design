@@ -117,25 +117,27 @@ const Drawer = function <T extends object>({ title, tabs = [], activeTab, open, 
             })}
         </div>
 
-        <div className="content">
-          {tabs.map((tab, index) => {
-            return (
-              <div key={index}>
-                {React.Children.map(tab.content, (child) => {
-                  if (React.isValidElement(child) && index === currentTab) {
-                    return validation
-                      ? React.cloneElement(child as React.ReactElement, {
-                          errors: errors,
-                        })
-                      : child;
-                  }
+        {Object.keys(open).length > 0 && open.get && (
+          <div className="content">
+            {tabs.map((tab, index) => {
+              return (
+                <div key={index}>
+                  {React.Children.map(tab.content, (child) => {
+                    if (React.isValidElement(child) && index === currentTab) {
+                      return validation
+                        ? React.cloneElement(child as React.ReactElement, {
+                            errors: errors,
+                          })
+                        : child;
+                    }
 
-                  return null;
-                })}
-              </div>
-            );
-          })}
-        </div>
+                    return null;
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
