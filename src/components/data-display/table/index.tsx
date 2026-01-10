@@ -517,8 +517,9 @@ const Table = forwardRef(
                   color="green"
                   checked={selectionItems.some((selectionItem) => trackBy?.(selectionItem) === trackBy?.(item))}
                   onChange={(event) => {
+                    debugger;
                     if (event.target.checked) setSelectionItems((prev) => [...prev, item]);
-                    else setSelectionItems((prev) => prev.filter((_item) => _item !== item));
+                    else setSelectionItems((prev) => prev.filter((_item) => trackBy?.(_item) !== trackBy?.(item)));
                   }}
                 />
               </td>
@@ -801,6 +802,7 @@ const Table = forwardRef(
     }, [checkboxSelectedParams]);
 
     useEffect(() => {
+      debugger;
       if (typeof selections === "function" && Array.isArray(selectionItems)) {
         selections(
           selectionItems.map((selectionItem) => ({ ...selectionItem, trackByValue: trackBy?.(selectionItem) }))

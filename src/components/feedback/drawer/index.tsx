@@ -22,8 +22,6 @@ const Drawer = function <T extends object>({ title, tabs = [], activeTab, open, 
   const [currentTab, setCurrentTab] = useState<number>(0);
 
   // hooks
-  console.log(validation?.data, "validation?.data");
-
   const { errors, onSubmit, setSubmit } = useValidation(
     validation?.data as T,
     validation?.rules as ValidationProperties<T>[],
