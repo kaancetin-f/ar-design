@@ -90,8 +90,6 @@ const Menu: React.FC<IProps> = ({ data, variant = "vertical", config, ...attribu
     };
   }, []);
 
-  console.log(selectedKey);
-
   return (
     <nav className="ar-menu" {...attributes}>
       <ul>

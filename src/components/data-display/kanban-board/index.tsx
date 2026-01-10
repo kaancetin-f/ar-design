@@ -107,9 +107,6 @@ const KanbanBoard = function <T, TColumnProperties>({ trackBy, columns, onChange
     const rect = item.getBoundingClientRect();
     const { clientX, clientY } = event;
 
-    console.log(`X: ${clientX} | Y: ${clientY}`);
-    console.log(`LEFT: ${rect.left} | RIGHT: ${rect.right}`);
-
     const isInside = clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom;
 
     if (!isInside && item.classList.contains("dragging")) {
