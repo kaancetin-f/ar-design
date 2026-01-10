@@ -110,10 +110,10 @@ export const useValidation = function <TData extends object>(
     });
   };
 
-  const setError = (key: keyof TData, message: string, step?: number, index?: number) => {
+  const setError = (key: keyof TData, message: string, step?: number, trackByValue?: number) => {
     let _key = step ? `${step}_${key as string}` : key;
 
-    if (index !== undefined) _key = `${_key as string}_${index}`;
+    if (trackByValue !== undefined) _key = `${_key as string}_${trackByValue}`;
 
     setErrors((prev) => ({ ...prev, [_key]: message }));
     _errors.current = { ..._errors.current, [_key]: message };
@@ -123,6 +123,7 @@ export const useValidation = function <TData extends object>(
     const value = data[param.key as keyof typeof data] as string | undefined;
 
     // Eğer subkey varsa, onunla işlem yapılacak.
+
     if (param.subkey) {
       if (param.subkey.includes(".")) {
         // Subkey içinde birden fazla seviye varsa, her seviyeye inerek değer alınacak.
@@ -145,10 +146,15 @@ export const useValidation = function <TData extends object>(
         if (Array.isArray(value)) {
           // Eğer value bir dizi ise ve subkey sadece bir seviye ise,
           // dizinin her bir elemanına subkey uygulanabilir.
-          const extractedValues = value.map((item) => item?.[param.subkey as keyof typeof item]);
+          const extractedValues = value.map((item) => ({
+            value: item?.[param.subkey as keyof typeof item],
+            trackByValue: item?.trackByValue,
+          }));
 
           // Elde edilen değerler topluca paramsShape'e gönderilebilir ya da başka bir şekilde işlenebilir.
-          extractedValues.map((extractedValue, index) => paramsShape(param, extractedValue, index));
+          extractedValues.map((extractedValue) =>
+            paramsShape(param, extractedValue.value, extractedValue.trackByValue)
+          );
         } else {
           // Value bir obje ise, subkey doğrudan kullanılır.
           paramsShape(param, value?.[param.subkey as keyof typeof value] as string);
@@ -160,7 +166,7 @@ export const useValidation = function <TData extends object>(
     }
   };
 
-  const paramsShape = (param: ValidationProperties<TData>, value: string | undefined, index?: number) => {
+  const paramsShape = (param: ValidationProperties<TData>, value: string | undefined, trackByValue?: number) => {
     const vLenght = value ? value.length : 0;
 
     const getKey = (subkey: string | undefined) => {
@@ -172,15 +178,15 @@ export const useValidation = function <TData extends object>(
 
     const handleValidation = (key: keyof TData, s: ValidationShape) => {
       if (s.type === "required" && Utils.IsNullOrEmpty(value)) {
-        setError(key, s.message, param.step, index);
+        setError(key, s.message, param.step, trackByValue);
       }
 
       if (s.type === "minimum" && vLenght < (s.value as number)) {
-        setError(key, Utils.StringFormat(s.message, s.value), param.step, index);
+        setError(key, Utils.StringFormat(s.message, s.value), param.step, trackByValue);
       }
 
       if (s.type === "maximum" && vLenght > (s.value as number)) {
-        setError(key, Utils.StringFormat(s.message, s.value), param.step, index);
+        setError(key, Utils.StringFormat(s.message, s.value), param.step, trackByValue);
       }
 
       // Regexes
@@ -191,19 +197,19 @@ export const useValidation = function <TData extends object>(
       const accountNumberRegex = /^\d{6,16}$/;
 
       if (s.type === "phone" && value && !phoneRegex.test(value.replace(/\D/g, ""))) {
-        setError(key, s.message, param.step, index);
+        setError(key, s.message, param.step, trackByValue);
       }
 
       if (s.type === "email" && value && !emailRegex.test(value)) {
-        setError(key, s.message, param.step, index);
+        setError(key, s.message, param.step, trackByValue);
       }
 
       if (s.type === "iban" && value && !ibanRegex.test(value.replace(/\s/g, ""))) {
-        setError(key, s.message, param.step, index);
+        setError(key, s.message, param.step, trackByValue);
       }
 
       if (s.type === "account-number" && value && !accountNumberRegex.test(value)) {
-        setError(key, s.message, param.step, index);
+        setError(key, s.message, param.step, trackByValue);
       }
     };
 

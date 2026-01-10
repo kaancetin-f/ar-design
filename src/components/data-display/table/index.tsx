@@ -631,7 +631,13 @@ const Table = forwardRef(
             {React.isValidElement(render) ? (
               render
             ) : c.editable && onEditable ? (
-              <Editable c={c} item={item} index={index} onEditable={onEditable} validation={config.validation} />
+              <Editable
+                c={c}
+                item={item}
+                trackByValue={trackBy?.(item) ?? ""}
+                onEditable={onEditable}
+                validation={config.validation}
+              />
             ) : (
               render
             )}
@@ -796,7 +802,9 @@ const Table = forwardRef(
 
     useEffect(() => {
       if (typeof selections === "function" && Array.isArray(selectionItems)) {
-        selections(selectionItems);
+        selections(
+          selectionItems.map((selectionItem) => ({ ...selectionItem, trackByValue: trackBy?.(selectionItem) }))
+        );
       }
 
       if (Array.isArray(_checkboxItems.current) && _checkboxItems.current.length > 0) {

@@ -9,12 +9,12 @@ import Select from "../../form/select";
 interface IProps<T> {
   c: TableColumnType<T>;
   item: T;
-  index: number;
-  onEditable: (item: T, index: number) => void;
+  trackByValue: string;
+  onEditable: (item: T, trackByValue: string) => void;
   validation?: Errors<T>;
 }
 
-const Editable = function <T>({ c, item, index, onEditable, validation }: IProps<T>) {
+const Editable = function <T>({ c, item, trackByValue, onEditable, validation }: IProps<T>) {
   // variables
   const key = c.key as keyof T;
   const itemValue = item[c.key as keyof T];
@@ -22,7 +22,7 @@ const Editable = function <T>({ c, item, index, onEditable, validation }: IProps
   const selectItems = Array.isArray(itemValue)
     ? (c.editable?.options?.filter((x) => itemValue.includes(x.value)) as Option[])
     : [];
-  const _vText = validation?.[`${c.key as string}_${index}` as keyof typeof validation];
+  const _vText = validation?.[`${c.key as string}_${trackByValue}` as keyof typeof validation];
 
   // states
   const [value, setValue] = useState<string | number | readonly string[] | undefined>(itemValue as string);
@@ -41,7 +41,7 @@ const Editable = function <T>({ c, item, index, onEditable, validation }: IProps
             const { value } = event.target;
 
             setValue(value);
-            onEditable({ ...item, [key]: c.editable?.type === "number" ? Number(value) : value } as T, index);
+            onEditable({ ...item, [key]: c.editable?.type === "number" ? Number(value) : value } as T, trackByValue);
           }}
           validation={{ text: _vText }}
         />
@@ -56,7 +56,7 @@ const Editable = function <T>({ c, item, index, onEditable, validation }: IProps
             const { value } = event.target;
 
             setValue(value);
-            onEditable({ ...item, [key]: c.editable?.type === "number" ? Number(value) : value } as T, index);
+            onEditable({ ...item, [key]: c.editable?.type === "number" ? Number(value) : value } as T, trackByValue);
           }}
           validation={{ text: _vText }}
         />
@@ -68,7 +68,7 @@ const Editable = function <T>({ c, item, index, onEditable, validation }: IProps
           value={value}
           onChange={(value) => {
             setValue(value);
-            onEditable({ ...item, [key]: value } as T, index);
+            onEditable({ ...item, [key]: value } as T, trackByValue);
           }}
           validation={{ text: _vText }}
         />
@@ -81,7 +81,7 @@ const Editable = function <T>({ c, item, index, onEditable, validation }: IProps
           options={c.editable.options as Option[]}
           onClick={async () => await c.editable?.method?.()}
           onChange={(option) => {
-            onEditable({ ...item, [key]: option?.value } as T, index);
+            onEditable({ ...item, [key]: option?.value } as T, trackByValue);
           }}
           validation={{ text: _vText }}
         />
@@ -94,7 +94,7 @@ const Editable = function <T>({ c, item, index, onEditable, validation }: IProps
           options={c.editable.options as Option[]}
           onClick={async () => await c.editable?.method?.()}
           onChange={(options) => {
-            onEditable({ ...item, [key]: options.map((option) => option.value) } as T, index);
+            onEditable({ ...item, [key]: options.map((option) => option.value) } as T, trackByValue);
           }}
           validation={{ text: _vText }}
           multiple
