@@ -31,6 +31,15 @@
         min-width: 280px;
         max-width: 280px;
       }
+
+      + main {
+        > section {
+          &.full-width {
+            padding-left: 7.5rem;
+            width: 100%;
+          }
+        }
+      }
     }
 
     > .button {
