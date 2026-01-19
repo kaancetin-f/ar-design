@@ -16,13 +16,15 @@ const TextEditor = <T extends object>({
   value,
   onChange,
   dynamicList,
-  // placeholder,
+  placeholder,
   height,
   // multilang,
   validation,
+  disabled,
 }: IProps<T>) => {
   // refs
   const _container = useRef<HTMLDivElement>(null);
+  const _label = useRef<HTMLLabelElement>(null);
   const _arIframe = useRef<HTMLIFrameElement>(null);
   const _onChange = useRef(onChange);
   const _onChangeTimeOut = useRef<NodeJS.Timeout | null>(null);
@@ -59,8 +61,8 @@ const TextEditor = <T extends object>({
       { radius: "sm" },
       undefined,
       undefined,
-      undefined
-    )
+      undefined,
+    ),
   );
 
   // methods
@@ -189,7 +191,7 @@ const TextEditor = <T extends object>({
     if (!_iframeDocument) return;
 
     setIframeDocument(_iframeDocument);
-    _iframeDocument.designMode = "on";
+    if (!disabled) _iframeDocument.designMode = "on";
 
     // Herhangi bir değişikliği izlemek için MutationObserver kullan
     const observer = new MutationObserver((mutationsList) => {
@@ -277,7 +279,39 @@ const TextEditor = <T extends object>({
 
   return (
     <div ref={_container} className="ar-text-editor">
-      <iframe ref={_arIframe} name={name} className={_iframeClassName.map((c) => c).join(" ")} height={height} />
+      {placeholder && (
+        <label
+          ref={_label}
+          className={value ? "visible" : "hidden"}
+          style={{ maxWidth: _arIframe.current?.getBoundingClientRect().width }}
+        >
+          {validation && "* "}
+          {placeholder}
+        </label>
+      )}
+
+      <iframe
+        ref={_arIframe}
+        name={name}
+        className={_iframeClassName.map((c) => c).join(" ")}
+        height={height}
+        {...(value
+          ? {
+              style: {
+                clipPath: `polygon(
+                            -15px 0,
+                            10px -5px,
+                            10px 5px,
+                            calc(${_label.current?.getBoundingClientRect().width}px + 7px) 5px,
+                            calc(${_label.current?.getBoundingClientRect().width}px + 7px) -5px,
+                            100% -70px,
+                            calc(100% + 5px) calc(100% + 5px),
+                            -5px calc(100% + 5px)
+                          )`,
+              },
+            }
+          : {})}
+      />
 
       <div className="toolbar">
         {toolbarButtons.map(({ command, icon, tooltip }, index) => (
@@ -390,7 +424,7 @@ const TextEditor = <T extends object>({
                   ))}
             </ul>
           </div>,
-          document.body
+          document.body,
         )}
     </div>
   );
