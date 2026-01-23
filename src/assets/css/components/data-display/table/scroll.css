@@ -1,70 +1,130 @@
-.ar-table:is(.scroll) > .content {
-  max-width: 100%;
-  overflow: auto;
-}
-.ar-table:is(.scroll) > .content > table > thead > tr > th {
-  position: sticky;
-  top: 0;
-}
-.ar-table > .content > table th[class^="sticky-"] {
-  z-index: 50;
-}
-.ar-table > .content > table .sticky-left {
-  position: sticky;
-  left: 0;
-}
+.ar-table {
+  /* Scroll durumu */
+  &:is(.scroll) {
+    > .content {
+      max-width: 100%;
+      overflow: auto;
 
-.ar-table > .content > table .sticky-right {
-  position: sticky;
-  right: 0;
-}
+      > table {
+        > thead {
+          > tr {
+            > th {
+              position: sticky;
+              top: 0;
+            }
+          }
+        }
+      }
+    }
+  }
 
-.ar-table > .content > table > thead > tr > th.sticky-left.sticky,
-.ar-table > .content > table > thead > tr > th.sticky-right.sticky,
-.ar-table > .content > table > thead > tr > th.sticky-left.active-sticky,
-.ar-table > .content > table > thead > tr > th.sticky-right.active-sticky {
-  background-color: var(--gray-100);
-}
-.ar-table > .content > table > thead > tr > th.sticky-left.sticky::after,
-.ar-table > .content > table > thead > tr > th.sticky-left.active-sticky::after,
-.ar-table > .content > table > thead > tr > th.sticky-right.sticky::after,
-.ar-table > .content > table > thead > tr > th.sticky-right.active-sticky::after {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 0;
-  content: "";
-  background-color: var(--gray-200);
-  width: 1px;
-  height: 50%;
-}
-.ar-table > .content > table > thead > tr > th.sticky-right.sticky::after,
-.ar-table > .content > table > thead > tr > th.sticky-right.active-sticky::after {
-  left: 0;
-  right: auto;
-}
-.ar-table > .content > table > tbody > tr > td.sticky-left.sticky,
-.ar-table > .content > table > tbody > tr > td.sticky-right.sticky,
-.ar-table > .content > table > tbody > tr > td.sticky-left.active-sticky,
-.ar-table > .content > table > tbody > tr > td.sticky-right.active-sticky {
-  background-color: var(--gray-100);
-  box-shadow: inset -1px 0 0 0 var(--gray-200);
-}
-.ar-table > .content > table > tbody > tr > td.sticky-right.sticky {
-  box-shadow: inset 1px 0 0 0 var(--gray-200);
-}
-.ar-table > .content > table .sticky-left.active-sticky::after,
-.ar-table > .content > table .sticky-right.active-sticky::after {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 0;
-  content: "";
-  background-color: var(--gray-200);
-  width: 1px;
-  height: 100%;
-}
-.ar-table > .content > table .sticky-right.active-sticky::after {
-  left: 0;
-  right: auto;
+  > .content {
+    > table {
+      th[class^="sticky-"] {
+        z-index: 50;
+      }
+
+      .sticky-left {
+        position: sticky;
+        left: 0;
+      }
+
+      .sticky-right {
+        position: sticky;
+        right: 0;
+      }
+
+      > thead {
+        > tr {
+          > th {
+            &:is(.sticky-left, .sticky-right) {
+              &:is(.sticky, .active-sticky) {
+                background-color: var(--gray-100);
+
+                &::after {
+                  position: absolute;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  content: "";
+                  background-color: var(--gray-200);
+                  width: 1px;
+                  height: 50%;
+                }
+              }
+            }
+
+            &.sticky-left {
+              &:is(.sticky, .active-sticky) {
+                &::after {
+                  right: 0;
+                }
+              }
+            }
+
+            &.sticky-right {
+              &:is(.sticky, .active-sticky) {
+                &::after {
+                  left: 0;
+                  right: auto;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      > tbody {
+        > tr {
+          > td {
+            &:is(.sticky-left, .sticky-right) {
+              &:is(.sticky, .active-sticky) {
+                background-color: var(--gray-100);
+              }
+            }
+
+            &.sticky-left {
+              &:is(.sticky, .active-sticky) {
+                box-shadow: inset -1px 0 0 0 var(--gray-200);
+              }
+            }
+
+            &.sticky-right {
+              &.sticky {
+                box-shadow: inset 1px 0 0 0 var(--gray-200);
+              }
+            }
+          }
+        }
+      }
+
+      .active-sticky {
+        &::after {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          content: "";
+          background-color: var(--gray-200);
+          width: 1px;
+          height: 100%;
+        }
+      }
+
+      .sticky-left {
+        .active-sticky {
+          &::after {
+            right: 0;
+          }
+        }
+      }
+
+      .sticky-right {
+        .active-sticky {
+          &::after {
+            left: 0;
+            right: auto;
+          }
+        }
+      }
+    }
+  }
 }
