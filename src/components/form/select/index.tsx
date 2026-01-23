@@ -27,6 +27,7 @@ const Select: React.FC<Props> = ({
   validation,
   upperCase,
   disabled,
+  readOnly,
   config = { clear: true },
 }) => {
   const _selectionClassName: string[] = ["selections"];
@@ -407,7 +408,7 @@ const Select: React.FC<Props> = ({
             placeholder={placeholder}
             validation={validation}
             disabled={disabled}
-            readOnly
+            readOnly={readOnly}
           />
         )}
 

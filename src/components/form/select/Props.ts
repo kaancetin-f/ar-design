@@ -37,6 +37,7 @@ export type Props = {
   onClick?: () => void;
   onCreate?: (option: Option) => void;
   placeholder?: string;
+  readOnly?: boolean;
   config?: {
     clear?: boolean;
   };

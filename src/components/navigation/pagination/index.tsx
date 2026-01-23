@@ -73,6 +73,7 @@ const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onCh
         }}
         config={{ clear: false }}
         style={{ width: 65 }}
+        readOnly={true}
       />
 
       <ul>
