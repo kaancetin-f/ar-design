@@ -24,21 +24,23 @@ const Tabs: React.FC<IProps> = ({ name, tabs = [], activeTab, onChange, onClose 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // methods
-  const handleScroll = () => {
-    if (_container.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = _container.current;
+  const handleScroll = useMemo(() => {
+    return () => {
+      if (_container.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = _container.current;
 
-      // Maksimum sağ değer: Toplam genişlik - Görünür genişlik
-      const maxRight = scrollWidth - clientWidth;
+        // Maksimum sağ değer: Toplam genişlik - Görünür genişlik
+        const maxRight = scrollWidth - clientWidth;
 
-      setScrollInfo({
-        isMaxLeft: scrollLeft <= 0, // En solda mı?
-        isMaxRight: scrollLeft >= maxRight - 1, // En sağda mı?
-        current: scrollLeft, // Anlık ne kadar sağda.
-        maxScrollable: maxRight, // Gidebileceği max piksel.
-      });
-    }
-  };
+        setScrollInfo({
+          isMaxLeft: scrollLeft <= 0, // En solda mı?
+          isMaxRight: scrollLeft >= maxRight - 1, // En sağda mı?
+          current: scrollLeft, // Anlık ne kadar sağda.
+          maxScrollable: maxRight, // Gidebileceği max piksel.
+        });
+      }
+    };
+  }, []);
 
   const scroll = useMemo(() => {
     return (direction: "left" | "right") => {
@@ -80,9 +82,17 @@ const Tabs: React.FC<IProps> = ({ name, tabs = [], activeTab, onChange, onClose 
   }, [name]);
 
   useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (_container.current) {
+        handleScroll();
+      }
+    }, 100);
+
     window.addEventListener("resize", handleScroll);
 
     return () => {
+      clearTimeout(timeoutId);
+
       window.removeEventListener("resize", handleScroll);
     };
   }, []);
