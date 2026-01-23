@@ -27,6 +27,7 @@ const Select: React.FC<Props> = ({
   validation,
   upperCase,
   disabled,
+  config = { clear: true },
 }) => {
   const _selectionClassName: string[] = ["selections"];
 
@@ -58,8 +59,8 @@ const Select: React.FC<Props> = ({
       border,
       undefined,
       undefined,
-      undefined
-    )
+      undefined,
+    ),
   );
 
   // methods
@@ -281,14 +282,14 @@ const Select: React.FC<Props> = ({
           if (!optionsOpen) return option;
 
           return option.text.toLocaleLowerCase().includes(searchText.toLocaleLowerCase());
-        })
+        }),
       );
       setIsSearchTextEqual(
         options?.some((option) => {
           if (!optionsOpen) return option;
 
           return option.text.toLocaleLowerCase() == searchText.toLocaleLowerCase();
-        })
+        }),
       );
     }
 
@@ -378,7 +379,7 @@ const Select: React.FC<Props> = ({
         ) : (
           <Input
             ref={_singleInput}
-            style={style}
+            style={{ ...style, paddingRight: config.clear === false ? "1.5rem" : "3.5rem" }}
             variant={variant}
             color={!Utils.IsNullOrEmpty(validation?.text) ? "red" : color}
             // status={!Utils.IsNullOrEmpty(validation?.text) ? "danger" : status}
@@ -406,19 +407,22 @@ const Select: React.FC<Props> = ({
             placeholder={placeholder}
             validation={validation}
             disabled={disabled}
+            readOnly
           />
         )}
 
         <div className="buttons">
-          <span
-            className={`button-clear ${!disabled && (multiple ? value.length > 0 : value) ? "opened" : "closed"}`}
-            onClick={(event) => {
-              if (disabled) return;
+          {config?.clear === true && (
+            <span
+              className={`button-clear ${!disabled && (multiple ? value.length > 0 : value) ? "opened" : "closed"}`}
+              onClick={(event) => {
+                if (disabled) return;
 
-              event.stopPropagation();
-              handleCleanSelection();
-            }}
-          ></span>
+                event.stopPropagation();
+                handleCleanSelection();
+              }}
+            ></span>
+          )}
 
           <span
             className={`angel-down ${!disabled && optionsOpen ? "opened" : "closed"}`}
@@ -484,7 +488,7 @@ const Select: React.FC<Props> = ({
               createField()
             )}
           </div>,
-          document.body
+          document.body,
         )}
       {/* :End: Options Field */}
     </div>

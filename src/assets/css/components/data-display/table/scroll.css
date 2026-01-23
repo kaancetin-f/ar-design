@@ -24,16 +24,6 @@
         z-index: 50;
       }
 
-      .sticky-left {
-        position: sticky;
-        left: 0;
-      }
-
-      .sticky-right {
-        position: sticky;
-        right: 0;
-      }
-
       > thead {
         > tr {
           > th {
@@ -54,6 +44,9 @@
             }
 
             &.sticky-left {
+              position: sticky;
+              left: 0;
+
               &:is(.sticky, .active-sticky) {
                 &::after {
                   right: 0;
@@ -62,6 +55,9 @@
             }
 
             &.sticky-right {
+              position: sticky;
+              right: 0;
+
               &:is(.sticky, .active-sticky) {
                 &::after {
                   left: 0;
@@ -83,12 +79,18 @@
             }
 
             &.sticky-left {
+              position: sticky;
+              left: 0;
+
               &:is(.sticky, .active-sticky) {
                 box-shadow: inset -1px 0 0 0 var(--gray-200);
               }
             }
 
             &.sticky-right {
+              position: sticky;
+              right: 0;
+
               &.sticky {
                 box-shadow: inset 1px 0 0 0 var(--gray-200);
               }
@@ -96,35 +98,111 @@
           }
         }
       }
+    }
+  }
+}
 
-      .active-sticky {
-        &::after {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          content: "";
-          background-color: var(--gray-200);
-          width: 1px;
-          height: 100%;
-        }
-      }
+/* --- [KÜÇÜK MOBİL - IPHONE SE VB.] --- */
+/* Çok dar ekranlar için özel düzeltmeler */
+@media (max-width: 375px) {
+}
 
-      .sticky-left {
-        .active-sticky {
-          &::after {
-            right: 0;
+/* --- [MOBİL - STANDART] --- */
+/* Ekran 576px ve altına düştüğünde çalışır */
+@media (max-width: 576px) {
+}
+
+/* --- [TABLET DİKEY & BÜYÜK TELEFONLAR] --- */
+/* Ekran 768px ve altına düştüğünde çalışır */
+@media (max-width: 768px) {
+  .ar-table {
+    /* Scroll durumu */
+    &:is(.scroll) {
+      > .content {
+        > table {
+          > thead {
+            > tr {
+              > th {
+              }
+            }
           }
         }
       }
+    }
 
-      .sticky-right {
-        .active-sticky {
-          &::after {
-            left: 0;
-            right: auto;
+    > .content {
+      > table {
+        th[class^="sticky-"] {
+        }
+
+        > thead {
+          > tr {
+            > th {
+              &:is(.sticky-left, .sticky-right) {
+                &:is(.sticky, .active-sticky) {
+                  &::after {
+                  }
+                }
+              }
+
+              &.sticky-left {
+                position: static;
+                left: auto;
+
+                &:is(.sticky, .active-sticky) {
+                  &::after {
+                  }
+                }
+              }
+
+              &.sticky-right {
+                position: static;
+                right: auto;
+
+                &:is(.sticky, .active-sticky) {
+                  &::after {
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        > tbody {
+          > tr {
+            > td {
+              &:is(.sticky-left, .sticky-right) {
+                &:is(.sticky, .active-sticky) {
+                  background-color: transparent;
+                }
+              }
+
+              &.sticky-left {
+                position: static;
+                left: auto;
+
+                &:is(.sticky, .active-sticky) {
+                  box-shadow: none;
+                }
+              }
+
+              &.sticky-right {
+                position: static;
+                right: auto;
+
+                &.sticky {
+                  box-shadow: none;
+                }
+              }
+            }
           }
         }
       }
     }
   }
+}
+
+/* --- [TABLET & KÜÇÜK LAPTOP] --- */
+/* Ekran 1024px ve altına düştüğünde çalışır */
+@media (max-width: 1024px) {
 }

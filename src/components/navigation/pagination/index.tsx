@@ -24,7 +24,7 @@ const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onCh
   const [pages, setPages] = useState<React.JSX.Element[]>([]);
   const [totalPageCount, setTotalPageCount] = useState<number>(0);
   const [selectedPerPage, setSelectedPerPage] = useState<Option | undefined>(
-    perPageOptions.find((x) => x.value === 10)
+    perPageOptions.find((x) => x.value === 10),
   );
 
   // methods
@@ -54,7 +54,7 @@ const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onCh
           onClick={() => handlePageChange(i, selectedPerPage?.value as number)}
         >
           {i}
-        </li>
+        </li>,
       );
     }
 
@@ -64,12 +64,15 @@ const Pagination: React.FC<IProps> = ({ currentPage, totalRecords, perPage, onCh
   return (
     <div className="ar-pagination">
       <Select
+        variant="borderless"
         value={selectedPerPage}
         options={[...perPageOptions, { value: totalRecords, text: "Tümü" }]}
         onChange={(option) => {
           setSelectedPerPage(option);
           handlePageChange(1, option?.value as number);
         }}
+        config={{ clear: false }}
+        style={{ width: 65 }}
       />
 
       <ul>

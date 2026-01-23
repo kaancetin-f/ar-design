@@ -37,6 +37,9 @@ export type Props = {
   onClick?: () => void;
   onCreate?: (option: Option) => void;
   placeholder?: string;
+  config?: {
+    clear?: boolean;
+  };
 } & (IMultiple | ISingle) &
   IVariant &
   IColors &

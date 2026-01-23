@@ -67,7 +67,7 @@ const Table = forwardRef(
       pagination,
       config = { isSearchable: false },
     }: IProps<T>,
-    ref: React.ForwardedRef<HTMLTableElementWithCustomAttributes>
+    ref: React.ForwardedRef<HTMLTableElementWithCustomAttributes>,
   ) => {
     // refs
     const _innerRef = useRef<HTMLTableElementWithCustomAttributes>(null);
@@ -109,7 +109,7 @@ const Table = forwardRef(
     const [filterButtonCoordinate, setFilterButtonCoordinate] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
     const [filterPopupContent, setFilterPopupContent] = useState<JSX.Element | null>(null);
     const [filterPopupOption, setFilterPopupOption] = useState<{ key: string; option: Option | undefined } | null>(
-      null
+      null,
     );
     const [filterPopupOptionSearchText, setFilterPopupOptionSearchText] = useState<string | null>(null);
     // states -> Filter Fields Backup
@@ -122,6 +122,8 @@ const Table = forwardRef(
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [selectedPerPage, setSelectedPerPage] = useState<number>(pagination?.perPage ?? 10);
+    // states -> Mobil
+    const [isMobile, setIsMobile] = useState(false);
 
     // hooks
     // Dışarıdan gelen ref'i _innerRef'e bağla.
@@ -203,6 +205,12 @@ const Table = forwardRef(
       });
     }, []);
 
+    const handleResize = useMemo(() => {
+      return (_: UIEvent) => {
+        setIsMobile(window.innerWidth <= 768);
+      };
+    }, []);
+
     const handleSearch = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -240,7 +248,7 @@ const Table = forwardRef(
 
         setCurrentPage(1);
       },
-      [filterPopupOption]
+      [filterPopupOption],
     );
 
     const handleCheckboxChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -269,7 +277,7 @@ const Table = forwardRef(
     const handleFilterPopupContent = (
       c: TableColumnType<T>,
       dataType: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function",
-      index: number | null
+      index: number | null,
     ) => {
       const key = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
       const value = Array.isArray(searchedText?.[key])
@@ -298,7 +306,7 @@ const Table = forwardRef(
                   <Select
                     value={
                       filterOption.find(
-                        (x) => x.value === filterPopupOption?.option?.value && filterPopupOption.key === c.key
+                        (x) => x.value === filterPopupOption?.option?.value && filterPopupOption.key === c.key,
                       ) ?? filterOption[0]
                     }
                     options={filterOption}
@@ -328,7 +336,7 @@ const Table = forwardRef(
                 <Column size={12}>
                   {c.filters
                     ?.filter((filter) =>
-                      filter.text.toLocaleLowerCase().includes(filterPopupOptionSearchText?.toLocaleLowerCase() ?? "")
+                      filter.text.toLocaleLowerCase().includes(filterPopupOptionSearchText?.toLocaleLowerCase() ?? ""),
                     )
                     ?.map((filter, fIndex) => {
                       const name = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
@@ -552,7 +560,7 @@ const Table = forwardRef(
                 index,
                 deph * (config.isTreeView ? 1.75 : 0),
                 0,
-                rowHeights[index] ?? 0
+                rowHeights[index] ?? 0,
               );
             })}
           </tr>
@@ -578,7 +586,7 @@ const Table = forwardRef(
       depth: number,
       level: number,
       height: number = 0,
-      isSubrows: boolean = false
+      isSubrows: boolean = false,
     ) => {
       let render: any;
 
@@ -698,7 +706,7 @@ const Table = forwardRef(
 
               {!config.subrow?.render ? (
                 columns.map((c: TableColumnType<T>, cIndex: number) =>
-                  renderCell(subitem, c, cIndex, subindex, depth * (config.isTreeView ? 2.25 : 1.75), level, 0, true)
+                  renderCell(subitem, c, cIndex, subindex, depth * (config.isTreeView ? 2.25 : 1.75), level, 0, true),
                 )
               ) : (
                 <td colSpan={columns.length || 1}>{config.subrow?.render.element(items) ?? <></>}</td>
@@ -745,7 +753,7 @@ const Table = forwardRef(
 
       if (previousSelections && previousSelections.length > 0) {
         const validSelections = data.filter((item) =>
-          previousSelections.some((selected) => trackBy?.(selected) === trackBy?.(item))
+          previousSelections.some((selected) => trackBy?.(selected) === trackBy?.(item)),
         );
         setSelectionItems(validSelections);
 
@@ -803,7 +811,7 @@ const Table = forwardRef(
     useEffect(() => {
       if (typeof selections === "function" && Array.isArray(selectionItems)) {
         selections(
-          selectionItems.map((selectionItem) => ({ ...selectionItem, trackByValue: trackBy?.(selectionItem) }))
+          selectionItems.map((selectionItem) => ({ ...selectionItem, trackByValue: trackBy?.(selectionItem) })),
         );
       }
 
@@ -894,7 +902,7 @@ const Table = forwardRef(
 
               _tBody.current.insertBefore(
                 _dragItem.current,
-                dragItemIndex < dropItemIndex ? overItem.nextSibling : overItem
+                dragItemIndex < dropItemIndex ? overItem.nextSibling : overItem,
               );
 
               const movedItem = data.splice(dragItemIndex, 1)[0];
@@ -955,6 +963,16 @@ const Table = forwardRef(
       setCurrentPage(1);
       setTimeout(() => handleScroll(), 0);
     }, [selectedPerPage]);
+
+    useEffect(() => {
+      setIsMobile(window.innerWidth <= 768);
+
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, []);
 
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
@@ -1221,14 +1239,30 @@ const Table = forwardRef(
           {filterPopupContent}
         </FilterPopup>
 
-        {pagination && pagination.totalRecords > pagination.perPage && (
+        {pagination && (
           <div className="footer">
             <span>
-              <strong>Showing {getData.length}</strong> <span>of {selectedPerPage ?? getData.length} agreement</span>
+              {isMobile ? (
+                <>
+                  <strong>
+                    {(currentPage - 1) * selectedPerPage + 1} -{" "}
+                    {Math.min(currentPage * selectedPerPage, pagination.totalRecords || getData.length)} of{" "}
+                    {pagination.totalRecords || getData.length}
+                  </strong>
+                </>
+              ) : (
+                <>
+                  <strong>
+                    Showing {(currentPage - 1) * selectedPerPage + 1} to{" "}
+                    {Math.min(currentPage * selectedPerPage, pagination.totalRecords || getData.length)}
+                  </strong>{" "}
+                  <span>of {pagination.totalRecords || getData.length} agreements</span>
+                </>
+              )}
             </span>
 
             <Pagination
-              totalRecords={config.isServerSide ? pagination.totalRecords : totalRecords ?? 0}
+              totalRecords={config.isServerSide ? pagination.totalRecords : (totalRecords ?? 0)}
               currentPage={currentPage}
               perPage={selectedPerPage}
               onChange={(currentPage, perPage) => {
@@ -1243,7 +1277,7 @@ const Table = forwardRef(
         )}
       </div>
     );
-  }
+  },
 );
 
 export default memo(Table, <T extends object>(prevProps: IProps<T>, nextProps: IProps<T>) => {
