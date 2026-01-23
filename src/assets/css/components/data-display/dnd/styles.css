@@ -9,7 +9,9 @@
     min-width: 1px;
     cursor: move;
     overflow: hidden;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
 
     &.drag-item {
       opacity: 0.25;
@@ -43,6 +45,7 @@
 
     > .content {
       flex: 100%;
+      max-width: 100%;
     }
   }
 
