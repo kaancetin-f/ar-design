@@ -758,6 +758,8 @@ const Table = forwardRef(
         setSelectionItems(validSelections);
 
         return;
+      } else {
+        setSelectionItems([]);
       }
     }, [previousSelections, data]);
 
