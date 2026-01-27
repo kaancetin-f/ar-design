@@ -83,6 +83,9 @@ const Table = forwardRef(
     const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
     // refs -> Filter
     const _filterButton = useRef<(HTMLSpanElement | null)[]>([]);
+    // refs -> Selection
+    const _selectionItems = useRef<T[]>([]);
+    const lastSentRef = useRef<T[]>([]);
 
     // variables
     const _subrowOpenAutomatically: boolean = config.subrow?.openAutomatically ?? false;
@@ -94,7 +97,6 @@ const Table = forwardRef(
 
     // states
     const [selectAll, setSelectAll] = useState<boolean>(false);
-    const [selectionItems, setSelectionItems] = useState<T[]>([]);
     const [showSubitems, setShowSubitems] = useState<{ [key: string]: boolean }>({});
     const [rowHeights, setRowHeights] = useState<number[]>([]);
     // states -> File
@@ -122,6 +124,8 @@ const Table = forwardRef(
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [selectedPerPage, setSelectedPerPage] = useState<number>(pagination?.perPage ?? 10);
+    // states -> Selection
+    const [_, setTriggerForRender] = useState<boolean>(false);
     // states -> Mobil
     const [isMobile, setIsMobile] = useState(false);
 
@@ -520,13 +524,26 @@ const Table = forwardRef(
             {selections && (
               <td className="flex justify-content-center sticky-left" data-sticky-position="left">
                 <Checkbox
+                  key={Date.now()}
                   ref={(element) => (_checkboxItems.current[index] = element)}
                   variant="filled"
                   color="green"
-                  checked={selectionItems.some((selectionItem) => trackBy?.(selectionItem) === trackBy?.(item))}
+                  checked={_selectionItems.current.some(
+                    (selectionItem) => trackBy?.(selectionItem) === trackBy?.(item),
+                  )}
                   onChange={(event) => {
-                    if (event.target.checked) setSelectionItems((prev) => [...prev, item]);
-                    else setSelectionItems((prev) => prev.filter((_item) => trackBy?.(_item) !== trackBy?.(item)));
+                    const key = trackBy?.(item);
+
+                    if (event.target.checked) {
+                      if (!_selectionItems.current.some((_item) => trackBy?.(_item) === key)) {
+                        _selectionItems.current = [..._selectionItems.current, item];
+                      }
+                    } else {
+                      _selectionItems.current = _selectionItems.current.filter((_item) => trackBy?.(_item) !== key);
+                    }
+
+                    selections(_selectionItems.current);
+                    setTriggerForRender((prev) => !prev);
                   }}
                 />
               </td>
@@ -749,19 +766,20 @@ const Table = forwardRef(
 
     // useEffects
     useEffect(() => {
-      if (Utils.DeepEqual(previousSelections, selectionItems)) return;
-
-      if (previousSelections && previousSelections.length > 0) {
-        const validSelections = data.filter((item) =>
-          previousSelections.some((selected) => trackBy?.(selected) === trackBy?.(item)),
-        );
-        setSelectionItems(validSelections);
-
+      if (!previousSelections || previousSelections.length === 0) {
+        _selectionItems.current = [];
         return;
-      } else {
-        setSelectionItems([]);
       }
-    }, [previousSelections, data]);
+
+      const validSelections = data.filter((item) =>
+        previousSelections.some((selected) => trackBy?.(selected) === trackBy?.(item)),
+      );
+
+      // Gereksiz overwrite’i engelle.
+      if (!Utils.DeepEqual(_selectionItems.current, validSelections)) {
+        _selectionItems.current = validSelections;
+      }
+    }, [previousSelections, data, trackBy]);
 
     useEffect(() => {
       if (config?.isServerSide && searchedParams) {
@@ -811,18 +829,18 @@ const Table = forwardRef(
     }, [checkboxSelectedParams]);
 
     useEffect(() => {
-      if (typeof selections === "function" && Array.isArray(selectionItems)) {
-        selections(
-          selectionItems.map((selectionItem) => ({ ...selectionItem, trackByValue: trackBy?.(selectionItem) })),
-        );
-      }
+      if (typeof selections !== "function") return;
 
-      if (Array.isArray(_checkboxItems.current) && _checkboxItems.current.length > 0) {
-        const allChecked = _checkboxItems.current.every((item) => item?.checked === true);
+      const payload = _selectionItems.current.map((item) => ({
+        ...item,
+        trackByValue: trackBy?.(item),
+      }));
 
-        setSelectAll(allChecked);
+      if (!Utils.DeepEqual(payload, lastSentRef.current)) {
+        lastSentRef.current = payload;
+        selections(payload);
       }
-    }, [selectionItems, currentPage, selectedPerPage]);
+    }, [selections, trackBy]);
 
     useEffect(() => {
       // Filter Content alanı re-render işlemi.
