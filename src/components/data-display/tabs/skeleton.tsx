@@ -9,15 +9,17 @@ const Skeleton = ({ tabs = [] }: IProps) => {
           tabs.map((tab, index) => {
             return (
               <div key={index} className="item" style={{ width: `${tab.title.length}px` }}>
-                {Array.from({ length: 3 }, (_, i) => (
-                  <span key={i} style={{ animationDelay: `${i++}s` }}></span>
-                ))}
+                <div className="title"></div>
               </div>
             );
           })}
       </div>
 
-      <div className="content"></div>
+      <div className="content">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
   );
 };
