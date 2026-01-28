@@ -25,7 +25,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation }:
   const _vText = validation?.[`${c.key as string}_${trackByValue}` as keyof typeof validation];
 
   // states
-  const [value, setValue] = useState<string | number | readonly string[] | undefined>(itemValue as string);
+  const [_value, setValue] = useState<string | number | readonly string[] | undefined>(itemValue as string);
 
   // useEffects
   useEffect(() => setValue(itemValue as string), [item]);
@@ -36,7 +36,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation }:
       return (
         <Input
           variant="borderless"
-          value={value}
+          value={_value}
           onChange={(event) => {
             const { value } = event.target;
 
@@ -46,17 +46,32 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation }:
           validation={{ text: _vText }}
         />
       );
-    case "input-number":
+    case "decimal":
       return (
-        <Input.Number
+        <Input.Decimal
           variant="borderless"
           name={c.key as string}
-          value={value}
+          value={_value}
           onChange={(event) => {
             const { value } = event.target;
 
             setValue(value);
-            onEditable({ ...item, [key]: c.editable?.type === "number" ? Number(value) : value } as T, trackByValue);
+            onEditable({ ...item, [key]: value } as T, trackByValue);
+          }}
+          validation={{ text: _vText }}
+        />
+      );
+    case "input-formatted-decimal":
+      return (
+        <Input.FormattedDecimal
+          variant="borderless"
+          name={c.key as string}
+          value={_value}
+          onChange={(event) => {
+            const { value } = event.target;
+
+            setValue(value);
+            onEditable({ ...item, [key]: value } as T, trackByValue);
           }}
           validation={{ text: _vText }}
         />
@@ -65,7 +80,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation }:
       return (
         <DatePicker
           variant="borderless"
-          value={value}
+          value={_value}
           onChange={(value) => {
             setValue(value);
             onEditable({ ...item, [key]: value } as T, trackByValue);

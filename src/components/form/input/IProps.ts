@@ -3,7 +3,8 @@ import { Variants } from "../../../libs/types";
 import { IBorder, IColors, IIcon, IUpperCase, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
 
 interface IProps
-  extends IVariant,
+  extends
+    IVariant,
     IColors,
     IBorder,
     IIcon,

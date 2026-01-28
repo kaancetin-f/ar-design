@@ -7,8 +7,9 @@ import IProps from "./IProps";
 import Utils from "../../../libs/infrastructure/shared/Utils";
 import { ARIcon } from "../../icons";
 import Otp from "./otp/Otp";
-import Num from "./num/Num";
+import FormattedDecimal from "./formatted-decimal/FormattedDecimal";
 import Phone from "./phone/Phone";
+import Decimal from "./decimal/Decimal";
 
 const BaseInput = forwardRef<HTMLInputElement, IProps>(
   (
@@ -23,7 +24,7 @@ const BaseInput = forwardRef<HTMLInputElement, IProps>(
       validation,
       ...attributes
     },
-    ref
+    ref,
   ) => {
     // refs
     const _innerRef = useRef<HTMLInputElement>(null);
@@ -50,8 +51,8 @@ const BaseInput = forwardRef<HTMLInputElement, IProps>(
         border,
         undefined,
         icon,
-        attributes.className
-      )
+        attributes.className,
+      ),
     );
 
     // addon className
@@ -224,17 +225,19 @@ const BaseInput = forwardRef<HTMLInputElement, IProps>(
         {button && <Button {...button} border={{ radius: border.radius }} disabled={attributes.disabled} />}
       </div>
     );
-  }
+  },
 );
 
 interface InputCompound extends React.ForwardRefExoticComponent<IProps & React.RefAttributes<HTMLInputElement>> {
-  Number: typeof Num;
+  Decimal: typeof Decimal;
+  FormattedDecimal: typeof FormattedDecimal;
   Phone: typeof Phone;
   Otp: typeof Otp;
 }
 
 const Input = BaseInput as InputCompound;
-Input.Number = Num;
+Input.Decimal = Decimal;
+Input.FormattedDecimal = FormattedDecimal;
 Input.Phone = Phone;
 Input.Otp = Otp;
 

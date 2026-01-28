@@ -5,7 +5,7 @@ import Input from "..";
 import { NUMBER } from "../../../../libs/infrastructure/shared";
 import IProps from "./IProps";
 
-const Num: React.FC<IProps> = ({
+const FormattedDecimal: React.FC<IProps> = ({
   variant,
   color,
   name,
@@ -122,4 +122,4 @@ const Num: React.FC<IProps> = ({
   );
 };
 
-export default Num;
+export default FormattedDecimal;
