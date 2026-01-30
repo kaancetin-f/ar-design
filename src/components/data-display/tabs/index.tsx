@@ -103,13 +103,13 @@ const Tabs: React.FC<IProps> = ({ name, tabs = [], activeTab, onChange, onClose 
     <div className="ar-tabs">
       <div className="tabs">
         {scrollInfo.current > 0 && (
-          <div className="left" onClick={() => scroll("left")}>
+          <div className="button left" onClick={() => scroll("left")}>
             <ARIcon icon={"ArrowLeft"} stroke="var(--gray-700)" />
           </div>
         )}
 
         {!scrollInfo.isMaxRight && (
-          <div className="right" onClick={() => scroll("right")}>
+          <div className="button right" onClick={() => scroll("right")}>
             <ARIcon icon={"ArrowRight"} stroke="var(--gray-700)" />
           </div>
         )}

@@ -5,11 +5,18 @@ import IProps from "./IProps";
 import { KanbanBoardColumnType } from "../../../libs/types";
 import "../../../assets/css/components/data-display/kanban-board/styles.css";
 import DnD from "../dnd";
+import { ARIcon } from "../../icons";
 
-const KanbanBoard = function <T, TColumnProperties>({ trackBy, columns, onChange }: IProps<T, TColumnProperties>) {
+const KanbanBoard = function <T, TColumnProperties>({
+  trackBy,
+  columns,
+  onChange,
+  config,
+}: IProps<T, TColumnProperties>) {
   // refs
   const _kanbanWrapper = useRef<HTMLDivElement>(null);
   const _hoverItemIndex = useRef<number | null>(null);
+  const _scrollInterval = useRef<number | null>(null);
   const _scrollAnimationFrame = useRef<number | null>(null);
   const _scrollSpeedRef = useRef(0); // px/frame
 
@@ -122,6 +129,24 @@ const KanbanBoard = function <T, TColumnProperties>({ trackBy, columns, onChange
     if (item.classList.contains("dragging")) item.classList.remove("dragging");
   };
 
+  const handleStartScroll = (direction: "left" | "right") => {
+    const el = _kanbanWrapper.current;
+    if (!el) return;
+
+    handleStopScroll();
+
+    _scrollInterval.current = window.setInterval(() => {
+      el.scrollLeft += direction === "left" ? -10 : 10;
+    }, 16); // ~60fps
+  };
+
+  const handleStopScroll = () => {
+    if (_scrollInterval.current) {
+      clearInterval(_scrollInterval.current);
+      _scrollInterval.current = null;
+    }
+  };
+
   const stopScrolling = () => {
     if (_scrollAnimationFrame.current) {
       cancelAnimationFrame(_scrollAnimationFrame.current);
@@ -158,26 +183,52 @@ const KanbanBoard = function <T, TColumnProperties>({ trackBy, columns, onChange
     <div
       ref={_kanbanWrapper}
       className="ar-kanban-board"
+      style={{
+        height: `calc(100dvh - (${_kanbanWrapper.current?.getBoundingClientRect().top}px + ${config?.safeAreaOffset?.bottom ?? 0}px))`,
+      }}
       onDragOver={handleBoardDragOver}
       onDragEnd={stopScrolling}
       onDrop={stopScrolling}
     >
+      <div className="buttons">
+        <div
+          className="button left"
+          onMouseDown={() => handleStartScroll("left")}
+          onMouseUp={handleStopScroll}
+          onMouseLeave={handleStopScroll}
+        >
+          <ARIcon icon={"ArrowLeft"} />
+        </div>
+        <div
+          className="button right"
+          onMouseDown={() => handleStartScroll("right")}
+          onMouseUp={handleStopScroll}
+          onMouseLeave={handleStopScroll}
+        >
+          <ARIcon icon={"ArrowRight"} />
+        </div>
+      </div>
+
+      <div className="titles">
+        {data.map((board, index) => (
+          <div key={index} className="title">
+            <h4>
+              <span
+                style={{
+                  backgroundColor: darkenColor(board.titleColor ?? "", 1),
+                  borderColor: darkenColor(board.titleColor ?? "", 1),
+                }}
+              ></span>
+              {board.title.toLocaleUpperCase("tr")}
+            </h4>
+            {board.description && <span>{board.description}</span>}
+          </div>
+        ))}
+      </div>
+
       <div className="columns">
         {data.map((board, index) => (
           <div key={index} className="column" onDrop={handleDrop(board.key)}>
-            <div className="title">
-              <h4>
-                <span
-                  style={{
-                    backgroundColor: darkenColor(board.titleColor ?? "", 1),
-                    borderColor: darkenColor(board.titleColor ?? "", 1),
-                  }}
-                ></span>
-                {board.title.toLocaleUpperCase("tr")}
-              </h4>
-              {board.description && <span>{board.description}</span>}
-            </div>
-
             <div
               className="items"
               onDragOver={handleItemsDragOver}

@@ -74,8 +74,7 @@
       }
     }
 
-    > .left,
-    .right {
+    > .button {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
@@ -86,22 +85,20 @@
       backdrop-filter: blur(5px);
       width: 2rem;
       height: 2rem;
-      border-radius: var(--border-radius);
-      color: var(--blue);
-      font-size: 1rem;
+      border-radius: var(--border-radius-sm);
       cursor: pointer;
       transition:
         visibility 0.25s,
         opacity 0.25s ease-in-out;
       z-index: 5;
-    }
 
-    > .left {
-      left: 0;
-    }
+      &.left {
+        left: 0;
+      }
 
-    > .right {
-      right: 0;
+      &.right {
+        right: 0;
+      }
     }
   }
 
@@ -191,52 +188,6 @@
 /* --- [MOBİL - STANDART] --- */
 /* Ekran 576px ve altına düştüğünde çalışır */
 @media (max-width: 576px) {
-  .ar-tabs {
-    > .tabs {
-      padding: 0 2rem;
-
-      > .container {
-        > .item {
-          &:not(:last-child) {
-            &::after {
-            }
-          }
-
-          &.selection {
-            &::before {
-            }
-          }
-
-          > .close-button {
-          }
-        }
-      }
-
-      > .left,
-      .right {
-      }
-
-      > .left {
-      }
-
-      > .right {
-      }
-    }
-
-    &.skeleton {
-      > .tabs {
-        > .item {
-          > span {
-          }
-        }
-      }
-
-      > .content {
-        &::before {
-        }
-      }
-    }
-  }
 }
 
 /* --- [TABLET DİKEY & BÜYÜK TELEFONLAR] --- */
@@ -263,14 +214,12 @@
         }
       }
 
-      > .left,
-      .right {
-      }
+      > .button {
+        &.left {
+        }
 
-      > .left {
-      }
-
-      > .right {
+        &.right {
+        }
       }
     }
 
