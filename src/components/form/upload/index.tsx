@@ -19,6 +19,7 @@ const Upload: React.FC<Props> = ({
   allowedTypes,
   maxSize,
   type = "list",
+  direction = "column",
   size,
   fullWidth,
   multiple,
@@ -222,6 +223,7 @@ const Upload: React.FC<Props> = ({
 
             <List
               type={type}
+              direction={direction}
               selectedFiles={selectedFiles ?? []}
               validationErrors={validationErrors}
               handleFileToBase64={handleFileToBase64}

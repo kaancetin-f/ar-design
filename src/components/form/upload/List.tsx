@@ -7,15 +7,23 @@ import Buttons from "./Buttons";
 
 interface IProps {
   type: "list" | "grid";
+  direction?: "row" | "column";
   selectedFiles: File[]; // Tekli de olabilir çoklu da
   validationErrors?: ValidationError[];
   handleFileToBase64: (file: File) => Promise<string>;
   handleFileRemove: (fileToRemove: File) => void;
 }
 
-const List = ({ type, selectedFiles, validationErrors = [], handleFileToBase64, handleFileRemove }: IProps) => {
+const List = ({
+  type,
+  direction,
+  selectedFiles,
+  validationErrors = [],
+  handleFileToBase64,
+  handleFileRemove,
+}: IProps) => {
   return (
-    <ul className={type}>
+    <ul className={`${type} ${direction}`}>
       {selectedFiles.map((selectedFile) => {
         const message = validationErrors.find((v) => v.fileName === selectedFile.name)?.message;
 

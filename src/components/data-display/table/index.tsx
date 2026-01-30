@@ -1015,21 +1015,27 @@ const Table = forwardRef(
                       }
                       content={
                         <>
-                          {actions.import.prefixItem}
+                          <Row>
+                            <Column size={12}>{actions.import.prefixItem}</Column>
+                          </Row>
 
-                          <Upload
-                            text={actions.import.buttonText ?? "Belge Yükleyin"}
-                            allowedTypes={actions.import.allowedTypes}
-                            files={files}
-                            onChange={(formData, files, base64) => {
-                              setFormData(formData);
-                              setFiles(files);
-                              setBase64(base64);
-                            }}
-                            size="small"
-                            fullWidth
-                            // multiple
-                          />
+                          <Row>
+                            <Column size={12}>
+                              <Upload
+                                text={actions.import.buttonText ?? "Belge Yükleyin"}
+                                allowedTypes={actions.import.allowedTypes}
+                                files={files}
+                                onChange={(formData, files, base64) => {
+                                  setFormData(formData);
+                                  setFiles(files);
+                                  setBase64(base64);
+                                }}
+                                size="small"
+                                fullWidth
+                                // multiple
+                              />
+                            </Column>
+                          </Row>
 
                           {actions.import.suffixItem}
                         </>
