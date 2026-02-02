@@ -16,6 +16,30 @@ class Icon {
         return (
           <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
         );
+      case "ArrowDown":
+        return (
+          <path
+            fillRule="evenodd"
+            d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"
+            // stroke={this._stroke}
+            // strokeWidth={this._strokeWidth}
+            // strokeMiterlimit="10"
+            // strokeLinecap="round"
+            // strokeLinejoin="round"
+          />
+        );
+      case "ArrowDownUp":
+        return (
+          <path
+            fillRule="evenodd"
+            d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"
+            // stroke={this._stroke}
+            // strokeWidth={this._strokeWidth}
+            // strokeMiterlimit="10"
+            // strokeLinecap="round"
+            // strokeLinejoin="round"
+          />
+        );
       case "ArrowLeft":
         return (
           <path
@@ -38,6 +62,18 @@ class Icon {
             strokeMiterlimit="10"
             strokeLinecap="round"
             strokeLinejoin="round"
+          />
+        );
+      case "ArrowUp":
+        return (
+          <path
+            fillRule="evenodd"
+            d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"
+            // stroke={this._stroke}
+            // strokeWidth={this._strokeWidth}
+            // strokeMiterlimit="10"
+            // strokeLinecap="round"
+            // strokeLinejoin="round"
           />
         );
       case "Bold":
@@ -92,6 +128,13 @@ class Icon {
           <path
             fillRule="evenodd"
             d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+          />
+        );
+      case "ChevronExpand":
+        return (
+          <path
+            fillRule="evenodd"
+            d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708m0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708"
           />
         );
       case "ChevronUp":
@@ -348,6 +391,10 @@ class Icon {
             fillRule="evenodd"
             d="M6 12.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-4-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5m4-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-4-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"
           />
+        );
+      case "ThreeDotsVertical":
+        return (
+          <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
         );
       case "TickCircle":
         return (

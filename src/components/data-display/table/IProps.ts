@@ -18,6 +18,7 @@ export type FilterValue = {
   operator: FilterOperator;
 };
 
+export type Sort<T> = { key: keyof T; direction: "asc" | "desc" | null };
 export type SearchedParam = { [key: string]: FilterValue | FilterValue[] };
 
 export type Config<T> = {
@@ -88,6 +89,7 @@ interface IProps<T> extends IChildren {
   rowBackgroundColor?: (item: T) => string;
   selections?: (selectionItems: T[]) => void;
   previousSelections?: T[];
+  sortedParams?: (params: Sort<T>[], query: string) => void;
   searchedParams?: (params: SearchedParam | null, query: string, operator: FilterOperator) => void;
   onEditable?: (item: T, trackByValue: string) => void;
   onDnD?: (item: T[]) => void;

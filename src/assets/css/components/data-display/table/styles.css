@@ -1,5 +1,6 @@
 @import url("./scroll.css");
 @import url("./filter-popup.css");
+@import url("./properties-popup.css");
 
 .ar-table {
   display: flex;
@@ -145,6 +146,25 @@
 
             &.align-content-right {
               text-align: right;
+            }
+
+            > div {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              gap: 1rem;
+              width: 100%;
+
+              > span {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+
+                > span {
+                  position: relative;
+                  top: 2.5px;
+                }
+              }
             }
 
             > .table-cell {

@@ -1,21 +1,19 @@
 "use client";
 
-import React, { MutableRefObject, ReactNode, useEffect, useRef, useState } from "react";
+import React, { Dispatch, MutableRefObject, ReactNode, SetStateAction, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 
 interface IProps {
   children: ReactNode;
+  open: { get: boolean; set: Dispatch<SetStateAction<boolean>> };
   tableContent: MutableRefObject<HTMLDivElement | null>;
   coordinate: { x: number; y: number };
   buttons: MutableRefObject<(HTMLSpanElement | null)[]>;
 }
 
-const FilterPopup = ({ children, tableContent, coordinate, buttons }: IProps) => {
+const FilterPopup = ({ children, open, tableContent, coordinate, buttons }: IProps) => {
   // refs
   const _arTableFilterPopup = useRef<HTMLDivElement>(null);
-
-  // states
-  const [open, setOpen] = useState<boolean>(false);
 
   // methods
   const handleClickOutSide = (event: MouseEvent) => {
@@ -23,18 +21,18 @@ const FilterPopup = ({ children, tableContent, coordinate, buttons }: IProps) =>
     const clickedInsidePopup = _arTableFilterPopup.current && _arTableFilterPopup.current.contains(target);
     const isOneOfButtons = buttons.current.some((button) => button === target || button?.contains(target));
 
-    if (!clickedInsidePopup && !isOneOfButtons) setOpen(false);
+    if (!clickedInsidePopup && !isOneOfButtons) handleClose();
   };
 
   const handleKeys = (event: KeyboardEvent) => {
     const key = event.key;
 
-    if (key === "Escape") setOpen(false);
+    if (key === "Escape") open.set(false);
   };
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => open.set(true);
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => open.set(false);
 
   // useEffects
   useEffect(() => {
@@ -77,7 +75,7 @@ const FilterPopup = ({ children, tableContent, coordinate, buttons }: IProps) =>
   }, []);
 
   return (
-    open &&
+    open.get &&
     ReactDOM.createPortal(
       <div
         ref={_arTableFilterPopup}
@@ -86,7 +84,7 @@ const FilterPopup = ({ children, tableContent, coordinate, buttons }: IProps) =>
       >
         {children}
       </div>,
-      document.body
+      document.body,
     )
   );
 };

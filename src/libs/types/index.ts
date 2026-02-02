@@ -176,8 +176,11 @@ export type FileCategory =
 // Icons
 export type Icons =
   | "Add"
+  | "ArrowDown"
+  | "ArrowDownUp"
   | "ArrowLeft"
   | "ArrowRight"
+  | "ArrowUp"
   | "Bold"
   | "BulletList"
   | "CameraReels"
@@ -185,6 +188,7 @@ export type Icons =
   | "ChevronBarLeft"
   | "ChevronBarRight"
   | "ChevronDown"
+  | "ChevronExpand"
   | "ChevronUp"
   | "CloseCircle"
   | "CloseSquare"
@@ -223,6 +227,7 @@ export type Icons =
   | "TextAlingCenter"
   | "TextAlingLeft"
   | "TextAlingRight"
+  | "ThreeDotsVertical"
   | "TickCircle"
   | "Trash-Fill"
   | "Underline"

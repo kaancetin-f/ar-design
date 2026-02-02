@@ -4,7 +4,7 @@ import "../../../assets/css/components/data-display/table/styles.css";
 import { ARIcon } from "../../icons";
 import Button from "../../form/button";
 import Checkbox from "../../form/checkbox";
-import IProps, { FilterValue, SearchedParam } from "./IProps";
+import IProps, { FilterValue, SearchedParam, Sort } from "./IProps";
 import Pagination from "../../navigation/pagination";
 import React, {
   ChangeEvent,
@@ -34,6 +34,8 @@ import Tooltip from "../../feedback/tooltip";
 import Editable from "./Editable";
 import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
+import PropertiesPopup from "./PropertiesPopup";
+import { ExtractKey } from "./Helpers";
 
 const filterOption: Option[] = [
   { value: FilterOperator.Contains, text: "İçerir" },
@@ -61,6 +63,7 @@ const Table = forwardRef(
       rowBackgroundColor,
       selections,
       previousSelections,
+      sortedParams,
       searchedParams,
       onEditable,
       onDnD,
@@ -81,6 +84,8 @@ const Table = forwardRef(
     // refs -> Search
     const _searchTextInputs = useRef<(HTMLInputElement | null)[]>([]);
     const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
+    // refs -> Properties
+    const _propertiesButton = useRef<(HTMLSpanElement | null)[]>([]);
     // refs -> Filter
     const _filterButton = useRef<(HTMLSpanElement | null)[]>([]);
     // refs -> Selection
@@ -107,6 +112,15 @@ const Table = forwardRef(
     const [searchedText, setSearchedText] = useState<SearchedParam | null>(null);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | null>(null);
     const [checkboxSelectedParams, setCheckboxSelectedParams] = useState<SearchedParam | null>(null);
+    // states -> Sort
+    const [sortConfig, setSortConfig] = useState<Sort<T>[]>([]);
+    const [sortCurrentColumn, setSortCurrentColumn] = useState<TableColumnType<T> | null>(null);
+    // states -> Properties
+    const [openProperties, setOpenProperties] = useState<boolean>(false);
+    const [propertiesButtonCoordinate, setPropertiesButtonCoordinate] = useState<{ x: number; y: number }>({
+      x: 0,
+      y: 0,
+    });
     // states -> Filter
     const [filterButtonCoordinate, setFilterButtonCoordinate] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
     const [filterPopupContent, setFilterPopupContent] = useState<JSX.Element | null>(null);
@@ -115,6 +129,7 @@ const Table = forwardRef(
     );
     const [filterPopupOptionSearchText, setFilterPopupOptionSearchText] = useState<string | null>(null);
     // states -> Filter Fields Backup
+    const [openFilter, setOpenFilter] = useState<boolean>(false);
     const [filterCurrentColumn, setFilterCurrentColumn] = useState<TableColumnType<T> | null>(null);
     const [filterCurrentDataType, setFilterCurrentDataType] = useState<
       "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function" | null
@@ -283,7 +298,10 @@ const Table = forwardRef(
       dataType: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function",
       index: number | null,
     ) => {
-      const key = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
+      const key: keyof T | null = ExtractKey(c.key);
+
+      if (!key) return;
+
       const value = Array.isArray(searchedText?.[key])
         ? "" // veya ihtiyacına göre birleştirme yap: searchedText[key].map(v => v.value).join(", ").
         : ((searchedText?.[key] as FilterValue)?.value as string);
@@ -493,6 +511,20 @@ const Table = forwardRef(
         setTotalRecords(data.length);
       }
 
+      // Sorting...
+      if (sortConfig.length > 0) {
+        _data.sort((a, b) => {
+          for (const config of sortConfig) {
+            const aValue = a[config.key];
+            const bValue = b[config.key];
+
+            if (aValue < bValue) return config.direction === "asc" ? -1 : 1;
+            if (aValue > bValue) return config.direction === "asc" ? 1 : -1;
+          }
+          return 0;
+        });
+      }
+
       if (pagination && !config.isServerSide) {
         const indexOfLastRow = currentPage * selectedPerPage;
         const indexOfFirstRow = indexOfLastRow - selectedPerPage;
@@ -501,7 +533,7 @@ const Table = forwardRef(
       }
 
       return _data;
-    }, [data, searchedText, currentPage, selectedPerPage]);
+    }, [data, searchedText, currentPage, selectedPerPage, sortConfig]);
 
     const renderRow = (item: T, index: number, deph: number) => {
       const isHasSubitems = _subrowSelector in item;
@@ -780,6 +812,20 @@ const Table = forwardRef(
         _selectionItems.current = validSelections;
       }
     }, [previousSelections, data, trackBy]);
+
+    useEffect(() => {
+      if (config?.isServerSide && sortedParams) {
+        const sortRecord: Record<string, string> = {};
+
+        sortConfig?.forEach((s) => {
+          if (s.direction) sortRecord[String(s.key)] = s.direction;
+        });
+
+        const query = new URLSearchParams(sortRecord);
+
+        sortedParams(sortConfig ?? [], query.toString());
+      }
+    }, [sortConfig]);
 
     useEffect(() => {
       if (config?.isServerSide && searchedParams) {
@@ -1160,7 +1206,14 @@ const Table = forwardRef(
                   </th>
                 )}
 
-                <THeadCell columns={columns} />
+                <THeadCell
+                  open={{ get: openProperties, set: setOpenProperties }}
+                  sort={{ get: sortConfig, set: setSortConfig }}
+                  columns={columns}
+                  propertiesButton={_propertiesButton}
+                  setSortCurrentColumn={setSortCurrentColumn}
+                  setPropertiesButtonCoordinate={setPropertiesButtonCoordinate}
+                />
               </tr>
 
               {config?.isSearchable && (
@@ -1237,6 +1290,7 @@ const Table = forwardRef(
                                 setFilterCurrentColumn(c);
                                 setFilterCurrentDataType(dataType);
                                 setFilterCurrentIndex(cIndex);
+                                setOpenFilter(true);
 
                                 handleFilterPopupContent(c, dataType, cIndex);
                               }}
@@ -1261,9 +1315,22 @@ const Table = forwardRef(
           </table>
         </div>
 
-        <FilterPopup tableContent={_tableContent} coordinate={filterButtonCoordinate} buttons={_filterButton}>
+        <FilterPopup
+          open={{ get: openFilter, set: setOpenFilter }}
+          tableContent={_tableContent}
+          coordinate={filterButtonCoordinate}
+          buttons={_filterButton}
+        >
           {filterPopupContent}
         </FilterPopup>
+
+        <PropertiesPopup
+          open={{ get: openProperties, set: setOpenProperties }}
+          sort={{ get: sortConfig, set: setSortConfig, currentColumn: sortCurrentColumn }}
+          tableContent={_tableContent}
+          coordinate={propertiesButtonCoordinate}
+          buttons={_propertiesButton}
+        />
 
         {pagination && (
           <div className="footer">
