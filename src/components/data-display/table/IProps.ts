@@ -18,6 +18,12 @@ export type FilterValue = {
   operator: FilterOperator;
 };
 
+export type Actions = {
+  import?: ImportActionType;
+  export?: ExportActionType;
+  create?: CreateActionType;
+  delete?: DeleteActionType;
+};
 export type Sort<T> = { key: keyof T; direction: "asc" | "desc" | null };
 export type SearchedParam = { [key: string]: FilterValue | FilterValue[] };
 
@@ -80,12 +86,7 @@ interface IProps<T> extends IChildren {
   description?: string;
   data: T[];
   columns: TableColumnType<T>[];
-  actions?: {
-    import?: ImportActionType;
-    export?: ExportActionType;
-    create?: CreateActionType;
-    delete?: DeleteActionType;
-  };
+  actions?: Actions;
   rowBackgroundColor?: (item: T) => string;
   selections?: (selectionItems: T[]) => void;
   previousSelections?: T[];

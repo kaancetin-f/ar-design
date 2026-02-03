@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Input from "../../form/input";
-import DatePicker from "../../form/date-picker";
-import { Errors, Option, TableColumnType } from "../../../libs/types";
-import Select from "../../form/select";
+import Input from "../../../form/input";
+import DatePicker from "../../../form/date-picker";
+import { Errors, Option, TableColumnType } from "../../../../libs/types";
+import Select from "../../../form/select";
 
 interface IProps<T> {
   c: TableColumnType<T>;

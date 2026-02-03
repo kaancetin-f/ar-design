@@ -5,13 +5,15 @@ import ReactDOM from "react-dom";
 
 interface IProps {
   children: ReactNode;
-  open: { get: boolean; set: Dispatch<SetStateAction<boolean>> };
+  states: {
+    open: { get: boolean; set: Dispatch<SetStateAction<boolean>> };
+  };
   tableContent: MutableRefObject<HTMLDivElement | null>;
   coordinate: { x: number; y: number };
   buttons: MutableRefObject<(HTMLSpanElement | null)[]>;
 }
 
-const FilterPopup = ({ children, open, tableContent, coordinate, buttons }: IProps) => {
+const FilterPopup = ({ children, states, tableContent, coordinate, buttons }: IProps) => {
   // refs
   const _arTableFilterPopup = useRef<HTMLDivElement>(null);
 
@@ -27,12 +29,12 @@ const FilterPopup = ({ children, open, tableContent, coordinate, buttons }: IPro
   const handleKeys = (event: KeyboardEvent) => {
     const key = event.key;
 
-    if (key === "Escape") open.set(false);
+    if (key === "Escape") states.open.set(false);
   };
 
-  const handleOpen = () => open.set(true);
+  const handleOpen = () => states.open.set(true);
 
-  const handleClose = () => open.set(false);
+  const handleClose = () => states.open.set(false);
 
   // useEffects
   useEffect(() => {
@@ -75,7 +77,7 @@ const FilterPopup = ({ children, open, tableContent, coordinate, buttons }: IPro
   }, []);
 
   return (
-    open.get &&
+    states.open.get &&
     ReactDOM.createPortal(
       <div
         ref={_arTableFilterPopup}

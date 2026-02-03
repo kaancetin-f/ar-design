@@ -8,9 +8,7 @@ import IProps, { FilterValue, SearchedParam, Sort } from "./IProps";
 import Pagination from "../../navigation/pagination";
 import React, {
   ChangeEvent,
-  CSSProperties,
   forwardRef,
-  Fragment,
   memo,
   useCallback,
   useEffect,
@@ -22,20 +20,18 @@ import React, {
 } from "react";
 import { HTMLTableElementWithCustomAttributes, Option, TableColumnType } from "../../../libs/types";
 import Input from "../../form/input";
-import Popover from "../../feedback/popover";
 import Utils from "../../../libs/infrastructure/shared/Utils";
-import Upload from "../../form/upload";
 import FilterPopup from "./FilterPopup";
 import { FilterOperator } from "../../../libs/infrastructure/shared/Enums";
 import Select from "../../form/select";
 import Grid from "../grid-system";
 import THeadCell from "./THeadCell";
-import Tooltip from "../../feedback/tooltip";
-import Editable from "./Editable";
 import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import PropertiesPopup from "./PropertiesPopup";
 import { ExtractKey } from "./Helpers";
+import Header from "./header/Header";
+import TBody from "./body/TBody";
 
 const filterOption: Option[] = [
   { value: FilterOperator.Contains, text: "İçerir" },
@@ -77,7 +73,6 @@ const Table = forwardRef(
     const _tableWrapper = useRef<HTMLDivElement>(null);
     const _tableContent = useRef<HTMLDivElement>(null);
     const _tBody = useRef<HTMLTableSectionElement>(null);
-    const _tBodyTR = useRef<(HTMLTableRowElement | null)[]>([]);
     const _dragItem = useRef<HTMLElement>();
     const _checkboxItems = useRef<(HTMLInputElement | null)[]>([]);
     const _filterCheckboxItems = useRef<(HTMLInputElement | null)[]>([]);
@@ -103,11 +98,6 @@ const Table = forwardRef(
     // states
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [showSubitems, setShowSubitems] = useState<{ [key: string]: boolean }>({});
-    const [rowHeights, setRowHeights] = useState<number[]>([]);
-    // states -> File
-    const [formData, setFormData] = useState<FormData | undefined>(undefined);
-    const [files, setFiles] = useState<File[]>([]);
-    const [base64, setBase64] = useState<string[]>([]);
     // states -> Search
     const [searchedText, setSearchedText] = useState<SearchedParam | null>(null);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | null>(null);
@@ -139,8 +129,6 @@ const Table = forwardRef(
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [selectedPerPage, setSelectedPerPage] = useState<number>(pagination?.perPage ?? 10);
-    // states -> Selection
-    const [_, setTriggerForRender] = useState<boolean>(false);
     // states -> Mobil
     const [isMobile, setIsMobile] = useState(false);
 
@@ -535,267 +523,6 @@ const Table = forwardRef(
       return _data;
     }, [data, searchedText, currentPage, selectedPerPage, sortConfig]);
 
-    const renderRow = (item: T, index: number, deph: number) => {
-      const isHasSubitems = _subrowSelector in item;
-      let _rowColor: CSSProperties = {};
-
-      if (rowBackgroundColor) _rowColor = { backgroundColor: rowBackgroundColor(item) };
-
-      // TODO: Keylere bakılacak...
-      return (
-        <Fragment key={`row-${index}`}>
-          <tr
-            key={`row-${index}`}
-            ref={(element) => {
-              _tBodyTR.current[index] = element;
-            }}
-            style={{ ..._rowColor }}
-            {...(onDnD && data.length > 1 ? { className: "draggable", draggable: true } : {})}
-          >
-            {/* Checkboxes */}
-            {selections && (
-              <td className="flex justify-content-center sticky-left" data-sticky-position="left">
-                <Checkbox
-                  key={Date.now()}
-                  ref={(element) => (_checkboxItems.current[index] = element)}
-                  variant="filled"
-                  color="green"
-                  checked={_selectionItems.current.some(
-                    (selectionItem) => trackBy?.(selectionItem) === trackBy?.(item),
-                  )}
-                  onChange={(event) => {
-                    const key = trackBy?.(item);
-
-                    if (event.target.checked) {
-                      if (!_selectionItems.current.some((_item) => trackBy?.(_item) === key)) {
-                        _selectionItems.current = [..._selectionItems.current, item];
-                      }
-                    } else {
-                      _selectionItems.current = _selectionItems.current.filter((_item) => trackBy?.(_item) !== key);
-                    }
-
-                    selections(_selectionItems.current);
-                    setTriggerForRender((prev) => !prev);
-                  }}
-                />
-              </td>
-            )}
-
-            {isHasSubitems && _subrowButton ? (
-              <td>
-                {item[_subrowSelector as keyof typeof item] && (
-                  <div className="subitem-open-button-wrapper">
-                    <span
-                      className={`subitem-open-button ${(showSubitems[index] && "opened") ?? ""}`}
-                      onClick={() => {
-                        setShowSubitems((prev) => ({
-                          ...prev,
-                          [`${index}`]: !prev[`${index}`],
-                        }));
-                      }}
-                    />
-                  </div>
-                )}
-              </td>
-            ) : isHasSubitems && _subrowButton ? (
-              <td style={{ width: 0, minWidth: 0 }}></td>
-            ) : null}
-
-            {columns.map((c, cIndex) => {
-              return renderCell(
-                item,
-                c,
-                cIndex,
-                index,
-                deph * (config.isTreeView ? 1.75 : 0),
-                0,
-                rowHeights[index] ?? 0,
-              );
-            })}
-          </tr>
-
-          {/* Alt satırları burada listele */}
-          {showSubitems[index] && item[_subrowSelector as keyof typeof item] && (
-            <SubitemList
-              items={item[_subrowSelector as keyof typeof item] as T[]}
-              columns={columns}
-              index={index}
-              depth={1.5}
-            />
-          )}
-        </Fragment>
-      );
-    };
-
-    const renderCell = (
-      item: T,
-      c: TableColumnType<T>,
-      cIndex: number,
-      index: number,
-      depth: number,
-      level: number,
-      height: number = 0,
-      isSubrows: boolean = false,
-    ) => {
-      let render: any;
-
-      // `c.key` bir string ise
-      if (typeof c.key !== "object") {
-        render = c.render ? c.render(item) : item[c.key as keyof T];
-      }
-      // `c.key` bir nesne ise ve `nestedKey` mevcutsa
-      else if (typeof c.key === "object") {
-        const _item = item[c.key.field as keyof T];
-
-        if (_item && typeof _item === "object") {
-          render = c.render ? c.render(item) : _item[c.key.nestedKey as keyof typeof _item];
-        }
-      } else {
-        // Diğer durumlarda `null` döndür
-        render = null;
-      }
-
-      const _className: string[] = [];
-
-      if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
-      if (c.config?.alignContent) _className.push(`align-content-${c.config.alignContent}`);
-      if (c.config?.textWrap) _className.push(`text-${c.config.textWrap}`);
-
-      return (
-        <td
-          key={`cell-${index}-${cIndex}`}
-          className={_className.join(" ")}
-          style={{
-            ...(c.config?.sticky ? { height } : {}),
-            ...(c.config?.width ? { width: c.config.width, minWidth: c.config.width, maxWidth: c.config.width } : {}),
-          }}
-          data-sticky-position={c.config?.sticky}
-        >
-          <div style={{ paddingLeft: `${depth == 0 ? 1 : depth}rem` }} className="table-cell">
-            {config.isTreeView && cIndex === 0 && (
-              <>
-                {isSubrows &&
-                  Array.from({ length: level }).map((_, i) => {
-                    if (i > 0) i *= 1.655;
-
-                    return (
-                      <div key={`last-before-${i}`} style={{ left: `${i + 0.65}rem` }} className="last-before"></div>
-                    );
-                  })}
-                <div className="before"></div>
-              </>
-            )}
-            {React.isValidElement(render) ? (
-              render
-            ) : c.editable && onEditable ? (
-              <Editable
-                c={c}
-                item={item}
-                trackByValue={trackBy?.(item) ?? ""}
-                onEditable={onEditable}
-                validation={config.validation}
-              />
-            ) : (
-              render
-            )}
-            {config.isTreeView && cIndex === 0 && (
-              <div className="after">
-                <div className="circle"></div>
-              </div>
-            )}
-          </div>
-        </td>
-      );
-    };
-
-    const SubitemList = ({ items, columns, index, depth, level = 1 }: any) => {
-      if (config.subrow?.render) {
-        return (
-          <tr className={`subrow-item ${_subrowButton ? "type-b" : "type-a"}`} data-level={level}>
-            {_subrowButton && <td style={{ ...config.subrow.render.styles, width: 0, minWidth: 0 }}></td>}
-
-            <td
-              colSpan={columns.length || 1}
-              style={{ ...config.subrow.render.styles, padding: "7.5px 7.5px 7.5px 0" }}
-            >
-              {config.subrow?.render.element(items) ?? <></>}
-            </td>
-          </tr>
-        );
-      }
-
-      return items.map((subitem: T, subindex: number) => {
-        const _subitem = subitem[_subrowSelector as keyof typeof subitem];
-        const isHasSubitems = _subrowSelector in subitem;
-
-        return (
-          <Fragment key={`subitem-${index}-${subindex}-${Math.random()}`}>
-            <tr className={`subrow-item ${_subrowButton ? "type-b" : "type-a"}`} data-level={level}>
-              {isHasSubitems && _subrowButton ? (
-                <td>
-                  <div className="subitem-open-button-wrapper">
-                    <span
-                      className={`${(showSubitems[`${index}.${subindex}`] && "opened") ?? ""} ${
-                        !_subitem && "passive"
-                      }`}
-                      onClick={() => {
-                        if (!_subitem) return;
-
-                        setShowSubitems((prev) => ({
-                          ...prev,
-                          [`${index}.${subindex}`]: !prev[`${index}.${subindex}`],
-                        }));
-                      }}
-                    />
-                  </div>
-                </td>
-              ) : !isHasSubitems && _subrowButton ? (
-                <td style={{ width: 0, minWidth: 0 }}></td>
-              ) : null}
-
-              {!config.subrow?.render ? (
-                columns.map((c: TableColumnType<T>, cIndex: number) =>
-                  renderCell(subitem, c, cIndex, subindex, depth * (config.isTreeView ? 2.25 : 1.75), level, 0, true),
-                )
-              ) : (
-                <td colSpan={columns.length || 1}>{config.subrow?.render.element(items) ?? <></>}</td>
-              )}
-            </tr>
-
-            {showSubitems[`${index}.${subindex}`] && _subitem && (
-              <SubitemList
-                items={_subitem as T[]}
-                columns={columns}
-                index={subindex}
-                depth={depth + 0.75}
-                level={level + 1}
-              />
-            )}
-          </Fragment>
-        );
-      });
-    };
-
-    const renderTBody = useMemo(() => {
-      return getData.length > 0 ? (
-        getData.map((item, index) => <React.Fragment key={index}>{renderRow(item, index, 1)}</React.Fragment>)
-      ) : (
-        <tr>
-          <td colSpan={columns.length || 1}>
-            <div className="no-item">
-              <ARIcon
-                icon={"Inbox-Fill"}
-                fill="var(--gray-300)"
-                size={64}
-                style={{ position: "relative", zIndex: 1 }}
-              />
-              <span>No Data</span>
-            </div>
-          </td>
-        </tr>
-      );
-    }, [getData, columns, showSubitems, rowHeights]);
-
     // useEffects
     useEffect(() => {
       if (!previousSelections || previousSelections.length === 0) {
@@ -1011,12 +738,7 @@ const Table = forwardRef(
       };
     }, [data]);
 
-    useLayoutEffect(() => {
-      const heights = _tBodyTR.current.map((el) => (el ? el.getBoundingClientRect().height : 0));
-
-      setTimeout(() => handleScroll(), 0);
-      setRowHeights(heights);
-    }, [data]);
+    useLayoutEffect(() => handleScroll(), [data]);
 
     useLayoutEffect(() => {
       if (!pagination?.currentPage) return;
@@ -1043,138 +765,7 @@ const Table = forwardRef(
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
         {(title || description || actions || React.Children.count(children) > 0) && (
-          <div className="header">
-            <div className="title">
-              <h4>{title}</h4>
-              {description && <h5>{description}</h5>}
-            </div>
-
-            <div className="actions">
-              {actions && (
-                <>
-                  {actions.import && (
-                    <Popover
-                      title={actions.import.title ?? "İçeri Aktar"}
-                      message={
-                        actions.import.message ??
-                        "Seçtiğiniz dosyaları uygulamaya yükleyebilirsiniz. Bu işlem, dosyalardaki verileri sistemimize aktarır ve verilerle işlem yapmanıza olanak tanır."
-                      }
-                      content={
-                        <>
-                          <Row>
-                            <Column size={12}>{actions.import.prefixItem}</Column>
-                          </Row>
-
-                          <Row>
-                            <Column size={12}>
-                              <Upload
-                                text={actions.import.buttonText ?? "Belge Yükleyin"}
-                                allowedTypes={actions.import.allowedTypes}
-                                files={files}
-                                onChange={(formData, files, base64) => {
-                                  setFormData(formData);
-                                  setFiles(files);
-                                  setBase64(base64);
-                                }}
-                                size="small"
-                                fullWidth
-                                // multiple
-                              />
-                            </Column>
-                          </Row>
-
-                          {actions.import.suffixItem}
-                        </>
-                      }
-                      onConfirm={(confirm) => {
-                        if (!confirm) {
-                          setFiles([]);
-
-                          return;
-                        }
-
-                        if (actions.import && actions.import.onClick) actions.import.onClick(formData, files, base64);
-                      }}
-                      config={{ buttons: { okay: "Yükle", cancel: "İptal" } }}
-                      windowBlur
-                    >
-                      <Tooltip text={actions.import.tooltip}>
-                        <Button
-                          variant="outlined"
-                          color="purple"
-                          icon={{ element: <ARIcon icon="Upload" fill="currentcolor" /> }}
-                        />
-                      </Tooltip>
-                    </Popover>
-                  )}
-
-                  {actions.export && (
-                    <Popover
-                      title={actions.export.title ?? "Dışarı Aktar"}
-                      message={
-                        actions.export.message ??
-                        "Seçtiğiniz verileri bilgisayarınıza indirebilirsiniz. Bu işlem, sistemimizdeki verileri dosya olarak dışa aktarır ve verileri harici olarak kullanmanıza olanak tanır."
-                      }
-                      content={actions.export.content}
-                      onConfirm={(confirm) => {
-                        if (!confirm) {
-                          setFiles([]);
-
-                          return;
-                        }
-
-                        if (actions.export && actions.export.onClick) actions.export.onClick();
-                      }}
-                      config={{ buttons: { okay: "Dışarı Aktar", cancel: "İptal" } }}
-                      windowBlur
-                    >
-                      <Tooltip text={actions.export.tooltip}>
-                        <Button
-                          variant="outlined"
-                          color="blue"
-                          icon={{ element: <ARIcon icon="Download" fill="currentcolor" /> }}
-                        />
-                      </Tooltip>
-                    </Popover>
-                  )}
-
-                  {actions.create && (
-                    <Tooltip text={actions.create.tooltip}>
-                      <Button
-                        variant="outlined"
-                        color="green"
-                        icon={{ element: <ARIcon icon="Add" size={24} /> }}
-                        onClick={actions.create.onClick}
-                      />
-                    </Tooltip>
-                  )}
-
-                  {actions.delete && (
-                    <Popover
-                      title={actions.delete.title ?? "Siliniyor"}
-                      message={
-                        actions.delete.message ??
-                        "Seçtiğiniz verileri uygulamadan silebilirsiniz. Bu işlem, verilerin sistemimizden tamamen kaldırılmasını sağlar ve bu verilerle artık işlem yapılamaz."
-                      }
-                      onConfirm={(confirm) => {
-                        if (!confirm) return;
-
-                        if (actions.delete && actions.delete.onClick) actions.delete.onClick();
-                      }}
-                    >
-                      <Tooltip text={actions.delete.tooltip}>
-                        <Button
-                          variant="outlined"
-                          color="red"
-                          icon={{ element: <ARIcon icon="Trash-Fill" fill="currentcolor" /> }}
-                        />
-                      </Tooltip>
-                    </Popover>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
+          <Header title={title} description={description} actions={actions} />
         )}
 
         <div ref={_tableContent} className="content" onScroll={handleScroll}>
@@ -1311,12 +902,28 @@ const Table = forwardRef(
               )}
             </thead>
 
-            <tbody ref={_tBody}>{renderTBody}</tbody>
+            <tbody ref={_tBody}>
+              <TBody
+                data={getData}
+                columns={columns}
+                states={{ showSubitems: { get: showSubitems, set: setShowSubitems } }}
+                methods={{
+                  trackBy: trackBy,
+                  selections: selections,
+                  onDnD: onDnD,
+                  onEditable: onEditable,
+                  rowBackgroundColor: rowBackgroundColor,
+                }}
+                config={config}
+              />
+            </tbody>
           </table>
         </div>
 
         <FilterPopup
-          open={{ get: openFilter, set: setOpenFilter }}
+          states={{
+            open: { get: openFilter, set: setOpenFilter },
+          }}
           tableContent={_tableContent}
           coordinate={filterButtonCoordinate}
           buttons={_filterButton}
@@ -1325,8 +932,10 @@ const Table = forwardRef(
         </FilterPopup>
 
         <PropertiesPopup
-          open={{ get: openProperties, set: setOpenProperties }}
-          sort={{ get: sortConfig, set: setSortConfig, currentColumn: sortCurrentColumn }}
+          states={{
+            open: { get: openProperties, set: setOpenProperties },
+            sort: { get: sortConfig, set: setSortConfig, currentColumn: sortCurrentColumn },
+          }}
           tableContent={_tableContent}
           coordinate={propertiesButtonCoordinate}
           buttons={_propertiesButton}

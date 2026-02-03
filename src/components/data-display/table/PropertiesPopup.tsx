@@ -17,18 +17,21 @@ import { ExtractKey } from "./Helpers";
 import { Sort } from "./IProps";
 
 interface IProps<T> {
-  open: { get: boolean; set: Dispatch<SetStateAction<boolean>> };
-  sort: {
-    get: Sort<T>[];
-    set: Dispatch<SetStateAction<Sort<T>[]>>;
-    currentColumn: TableColumnType<T> | null;
+  states: {
+    open: { get: boolean; set: Dispatch<SetStateAction<boolean>> };
+    sort: {
+      get: Sort<T>[];
+      set: Dispatch<SetStateAction<Sort<T>[]>>;
+      currentColumn: TableColumnType<T> | null;
+    };
   };
+
   tableContent: MutableRefObject<HTMLDivElement | null>;
   coordinate: { x: number; y: number };
   buttons: MutableRefObject<(HTMLSpanElement | null)[]>;
 }
 
-function PropertiesPopup<T extends object>({ open, sort, tableContent, coordinate, buttons }: IProps<T>) {
+function PropertiesPopup<T extends object>({ states, tableContent, coordinate, buttons }: IProps<T>) {
   // refs
   const _arTablePropertiesPopup = useRef<HTMLDivElement>(null);
 
@@ -47,7 +50,7 @@ function PropertiesPopup<T extends object>({ open, sort, tableContent, coordinat
     return (columnKey: keyof T | null, direction: "asc" | "desc") => {
       if (!columnKey) return;
 
-      sort.set((prev) => {
+      states.sort.set((prev) => {
         const index = prev.findIndex((s) => s.key === columnKey);
 
         if (index !== -1) return [{ key: columnKey, direction }];
@@ -60,12 +63,12 @@ function PropertiesPopup<T extends object>({ open, sort, tableContent, coordinat
   const handleKeys = (event: KeyboardEvent) => {
     const key = event.key;
 
-    if (key === "Escape") open.set(false);
+    if (key === "Escape") states.open.set(false);
   };
 
-  const handleOpen = () => open.set(true);
+  const handleOpen = () => states.open.set(true);
 
-  const handleClose = () => open.set(false);
+  const handleClose = () => states.open.set(false);
 
   // useEffects
   useEffect(() => {
@@ -107,11 +110,11 @@ function PropertiesPopup<T extends object>({ open, sort, tableContent, coordinat
     };
   }, []);
 
-  const currentKey = ExtractKey(sort.currentColumn?.key);
-  const currentSort = sort.get?.find((s) => s.key === currentKey);
+  const currentKey = ExtractKey(states.sort.currentColumn?.key);
+  const currentSort = states.sort.get?.find((s) => s.key === currentKey);
 
   return (
-    open.get &&
+    states.open.get &&
     ReactDOM.createPortal(
       <div
         ref={_arTablePropertiesPopup}
@@ -143,8 +146,8 @@ function PropertiesPopup<T extends object>({ open, sort, tableContent, coordinat
           {currentSort && currentSort.direction && (
             <li
               onClick={() => {
-                sort.set((prev) => prev.filter((s) => s.key !== currentKey));
-                open.set(false);
+                states.sort.set((prev) => prev.filter((s) => s.key !== currentKey));
+                states.open.set(false);
               }}
             >
               <span>
