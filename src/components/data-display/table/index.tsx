@@ -512,7 +512,7 @@ const Table = forwardRef(
       }
 
       // Sorting...
-      if (sortConfig.length > 0) {
+      if (sortConfig.length > 0 && !config.isServerSide) {
         _data.sort((a, b) => {
           for (const config of sortConfig) {
             const aValue = a[config.key];
