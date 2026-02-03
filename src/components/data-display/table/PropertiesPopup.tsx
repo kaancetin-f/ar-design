@@ -1,6 +1,15 @@
 "use client";
 
-import React, { Dispatch, memo, MutableRefObject, SetStateAction, useEffect, useMemo, useRef } from "react";
+import React, {
+  Dispatch,
+  memo,
+  MutableRefObject,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
 import ReactDOM from "react-dom";
 import { ARIcon } from "../../icons";
 import { TableColumnType } from "../../../libs/types";
@@ -24,15 +33,15 @@ function PropertiesPopup<T extends object>({ open, sort, tableContent, coordinat
   const _arTablePropertiesPopup = useRef<HTMLDivElement>(null);
 
   // methods
-  // const handleClickOutSide = useCallback(() => {
-  //   (event: MouseEvent) => {
-  //     const target = event.target as HTMLElement;
-  //     const clickedInsidePopup = _arTablePropertiesPopup.current && _arTablePropertiesPopup.current.contains(target);
-  //     const isOneOfButtons = buttons.current.some((button) => button === target || button?.contains(target));
+  const handleClickOutSide = useCallback(() => {
+    (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const clickedInsidePopup = _arTablePropertiesPopup.current && _arTablePropertiesPopup.current.contains(target);
+      const isOneOfButtons = buttons.current.some((button) => button === target || button?.contains(target));
 
-  //     if (!clickedInsidePopup && !isOneOfButtons) handleClose();
-  //   };
-  // }, []);
+      if (!clickedInsidePopup && !isOneOfButtons) handleClose();
+    };
+  }, []);
 
   const handleSort = useMemo(() => {
     return (columnKey: keyof T | null, direction: "asc" | "desc") => {
@@ -85,11 +94,11 @@ function PropertiesPopup<T extends object>({ open, sort, tableContent, coordinat
       tableContent.current.addEventListener("scroll", handleClose);
     }
 
-    // document.addEventListener("click", handleClickOutSide);
+    document.addEventListener("click", handleClickOutSide);
     document.addEventListener("keydown", handleKeys);
 
     return () => {
-      // document.removeEventListener("click", handleClickOutSide);
+      document.removeEventListener("click", handleClickOutSide);
       document.removeEventListener("keydown", handleKeys);
 
       if (tableContent.current) {

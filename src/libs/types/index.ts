@@ -81,6 +81,7 @@ export type TableColumnType<T> = {
     alignContent?: "left" | "center" | "right";
     sticky?: "left" | "right";
     textWrap?: "wrap" | "nowrap";
+    isProperties?: boolean;
   };
 };
 export type HTMLTableElementWithCustomAttributes = {

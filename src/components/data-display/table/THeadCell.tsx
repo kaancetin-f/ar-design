@@ -31,6 +31,7 @@ const MemoizedTHeadCell = function <T>({
   return (
     <>
       {columns.map((c, cIndex) => {
+        const { isProperties = true } = c.config ?? {};
         const _direction = sort.get.find((s) => s.key === c.key)?.direction;
         let _className: string[] = [];
 
@@ -67,41 +68,43 @@ const MemoizedTHeadCell = function <T>({
                 {c.title}
               </span>
 
-              <span
-                ref={(element) => (propertiesButton.current[cIndex] = element)}
-                className="properties-field"
-                onClick={(event) => {
-                  event.stopPropagation();
+              {isProperties && (
+                <span
+                  ref={(element) => (propertiesButton.current[cIndex] = element)}
+                  className="properties-field"
+                  onClick={(event) => {
+                    event.stopPropagation();
 
-                  const rect = event.currentTarget.getBoundingClientRect();
-                  const screenCenterX = window.innerWidth / 2;
-                  const coordinateX = rect.x > screenCenterX ? rect.x + rect.width - 225 : rect.x;
-                  const coordinateY = rect.y + rect.height;
+                    const rect = event.currentTarget.getBoundingClientRect();
+                    const screenCenterX = window.innerWidth / 2;
+                    const coordinateX = rect.x > screenCenterX ? rect.x + rect.width - 225 : rect.x;
+                    const coordinateY = rect.y + rect.height;
 
-                  setSortCurrentColumn(c);
-                  setPropertiesButtonCoordinate({
-                    x: coordinateX,
-                    y: coordinateY,
-                  });
+                    setSortCurrentColumn(c);
+                    setPropertiesButtonCoordinate({
+                      x: coordinateX,
+                      y: coordinateY,
+                    });
 
-                  sort.set((prev) => {
-                    const key = ExtractKey(c.key) as keyof T;
-                    const index = prev.findIndex((s) => s.key === key);
+                    sort.set((prev) => {
+                      const key = ExtractKey(c.key) as keyof T;
+                      const index = prev.findIndex((s) => s.key === key);
 
-                    if (index === -1) return [...prev, { key, direction: null }];
+                      if (index === -1) return [...prev, { key, direction: null }];
 
-                    return prev;
-                  });
-                  open.set(true);
-                }}
-              >
-                <Button
-                  variant="borderless"
-                  icon={{
-                    element: <ARIcon size={16} icon="ThreeDotsVertical" fill="var(--dark)" strokeWidth={0} />,
+                      return prev;
+                    });
+                    open.set(true);
                   }}
-                />
-              </span>
+                >
+                  <Button
+                    variant="borderless"
+                    icon={{
+                      element: <ARIcon size={16} icon="ThreeDotsVertical" fill="var(--dark)" strokeWidth={0} />,
+                    }}
+                  />
+                </span>
+              )}
             </div>
           </th>
         );
