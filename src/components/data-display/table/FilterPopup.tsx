@@ -4,16 +4,18 @@ import React, { Dispatch, MutableRefObject, ReactNode, SetStateAction, useEffect
 import ReactDOM from "react-dom";
 
 interface IProps {
-  children: ReactNode;
+  refs: {
+    tableContent: MutableRefObject<HTMLDivElement | null>;
+    buttons: MutableRefObject<(HTMLSpanElement | null)[]>;
+  };
   states: {
     open: { get: boolean; set: Dispatch<SetStateAction<boolean>> };
   };
-  tableContent: MutableRefObject<HTMLDivElement | null>;
+  children: ReactNode;
   coordinate: { x: number; y: number };
-  buttons: MutableRefObject<(HTMLSpanElement | null)[]>;
 }
 
-const FilterPopup = ({ children, states, tableContent, coordinate, buttons }: IProps) => {
+const FilterPopup = ({ children, refs, states, coordinate }: IProps) => {
   // refs
   const _arTableFilterPopup = useRef<HTMLDivElement>(null);
 
@@ -21,7 +23,7 @@ const FilterPopup = ({ children, states, tableContent, coordinate, buttons }: IP
   const handleClickOutSide = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
     const clickedInsidePopup = _arTableFilterPopup.current && _arTableFilterPopup.current.contains(target);
-    const isOneOfButtons = buttons.current.some((button) => button === target || button?.contains(target));
+    const isOneOfButtons = refs.buttons.current.some((button) => button === target || button?.contains(target));
 
     if (!clickedInsidePopup && !isOneOfButtons) handleClose();
   };
@@ -38,19 +40,19 @@ const FilterPopup = ({ children, states, tableContent, coordinate, buttons }: IP
 
   // useEffects
   useEffect(() => {
-    buttons.current.map((button) => {
+    refs.buttons.current.map((button) => {
       if (button) button.addEventListener("click", handleOpen);
     });
 
     return () => {
-      buttons.current.map((button) => {
+      refs.buttons.current.map((button) => {
         if (button) button.removeEventListener("click", handleOpen);
       });
     };
-  }, [buttons]);
+  }, [refs.buttons]);
 
   useEffect(() => {
-    const firstFilterButton = buttons.current[0];
+    const firstFilterButton = refs.buttons.current[0];
 
     if (firstFilterButton) {
       const rect = firstFilterButton.getBoundingClientRect();
@@ -59,8 +61,8 @@ const FilterPopup = ({ children, states, tableContent, coordinate, buttons }: IP
       coordinate.y = rect.top + rect.height;
     }
 
-    if (tableContent.current) {
-      tableContent.current.addEventListener("scroll", handleClose);
+    if (refs.tableContent.current) {
+      refs.tableContent.current.addEventListener("scroll", handleClose);
     }
 
     document.addEventListener("click", handleClickOutSide);
@@ -70,8 +72,8 @@ const FilterPopup = ({ children, states, tableContent, coordinate, buttons }: IP
       document.removeEventListener("click", handleClickOutSide);
       document.removeEventListener("keydown", handleKeys);
 
-      if (tableContent.current) {
-        tableContent.current.removeEventListener("scroll", handleClose);
+      if (refs.tableContent.current) {
+        refs.tableContent.current.removeEventListener("scroll", handleClose);
       }
     };
   }, []);

@@ -17,6 +17,10 @@ import { ExtractKey } from "./Helpers";
 import { Sort } from "./IProps";
 
 interface IProps<T> {
+  refs: {
+    tableContent: MutableRefObject<HTMLDivElement | null>;
+    buttons: MutableRefObject<(HTMLSpanElement | null)[]>;
+  };
   states: {
     open: { get: boolean; set: Dispatch<SetStateAction<boolean>> };
     sort: {
@@ -25,13 +29,10 @@ interface IProps<T> {
       currentColumn: TableColumnType<T> | null;
     };
   };
-
-  tableContent: MutableRefObject<HTMLDivElement | null>;
   coordinate: { x: number; y: number };
-  buttons: MutableRefObject<(HTMLSpanElement | null)[]>;
 }
 
-function PropertiesPopup<T extends object>({ states, tableContent, coordinate, buttons }: IProps<T>) {
+function PropertiesPopup<T extends object>({ refs, states, coordinate }: IProps<T>) {
   // refs
   const _arTablePropertiesPopup = useRef<HTMLDivElement>(null);
 
@@ -40,7 +41,7 @@ function PropertiesPopup<T extends object>({ states, tableContent, coordinate, b
     (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       const clickedInsidePopup = _arTablePropertiesPopup.current && _arTablePropertiesPopup.current.contains(target);
-      const isOneOfButtons = buttons.current.some((button) => button === target || button?.contains(target));
+      const isOneOfButtons = refs.buttons.current.some((button) => button === target || button?.contains(target));
 
       if (!clickedInsidePopup && !isOneOfButtons) handleClose();
     };
@@ -72,19 +73,19 @@ function PropertiesPopup<T extends object>({ states, tableContent, coordinate, b
 
   // useEffects
   useEffect(() => {
-    buttons.current.map((button) => {
+    refs.buttons.current.map((button) => {
       if (button) button.addEventListener("click", handleOpen);
     });
 
     return () => {
-      buttons.current.map((button) => {
+      refs.buttons.current.map((button) => {
         if (button) button.removeEventListener("click", handleOpen);
       });
     };
-  }, [buttons]);
+  }, [refs.buttons]);
 
   useEffect(() => {
-    const firstFilterButton = buttons.current[0];
+    const firstFilterButton = refs.buttons.current[0];
 
     if (firstFilterButton) {
       const rect = firstFilterButton.getBoundingClientRect();
@@ -93,8 +94,8 @@ function PropertiesPopup<T extends object>({ states, tableContent, coordinate, b
       coordinate.y = rect.top + rect.height;
     }
 
-    if (tableContent.current) {
-      tableContent.current.addEventListener("scroll", handleClose);
+    if (refs.tableContent.current) {
+      refs.tableContent.current.addEventListener("scroll", handleClose);
     }
 
     document.addEventListener("click", handleClickOutSide);
@@ -104,8 +105,8 @@ function PropertiesPopup<T extends object>({ states, tableContent, coordinate, b
       document.removeEventListener("click", handleClickOutSide);
       document.removeEventListener("keydown", handleKeys);
 
-      if (tableContent.current) {
-        tableContent.current.removeEventListener("scroll", handleClose);
+      if (refs.tableContent.current) {
+        refs.tableContent.current.removeEventListener("scroll", handleClose);
       }
     };
   }, []);

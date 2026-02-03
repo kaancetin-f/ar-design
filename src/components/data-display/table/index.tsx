@@ -921,24 +921,28 @@ const Table = forwardRef(
         </div>
 
         <FilterPopup
+          refs={{
+            tableContent: _tableContent,
+            buttons: _filterButton,
+          }}
           states={{
             open: { get: openFilter, set: setOpenFilter },
           }}
-          tableContent={_tableContent}
           coordinate={filterButtonCoordinate}
-          buttons={_filterButton}
         >
           {filterPopupContent}
         </FilterPopup>
 
         <PropertiesPopup
+          refs={{
+            tableContent: _tableContent,
+            buttons: _propertiesButton,
+          }}
           states={{
             open: { get: openProperties, set: setOpenProperties },
             sort: { get: sortConfig, set: setSortConfig, currentColumn: sortCurrentColumn },
           }}
-          tableContent={_tableContent}
           coordinate={propertiesButtonCoordinate}
-          buttons={_propertiesButton}
         />
 
         {pagination && (
