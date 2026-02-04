@@ -16,7 +16,7 @@ interface IProps {
 
 const List = ({
   type,
-  direction,
+  direction = "row",
   selectedFiles,
   validationErrors = [],
   handleFileToBase64,

@@ -29,6 +29,7 @@ export type SearchedParam = { [key: string]: FilterValue | FilterValue[] };
 
 export type Config<T> = {
   isServerSide?: boolean;
+  isProperties?: boolean;
   isSearchable?: boolean;
   scroll?: {
     maxHeight: number;

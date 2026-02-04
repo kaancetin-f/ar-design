@@ -798,12 +798,17 @@ const Table = forwardRef(
                 )}
 
                 <THeadCell
-                  open={{ get: openProperties, set: setOpenProperties }}
-                  sort={{ get: sortConfig, set: setSortConfig }}
+                  refs={{
+                    propertiesButton: _propertiesButton,
+                  }}
+                  states={{
+                    open: { get: openProperties, set: setOpenProperties },
+                    sort: { get: sortConfig, set: setSortConfig },
+                    sortCurrentColumn: { set: setSortCurrentColumn },
+                    propertiesButtonCoordinate: { set: setPropertiesButtonCoordinate },
+                  }}
                   columns={columns}
-                  propertiesButton={_propertiesButton}
-                  setSortCurrentColumn={setSortCurrentColumn}
-                  setPropertiesButtonCoordinate={setPropertiesButtonCoordinate}
+                  config={config}
                 />
               </tr>
 
@@ -933,17 +938,19 @@ const Table = forwardRef(
           {filterPopupContent}
         </FilterPopup>
 
-        <PropertiesPopup
-          refs={{
-            tableContent: _tableContent,
-            buttons: _propertiesButton,
-          }}
-          states={{
-            open: { get: openProperties, set: setOpenProperties },
-            sort: { get: sortConfig, set: setSortConfig, currentColumn: sortCurrentColumn },
-          }}
-          coordinate={propertiesButtonCoordinate}
-        />
+        {config.isProperties && (
+          <PropertiesPopup
+            refs={{
+              tableContent: _tableContent,
+              buttons: _propertiesButton,
+            }}
+            states={{
+              open: { get: openProperties, set: setOpenProperties },
+              sort: { get: sortConfig, set: setSortConfig, currentColumn: sortCurrentColumn },
+            }}
+            coordinate={propertiesButtonCoordinate}
+          />
+        )}
 
         {pagination && (
           <div className="footer">

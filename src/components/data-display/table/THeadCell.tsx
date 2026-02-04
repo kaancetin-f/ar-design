@@ -3,36 +3,43 @@ import { TableColumnType } from "../../../libs/types";
 import Button from "../../form/button";
 import { ARIcon } from "../../icons";
 import { ExtractKey } from "./Helpers";
-import { Sort } from "./IProps";
+import { Config, Sort } from "./IProps";
 
 const MemoizedTHeadCell = function <T>({
-  open,
-  sort,
+  refs,
+  states,
   columns,
-  propertiesButton,
-  setSortCurrentColumn,
-  setPropertiesButtonCoordinate,
+  config,
 }: {
-  open: { get: boolean; set: Dispatch<SetStateAction<boolean>> };
-  sort: {
-    get: Sort<T>[];
-    set: Dispatch<SetStateAction<Sort<T>[]>>;
+  refs: {
+    propertiesButton: React.MutableRefObject<(HTMLSpanElement | null)[]>;
+  };
+  states: {
+    open: { get: boolean; set: Dispatch<SetStateAction<boolean>> };
+    sort: {
+      get: Sort<T>[];
+      set: Dispatch<SetStateAction<Sort<T>[]>>;
+    };
+    sortCurrentColumn: {
+      set: React.Dispatch<React.SetStateAction<TableColumnType<T> | null>>;
+    };
+    propertiesButtonCoordinate: {
+      set: React.Dispatch<
+        React.SetStateAction<{
+          x: number;
+          y: number;
+        }>
+      >;
+    };
   };
   columns: TableColumnType<T>[];
-  propertiesButton: React.MutableRefObject<(HTMLSpanElement | null)[]>;
-  setSortCurrentColumn: React.Dispatch<React.SetStateAction<TableColumnType<T> | null>>;
-  setPropertiesButtonCoordinate: React.Dispatch<
-    React.SetStateAction<{
-      x: number;
-      y: number;
-    }>
-  >;
+  config: Config<T>;
 }) {
   return (
     <>
       {columns.map((c, cIndex) => {
         const { isProperties = true } = c.config ?? {};
-        const _direction = sort.get.find((s) => s.key === c.key)?.direction;
+        const _direction = states.sort.get.find((s) => s.key === c.key)?.direction;
         let _className: string[] = [];
 
         if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
@@ -68,9 +75,9 @@ const MemoizedTHeadCell = function <T>({
                 {c.title}
               </span>
 
-              {isProperties && (
+              {config.isProperties && isProperties && (
                 <span
-                  ref={(element) => (propertiesButton.current[cIndex] = element)}
+                  ref={(element) => (refs.propertiesButton.current[cIndex] = element)}
                   className="properties-field"
                   onClick={(event) => {
                     event.stopPropagation();
@@ -80,13 +87,13 @@ const MemoizedTHeadCell = function <T>({
                     const coordinateX = rect.x > screenCenterX ? rect.x + rect.width - 225 : rect.x;
                     const coordinateY = rect.y + rect.height;
 
-                    setSortCurrentColumn(c);
-                    setPropertiesButtonCoordinate({
+                    states.sortCurrentColumn.set(c);
+                    states.propertiesButtonCoordinate.set({
                       x: coordinateX,
                       y: coordinateY,
                     });
 
-                    sort.set((prev) => {
+                    states.sort.set((prev) => {
                       const key = ExtractKey(c.key) as keyof T;
                       const index = prev.findIndex((s) => s.key === key);
 
@@ -94,7 +101,7 @@ const MemoizedTHeadCell = function <T>({
 
                       return prev;
                     });
-                    open.set(true);
+                    states.open.set(true);
                   }}
                 >
                   <Button

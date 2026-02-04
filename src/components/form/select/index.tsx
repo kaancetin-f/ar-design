@@ -371,7 +371,11 @@ const Select: React.FC<Props> = ({
             <span
               ref={_placeholder}
               className={`placeholder ${value.length > 0 ? "visible" : "hidden"}`}
-              onClick={() => setOptionsOpen((prev) => !prev)}
+              onClick={() => {
+                onClick && onClick();
+
+                setOptionsOpen((prev) => !prev);
+              }}
             >
               {validation ? "* " : ""}
               {placeholder}
@@ -430,8 +434,10 @@ const Select: React.FC<Props> = ({
             onClick={(event) => {
               if (disabled) return;
 
+              onClick && onClick();
+
               event.stopPropagation();
-              setOptionsOpen((x) => !x);
+              setOptionsOpen((prev) => !prev);
             }}
           ></span>
         </div>

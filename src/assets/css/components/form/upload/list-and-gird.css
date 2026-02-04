@@ -11,23 +11,40 @@
     width: max-content !important;
   }
 
-  > ul.list {
+  > ul {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
 
     &.list {
       flex-direction: column;
-    }
 
-    &.column {
-      > li {
-        width: 100%;
+      &.row,
+      &.column {
+        margin: 0;
+
+        > li {
+          width: 100%;
+        }
       }
     }
 
     &.grid {
       flex-direction: row;
+
+      &.row {
+        margin: 0;
+
+        > li {
+          max-width: calc(100% / 4);
+        }
+      }
+
+      &.column {
+        > li {
+          width: 100%;
+        }
+      }
     }
 
     > li {
