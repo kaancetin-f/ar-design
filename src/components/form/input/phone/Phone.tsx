@@ -36,26 +36,29 @@ const Phone: React.FC<IProps> = ({
   // useEffects
   useEffect(() => {
     setValue(values.value);
-    setSelected(options.find((option) => option.value === values.option));
+    setSelected(options?.find((option) => option.value === values.option));
   }, [values]);
 
   return (
     <div className="ar-input-phone-wrapper">
-      <Select
-        style={{ width: 130 }}
-        variant="outlined"
-        color="light"
-        options={options}
-        value={selected}
-        onChange={(option) => {
-          onSelected(option);
-          setSelected(option);
-        }}
-      />
+      {options && (
+        <Select
+          style={{ width: 130 }}
+          variant="outlined"
+          color="light"
+          options={options}
+          value={selected}
+          onChange={(option) => {
+            onSelected?.(option);
+            setSelected(option);
+          }}
+        />
+      )}
 
       <Input
         ref={_input}
         {...attributes}
+        {...(!options ? { style: { borderRadius: "var(--border-radius-sm)" } } : {})}
         variant={variant}
         color={color}
         value={PHONE.FormatByMask(selected?.value as string, _value as string)}
