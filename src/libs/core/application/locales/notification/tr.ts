@@ -18,7 +18,7 @@ const NotificationTR: INotificationLocale = {
 
   // 204 No Content -> PUT Processes
   "Notification.204.Title": "İşlem Başarılı",
-  "Notification.204.Message": "Kayıtlı içerik güncellendi ancak herhangi bir veri döndürülmedi.",
+  "Notification.204.Message": "Kayıtlı içerik güncellendi.",
   "Notification.204.Delete.Title": "Kaldırma Başarılı",
   "Notification.204.Delete.Message": "Kaldırma işlemi başarılı.",
 

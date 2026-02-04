@@ -17,7 +17,7 @@ const NotificationEN: INotificationLocale = {
 
   // 204 No Content -> PUT Processes
   "Notification.204.Title": "Operation Successful",
-  "Notification.204.Message": "The content has been updated, but no data was returned.",
+  "Notification.204.Message": "The content has been updated.",
   "Notification.204.Delete.Title": "Removal Successful",
   "Notification.204.Delete.Message": "The removal process was successful.",
 
