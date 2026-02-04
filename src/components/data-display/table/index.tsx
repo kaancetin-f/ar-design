@@ -952,28 +952,28 @@ const Table = forwardRef(
           />
         )}
 
-        {pagination && (
-          <div className="footer">
-            <span>
-              {isMobile ? (
-                <>
-                  <strong>
-                    {(currentPage - 1) * selectedPerPage + 1} -{" "}
-                    {Math.min(currentPage * selectedPerPage, pagination.totalRecords || getData.length)} of{" "}
-                    {pagination.totalRecords || getData.length}
-                  </strong>
-                </>
-              ) : (
-                <>
-                  <strong>
-                    Showing {(currentPage - 1) * selectedPerPage + 1} to{" "}
-                    {Math.min(currentPage * selectedPerPage, pagination.totalRecords || getData.length)}
-                  </strong>{" "}
-                  <span>of {pagination.totalRecords || getData.length} agreements</span>
-                </>
-              )}
-            </span>
+        <div className="footer">
+          <span>
+            {isMobile ? (
+              <>
+                <strong>
+                  {(currentPage - 1) * selectedPerPage + 1} -{" "}
+                  {Math.min(currentPage * selectedPerPage, pagination?.totalRecords || getData.length)} of{" "}
+                  {pagination?.totalRecords || getData.length}
+                </strong>
+              </>
+            ) : (
+              <>
+                <strong>
+                  Showing {(currentPage - 1) * selectedPerPage + 1} to{" "}
+                  {Math.min(currentPage * selectedPerPage, pagination?.totalRecords || getData.length)}
+                </strong>{" "}
+                <span>of {pagination?.totalRecords || getData.length} agreements</span>
+              </>
+            )}
+          </span>
 
+          {pagination && (
             <Pagination
               totalRecords={config.isServerSide ? pagination.totalRecords : (totalRecords ?? 0)}
               currentPage={currentPage}
@@ -986,8 +986,8 @@ const Table = forwardRef(
                 setTimeout(() => handleScroll(), 0);
               }}
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     );
   },
