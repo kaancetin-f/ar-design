@@ -54,12 +54,6 @@
       column-gap: 0.5rem;
       margin-left: auto;
     }
-
-    > div {
-      &:last-child {
-        margin-left: auto;
-      }
-    }
   }
 
   > .footer {
