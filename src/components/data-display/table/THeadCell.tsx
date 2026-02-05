@@ -67,10 +67,12 @@ const MemoizedTHeadCell = function <T>({
           >
             <div>
               <span style={{ fontWeight: 500 }}>
-                <span>
-                  {_direction === "asc" && <ARIcon icon="ArrowUp" />}
-                  {_direction === "desc" && <ARIcon icon="ArrowDown" />}
-                </span>
+                {(_direction === "asc" || _direction === "desc") && (
+                  <span>
+                    {_direction === "asc" && <ARIcon icon="ArrowUp" />}
+                    {_direction === "desc" && <ARIcon icon="ArrowDown" />}
+                  </span>
+                )}
 
                 {c.title}
               </span>

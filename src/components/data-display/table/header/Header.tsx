@@ -16,7 +16,7 @@ const Header = ({ title, description, actions }: IProps) => {
         {description && <h5>{description}</h5>}
       </div>
 
-      <div className="actions">{actions && <ActionButtons actions={actions} />}</div>
+      {actions && <ActionButtons actions={actions} />}
     </div>
   );
 };

@@ -204,7 +204,7 @@ function TBody<T extends object>({ data, columns, methods, states, config }: IPr
               validation={config.validation}
             />
           ) : (
-            render
+            <span>{render}</span>
           )}
           {config.isTreeView && cIndex === 0 && (
             <div className="after">

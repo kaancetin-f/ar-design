@@ -156,6 +156,8 @@
               width: 100%;
 
               > span {
+                position: sticky;
+                left: 0.5rem;
                 display: flex;
                 align-items: center;
                 gap: 0.5rem;
@@ -376,6 +378,11 @@
                   height: 5px;
                   border-radius: var(--border-radius-pill);
                 }
+              }
+
+              > span {
+                position: sticky;
+                left: 0.5rem;
               }
             }
 
