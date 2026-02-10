@@ -6,6 +6,9 @@ import { KanbanBoardColumnType } from "../../../libs/types";
 import "../../../assets/css/components/data-display/kanban-board/styles.css";
 import DnD from "../dnd";
 import { ARIcon } from "../../icons";
+import Input from "../../form/input";
+import DateFilters from "./DateFilters";
+import SelectFilters from "./SelectFilters";
 
 const KanbanBoard = function <T, TColumnProperties>({
   trackBy,
@@ -22,6 +25,13 @@ const KanbanBoard = function <T, TColumnProperties>({
 
   // states
   const [data, setData] = useState<KanbanBoardColumnType<T, TColumnProperties>[]>([]);
+  // states -> Filters
+  const [search, setSearch] = useState<string>("");
+  const [selectFilters, setSelectFilters] = useState<{
+    [k: string]: (string | null)[];
+  }>({});
+  const [selectedFilters, setSelectedFilters] = useState<Record<string, Set<string | null>>>({});
+  const [dateFilters, setDateFilters] = useState<Record<string, { from: Date | null; to: Date | null }>>({});
 
   // methods
   const handleBoardDragOver = (event: React.DragEvent) => {
@@ -177,101 +187,228 @@ const KanbanBoard = function <T, TColumnProperties>({
   };
 
   // useEffects
-  useEffect(() => setData(columns), [columns]);
+  useEffect(() => {
+    const selectMap = new Map<string, Set<string | null>>();
+    const dateMap = new Map<string, true>();
+
+    columns.forEach((col) => {
+      col.items.forEach((item) => {
+        const keys = config?.filter?.keys(item);
+
+        keys?.forEach((k) => {
+          if (k.type === "select") {
+            if (!selectMap.has(k.name)) selectMap.set(k.name, new Set());
+
+            selectMap.get(k.name)!.add(k.key ?? null);
+          }
+
+          if (k.type === "date") dateMap.set(k.name, true);
+        });
+      });
+    });
+
+    // checkbox filtre seçenekleri
+    const nextSelectFilters = Object.fromEntries(
+      Array.from(selectMap.entries()).map(([name, set]) => [name, Array.from(set)]),
+    );
+
+    setSelectFilters(nextSelectFilters);
+
+    // date filtreler (sadece isim + boş range)
+    setDateFilters((prev) => {
+      const next = { ...prev };
+
+      Array.from(dateMap.keys()).forEach((name) => {
+        if (!next[name]) {
+          next[name] = { from: null, to: null };
+        }
+      });
+
+      return next;
+    });
+  }, [columns]);
+
+  useEffect(() => {
+    let nextData = columns.map((col) => ({
+      ...col,
+      items: [...col.items],
+    }));
+
+    // Search varsa...
+    if (config?.filter?.search && search?.trim()) {
+      const q = search.trim();
+
+      nextData = nextData.map((col) => ({
+        ...col,
+        items: col.items.filter((item) => config.filter!.search!(item, q)),
+      }));
+    }
+
+    // Select ve Date varsa...
+    nextData = nextData.map((col) => ({
+      ...col,
+      items: col.items.filter((item) => {
+        const keys = config?.filter?.keys(item) ?? [];
+
+        // Select (checkbox)
+        const selectOk = Object.entries(selectedFilters).every(([filterName, selectedSet]) => {
+          if (!selectedSet || selectedSet.size === 0) return true;
+
+          const value = keys.find((k) => k.name === filterName)?.key ?? null;
+
+          return selectedSet.has(value);
+        });
+
+        if (!selectOk) return false;
+
+        // Date (range)
+        const dateOk = Object.entries(dateFilters).every(([filterName, range]) => {
+          if (!range.from && !range.to) return true;
+
+          const raw = keys.find((k) => k.name === filterName)?.key;
+          if (!raw) return false;
+
+          const d = new Date(raw);
+          if (range.from && d < range.from) return false;
+          if (range.to && d > range.to) return false;
+
+          return true;
+        });
+
+        return dateOk;
+      }),
+    }));
+
+    setData(nextData);
+  }, [columns, search, selectedFilters, dateFilters]);
 
   return (
-    <div
-      ref={_kanbanWrapper}
-      className="ar-kanban-board"
-      style={{
-        height: `calc(100dvh - (${_kanbanWrapper.current?.getBoundingClientRect().top}px + ${config?.safeAreaOffset?.bottom ?? 0}px))`,
-      }}
-      onDragOver={handleBoardDragOver}
-      onDragEnd={stopScrolling}
-      onDrop={stopScrolling}
-    >
-      <div className="buttons">
-        <div
-          className="button left"
-          onMouseDown={() => handleStartScroll("left")}
-          onMouseUp={handleStopScroll}
-          onMouseLeave={handleStopScroll}
-        >
-          <ARIcon icon={"ArrowLeft"} />
-        </div>
-        <div
-          className="button right"
-          onMouseDown={() => handleStartScroll("right")}
-          onMouseUp={handleStopScroll}
-          onMouseLeave={handleStopScroll}
-        >
-          <ARIcon icon={"ArrowRight"} />
-        </div>
+    <>
+      <div className="filters">
+        <Input
+          variant="borderless"
+          placeholder="Filter by keyword"
+          onChange={(event) => setSearch(event.target.value.toLocaleLowerCase())}
+        />
+
+        <ul>
+          <DateFilters
+            states={{
+              dateFilters: {
+                get: dateFilters,
+                set: setDateFilters,
+              },
+            }}
+          />
+
+          <SelectFilters
+            states={{
+              selectFilters: {
+                get: selectFilters,
+                set: setSelectFilters,
+              },
+              selectedFilters: {
+                get: selectedFilters,
+                set: setSelectedFilters,
+              },
+            }}
+          />
+        </ul>
       </div>
 
-      <div className="titles">
-        {data.map((board, index) => (
-          <div key={index} className="title">
-            <h4>
-              <span
-                style={{
-                  backgroundColor: darkenColor(board.titleColor ?? "", 1),
-                  borderColor: darkenColor(board.titleColor ?? "", 1),
-                }}
-              ></span>
-              {board.title.toLocaleUpperCase("tr")}
-            </h4>
-            {board.description && <span>{board.description}</span>}
+      <div
+        ref={_kanbanWrapper}
+        className="ar-kanban-board"
+        style={{
+          height: `calc(100dvh - (${_kanbanWrapper.current?.getBoundingClientRect().top}px + ${config?.safeAreaOffset?.bottom ?? 0}px))`,
+        }}
+        onDragOver={handleBoardDragOver}
+        onDragEnd={stopScrolling}
+        onDrop={stopScrolling}
+      >
+        <div className="buttons">
+          <div
+            className="button left"
+            onMouseDown={() => handleStartScroll("left")}
+            onMouseUp={handleStopScroll}
+            onMouseLeave={handleStopScroll}
+          >
+            <ARIcon icon={"ArrowLeft"} />
           </div>
-        ))}
-      </div>
+          <div
+            className="button right"
+            onMouseDown={() => handleStartScroll("right")}
+            onMouseUp={handleStopScroll}
+            onMouseLeave={handleStopScroll}
+          >
+            <ARIcon icon={"ArrowRight"} />
+          </div>
+        </div>
 
-      <div className="columns">
-        {data.map((board, index) => (
-          <div key={index} className="column" onDrop={handleDrop(board.key)}>
-            <div
-              className="items"
-              onDragOver={handleItemsDragOver}
-              onDragLeave={handleItemsDragLeave}
-              onDrop={handleItemsDrop}
-            >
-              <DnD
-                key={board.key}
-                data={board.items}
-                renderItem={(item, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="item"
-                      onDragOver={(event) => {
-                        event.preventDefault();
-
-                        const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-                        const mouseY = event.clientY;
-                        const isBelow = mouseY > rect.top + rect.height / 2;
-
-                        _hoverItemIndex.current = isBelow ? index + 1 : index;
-                      }}
-                    >
-                      {board.renderItem(item, index)}
-                    </div>
-                  );
-                }}
-                columnKey={board.key}
-                confing={{ isMoveIcon: false }}
-                // onChange={(data) => {
-                //   const now = Date.now();
-
-                //   setBoardData((prev) =>
-                //     prev.map((col) => (col.key === board.key ? { ...col, items: data,  } : col))
-                //   );
-                // }}
-              />
+        <div className="titles">
+          {data.map((board, index) => (
+            <div key={index} className="title">
+              <h4>
+                <span
+                  style={{
+                    backgroundColor: darkenColor(board.titleColor ?? "", 1),
+                    borderColor: darkenColor(board.titleColor ?? "", 1),
+                  }}
+                ></span>
+                {board.title.toLocaleUpperCase("tr")}
+              </h4>
+              {board.description && <span>{board.description}</span>}
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        <div className="columns">
+          {data.map((board, index) => (
+            <div key={index} className="column" onDrop={handleDrop(board.key)}>
+              <div
+                className="items"
+                onDragOver={handleItemsDragOver}
+                onDragLeave={handleItemsDragLeave}
+                onDrop={handleItemsDrop}
+              >
+                <DnD
+                  key={board.key}
+                  data={board.items}
+                  renderItem={(item, dndIndex) => {
+                    return (
+                      <div
+                        key={dndIndex}
+                        className="item"
+                        onDragOver={(event) => {
+                          event.preventDefault();
+
+                          const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+                          const mouseY = event.clientY;
+                          const isBelow = mouseY > rect.top + rect.height / 2;
+
+                          _hoverItemIndex.current = isBelow ? index + 1 : index;
+                        }}
+                      >
+                        {board.renderItem(item, index)}
+                      </div>
+                    );
+                  }}
+                  columnKey={board.key}
+                  confing={{ isMoveIcon: false }}
+                  // onChange={(data) => {
+                  //   const now = Date.now();
+
+                  //   setBoardData((prev) =>
+                  //     prev.map((col) => (col.key === board.key ? { ...col, items: data,  } : col))
+                  //   );
+                  // }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
