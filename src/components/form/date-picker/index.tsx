@@ -30,13 +30,13 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, config, validat
   // refs
   const _arCalendar = useRef<HTMLDivElement>(null);
   const _arClock = useRef<HTMLDivElement>(null);
+  const _placeholder = useRef<HTMLLabelElement>(null);
   const _calendarHeader = useRef<HTMLDivElement>(null);
   const _calendarFooter = useRef<HTMLDivElement>(null);
   const _clockHeader = useRef<HTMLDivElement>(null);
   const _clockFooter = useRef<HTMLDivElement>(null);
   const _currentDate = useRef<Date>(new Date()).current;
   const _beginDate = useRef<HTMLInputElement>(null);
-
   // refs -> Geçerli Tarih ve Saat Bilgileri.
   const _year = useRef<number>(_currentDate.getFullYear());
   const _month = useRef<number>(_currentDate.getMonth());
@@ -138,8 +138,8 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, config, validat
         _day.current,
         !config?.isClock ? 0 : _hours.current,
         !config?.isClock ? 0 : _minutes.current,
-        0
-      )
+        0,
+      ),
     );
 
     onChange(inputDate.toISOString());
@@ -173,8 +173,8 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, config, validat
         now.getDate(),
         !config?.isClock ? 0 : now.getHours(),
         !config?.isClock ? 0 : now.getMinutes(),
-        0
-      )
+        0,
+      ),
     );
 
     onChange(inputDate.toISOString());
@@ -242,7 +242,7 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, config, validat
             }}
           >
             <span>{i}</span>
-          </span>
+          </span>,
         );
       }
 
@@ -343,61 +343,81 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, config, validat
   return (
     <div className="ar-date-picker">
       {attributes.placeholder && attributes.placeholder.length > 0 && (
-        <label>
+        <label ref={_placeholder}>
           {validation ? "* " : ""}
           {attributes.placeholder}
         </label>
       )}
 
-      <Input
-        ref={_beginDate}
-        variant={variant}
-        color={color}
-        {...attributes}
-        value={DATE.ParseValue(String(attributes.value), config?.isClock)}
-        type={config?.isClock ? "datetime-local" : "date"}
-        onKeyDown={(event) => {
-          if (event.code === "Space") event.preventDefault();
-          else if (event.code === "Enter") handleOk();
-        }}
-        onChange={(event) => {
-          // Disabled gelmesi durumunda işlem yapmasına izin verme...
-          if (attributes.disabled) return;
-
-          (() => {
-            if (!calendarIsOpen) setCalendarIsOpen(true);
-            const value = event.target.value;
-
-            const [date, time] = value.split("T");
-            const [year, month, day] = date.split("-").map(Number);
-            const hours = time ? time.split(".")[0].split(":").map(Number)[0] : 0;
-            const minutes = time ? time.split(".")[0].split(":").map(Number)[1] : 0;
-
-            _year.current = year;
-            _month.current = month - 1;
-            _day.current = day;
-
-            if (hours || minutes) {
-              _hours.current = hours;
-              _minutes.current = minutes;
+      <div
+        className="wrapper"
+        {...(String(attributes.value).length > 0
+          ? {
+              style: {
+                clipPath: `polygon(
+                            -15px 0,
+                            10px -5px,
+                            10px 5px,
+                            calc(${_placeholder.current?.getBoundingClientRect().width}px + 7px) 5px,
+                            calc(${_placeholder.current?.getBoundingClientRect().width}px + 7px) -5px,
+                            100% -70px,
+                            calc(100% + 5px) calc(100% + 5px),
+                            -5px calc(100% + 5px)
+                          )`,
+              },
             }
+          : {})}
+      >
+        <Input
+          ref={_beginDate}
+          variant={variant}
+          color={color}
+          {...attributes}
+          value={DATE.ParseValue(String(attributes.value), config?.isClock)}
+          type={config?.isClock ? "datetime-local" : "date"}
+          onKeyDown={(event) => {
+            if (event.code === "Space") event.preventDefault();
+            else if (event.code === "Enter") handleOk();
+          }}
+          onChange={(event) => {
+            // Disabled gelmesi durumunda işlem yapmasına izin verme...
+            if (attributes.disabled) return;
 
-            // Yıl ve Ay'ı anlık yeniler.
-            setSelectedYear(_year.current);
-            setSelectedMonth(_month.current);
-            // Takvimi anlık yeniler.
-            setDateChanged((prev) => !prev);
-            setTimeChanged((prev) => !prev);
-            onChange(value);
-          })();
-        }}
-        onClick={(event) => {
-          event.preventDefault();
-          setCalendarIsOpen(true);
-        }}
-        autoComplete="off"
-        validation={validation}
-      />
+            (() => {
+              if (!calendarIsOpen) setCalendarIsOpen(true);
+              const value = event.target.value;
+
+              const [date, time] = value.split("T");
+              const [year, month, day] = date.split("-").map(Number);
+              const hours = time ? time.split(".")[0].split(":").map(Number)[0] : 0;
+              const minutes = time ? time.split(".")[0].split(":").map(Number)[1] : 0;
+
+              _year.current = year;
+              _month.current = month - 1;
+              _day.current = day;
+
+              if (hours || minutes) {
+                _hours.current = hours;
+                _minutes.current = minutes;
+              }
+
+              // Yıl ve Ay'ı anlık yeniler.
+              setSelectedYear(_year.current);
+              setSelectedMonth(_month.current);
+              // Takvimi anlık yeniler.
+              setDateChanged((prev) => !prev);
+              setTimeChanged((prev) => !prev);
+              onChange(value);
+            })();
+          }}
+          onClick={(event) => {
+            event.preventDefault();
+            setCalendarIsOpen(true);
+          }}
+          autoComplete="off"
+          validation={validation}
+        />
+      </div>
 
       {calendarIsOpen &&
         ReactDOM.createPortal(
@@ -516,7 +536,7 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, config, validat
             )}
             {/* :End: Clock */}
           </div>,
-          document.body
+          document.body,
         )}
     </div>
   );

@@ -10,7 +10,6 @@
   flex-direction: row;
 }
 .ar-date-picker > label {
-  background-color: var(--white);
   position: absolute;
   top: -0.5rem;
   left: 0.55rem;

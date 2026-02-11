@@ -6,9 +6,7 @@ import { KanbanBoardColumnType } from "../../../libs/types";
 import "../../../assets/css/components/data-display/kanban-board/styles.css";
 import DnD from "../dnd";
 import { ARIcon } from "../../icons";
-import Input from "../../form/input";
-import DateFilters from "./DateFilters";
-import SelectFilters from "./SelectFilters";
+import Filter from "./filter";
 
 const KanbanBoard = function <T, TColumnProperties>({
   trackBy,
@@ -207,14 +205,7 @@ const KanbanBoard = function <T, TColumnProperties>({
       });
     });
 
-    // checkbox filtre seçenekleri
-    const nextSelectFilters = Object.fromEntries(
-      Array.from(selectMap.entries()).map(([name, set]) => [name, Array.from(set)]),
-    );
-
-    setSelectFilters(nextSelectFilters);
-
-    // date filtreler (sadece isim + boş range)
+    setSelectFilters(Object.fromEntries(Array.from(selectMap.entries()).map(([name, set]) => [name, Array.from(set)])));
     setDateFilters((prev) => {
       const next = { ...prev };
 
@@ -284,37 +275,28 @@ const KanbanBoard = function <T, TColumnProperties>({
 
   return (
     <>
-      <div className="filters">
-        <Input
-          variant="borderless"
-          placeholder="Filter by keyword"
-          onChange={(event) => setSearch(event.target.value.toLocaleLowerCase())}
+      {config?.filter && (
+        <Filter
+          states={{
+            search: {
+              get: search,
+              set: setSearch,
+            },
+            dateFilters: {
+              get: dateFilters,
+              set: setDateFilters,
+            },
+            selectFilters: {
+              get: selectFilters,
+              set: setSelectFilters,
+            },
+            selectedFilters: {
+              get: selectedFilters,
+              set: setSelectedFilters,
+            },
+          }}
         />
-
-        <ul>
-          <DateFilters
-            states={{
-              dateFilters: {
-                get: dateFilters,
-                set: setDateFilters,
-              },
-            }}
-          />
-
-          <SelectFilters
-            states={{
-              selectFilters: {
-                get: selectFilters,
-                set: setSelectFilters,
-              },
-              selectedFilters: {
-                get: selectedFilters,
-                set: setSelectedFilters,
-              },
-            }}
-          />
-        </ul>
-      </div>
+      )}
 
       <div
         ref={_kanbanWrapper}

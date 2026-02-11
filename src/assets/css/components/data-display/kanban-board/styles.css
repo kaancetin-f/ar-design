@@ -234,13 +234,13 @@
       position: relative;
       padding: 0.5rem;
       cursor: pointer;
-      transition: background-color 150ms ease-in-out;
+      user-select: none;
 
-      &:hover {
+      &.active {
         background-color: var(--gray-100);
 
         > ul {
-          display: block;
+          animation: dropdownOpen 250ms ease-in-out;
         }
       }
 
@@ -256,7 +256,6 @@
       }
 
       > ul {
-        display: none;
         position: absolute;
         top: 100%;
         right: 0;
@@ -272,6 +271,17 @@
         }
       }
     }
+  }
+}
+
+@keyframes dropdownOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
