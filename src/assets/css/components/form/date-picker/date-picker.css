@@ -8,6 +8,10 @@
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
+
+  > .wrapper {
+    width: 100%;
+  }
 }
 .ar-date-picker > label {
   position: absolute;
