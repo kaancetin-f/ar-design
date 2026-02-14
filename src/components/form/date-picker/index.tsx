@@ -351,10 +351,8 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, config, validat
 
       <div
         className="wrapper"
-        {...(String(attributes.value).length > 0
-          ? {
-              style: {
-                clipPath: `polygon(
+        style={{
+          clipPath: `polygon(
                             -15px 0,
                             10px -5px,
                             10px 5px,
@@ -364,9 +362,7 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, config, validat
                             calc(100% + 5px) calc(100% + 5px),
                             -5px calc(100% + 5px)
                           )`,
-              },
-            }
-          : {})}
+        }}
       >
         <Input
           ref={_beginDate}

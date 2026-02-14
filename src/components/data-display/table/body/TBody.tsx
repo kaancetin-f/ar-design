@@ -1,4 +1,4 @@
-import React, { Fragment, memo, useEffect, useRef, useState } from "react";
+import React, { Dispatch, Fragment, memo, SetStateAction, useEffect, useRef, useState } from "react";
 import { ARIcon } from "../../../icons";
 import { TableColumnType } from "../../../../libs/types";
 import Checkbox from "../../../form/checkbox";
@@ -8,12 +8,20 @@ import { Config } from "../IProps";
 interface IProps<T> {
   data: T[];
   columns: TableColumnType<T>[];
+  refs: {
+    _checkboxItems: React.MutableRefObject<(HTMLInputElement | null)[]>;
+    _selectionItems: React.MutableRefObject<T[]>;
+  };
   states: {
+    setSelectAll: {
+      get: boolean;
+      set: Dispatch<SetStateAction<boolean>>;
+    };
     showSubitems: {
       get: {
         [key: string]: boolean;
       };
-      set: React.Dispatch<
+      set: Dispatch<
         React.SetStateAction<{
           [key: string]: boolean;
         }>
@@ -42,15 +50,12 @@ interface IRenderCell<T> {
   isSubrows?: boolean;
 }
 
-function TBody<T extends object>({ data, columns, methods, states, config }: IProps<T>) {
+function TBody<T extends object>({ data, columns, refs, methods, states, config }: IProps<T>) {
   // refs
   const _tBodyTR = useRef<(HTMLTableRowElement | null)[]>([]);
-  const _checkboxItems = useRef<(HTMLInputElement | null)[]>([]);
-  // refs -> Selection
-  const _selectionItems = useRef<T[]>([]);
 
   // states
-  const [_, setTriggerForRender] = useState<boolean>(false);
+  const [triggerForRender, setTriggerForRender] = useState<boolean>(false);
   const [rowHeights, setRowHeights] = useState<number[]>([]);
 
   // variables
@@ -75,26 +80,26 @@ function TBody<T extends object>({ data, columns, methods, states, config }: IPr
             <td className="flex justify-content-center sticky-left" data-sticky-position="left">
               <Checkbox
                 key={Date.now()}
-                ref={(element) => (_checkboxItems.current[index] = element)}
+                ref={(element) => (refs._checkboxItems.current[index] = element)}
                 variant="filled"
                 color="green"
-                checked={_selectionItems.current.some(
+                checked={refs._selectionItems.current.some(
                   (selectionItem) => methods.trackBy?.(selectionItem) === methods.trackBy?.(item),
                 )}
                 onChange={(event) => {
                   const key = methods.trackBy?.(item);
 
                   if (event.target.checked) {
-                    if (!_selectionItems.current.some((_item) => methods.trackBy?.(_item) === key)) {
-                      _selectionItems.current = [..._selectionItems.current, item];
+                    if (!refs._selectionItems.current.some((_item) => methods.trackBy?.(_item) === key)) {
+                      refs._selectionItems.current = [...refs._selectionItems.current, item];
                     }
                   } else {
-                    _selectionItems.current = _selectionItems.current.filter(
+                    refs._selectionItems.current = refs._selectionItems.current.filter(
                       (_item) => methods.trackBy?.(_item) !== key,
                     );
                   }
 
-                  methods.selections?.(_selectionItems.current);
+                  methods.selections?.(refs._selectionItems.current);
                   setTriggerForRender((prev) => !prev);
                 }}
               />
@@ -291,8 +296,18 @@ function TBody<T extends object>({ data, columns, methods, states, config }: IPr
   // useEffects
   useEffect(() => {
     const heights = _tBodyTR.current.map((el) => (el ? el.getBoundingClientRect().height : 0));
+
     setRowHeights(heights);
+    setTriggerForRender((prev) => !prev);
   }, [data]);
+
+  useEffect(() => {
+    if (Array.isArray(refs._checkboxItems.current) && refs._checkboxItems.current.length > 0) {
+      const allChecked = refs._checkboxItems.current.every((item) => item?.checked === true);
+
+      states.setSelectAll.set(allChecked);
+    }
+  }, [triggerForRender]);
 
   return data.length > 0 ? (
     data.map((item, index) => <React.Fragment key={index}>{renderRow(item, index, 1)}</React.Fragment>)

@@ -911,7 +911,11 @@ const Table = forwardRef(
               <TBody
                 data={getData}
                 columns={columns}
-                states={{ showSubitems: { get: showSubitems, set: setShowSubitems } }}
+                refs={{ _checkboxItems: _checkboxItems, _selectionItems: _selectionItems }}
+                states={{
+                  setSelectAll: { get: selectAll, set: setSelectAll },
+                  showSubitems: { get: showSubitems, set: setShowSubitems },
+                }}
                 methods={{
                   trackBy: trackBy,
                   selections: selections,
