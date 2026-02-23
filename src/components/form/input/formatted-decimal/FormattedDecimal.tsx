@@ -17,17 +17,23 @@ const FormattedDecimal: React.FC<IProps> = ({
   validation,
   disabled,
 }: IProps) => {
-  // refs
-  // const _firstLoad = useRef<boolean>(false);
   const _input = useRef<HTMLInputElement | null>(null);
-
-  // states
-  const [_value, setValue] = useState<string | number | readonly string[] | undefined>("");
+  const [_value, setValue] = useState<string>("");
 
   // methods
+  const getSeparators = (locale: string) => {
+    const parts = new Intl.NumberFormat(locale).formatToParts(1000.1);
+
+    const group = parts.find((p) => p.type === "group")?.value ?? ",";
+    const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
+
+    return { group, decimal };
+  };
+
+  const getFormatter = useMemo(() => NUMBER.Decimal(locale, digits), [locale, digits]);
+
   const handleClick = () => {
     const input = _input.current;
-
     if (!input) return;
 
     const caret = input.selectionStart ?? 0;
@@ -36,7 +42,6 @@ const FormattedDecimal: React.FC<IProps> = ({
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const input = _input.current;
-
     if (!input) return;
 
     const caret = input.selectionStart ?? 0;
@@ -53,50 +58,41 @@ const FormattedDecimal: React.FC<IProps> = ({
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     let { value } = event.target;
 
-    // Temizle.
-    const cleanedValue = (value = value.replace(/[^0-9,]/g, ""));
+    const { group, decimal } = getSeparators(locale as string);
 
-    // Numara olarak çevir.
-    const normalized = parseCurrencySmart(value);
-    // const isDecimals = cleanedValue.includes(",");
-    const parsedDecimal = parseFloat(normalized);
-    const newValue = isNaN(parsedDecimal) ? 0 : parsedDecimal;
+    // Locale’a göre izin verilen karakterleri temizle.
+    const regex = new RegExp(`[^0-9\\${group}\\${decimal}]`, "g");
+    value = value.replace(regex, "");
 
-    // Formatla ve Kullanıcı , (virgül) girdiyse kuruş göster.
-    let formatted = newValue === 0 && cleanedValue === "" ? "" : getFormatter.format(newValue);
+    // Normalize et (decimal her zaman "." olacak şekilde)
+    let normalized = value.replace(new RegExp(`\\${group}`, "g"), "").replace(decimal, ".");
+
+    const parsed = parseFloat(normalized);
+    const numericValue = isNaN(parsed) ? 0 : parsed;
+
+    const formatted = value === "" ? "" : getFormatter.format(numericValue);
 
     setValue(formatted);
-    onChange?.({ ...event, target: { ...event.target, name: name, value: normalized } });
-  };
 
-  const getFormatter = useMemo(() => NUMBER.Decimal(locale, digits), [digits]);
-
-  const parseCurrencySmart = (input: string) => {
-    if (input.includes(",") && input.includes(".")) {
-      // Nokta binlik, virgül ondalık (tr-TR, de-DE gibi)
-      return input.replace(/\./g, "").replace(",", ".");
-    } else if (input.includes(",") && !input.includes(".")) {
-      // Virgül ondalık, binlik yok (fr-FR gibi)
-      return input.replace(",", ".");
-    } else if (input.includes(".") && !input.includes(",")) {
-      // Nokta ondalık, binlik yok veya US format
-      return input.replace(/,/g, "");
-    } else {
-      // Hiçbiri yok, zaten sayı
-      return input;
-    }
+    onChange?.({
+      ...event,
+      target: {
+        ...event.target,
+        name,
+        value: normalized,
+      },
+    });
   };
 
   // useEffects
   useEffect(() => {
-    // if (!_firstLoad.current && value !== undefined && value !== "") {
-    //   // const isDecimals = String(value).includes(".");
-    //   setValue(getFormatter.format(Number(value)));
-    //   _firstLoad.current = true;
-    // }
+    if (value === undefined || value === null || value === "") {
+      setValue("");
+      return;
+    }
 
     setValue(getFormatter.format(Number(value)));
-  }, [value]);
+  }, [value, getFormatter]);
 
   return (
     <Input
@@ -104,13 +100,11 @@ const FormattedDecimal: React.FC<IProps> = ({
       name={name}
       variant={variant}
       color={color}
-      value={_value ?? ""}
+      value={_value}
       type="text"
       inputMode="decimal"
       onChange={(event) => {
-        // Disabled gelmesi durumunda işlem yapmasına izin verme...
         if (disabled) return;
-
         handleChange(event);
       }}
       onClick={handleClick}

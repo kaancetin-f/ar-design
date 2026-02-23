@@ -12,6 +12,7 @@ interface IProps extends IVariant, IColors, IBorder, IUpperCase, IValidation, IP
   name: string;
   value: string | number | readonly string[] | undefined;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  locale?: Intl.LocalesArgument;
 }
 
 export default IProps;

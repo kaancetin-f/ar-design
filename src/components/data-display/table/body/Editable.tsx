@@ -5,6 +5,7 @@ import Input from "../../../form/input";
 import DatePicker from "../../../form/date-picker";
 import { Errors, Option, TableColumnType } from "../../../../libs/types";
 import Select from "../../../form/select";
+import { Config } from "../IProps";
 
 interface IProps<T> {
   c: TableColumnType<T>;
@@ -12,9 +13,10 @@ interface IProps<T> {
   trackByValue: string;
   onEditable: (item: T, trackByValue: string) => void;
   validation?: Errors<T>;
+  config: Config<T>;
 }
 
-const Editable = function <T>({ c, item, trackByValue, onEditable, validation }: IProps<T>) {
+const Editable = function <T>({ c, item, trackByValue, onEditable, validation, config }: IProps<T>) {
   // variables
   const key = c.key as keyof T;
   const itemValue = item[c.key as keyof T];
@@ -59,6 +61,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation }:
             onEditable({ ...item, [key]: value } as T, trackByValue);
           }}
           validation={{ text: _vText }}
+          locale={config.locale}
         />
       );
     case "input-formatted-decimal":
@@ -74,6 +77,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation }:
             onEditable({ ...item, [key]: value } as T, trackByValue);
           }}
           validation={{ text: _vText }}
+          locale={config.locale}
         />
       );
     case "date-picker":

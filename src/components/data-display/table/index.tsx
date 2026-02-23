@@ -509,6 +509,7 @@ const Table = forwardRef(
             if (aValue < bValue) return config.direction === "asc" ? -1 : 1;
             if (aValue > bValue) return config.direction === "asc" ? 1 : -1;
           }
+
           return 0;
         });
       }
@@ -521,7 +522,7 @@ const Table = forwardRef(
       }
 
       return _data;
-    }, [data, searchedText, currentPage, selectedPerPage, sortConfig]);
+    }, [data, searchedText, currentPage, selectedPerPage, sortConfig, config.isServerSide]);
 
     // useEffects
     useEffect(() => {

@@ -52,6 +52,7 @@ interface IRenderCell<T> {
 
 function TBody<T extends object>({ data, columns, refs, methods, states, config }: IProps<T>) {
   // refs
+  const _hasMeasured = useRef<boolean>(false);
   const _tBodyTR = useRef<(HTMLTableRowElement | null)[]>([]);
 
   // states
@@ -207,6 +208,7 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
               trackByValue={methods.trackBy?.(item) ?? ""}
               onEditable={methods.onEditable}
               validation={config.validation}
+              config={config}
             />
           ) : (
             <span>{render}</span>
@@ -295,10 +297,14 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
 
   // useEffects
   useEffect(() => {
+    if (_hasMeasured.current) return;
+    if (!data || data.length === 0) return;
+
     const heights = _tBodyTR.current.map((el) => (el ? el.getBoundingClientRect().height : 0));
 
     setRowHeights(heights);
     setTriggerForRender((prev) => !prev);
+    _hasMeasured.current = true;
   }, [data]);
 
   useEffect(() => {

@@ -28,6 +28,7 @@ export type Sort<T> = { key: keyof T; direction: "asc" | "desc" | null };
 export type SearchedParam = { [key: string]: FilterValue | FilterValue[] };
 
 export type Config<T> = {
+  locale?: string;
   isServerSide?: boolean;
   isProperties?: boolean;
   isSearchable?: boolean;
