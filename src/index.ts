@@ -14,6 +14,7 @@ import TextEditor from "./components/form/text-editor";
 import Upload from "./components/form/upload";
 
 // Data Display
+import Calendar from "./components/data-display/calendar";
 import Card from "./components/data-display/card";
 import Chip from "./components/data-display/chip";
 import Diagram from "./components/data-display/diagram/index";
@@ -59,6 +60,7 @@ export {
   Upload,
 
   // Data Display
+  Calendar,
   Card,
   Chip,
   Diagram,

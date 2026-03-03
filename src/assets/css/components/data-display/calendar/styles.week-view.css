@@ -1,0 +1,124 @@
+.ar-calendar {
+  > .ar-calendar-week-view {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background-color: var(--white);
+    padding: 0.75rem 0.75rem 0.75rem 2rem;
+    border-radius: var(--border-radius-sm);
+
+    > .head {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+
+      > .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        width: calc(100% / 7);
+        padding: 0.5rem 0;
+
+        > .day-name {
+          color: var(--gray-400);
+          font-size: 0.75rem;
+        }
+
+        > .date {
+          font-size: 1.5rem;
+        }
+      }
+    }
+
+    > .body {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+
+      > .clocks {
+        > div {
+          height: 60px;
+
+          > span {
+            color: var(--gray-700);
+            font-size: 0.75rem;
+          }
+        }
+      }
+
+      > .grid {
+        position: relative;
+        width: 100%;
+        border: solid 1px transparent;
+        border-top-color: var(--gray-200);
+
+        > .events-layer {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 1;
+
+          > .event-box {
+            position: absolute;
+            background-color: rgba(var(--primary-rgb), 0.75);
+            width: calc(100% / 7);
+            padding: 0.5rem;
+            border-radius: var(--border-radius-sm);
+            color: var(--white);
+            font-size: 12px;
+          }
+        }
+
+        > .row {
+          position: relative;
+          margin: auto;
+
+          &:nth-child(2) {
+            > .cell {
+              &::before {
+                content: "";
+                position: absolute;
+                left: -1px;
+                background-color: var(--gray-200);
+                width: 1px;
+                height: 25px;
+                transform: translateY(-25px);
+              }
+            }
+          }
+
+          &:last-child {
+            > .cell {
+              border-bottom-color: transparent;
+            }
+          }
+
+          > .cell {
+            position: relative;
+            width: calc(100% / 7);
+            height: 60px;
+            padding: 0;
+            border: solid 1px transparent;
+            border-left-color: var(--gray-200);
+            border-bottom-color: var(--gray-200);
+
+            &:first-child {
+              &::after {
+                content: "";
+                position: absolute;
+                top: -2px;
+                left: 0;
+                background-color: var(--gray-200);
+                width: 15px;
+                height: 1px;
+                transform: translateX(-15px);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

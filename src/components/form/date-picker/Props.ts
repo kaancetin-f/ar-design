@@ -4,6 +4,7 @@ type Props = {
   label?: string;
   onChange: (value: string) => void;
   config?: {
+    locale?: Intl.LocalesArgument;
     isClock?: boolean;
     isFooterButton?: boolean;
   };

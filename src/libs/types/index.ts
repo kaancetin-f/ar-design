@@ -262,3 +262,5 @@ export type EdgeData = {
     port: Port;
   };
 };
+
+export type View = "Day" | "Week" | "Month" | "Year";
