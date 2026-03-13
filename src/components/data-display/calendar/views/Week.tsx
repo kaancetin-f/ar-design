@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { CalendarEvent } from "../IProps";
 
-interface IProps {
-  data: CalendarEvent[];
+interface IProps<T> {
+  data: (T & CalendarEvent)[];
+  renderItem: (item: T, index: number) => React.JSX.Element;
   states: {
     currentDate: {
       get: Date;
@@ -15,22 +16,16 @@ interface IProps {
   };
 }
 
-const Week = ({ data, states, config }: IProps) => {
+const Week = function <T>({ data, renderItem, states, config }: IProps<T>) {
   const startHour = 0;
   const endHour = 24;
   const hours = endHour - startHour;
   const cellHeight = 60;
 
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
-
   const weekDays = useMemo(
     () => getWeekDays(states.currentDate.get, config?.weekStartsOn ?? 1),
     [states.currentDate.get, config?.weekStartsOn],
   );
-
-  useEffect(() => {
-    setEvents(data);
-  }, [data]);
 
   return (
     <div className="ar-calendar-week-view">
@@ -64,7 +59,7 @@ const Week = ({ data, states, config }: IProps) => {
           ))}
 
           <div className="events-layer">
-            {events.flatMap((event, eventIdx) => {
+            {data.flatMap((event, eventIdx) => {
               const eventColor = getColor(eventIdx);
 
               // Her etkinlik için haftanın günlerini gezip, o güne düşen parçayı hesaplıyoruz
@@ -110,21 +105,7 @@ const Week = ({ data, states, config }: IProps) => {
                             : "var(--border-radius-sm)",
                       }}
                     >
-                      {!isContinuedFromYesterday && (
-                        <>
-                          <div className="event-content">
-                            {event.start.toLocaleTimeString(config?.locale ?? "tr-TR", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                            {" - "}
-                            {event.end.toLocaleTimeString(config?.locale ?? "tr-TR", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </div>
-                        </>
-                      )}
+                      {!isContinuedFromYesterday && renderItem(event, eventIdx)}
                     </div>
                   );
                 }

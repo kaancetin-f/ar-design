@@ -3,8 +3,9 @@ export type CalendarEvent = {
   end: Date;
 };
 
-interface IProps {
-  data: CalendarEvent[];
+interface IProps<T> {
+  data: (T & CalendarEvent)[];
+  renderItem: (item: T, index: number) => React.JSX.Element;
   config?: {
     locale?: Intl.LocalesArgument;
     weekStartsOn?: number;
