@@ -63,6 +63,7 @@ export type TableColumnType<T> = {
   title: string;
   key?: keyof T | { field: keyof T; nestedKey: string };
   filters?: Option[];
+  filterDataType?: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
   render?: (item: T) => React.ReactNode;
   editable?: {
     type:

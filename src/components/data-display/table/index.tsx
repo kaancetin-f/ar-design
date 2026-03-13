@@ -885,11 +885,11 @@ const Table = forwardRef(
 
                                 setFilterButtonCoordinate({ x: coordinateX, y: coordinateY });
                                 setFilterCurrentColumn(c);
-                                setFilterCurrentDataType(dataType);
+                                setFilterCurrentDataType(c.filterDataType ?? dataType);
                                 setFilterCurrentIndex(cIndex);
                                 setOpenFilter(true);
 
-                                handleFilterPopupContent(c, dataType, cIndex);
+                                handleFilterPopupContent(c, c.filterDataType ?? dataType, cIndex);
                               }}
                             >
                               <Button
