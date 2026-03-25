@@ -486,6 +486,7 @@ const Table = forwardRef(
 
       if (searchedText && Object.keys(searchedText).length > 0) {
         _data = _data.filter((item) => deepSearch(item, searchedText));
+
         setTotalRecords(_data.length);
       } else {
         setTotalRecords(data.length);
@@ -513,6 +514,7 @@ const Table = forwardRef(
         _data = _data.slice(indexOfFirstRow, indexOfLastRow);
       }
 
+      handleScroll();
       return _data;
     }, [data, searchedText, currentPage, selectedPerPage, sortConfig, config.isServerSide]);
 
@@ -731,8 +733,6 @@ const Table = forwardRef(
       };
     }, [data]);
 
-    useLayoutEffect(() => handleScroll(), [data]);
-
     useLayoutEffect(() => {
       if (!pagination?.currentPage) return;
 
@@ -800,6 +800,7 @@ const Table = forwardRef(
                     sortCurrentColumn: { set: setSortCurrentColumn },
                     propertiesButtonCoordinate: { set: setPropertiesButtonCoordinate },
                   }}
+                  methods={{ handleScroll }}
                   columns={columns}
                   config={config}
                 />
@@ -847,6 +848,9 @@ const Table = forwardRef(
                               <DatePicker
                                 value={(config.isServerSide ? ssrValue : csrValue) ?? ""}
                                 name={key}
+                                onClick={() => {
+                                  handleScroll();
+                                }}
                                 onChange={(value) => handleSearch(key, value, c.filterDataType)}
                                 style={{ height: "2rem" }}
                                 config={{ isClock: true, isFooterButton: true, locale: config.locale }}
@@ -860,6 +864,9 @@ const Table = forwardRef(
                                   style={{ height: "2rem" }}
                                   value={(config.isServerSide ? ssrValue : csrValue) ?? ""}
                                   name={key}
+                                  onClick={() => {
+                                    handleScroll();
+                                  }}
                                   onInput={(event) => handleSearch(event.currentTarget.name, event.currentTarget.value)}
                                   disabled={!c.key || !!c.filters}
                                 />
@@ -867,6 +874,7 @@ const Table = forwardRef(
                                 <span
                                   ref={(element) => (_filterButton.current[cIndex] = element)}
                                   onClick={(event) => {
+                                    event.preventDefault();
                                     event.stopPropagation();
 
                                     // Temizlik...
@@ -893,6 +901,7 @@ const Table = forwardRef(
                                     setOpenFilter(true);
 
                                     handleFilterPopupContent(c, c.filterDataType ?? dataType, cIndex);
+                                    handleScroll();
                                   }}
                                 >
                                   <Button
@@ -958,6 +967,7 @@ const Table = forwardRef(
               open: { get: openProperties, set: setOpenProperties },
               sort: { get: sortConfig, set: setSortConfig, currentColumn: sortCurrentColumn },
             }}
+            methods={{ handleScroll }}
             coordinate={propertiesButtonCoordinate}
           />
         )}

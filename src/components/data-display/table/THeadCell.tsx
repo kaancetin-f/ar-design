@@ -8,6 +8,7 @@ import { Config, Sort } from "./IProps";
 const MemoizedTHeadCell = function <T>({
   refs,
   states,
+  methods,
   columns,
   config,
 }: {
@@ -31,6 +32,9 @@ const MemoizedTHeadCell = function <T>({
         }>
       >;
     };
+  };
+  methods: {
+    handleScroll: () => void;
   };
   columns: TableColumnType<T>[];
   config: Config<T>;
@@ -81,7 +85,9 @@ const MemoizedTHeadCell = function <T>({
                 <span
                   ref={(element) => (refs.propertiesButton.current[cIndex] = element)}
                   className="properties-field"
+                  data-properties-button="true"
                   onClick={(event) => {
+                    event.preventDefault();
                     event.stopPropagation();
 
                     const rect = event.currentTarget.getBoundingClientRect();
@@ -104,6 +110,7 @@ const MemoizedTHeadCell = function <T>({
                       return prev;
                     });
                     states.open.set(true);
+                    methods.handleScroll();
                   }}
                 >
                   <Button
