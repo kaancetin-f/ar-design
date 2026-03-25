@@ -7,7 +7,6 @@ import Checkbox from "../../form/checkbox";
 import IProps, { FilterValue, SearchedParam, Sort } from "./IProps";
 import Pagination from "../../navigation/pagination";
 import React, {
-  ChangeEvent,
   forwardRef,
   memo,
   useCallback,
@@ -18,7 +17,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { HTMLTableElementWithCustomAttributes, Option, TableColumnType } from "../../../libs/types";
+import { FilterDataType, HTMLTableElementWithCustomAttributes, Option, TableColumnType } from "../../../libs/types";
 import Input from "../../form/input";
 import Utils from "../../../libs/infrastructure/shared/Utils";
 import FilterPopup from "./FilterPopup";
@@ -32,6 +31,7 @@ import PropertiesPopup from "./PropertiesPopup";
 import { ExtractKey } from "./Helpers";
 import Header from "./header/Header";
 import TBody from "./body/TBody";
+import DatePicker from "../../form/date-picker";
 
 const filterOption: Option[] = [
   { value: FilterOperator.Contains, text: "İçerir" },
@@ -121,9 +121,7 @@ const Table = forwardRef(
     // states -> Filter Fields Backup
     const [openFilter, setOpenFilter] = useState<boolean>(false);
     const [filterCurrentColumn, setFilterCurrentColumn] = useState<TableColumnType<T> | null>(null);
-    const [filterCurrentDataType, setFilterCurrentDataType] = useState<
-      "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function" | null
-    >(null);
+    const [filterCurrentDataType, setFilterCurrentDataType] = useState<FilterDataType | null>(null);
     const [filterCurrentIndex, setFilterCurrentIndex] = useState<number | null>(null);
     // states -> Pagination
     const [totalRecords, setTotalRecords] = useState<number>(0);
@@ -219,8 +217,7 @@ const Table = forwardRef(
     }, []);
 
     const handleSearch = useCallback(
-      (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
+      (name: string, value: string, dataType?: FilterDataType) => {
         const operator =
           filterPopupOption?.key == name
             ? (filterPopupOption.option?.value as FilterOperator)
@@ -229,14 +226,17 @@ const Table = forwardRef(
         if (config.isServerSide) {
           if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
 
-          _searchTimeOut.current = setTimeout(() => {
-            setSearchedParams((prev) => ({
-              ...prev,
-              [name]: { value: value, operator: operator },
-            }));
+          _searchTimeOut.current = setTimeout(
+            () => {
+              setSearchedParams((prev) => ({
+                ...prev,
+                [name]: { value: value, operator: operator },
+              }));
 
-            if (pagination) pagination.onChange?.(1, selectedPerPage);
-          }, 750);
+              if (pagination) pagination.onChange?.(1, selectedPerPage);
+            },
+            dataType === "date" ? 0 : 750,
+          );
         } else {
           setSearchedText((prev) => {
             const _state = { ...prev };
@@ -250,8 +250,6 @@ const Table = forwardRef(
             return _state;
           });
         }
-
-        event.target.value = value;
 
         setCurrentPage(1);
       },
@@ -281,11 +279,7 @@ const Table = forwardRef(
       });
     }, []);
 
-    const handleFilterPopupContent = (
-      c: TableColumnType<T>,
-      dataType: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function",
-      index: number | null,
-    ) => {
+    const handleFilterPopupContent = (c: TableColumnType<T>, dataType: FilterDataType, index: number | null) => {
       const key: keyof T | null = ExtractKey(c.key);
 
       if (!key) return;
@@ -294,9 +288,7 @@ const Table = forwardRef(
         ? "" // veya ihtiyacına göre birleştirme yap: searchedText[key].map(v => v.value).join(", ").
         : ((searchedText?.[key] as FilterValue)?.value as string);
 
-      const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
-
+      const handleChange = (value: string) => {
         const input = _searchTextInputs.current[index ?? 0];
 
         if (input) {
@@ -327,7 +319,7 @@ const Table = forwardRef(
                   />
                 </Column>
                 <Column size={12}>
-                  <Input value={value ?? ""} onChange={handleChange} placeholder="Ara" />
+                  <Input value={value ?? ""} onChange={(event) => handleChange(event.target.value)} placeholder="Ara" />
                 </Column>
               </Row>
             );
@@ -851,54 +843,67 @@ const Table = forwardRef(
                       >
                         {c.key && (
                           <div className="filter-field">
-                            <Input
-                              ref={(element) => (_searchTextInputs.current[cIndex] = element)}
-                              variant={c.key && !c.filters ? "outlined" : "filled"}
-                              style={{ height: "2rem" }}
-                              value={(config.isServerSide ? ssrValue : csrValue) ?? ""}
-                              name={key}
-                              onInput={handleSearch}
-                              disabled={!c.key || !!c.filters}
-                            />
-
-                            <span
-                              ref={(element) => (_filterButton.current[cIndex] = element)}
-                              onClick={(event) => {
-                                event.stopPropagation();
-
-                                // Temizlik...
-                                setFilterPopupOptionSearchText("");
-
-                                const rect = event.currentTarget.getBoundingClientRect();
-                                const screenCenterX = window.innerWidth / 2;
-                                // const screenCenterY = window.innerHeight / 2;
-                                const coordinateX = rect.x > screenCenterX ? rect.x + rect.width - 225 : rect.x;
-                                const coordinateY = rect.y + rect.height;
-                                // data içindeki alanların tiplerini bulmak için kullanılmaktadır
-                                const getDataFirstItem = { ...data[0] };
-                                const key = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
-
-                                const getValueByKey = getDataFirstItem[key as keyof typeof getDataFirstItem];
-                                let dataType = typeof getValueByKey;
-
-                                if (getValueByKey == null) dataType = "string";
-
-                                setFilterButtonCoordinate({ x: coordinateX, y: coordinateY });
-                                setFilterCurrentColumn(c);
-                                setFilterCurrentDataType(c.filterDataType ?? dataType);
-                                setFilterCurrentIndex(cIndex);
-                                setOpenFilter(true);
-
-                                handleFilterPopupContent(c, c.filterDataType ?? dataType, cIndex);
-                              }}
-                            >
-                              <Button
-                                variant="borderless"
-                                icon={{
-                                  element: <ARIcon size={24} icon="Filter" fill="var(--dark)" strokeWidth={0} />,
-                                }}
+                            {c.filterDataType === "date" ? (
+                              <DatePicker
+                                value={(config.isServerSide ? ssrValue : csrValue) ?? ""}
+                                name={key}
+                                onChange={(value) => handleSearch(key, value, c.filterDataType)}
+                                style={{ height: "2rem" }}
+                                config={{ isClock: true, isFooterButton: true, locale: config.locale }}
+                                disabled={!c.key || !!c.filters}
                               />
-                            </span>
+                            ) : (
+                              <>
+                                <Input
+                                  ref={(element) => (_searchTextInputs.current[cIndex] = element)}
+                                  variant={c.key && !c.filters ? "outlined" : "filled"}
+                                  style={{ height: "2rem" }}
+                                  value={(config.isServerSide ? ssrValue : csrValue) ?? ""}
+                                  name={key}
+                                  onInput={(event) => handleSearch(event.currentTarget.name, event.currentTarget.value)}
+                                  disabled={!c.key || !!c.filters}
+                                />
+
+                                <span
+                                  ref={(element) => (_filterButton.current[cIndex] = element)}
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+
+                                    // Temizlik...
+                                    setFilterPopupOptionSearchText("");
+
+                                    const rect = event.currentTarget.getBoundingClientRect();
+                                    const screenCenterX = window.innerWidth / 2;
+                                    // const screenCenterY = window.innerHeight / 2;
+                                    const coordinateX = rect.x > screenCenterX ? rect.x + rect.width - 225 : rect.x;
+                                    const coordinateY = rect.y + rect.height;
+                                    // data içindeki alanların tiplerini bulmak için kullanılmaktadır
+                                    const getDataFirstItem = { ...data[0] };
+                                    const key = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
+
+                                    const getValueByKey = getDataFirstItem[key as keyof typeof getDataFirstItem];
+                                    let dataType = typeof getValueByKey;
+
+                                    if (getValueByKey == null) dataType = "string";
+
+                                    setFilterButtonCoordinate({ x: coordinateX, y: coordinateY });
+                                    setFilterCurrentColumn(c);
+                                    setFilterCurrentDataType(c.filterDataType ?? dataType);
+                                    setFilterCurrentIndex(cIndex);
+                                    setOpenFilter(true);
+
+                                    handleFilterPopupContent(c, c.filterDataType ?? dataType, cIndex);
+                                  }}
+                                >
+                                  <Button
+                                    variant="borderless"
+                                    icon={{
+                                      element: <ARIcon size={24} icon="Filter" fill="var(--dark)" strokeWidth={0} />,
+                                    }}
+                                  />
+                                </span>
+                              </>
+                            )}
                           </div>
                         )}
                       </th>

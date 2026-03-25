@@ -59,11 +59,21 @@ export type MenuItemVariants = "vertical" | "horizontal";
 export type MenuItemType = "group" | "divider";
 
 // Table Types
+export type FilterDataType =
+  | "string"
+  | "number"
+  | "date"
+  | "bigint"
+  | "boolean"
+  | "symbol"
+  | "undefined"
+  | "object"
+  | "function";
 export type TableColumnType<T> = {
   title: string;
   key?: keyof T | { field: keyof T; nestedKey: string };
   filters?: Option[];
-  filterDataType?: "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
+  filterDataType?: FilterDataType;
   render?: (item: T) => React.ReactNode;
   editable?: {
     type:
