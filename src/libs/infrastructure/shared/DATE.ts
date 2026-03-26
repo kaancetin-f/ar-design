@@ -34,21 +34,23 @@ class DATE {
    * @param locale
    * @returns
    */
-  public Verbose = (date: Date, locale: string = "tr") => {
+  public Verbose = (date: Date, locale: string = "tr", UTC: boolean = false) => {
     return date.toLocaleDateString(this.GetLocaleFromLanguage(locale), {
       day: "numeric",
       month: "long",
       year: "numeric",
+      ...(UTC ? { timeZone: "UTC" } : {}),
     });
   };
 
-  public WithTime = (date: Date, locale: string = "tr") => {
+  public WithTime = (date: Date, locale: string = "tr", UTC: boolean = false) => {
     return date.toLocaleString(this.GetLocaleFromLanguage(locale), {
       day: "numeric",
       month: "long",
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      ...(UTC ? { timeZone: "UTC" } : {}),
     });
   };
 

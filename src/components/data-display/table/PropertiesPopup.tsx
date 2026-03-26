@@ -5,7 +5,8 @@ import ReactDOM from "react-dom";
 import { ARIcon } from "../../icons";
 import { TableColumnType } from "../../../libs/types";
 import { ExtractKey } from "./Helpers";
-import { Sort } from "./IProps";
+import { Config, Sort } from "./IProps";
+import { useTranslation } from "../../../libs/core/application/hooks";
 
 interface IProps<T> {
   refs: {
@@ -24,11 +25,15 @@ interface IProps<T> {
     handleScroll: () => void;
   };
   coordinate: { x: number; y: number };
+  config: Config<T>;
 }
 
-function PropertiesPopup<T extends object>({ refs, states, methods, coordinate }: IProps<T>) {
+function PropertiesPopup<T extends object>({ refs, states, methods, coordinate, config }: IProps<T>) {
   // refs
   const _arTablePropertiesPopup = useRef<HTMLDivElement>(null);
+
+  // hooks
+  const { t } = useTranslation(String(config.locale ?? "tr"));
 
   // methods
   const handleClickOutSide = (event: MouseEvent) => {
@@ -127,7 +132,7 @@ function PropertiesPopup<T extends object>({ refs, states, methods, coordinate }
               <span>
                 <ARIcon icon="ArrowUp" />
               </span>
-              <span>Sort Ascending</span>
+              <span>{t("Table.Properties.Asc.Text")}</span>
             </li>
           )}
 
@@ -137,7 +142,7 @@ function PropertiesPopup<T extends object>({ refs, states, methods, coordinate }
               <span>
                 <ARIcon icon="ArrowDown" />
               </span>
-              <span>Sort Descending</span>
+              <span>{t("Table.Properties.Desc.Text")}</span>
             </li>
           )}
 
@@ -152,7 +157,7 @@ function PropertiesPopup<T extends object>({ refs, states, methods, coordinate }
               <span>
                 <ARIcon icon="ChevronExpand" />
               </span>
-              <span>Clear Sort</span>
+              <span>{t("Table.Properties.ClearSort.Text")}</span>
             </li>
           )}
         </ul>

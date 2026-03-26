@@ -32,17 +32,7 @@ import { ExtractKey } from "./Helpers";
 import Header from "./header/Header";
 import TBody from "./body/TBody";
 import DatePicker from "../../form/date-picker";
-
-const filterOption: Option[] = [
-  { value: FilterOperator.Contains, text: "İçerir" },
-  { value: FilterOperator.DoesNotContains, text: "İçermez" },
-  { value: FilterOperator.Equals, text: "Eşittir" },
-  { value: FilterOperator.DoesNotEquals, text: "Eşit değildir" },
-  { value: FilterOperator.BeginsWith, text: "İle başlar" },
-  { value: FilterOperator.EndsWith, text: "İle biter" },
-  { value: FilterOperator.Blank, text: "Boş" },
-  { value: FilterOperator.NotBlank, text: "Boş değil" },
-];
+import { useTranslation } from "../../../libs/core/application/hooks";
 
 const { Row, Column } = Grid;
 
@@ -131,6 +121,7 @@ const Table = forwardRef(
     const [isMobile, setIsMobile] = useState(false);
 
     // hooks
+    const { t } = useTranslation(String(config.locale ?? "tr"));
     // Dışarıdan gelen ref'i _innerRef'e bağla.
     useImperativeHandle(ref, () => _innerRef.current as HTMLTableElementWithCustomAttributes);
 
@@ -315,11 +306,15 @@ const Table = forwardRef(
                     onChange={(option) => {
                       setFilterPopupOption({ key: c.key as string, option: option });
                     }}
-                    placeholder="Koşul"
+                    placeholder={t("Table.Filters.Where.Input.Placeholder")}
                   />
                 </Column>
                 <Column size={12}>
-                  <Input value={value ?? ""} onChange={(event) => handleChange(event.target.value)} placeholder="Ara" />
+                  <Input
+                    value={value ?? ""}
+                    onChange={(event) => handleChange(event.target.value)}
+                    placeholder={t("Table.Filters.Search.Input.Placeholder")}
+                  />
                 </Column>
               </Row>
             );
@@ -329,9 +324,9 @@ const Table = forwardRef(
               <Row>
                 <Column size={12}>
                   <Input
-                    placeholder="Ara"
                     value={value ?? ""}
                     onChange={(event) => setFilterPopupOptionSearchText(event.target.value)}
+                    placeholder={t("Table.Filters.Search.Input.Placeholder")}
                   />
                 </Column>
 
@@ -755,6 +750,17 @@ const Table = forwardRef(
       };
     }, []);
 
+    const filterOption: Option[] = [
+      { value: FilterOperator.Contains, text: t("Table.Filters.Where.Input.Item.1.Text") },
+      { value: FilterOperator.DoesNotContains, text: t("Table.Filters.Where.Input.Item.2.Text") },
+      { value: FilterOperator.Equals, text: t("Table.Filters.Where.Input.Item.3.Text") },
+      { value: FilterOperator.DoesNotEquals, text: t("Table.Filters.Where.Input.Item.4.Text") },
+      { value: FilterOperator.BeginsWith, text: t("Table.Filters.Where.Input.Item.5.Text") },
+      { value: FilterOperator.EndsWith, text: t("Table.Filters.Where.Input.Item.6.Text") },
+      { value: FilterOperator.Blank, text: t("Table.Filters.Where.Input.Item.7.Text") },
+      { value: FilterOperator.NotBlank, text: t("Table.Filters.Where.Input.Item.8.Text") },
+    ];
+
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
         {(title || description || actions || React.Children.count(children) > 0) && (
@@ -969,6 +975,7 @@ const Table = forwardRef(
             }}
             methods={{ handleScroll }}
             coordinate={propertiesButtonCoordinate}
+            config={config}
           />
         )}
 
@@ -983,13 +990,12 @@ const Table = forwardRef(
                 </strong>
               </>
             ) : (
-              <>
-                <strong>
-                  Showing {(currentPage - 1) * selectedPerPage + 1} to{" "}
-                  {Math.min(currentPage * selectedPerPage, pagination?.totalRecords || getData.length)}
-                </strong>{" "}
-                <span>of {pagination?.totalRecords || getData.length} agreements</span>
-              </>
+              t(
+                "Table.Pagination.Information.Text",
+                (currentPage - 1) * selectedPerPage + 1,
+                Math.min(currentPage * selectedPerPage, pagination?.totalRecords || getData.length),
+                pagination?.totalRecords || getData.length,
+              )
             )}
           </span>
 
