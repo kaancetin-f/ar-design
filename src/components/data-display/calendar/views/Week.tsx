@@ -1,5 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { CalendarEvent } from "../IProps";
+import ReactDOM from "react-dom";
 
 interface IProps<T> {
   data: (T & CalendarEvent)[];
@@ -17,46 +18,85 @@ interface IProps<T> {
 }
 
 const Week = function <T>({ data, renderItem, states, config }: IProps<T>) {
+  // refs
+  const _eventBox = useRef<(HTMLDivElement | null)[]>([]);
+
+  // states
+  const [mouseCoordinate, setMouseCoordinate] = useState<{
+    x: number;
+    y: number;
+    isRightHalf: boolean;
+    isBottomHalf: boolean;
+  }>({
+    x: 0,
+    y: 0,
+    isRightHalf: false,
+    isBottomHalf: false,
+  });
+  const [activeTooltip, setActiveTooltip] = useState<{ id: number; content: React.JSX.Element } | null>(null);
+
+  // variables
   const startHour = 0;
   const endHour = 24;
   const hours = endHour - startHour;
   const cellHeight = 60;
 
+  // methods
   const weekDays = useMemo(
     () => getWeekDays(states.currentDate.get, config?.weekStartsOn ?? 1),
     [states.currentDate.get, config?.weekStartsOn],
   );
 
-  return (
-    <div className="ar-calendar-week-view">
-      <div className="head">
-        {weekDays.map((day) => (
-          <div key={day.toISOString()} className="item" style={{ flex: 1, textAlign: "center" }}>
-            <span className="day-name">
-              {day.toLocaleString(config?.locale ?? "tr", { weekday: "short" }).toUpperCase()}
-            </span>
-            <span className="date">{day.getDate()}</span>
-          </div>
-        ))}
-      </div>
+  // useEffects
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      setMouseCoordinate({
+        x: event.clientX,
+        y: event.clientY,
+        isRightHalf: event.clientX > window.innerWidth / 2,
+        isBottomHalf: event.clientY > window.innerHeight / 2,
+      });
+    };
 
-      <div className="body">
-        <div className="clocks" style={{ width: "50px" }}>
-          {Array.from({ length: hours }, (_, index) => (
-            <div key={index}>
-              <span>{String(startHour + index).padStart(2, "0")}:00</span>
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
+  return (
+    <>
+      <div className="ar-calendar-week-view">
+        <div className="head">
+          {weekDays.map((day) => (
+            <div key={day.toISOString()} className="item">
+              <span className="day-name">
+                {day.toLocaleString(config?.locale ?? "tr", { weekday: "short" }).toUpperCase()}
+              </span>
+              <span className="date">{day.getDate()}</span>
             </div>
           ))}
         </div>
 
-        <div role="grid" className="grid">
-          {Array.from({ length: hours }).map((_, rowIndex) => (
-            <div key={rowIndex} className="row">
-              {weekDays.map((_, colIndex) => (
-                <div key={colIndex} className="cell" />
-              ))}
-            </div>
-          ))}
+        <div className="body">
+          <div className="clocks">
+            {Array.from({ length: hours }, (_, index) => (
+              <div key={index}>
+                <span>{String(startHour + index).padStart(2, "0")}:00</span>
+              </div>
+            ))}
+          </div>
+
+          <div role="grid" className="grid">
+            {Array.from({ length: hours }).map((_, rowIndex) => (
+              <div key={rowIndex} className="row">
+                {weekDays.map((_, colIndex) => (
+                  <div key={colIndex} className="cell" />
+                ))}
+              </div>
+            ))}
+          </div>
 
           <div className="events-layer">
             {data.flatMap((event, eventIdx) => {
@@ -88,7 +128,14 @@ const Week = function <T>({ data, renderItem, states, config }: IProps<T>) {
 
                   return (
                     <div
+                      ref={(element) => {
+                        if (!element) return;
+
+                        _eventBox.current[dayIndex] = element;
+                      }}
                       key={`${eventIdx}-${dayIndex}`}
+                      onMouseEnter={() => setActiveTooltip({ content: renderItem(event, eventIdx), id: eventIdx })}
+                      onMouseLeave={() => setActiveTooltip(null)}
                       className="event-box"
                       style={{
                         backgroundColor: eventColor.bg,
@@ -115,7 +162,22 @@ const Week = function <T>({ data, renderItem, states, config }: IProps<T>) {
           </div>
         </div>
       </div>
-    </div>
+
+      {activeTooltip &&
+        ReactDOM.createPortal(
+          <div
+            className="ar-calendar-tooltip"
+            style={{
+              top: mouseCoordinate.y,
+              left: mouseCoordinate.x,
+              transform: `translate(${mouseCoordinate.isRightHalf ? "-110%" : "10%"}, ${mouseCoordinate.isBottomHalf ? "-110%" : "10%"})`,
+            }}
+          >
+            {activeTooltip.content}
+          </div>,
+          document.body,
+        )}
+    </>
   );
 };
 

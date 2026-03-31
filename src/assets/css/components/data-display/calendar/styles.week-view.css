@@ -16,10 +16,12 @@
       > .item {
         display: flex;
         flex-direction: column;
+        flex: 1;
         align-items: center;
         gap: 1rem;
         width: calc(100% / 7);
         padding: 0.5rem 0;
+        text-align: center;
 
         > .day-name {
           color: var(--gray-400);
@@ -33,11 +35,16 @@
     }
 
     > .body {
+      position: relative;
       display: flex;
       flex-direction: row;
       width: 100%;
 
       > .clocks {
+        position: relative;
+        width: 50px;
+        z-index: 1;
+
         > div {
           height: 60px;
 
@@ -54,25 +61,7 @@
         height: calc(24 * 60px);
         border: solid 1px transparent;
         border-top-color: var(--gray-200);
-        overflow: hidden;
-
-        > .events-layer {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-          z-index: 1;
-
-          > .event-box {
-            position: absolute;
-            width: calc(100% / 7);
-            padding: 0.5rem;
-            color: var(--white);
-            font-size: 12px;
-          }
-        }
+        z-index: 1;
 
         > .row {
           position: relative;
@@ -123,6 +112,34 @@
           }
         }
       }
+
+      > .events-layer {
+        position: absolute;
+        right: 0;
+        width: calc(100% - 50px); /* Solda yer alan clocks'dan dolayı -50px yapıldı. */
+        height: calc(24 * 60px);
+        z-index: 2;
+
+        > .event-box {
+          position: absolute;
+          width: calc(100% / 7);
+          padding: 0.5rem;
+          color: var(--white);
+          font-size: 12px;
+          overflow: hidden;
+          z-index: 10;
+        }
+      }
     }
   }
+}
+
+.ar-calendar-tooltip {
+  position: fixed;
+  background-color: var(--black);
+  padding: 1rem;
+  border-radius: var(--border-radius-sm);
+  color: var(--white);
+  pointer-events: none;
+  z-index: 200;
 }
