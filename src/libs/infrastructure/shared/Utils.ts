@@ -8,7 +8,7 @@ class Utils {
     border?: Border,
     size?: Sizes,
     icon?: Icon,
-    className?: string
+    className?: string,
   ) => {
     const classNames: string[] = [];
 
