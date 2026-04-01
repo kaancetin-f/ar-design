@@ -6,6 +6,7 @@ import { View } from "../../../libs/types";
 import { CalendarEvent } from "./IProps";
 
 interface IProps<T> {
+  trackedBy: keyof (T & CalendarEvent);
   data: (T & CalendarEvent)[];
   renderItem: (item: T, index: number) => React.JSX.Element;
   states: {
@@ -20,10 +21,18 @@ interface IProps<T> {
   };
 }
 
-const Body = function <T>({ data, renderItem, states, config }: IProps<T>) {
+const Body = function <T>({ trackedBy, data, renderItem, states, config }: IProps<T>) {
   if (states.view.get === "Day") return <Day />;
   else if (states.view.get === "Week")
-    return <Week data={data} renderItem={renderItem} states={{ currentDate: states.currentDate }} config={config} />;
+    return (
+      <Week
+        trackedBy={trackedBy}
+        data={data}
+        renderItem={renderItem}
+        states={{ currentDate: states.currentDate }}
+        config={config}
+      />
+    );
   else if (states.view.get === "Month") return <Month />;
 
   return <>...</>;

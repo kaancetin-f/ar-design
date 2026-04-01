@@ -127,7 +127,6 @@
           color: var(--white);
           font-size: 12px;
           overflow: hidden;
-          z-index: 10;
         }
       }
     }

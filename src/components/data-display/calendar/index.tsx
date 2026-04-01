@@ -7,7 +7,7 @@ import { View } from "../../../libs/types";
 import Header from "./Header";
 import "../../../assets/css/components/data-display/calendar/styles.css";
 
-const Calendar = function <T>({ data, renderItem, config }: IProps<T>) {
+const Calendar = function <T>({ trackedBy, data, renderItem, config }: IProps<T>) {
   // states
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<View>("Week");
@@ -26,6 +26,7 @@ const Calendar = function <T>({ data, renderItem, config }: IProps<T>) {
       />
 
       <Body
+        trackedBy={trackedBy}
         data={data}
         renderItem={renderItem}
         states={{

@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { CalendarEvent } from "../IProps";
 import ReactDOM from "react-dom";
 
 interface IProps<T> {
+  trackedBy: keyof (T & CalendarEvent);
   data: (T & CalendarEvent)[];
   renderItem: (item: T, index: number) => React.JSX.Element;
   states: {
@@ -17,10 +18,7 @@ interface IProps<T> {
   };
 }
 
-const Week = function <T>({ data, renderItem, states, config }: IProps<T>) {
-  // refs
-  const _eventBox = useRef<(HTMLDivElement | null)[]>([]);
-
+const Week = function <T>({ trackedBy, data, renderItem, states, config }: IProps<T>) {
   // states
   const [mouseCoordinate, setMouseCoordinate] = useState<{
     x: number;
@@ -39,7 +37,7 @@ const Week = function <T>({ data, renderItem, states, config }: IProps<T>) {
   const startHour = 0;
   const endHour = 24;
   const hours = endHour - startHour;
-  const cellHeight = 60;
+  // const cellHeight = 60;
 
   // methods
   const weekDays = useMemo(
@@ -99,64 +97,48 @@ const Week = function <T>({ data, renderItem, states, config }: IProps<T>) {
           </div>
 
           <div className="events-layer">
-            {data.flatMap((event, eventIdx) => {
-              const eventColor = getColor(eventIdx);
+            {weekDays.map((day, dayIndex) => {
+              const dayStart = new Date(day).setHours(0, 0, 0, 0);
+              const dayEnd = new Date(day).setHours(23, 59, 59, 999);
 
-              // Her etkinlik için haftanın günlerini gezip, o güne düşen parçayı hesaplıyoruz
-              return weekDays.map((day, dayIndex) => {
-                const dayStart = new Date(day);
-                dayStart.setHours(0, 0, 0, 0);
+              // 1. Bu güne ait etkinlikleri filtrele ve sırala.
+              const dayEvents = data
+                .filter((event) => {
+                  return event.start.getTime() <= dayEnd && event.end.getTime() >= dayStart;
+                })
+                .sort((a, b) => a.start.getTime() - b.start.getTime());
 
-                const dayEnd = new Date(day);
-                dayEnd.setHours(23, 59, 59, 999);
+              // 2. Çakışmaları hesapla (Görsel yerleşim için kritik adım).
+              const positionedEvents = computeEventLayout(dayEvents, dayStart, dayEnd);
 
-                // Etkinlik bu günle kesişiyor mu?
-                const overlapStart = new Date(Math.max(event.start.getTime(), dayStart.getTime()));
-                const overlapEnd = new Date(Math.min(event.end.getTime(), dayEnd.getTime()));
+              return positionedEvents.map(({ event, layout, originalIndex }) => {
+                const uniqueValue = event[trackedBy];
+                const eventColor = getColor(uniqueValue as string | number);
 
-                if (overlapStart < overlapEnd) {
-                  // Bu güne düşen kısmın yükseklik ve top değerleri
-                  const startMinutes = overlapStart.getHours() * 60 + overlapStart.getMinutes();
-                  const durationMinutes = (overlapEnd.getTime() - overlapStart.getTime()) / 60000;
-
-                  const top = (startMinutes / 60) * cellHeight;
-                  const height = (durationMinutes / 60) * cellHeight;
-
-                  // Durum Kontrolleri
-                  const isContinuedFromYesterday = event.start < dayStart;
-                  const isContinuingTomorrow = event.end > dayEnd;
-
-                  return (
-                    <div
-                      ref={(element) => {
-                        if (!element) return;
-
-                        _eventBox.current[dayIndex] = element;
-                      }}
-                      key={`${eventIdx}-${dayIndex}`}
-                      onMouseEnter={() => setActiveTooltip({ content: renderItem(event, eventIdx), id: eventIdx })}
-                      onMouseLeave={() => setActiveTooltip(null)}
-                      className="event-box"
-                      style={{
-                        backgroundColor: eventColor.bg,
-                        top: `${top}px`,
-                        height: `${height}px`,
-                        left: `${(100 / 7) * dayIndex}%`,
-                        width: `${100 / 7}%`,
-                        borderTop: isContinuedFromYesterday ? "none" : `1px solid ${eventColor.border}`,
-                        borderBottom: isContinuingTomorrow ? "none" : `1px solid ${eventColor.border}`,
-                        borderRadius: isContinuedFromYesterday
-                          ? "0 0 var(--border-radius-sm) var(--border-radius-sm)"
-                          : isContinuingTomorrow
-                            ? "var(--border-radius-sm) var(--border-radius-sm) 0 0"
-                            : "var(--border-radius-sm)",
-                      }}
-                    >
-                      {!isContinuedFromYesterday && renderItem(event, eventIdx)}
-                    </div>
-                  );
-                }
-                return null;
+                return (
+                  <div
+                    key={`${originalIndex}-${dayIndex}`}
+                    onMouseEnter={() =>
+                      setActiveTooltip({ content: renderItem(event, originalIndex), id: originalIndex })
+                    }
+                    onMouseLeave={() => setActiveTooltip(null)}
+                    className="event-box"
+                    style={{
+                      backgroundColor: eventColor.bg,
+                      position: "absolute",
+                      top: `${layout.top}px`,
+                      height: `${layout.height}px`,
+                      // Dinamik genişlik ve sol mesafe hesaplama.
+                      left: `calc(${(100 / 7) * dayIndex}% + ${(layout.column * (100 / 7)) / layout.totalColumns}%)`,
+                      width: `${100 / 7 / layout.totalColumns}%`,
+                      border: `1px solid ${eventColor.border}`,
+                      borderRadius: "var(--border-radius-sm)",
+                      zIndex: 10,
+                    }}
+                  >
+                    {layout.height > 20 && renderItem(event, originalIndex)}
+                  </div>
+                );
               });
             })}
           </div>
@@ -181,7 +163,72 @@ const Week = function <T>({ data, renderItem, states, config }: IProps<T>) {
   );
 };
 
-// Yardımcı Fonksiyonlar aynı kalıyor
+/**
+ * Etkinliklerin çakışma durumuna göre konumlarını hesaplayan yardımcı fonksiyon
+ */
+function computeEventLayout<T>(events: (T & CalendarEvent)[], dayStart: number, dayEnd: number) {
+  const cellHeight = 60;
+  const results: { event: any; originalIndex: number; layout: any }[] = [];
+
+  // Gruplandırma (Aynı anda çakışan etkinlik kümeleri)
+  let clusters: any[][] = [];
+  let lastEventEnd = 0;
+
+  events.forEach((event, idx) => {
+    const start = Math.max(event.start.getTime(), dayStart);
+    const end = Math.min(event.end.getTime(), dayEnd);
+
+    if (start >= lastEventEnd) {
+      clusters.push([]); // Yeni bir küme başlat
+    }
+
+    const lastCluster = clusters[clusters.length - 1];
+    lastCluster.push({ event, idx, start, end });
+    lastEventEnd = Math.max(lastEventEnd, end);
+  });
+
+  // Her küme içindeki kolonları hesapla
+  clusters.forEach((cluster) => {
+    const columns: any[][] = [];
+
+    cluster.forEach((item) => {
+      let placed = false;
+      for (let i = 0; i < columns.length; i++) {
+        // Eğer bu kolondaki son etkinlikle çakışmıyorsa buraya koy
+        const lastInColumn = columns[i][columns[i].length - 1];
+        if (item.start >= lastInColumn.end) {
+          columns[i].push(item);
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) {
+        columns.push([item]); // Yeni kolon aç
+      }
+    });
+
+    // Sonuçları formatla
+    cluster.forEach((item) => {
+      const colIndex = columns.findIndex((col) => col.includes(item));
+      const startMinutes = new Date(item.start).getHours() * 60 + new Date(item.start).getMinutes();
+      const duration = (item.end - item.start) / 60000;
+
+      results.push({
+        event: item.event,
+        originalIndex: item.idx,
+        layout: {
+          top: (startMinutes / 60) * cellHeight,
+          height: (duration / 60) * cellHeight,
+          column: colIndex,
+          totalColumns: columns.length,
+        },
+      });
+    });
+  });
+
+  return results;
+}
+
 const getWeekRange = (date: Date, weekStartsOn: number = 1) => {
   const current = new Date(date);
   const currentDay = current.getDay();
@@ -212,7 +259,15 @@ const getColor = (id: string | number) => {
     { bg: "#e91e63", border: "#c2185b" }, // Pembe
     { bg: "#00bcd4", border: "#0097a7" }, // Turkuaz
   ];
-  const index = typeof id === "number" ? id : id.length;
+
+  // Eğer id string ise karakter kodlarının toplamını alarak tutarlı bir index üretiriz
+  let hash = 0;
+  const identifier = String(id);
+  for (let i = 0; i < identifier.length; i++) {
+    hash = identifier.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const index = Math.abs(hash);
   return colors[index % colors.length];
 };
 

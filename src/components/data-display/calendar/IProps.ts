@@ -4,6 +4,7 @@ export type CalendarEvent = {
 };
 
 interface IProps<T> {
+  trackedBy: keyof (T & CalendarEvent);
   data: (T & CalendarEvent)[];
   renderItem: (item: T, index: number) => React.JSX.Element;
   config?: {
