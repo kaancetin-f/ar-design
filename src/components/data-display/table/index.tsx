@@ -776,7 +776,7 @@ const Table = forwardRef(
                 )}
 
                 {selections && (
-                  <th className="selection-col sticky-left" data-sticky-position="left">
+                  <th className="selection-col sticky-left" data-sticky-position="left" style={{ bottom: 0 }}>
                     <Checkbox
                       variant="filled"
                       color="green"

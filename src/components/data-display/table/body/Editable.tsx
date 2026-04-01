@@ -46,6 +46,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation, c
             onEditable({ ...item, [key]: c.editable?.type === "number" ? Number(value) : value } as T, trackByValue);
           }}
           validation={{ text: _vText }}
+          {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
         />
       );
     case "decimal":
@@ -62,6 +63,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation, c
           }}
           validation={{ text: _vText }}
           locale={config.locale}
+          {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
         />
       );
     case "input-formatted-decimal":
@@ -78,6 +80,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation, c
           }}
           validation={{ text: _vText }}
           locale={config.locale}
+          {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
         />
       );
     case "date-picker":
@@ -90,6 +93,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation, c
             onEditable({ ...item, [key]: value } as T, trackByValue);
           }}
           validation={{ text: _vText }}
+          {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
         />
       );
     case "single-select":
@@ -103,6 +107,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation, c
             onEditable({ ...item, [key]: option?.value } as T, trackByValue);
           }}
           validation={{ text: _vText }}
+          {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
         />
       );
     case "multiple-select":
@@ -117,6 +122,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation, c
           }}
           validation={{ text: _vText }}
           multiple
+          {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
         />
       );
     default:

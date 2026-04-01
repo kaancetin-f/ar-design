@@ -54,6 +54,7 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
   // refs
   const _hasMeasured = useRef<boolean>(false);
   const _tBodyTR = useRef<(HTMLTableRowElement | null)[]>([]);
+  const _tHeadTH = useRef<(HTMLTableCellElement | null)[]>([]);
 
   // states
   const [triggerForRender, setTriggerForRender] = useState<boolean>(false);
@@ -78,7 +79,14 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
         >
           {/* Checkboxes */}
           {methods.selections && (
-            <td className="flex justify-content-center sticky-left" data-sticky-position="left">
+            <td
+              ref={(element) => {
+                _tHeadTH.current[index] = element;
+              }}
+              className="flex justify-content-center sticky-left"
+              style={{ display: "flex", alignItems: "center", height: rowHeights[index] ?? 0 }}
+              data-sticky-position="left"
+            >
               <Checkbox
                 key={Date.now()}
                 ref={(element) => (refs._checkboxItems.current[index] = element)}

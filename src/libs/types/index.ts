@@ -86,6 +86,7 @@ export type TableColumnType<T> = {
       | "multiple-select";
     options?: Option[];
     method?: () => void | Promise<void>;
+    where?: (item: T) => boolean;
   };
   config?: {
     width?: number;
