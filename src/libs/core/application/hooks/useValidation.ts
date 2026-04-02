@@ -147,7 +147,7 @@ const useValidation = function <TData extends object>(
       const key = getKey(param.subkey);
 
       if (param.where) {
-        if (s.type === "required" && !Utils.IsNullOrEmpty(value) && param.where(data)) {
+        if (param.where(data)) {
           setError(param.subkey ? key : param.key, s.message, param.step);
         }
       } else {
