@@ -19,8 +19,6 @@ const FilterPopup = ({ children, refs, states, coordinate }: IProps) => {
   // refs
   const _arTableFilterPopup = useRef<HTMLDivElement>(null);
 
-  // hooks
-
   // methods
   const handleClickOutSide = (event: MouseEvent) => {
     const target = event.target as HTMLElement;

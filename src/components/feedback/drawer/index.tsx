@@ -25,7 +25,7 @@ const Drawer = function <T extends object>({ title, tabs = [], activeTab, open, 
   const { errors, onSubmit, setSubmit } = useValidation(
     validation?.data as T,
     validation?.rules as ValidationProperties<T>[],
-    currentTab + 1
+    currentTab + 1,
   );
 
   // methods
@@ -93,7 +93,7 @@ const Drawer = function <T extends object>({ title, tabs = [], activeTab, open, 
         )}
 
         <div className="tabs">
-          {tabs.length > 0 &&
+          {tabs.length > 1 &&
             tabs.map((tab, index) => {
               let className: string[] = ["item"];
 

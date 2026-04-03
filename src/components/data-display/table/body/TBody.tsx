@@ -4,6 +4,7 @@ import { TableColumnType } from "../../../../libs/types";
 import Checkbox from "../../../form/checkbox";
 import Editable from "./Editable";
 import { Config } from "../IProps";
+import { useTranslation } from "../../../../libs/core/application/hooks";
 
 interface IProps<T> {
   data: T[];
@@ -63,6 +64,9 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
   // variables
   const _subrowSelector: string = config.subrow?.selector ?? "subitems";
   const _subrowButton: boolean = config.subrow?.button ?? true;
+
+  // hooks
+  const { t } = useTranslation(String(config.locale ?? "tr"));
 
   // methods
   const renderRow = (item: T, index: number, deph: number) => {
@@ -331,7 +335,7 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
         <div className="no-item">
           <ARIcon icon={"Inbox-Fill"} fill="var(--gray-300)" size={64} style={{ position: "relative", zIndex: 1 }} />
 
-          <span>No Data</span>
+          <span>{t("Table.Body.NoData.Text")}</span>
         </div>
       </td>
     </tr>

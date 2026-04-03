@@ -18,6 +18,9 @@ const TableTR: ITableLocale = {
   "Table.Filters.Where.Input.Item.8.Text": "Boş değil",
   "Table.Filters.Search.Input.Placeholder": "Ara",
 
+  // Body
+  "Table.Body.NoData.Text": "Veri Bulunamadı.",
+
   // Pagination
   "Table.Pagination.Information.Text": "{2} kayıt içerisinden {0} - {1} aralığı listeleniyor",
 };

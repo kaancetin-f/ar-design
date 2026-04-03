@@ -16,6 +16,9 @@ interface ITableLocale {
   "Table.Filters.Where.Input.Item.8.Text": string;
   "Table.Filters.Search.Input.Placeholder": string;
 
+  // Body
+  "Table.Body.NoData.Text": string;
+
   // Pagination
   "Table.Pagination.Information.Text": string;
 }

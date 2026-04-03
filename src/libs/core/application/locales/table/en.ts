@@ -18,6 +18,9 @@ const TableEN: ITableLocale = {
   "Table.Filters.Where.Input.Item.8.Text": "Is Not Empty",
   "Table.Filters.Search.Input.Placeholder": "Search",
 
+  // Body
+  "Table.Body.NoData.Text": "No Data",
+
   // Pagination
   "Table.Pagination.Information.Text": "Showing {0} to {1} of {2} agreements",
 };
