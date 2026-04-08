@@ -125,9 +125,12 @@ const Drawer = function <T extends object>({ title, tabs = [], activeTab, open, 
                   {React.Children.map(tab.content, (child) => {
                     if (React.isValidElement(child) && index === currentTab) {
                       return validation
-                        ? React.cloneElement(child as React.ReactElement, {
-                            errors: errors,
-                          })
+                        ? React.cloneElement(
+                            child as React.ReactElement<{ errors: Partial<{ [key in keyof T]: string }> }>,
+                            {
+                              errors: errors,
+                            },
+                          )
                         : child;
                     }
 

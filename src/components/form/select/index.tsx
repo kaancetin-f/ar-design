@@ -41,7 +41,7 @@ const Select: React.FC<Props> = ({
   const _optionItems = useRef<(HTMLLIElement | null)[]>([]);
   const _searchField = useRef<HTMLInputElement>(null);
   // const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
-  let _otoFocus = useRef<NodeJS.Timeout>().current;
+  let _otoFocus = useRef<NodeJS.Timeout | null>(null).current;
   let _navigationIndex = useRef<number>(0);
 
   // states
@@ -265,7 +265,7 @@ const Select: React.FC<Props> = ({
     }
 
     return () => {
-      clearTimeout(_otoFocus);
+      _otoFocus && clearTimeout(_otoFocus);
 
       window.removeEventListener("blur", () => setOptionsOpen(false));
       document.removeEventListener("click", handleClickOutSide);
@@ -474,7 +474,11 @@ const Select: React.FC<Props> = ({
                   return (
                     <li
                       key={index}
-                      ref={(element) => (_optionItems.current[index] = element)}
+                      ref={(element) => {
+                        if (!element) return;
+
+                        _optionItems.current[index] = element;
+                      }}
                       className={option === value ? "selectedItem" : ""}
                       onClick={(event) => {
                         event.stopPropagation();

@@ -92,7 +92,11 @@ const Notification = ({ title, message, status, direction = "bottom-left", trigg
     return (
       <div
         key={item.id}
-        ref={(element) => (_notificationItems.current[index] = element)}
+        ref={(element) => {
+          if (!element) return;
+
+          _notificationItems.current[index] = element;
+        }}
         className="ar-notification-item"
         style={
           items.length > 5

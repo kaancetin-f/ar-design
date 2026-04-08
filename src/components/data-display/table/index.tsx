@@ -63,7 +63,7 @@ const Table = forwardRef(
     const _tableWrapper = useRef<HTMLDivElement>(null);
     const _tableContent = useRef<HTMLDivElement>(null);
     const _tBody = useRef<HTMLTableSectionElement>(null);
-    const _dragItem = useRef<HTMLElement>();
+    const _dragItem = useRef<HTMLElement>(null);
     const _checkboxItems = useRef<(HTMLInputElement | null)[]>([]);
     const _filterCheckboxItems = useRef<(HTMLInputElement | null)[]>([]);
     // refs -> Search
@@ -103,7 +103,7 @@ const Table = forwardRef(
     });
     // states -> Filter
     const [filterButtonCoordinate, setFilterButtonCoordinate] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-    const [filterPopupContent, setFilterPopupContent] = useState<JSX.Element | null>(null);
+    const [filterPopupContent, setFilterPopupContent] = useState<React.JSX.Element | null>(null);
     const [filterPopupOption, setFilterPopupOption] = useState<{ key: string; option: Option | undefined } | null>(
       null,
     );
@@ -341,7 +341,11 @@ const Table = forwardRef(
                       return (
                         <div>
                           <Checkbox
-                            ref={(element) => (_filterCheckboxItems.current[fIndex] = element)}
+                            ref={(element) => {
+                              if (!element) return;
+
+                              _filterCheckboxItems.current[fIndex] = element;
+                            }}
                             variant="filled"
                             color="green"
                             label={filter.text}
@@ -865,7 +869,11 @@ const Table = forwardRef(
                             ) : (
                               <>
                                 <Input
-                                  ref={(element) => (_searchTextInputs.current[cIndex] = element)}
+                                  ref={(element) => {
+                                    if (!element) return;
+
+                                    _searchTextInputs.current[cIndex] = element;
+                                  }}
                                   variant={c.key && !c.filters ? "outlined" : "filled"}
                                   style={{ height: "2rem" }}
                                   value={(config.isServerSide ? ssrValue : csrValue) ?? ""}
@@ -878,7 +886,11 @@ const Table = forwardRef(
                                 />
 
                                 <span
-                                  ref={(element) => (_filterButton.current[cIndex] = element)}
+                                  ref={(element) => {
+                                    if (!element) return;
+
+                                    _filterButton.current[cIndex] = element;
+                                  }}
                                   onClick={(event) => {
                                     event.preventDefault();
                                     event.stopPropagation();
@@ -1027,4 +1039,4 @@ export default memo(Table, <T extends object>(prevProps: IProps<T>, nextProps: I
   const pagination = Utils.DeepEqual(prevProps.pagination, nextProps.pagination);
 
   return data && columns && actions && previousSelections && pagination;
-}) as <T extends object>(props: IProps<T> & { ref?: React.Ref<HTMLTableElement> }) => JSX.Element;
+}) as <T extends object>(props: IProps<T> & { ref?: React.Ref<HTMLTableElement> }) => React.JSX.Element;

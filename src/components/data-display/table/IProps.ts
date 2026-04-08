@@ -94,7 +94,7 @@ interface IProps<T> extends IChildren {
   previousSelections?: T[];
   sortedParams?: (params: Sort<T>[], query: string) => void;
   searchedParams?: (params: SearchedParam | null, query: string, operator: FilterOperator) => void;
-  onEditable?: (item: T, trackByValue: string) => void;
+  onEditable?: (item: T, trackByValue: string, currentKey?: keyof T | null) => void;
   onDnD?: (item: T[]) => void;
   pagination?: {
     totalRecords: number;

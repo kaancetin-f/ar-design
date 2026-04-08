@@ -6,12 +6,13 @@ import DatePicker from "../../../form/date-picker";
 import { Errors, Option, TableColumnType } from "../../../../libs/types";
 import Select from "../../../form/select";
 import { Config } from "../IProps";
+import { ExtractKey } from "../Helpers";
 
 interface IProps<T> {
   c: TableColumnType<T>;
   item: T;
   trackByValue: string;
-  onEditable: (item: T, trackByValue: string) => void;
+  onEditable: (item: T, trackByValue: string, currentKey?: keyof T | null) => void;
   validation?: Errors<T>;
   config: Config<T>;
 }
@@ -43,7 +44,11 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation, c
             const { value } = event.target;
 
             setValue(value);
-            onEditable({ ...item, [key]: c.editable?.type === "number" ? Number(value) : value } as T, trackByValue);
+            onEditable(
+              { ...item, [key]: c.editable?.type === "number" ? Number(value) : value } as T,
+              trackByValue,
+              ExtractKey(c.key),
+            );
           }}
           validation={{ text: _vText }}
           {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
@@ -59,7 +64,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation, c
             const { value } = event.target;
 
             setValue(value);
-            onEditable({ ...item, [key]: value } as T, trackByValue);
+            onEditable({ ...item, [key]: value } as T, trackByValue, ExtractKey(c.key));
           }}
           validation={{ text: _vText }}
           locale={config.locale}
@@ -76,7 +81,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation, c
             const { value } = event.target;
 
             setValue(value);
-            onEditable({ ...item, [key]: value } as T, trackByValue);
+            onEditable({ ...item, [key]: value } as T, trackByValue, ExtractKey(c.key));
           }}
           validation={{ text: _vText }}
           locale={config.locale}
@@ -90,7 +95,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation, c
           value={_value}
           onChange={(value) => {
             setValue(value);
-            onEditable({ ...item, [key]: value } as T, trackByValue);
+            onEditable({ ...item, [key]: value } as T, trackByValue, ExtractKey(c.key));
           }}
           validation={{ text: _vText }}
           {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
@@ -104,7 +109,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation, c
           options={c.editable.options as Option[]}
           onClick={async () => await c.editable?.method?.()}
           onChange={(option) => {
-            onEditable({ ...item, [key]: option?.value } as T, trackByValue);
+            onEditable({ ...item, [key]: option?.value } as T, trackByValue, ExtractKey(c.key));
           }}
           validation={{ text: _vText }}
           {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
@@ -118,7 +123,7 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation, c
           options={c.editable.options as Option[]}
           onClick={async () => await c.editable?.method?.()}
           onChange={(options) => {
-            onEditable({ ...item, [key]: options.map((option) => option.value) } as T, trackByValue);
+            onEditable({ ...item, [key]: options.map((option) => option.value) } as T, trackByValue, ExtractKey(c.key));
           }}
           validation={{ text: _vText }}
           multiple

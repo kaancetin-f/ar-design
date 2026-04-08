@@ -268,9 +268,11 @@ const DatePicker: React.FC<Props> = ({ variant, color, onChange, config, validat
     const generateList = (count: number, current: number, setFunc: React.Dispatch<React.SetStateAction<any>>) => {
       const items = Array.from({ length: count }, (_, i) => (
         <li
-          ref={(element) =>
-            count === 24 ? (_hoursLiElements.current[i] = element) : (_minutesLiElements.current[i] = element)
-          }
+          ref={(element) => {
+            if (!element) return;
+
+            count === 24 ? (_hoursLiElements.current[i] = element) : (_minutesLiElements.current[i] = element);
+          }}
           key={i}
           {...(current === i ? { className: "selection-time" } : {})}
           onClick={() => {

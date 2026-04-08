@@ -83,7 +83,11 @@ const MemoizedTHeadCell = function <T>({
 
               {config.isProperties && isProperties && (
                 <span
-                  ref={(element) => (refs.propertiesButton.current[cIndex] = element)}
+                  ref={(element) => {
+                    if (!element) return;
+
+                    refs.propertiesButton.current[cIndex] = element;
+                  }}
                   className="properties-field"
                   data-properties-button="true"
                   onClick={(event) => {

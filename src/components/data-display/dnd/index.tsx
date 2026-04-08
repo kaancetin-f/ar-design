@@ -10,7 +10,7 @@ let _fromColumn: string | undefined = undefined;
 const DnD = function <T>({ data, renderItem, columnKey, onChange, confing = { isMoveIcon: true } }: IProps<T>) {
   // refs
   const _arDnD = useRef<HTMLDivElement>(null);
-  const _dragItem = useRef<HTMLElement>();
+  const _dragItem = useRef<HTMLElement>(null);
 
   // useEffects
   useEffect(() => {
@@ -105,7 +105,7 @@ const DnD = function <T>({ data, renderItem, columnKey, onChange, confing = { is
 
             _arDnD.current.insertBefore(
               _dragItem.current,
-              dragItemIndex < dropItemIndex ? overItem.nextSibling : overItem
+              dragItemIndex < dropItemIndex ? overItem.nextSibling : overItem,
             );
 
             const movedItem = data.splice(dragItemIndex, 1)[0];

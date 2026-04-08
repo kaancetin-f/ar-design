@@ -33,7 +33,7 @@ interface IProps<T> {
     trackBy?: (item: T) => string;
     selections?: (selectionItems: T[]) => void;
     onDnD?: (item: T[]) => void;
-    onEditable?: (item: T, trackByValue: string) => void;
+    onEditable?: (item: T, trackByValue: string, currentKey?: keyof T | null) => void;
     rowBackgroundColor?: (item: T) => string;
   };
 
@@ -93,7 +93,11 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
             >
               <Checkbox
                 key={Date.now()}
-                ref={(element) => (refs._checkboxItems.current[index] = element)}
+                ref={(element) => {
+                  if (!element) return;
+
+                  refs._checkboxItems.current[index] = element;
+                }}
                 variant="filled"
                 color="green"
                 checked={refs._selectionItems.current.some(

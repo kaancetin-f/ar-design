@@ -18,7 +18,7 @@ const Steps = function <T extends object>({ children, name, steps = [], onChange
   const { errors, onSubmit, setSubmit } = useValidation(
     validation?.data as T,
     validation?.rules as ValidationProperties<T>[],
-    currentStep + 1
+    currentStep + 1,
   );
 
   // methods
@@ -87,9 +87,12 @@ const Steps = function <T extends object>({ children, name, steps = [], onChange
               {React.Children.map(step.content, (child) => {
                 if (React.isValidElement(child) && stepIndex === currentStep) {
                   return validation
-                    ? React.cloneElement(child as React.ReactElement, {
-                        errors: errors,
-                      })
+                    ? React.cloneElement(
+                        child as React.ReactElement<{ errors: Partial<{ [key in keyof T]: string }> }>,
+                        {
+                          errors: errors,
+                        },
+                      )
                     : child;
                 }
 

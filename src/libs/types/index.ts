@@ -70,7 +70,7 @@ export type FilterDataType =
   | "object"
   | "function";
 export type TableColumnType<T> = {
-  title: string;
+  title?: string;
   key?: keyof T | { field: keyof T; nestedKey: string };
   filters?: Option[];
   filterDataType?: FilterDataType;
@@ -89,7 +89,7 @@ export type TableColumnType<T> = {
     where?: (item: T) => boolean;
   };
   config?: {
-    width?: number;
+    width?: number | "auto" | "fit-content" | "max-content" | "min-content";
     alignContent?: "left" | "center" | "right";
     sticky?: "left" | "right";
     textWrap?: "wrap" | "nowrap";
