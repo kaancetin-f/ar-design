@@ -10,15 +10,23 @@ import { ValidationProperties } from "../../../libs/types";
 
 const { Title } = Typography;
 
-const Steps = function <T extends object>({ children, name, steps = [], onChange, validation }: IProps<T>) {
+const Steps = function <T extends object>({
+  children,
+  name,
+  steps = [],
+  currentStep,
+  onChange,
+  validation,
+  config,
+}: IProps<T>) {
   // states
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [_currentStep, setCurrentStep] = useState<number>(0);
 
   // hooks
   const { errors, onSubmit, setSubmit } = useValidation(
     validation?.data as T,
     validation?.rules as ValidationProperties<T>[],
-    currentStep + 1,
+    _currentStep + 1,
   );
 
   // methods
@@ -30,11 +38,17 @@ const Steps = function <T extends object>({ children, name, steps = [], onChange
 
   // useEffects
   useEffect(() => {
+    setCurrentStep(currentStep ?? 0);
+  }, [currentStep]);
+
+  useEffect(() => {
+    if (config?.isAutomatic) return;
+
     const key = `${window.location.pathname}::${name}`;
     const stored = sessionStorage.getItem(key);
 
-    setCurrentStep(stored !== null ? Number(stored) : 0);
-    onChange?.(stored !== null ? Number(stored) : 0);
+    setCurrentStep(stored !== null ? Number(stored) : (currentStep ?? 0));
+    onChange?.(stored !== null ? Number(stored) : (currentStep ?? 0));
   }, []);
 
   return (
@@ -44,13 +58,15 @@ const Steps = function <T extends object>({ children, name, steps = [], onChange
           steps.map((step, index) => {
             let itemIcon: string[] = ["item-icon"];
 
-            itemIcon.push(getStepIconStatus(currentStep, index));
+            itemIcon.push(getStepIconStatus(_currentStep, index));
 
             return (
               <div
                 key={step.title || index}
                 className="item"
                 onClick={() => {
+                  if (config?.isAutomatic) return;
+
                   if (validation) {
                     onSubmit((result) => {
                       if (!result) return;
@@ -69,7 +85,7 @@ const Steps = function <T extends object>({ children, name, steps = [], onChange
                 }}
               >
                 <div className={itemIcon.map((c) => c).join(" ")}>
-                  <span className={getStepIconStatus(currentStep, index)}></span>
+                  <span className={getStepIconStatus(_currentStep, index)}></span>
                 </div>
                 <div className="item-informations">
                   <span className="step">STEP {index + 1}</span>
@@ -85,7 +101,7 @@ const Steps = function <T extends object>({ children, name, steps = [], onChange
           return (
             <div key={stepIndex}>
               {React.Children.map(step.content, (child) => {
-                if (React.isValidElement(child) && stepIndex === currentStep) {
+                if (React.isValidElement(child) && stepIndex === _currentStep) {
                   return validation
                     ? React.cloneElement(
                         child as React.ReactElement<{ errors: Partial<{ [key in keyof T]: string }> }>,
@@ -102,46 +118,48 @@ const Steps = function <T extends object>({ children, name, steps = [], onChange
           );
         })}
 
-        <div className="buttons">
-          {currentStep > 0 && (
-            <Button
-              color="blue"
-              onClick={() => {
-                setCurrentStep((prev) => prev - 1);
-                onChange(currentStep - 1);
-              }}
-            >
-              Geri
-            </Button>
-          )}
+        {!config?.isAutomatic && (
+          <div className="buttons">
+            {_currentStep > 0 && (
+              <Button
+                color="blue"
+                onClick={() => {
+                  setCurrentStep((prev) => prev - 1);
+                  onChange(_currentStep - 1);
+                }}
+              >
+                Geri
+              </Button>
+            )}
 
-          {children && children}
+            {children && children}
 
-          {currentStep < steps.length - 1 && (
-            <Button
-              color="blue"
-              onClick={() => {
-                if (validation) {
-                  onSubmit((result) => {
-                    if (!result) return;
+            {_currentStep < steps.length - 1 && (
+              <Button
+                color="blue"
+                onClick={() => {
+                  if (validation) {
+                    onSubmit((result) => {
+                      if (!result) return;
 
+                      setCurrentStep((prev) => prev + 1);
+                      onChange(_currentStep + 1);
+                      setSubmit(false);
+                    });
+                  } else {
                     setCurrentStep((prev) => prev + 1);
-                    onChange(currentStep + 1);
-                    setSubmit(false);
-                  });
-                } else {
-                  setCurrentStep((prev) => prev + 1);
-                  onChange(currentStep + 1);
-                }
+                    onChange(_currentStep + 1);
+                  }
 
-                const key = `${window.location.pathname}::${name}`;
-                sessionStorage.setItem(key, String(currentStep + 1));
-              }}
-            >
-              İleri
-            </Button>
-          )}
-        </div>
+                  const key = `${window.location.pathname}::${name}`;
+                  sessionStorage.setItem(key, String(_currentStep + 1));
+                }}
+              >
+                İleri
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
