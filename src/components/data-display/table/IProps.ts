@@ -27,7 +27,7 @@ export type Actions = {
 export type Sort<T> = { key: keyof T; direction: "asc" | "desc" | null };
 export type SearchedParam = { [key: string]: FilterValue | FilterValue[] };
 
-export type Config<T> = {
+export type Config<T extends object> = {
   locale?: Intl.LocalesArgument;
   isServerSide?: boolean;
   isProperties?: boolean;
@@ -41,14 +41,17 @@ export type Config<T> = {
     button?: boolean;
     render?: {
       styles: React.CSSProperties;
-      element: (item: any[]) => React.JSX.Element;
+      element: (item: T[]) => React.JSX.Element;
     };
   };
   dnd?: {
     renderItem: React.JSX.Element;
   };
   isTreeView?: boolean;
-  validation?: Errors<T>;
+  validation?: {
+    errors: Errors<T>;
+    getChangeData?: (items: T[]) => void;
+  };
 };
 
 type ImportActionType = {
@@ -82,7 +85,7 @@ type DeleteActionType = {
   onClick: () => void;
 };
 
-interface IProps<T> extends IChildren {
+interface IProps<T extends object> extends IChildren {
   trackBy?: (item: T) => string;
   title?: string;
   description?: string;

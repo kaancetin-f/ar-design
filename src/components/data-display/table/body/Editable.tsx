@@ -3,21 +3,20 @@
 import React, { useEffect, useState } from "react";
 import Input from "../../../form/input";
 import DatePicker from "../../../form/date-picker";
-import { Errors, Option, TableColumnType } from "../../../../libs/types";
+import { Option, TableColumnType } from "../../../../libs/types";
 import Select from "../../../form/select";
 import { Config } from "../IProps";
 import { ExtractKey } from "../Helpers";
 
-interface IProps<T> {
+interface IProps<T extends object> {
   c: TableColumnType<T>;
   item: T;
   trackByValue: string;
   onEditable: (item: T, trackByValue: string, currentKey?: keyof T | null) => void;
-  validation?: Errors<T>;
   config: Config<T>;
 }
 
-const Editable = function <T>({ c, item, trackByValue, onEditable, validation, config }: IProps<T>) {
+const Editable = function <T extends object>({ c, item, trackByValue, onEditable, config }: IProps<T>) {
   // variables
   const key = c.key as keyof T;
   const itemValue = item[c.key as keyof T];
@@ -25,7 +24,8 @@ const Editable = function <T>({ c, item, trackByValue, onEditable, validation, c
   const selectItems = Array.isArray(itemValue)
     ? (c.editable?.options?.filter((x) => itemValue.includes(x.value)) as Option[])
     : [];
-  const _vText = validation?.[`${c.key as string}_${trackByValue}` as keyof typeof validation];
+  const validation = config.validation;
+  const _vText = validation?.errors?.[`${c.key as string}_${trackByValue}` as keyof typeof validation.errors];
 
   // states
   const [_value, setValue] = useState<string | number | readonly string[] | undefined>(itemValue as string);

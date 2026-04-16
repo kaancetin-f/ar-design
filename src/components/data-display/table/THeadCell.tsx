@@ -5,7 +5,7 @@ import { ARIcon } from "../../icons";
 import { ExtractKey } from "./Helpers";
 import { Config, Sort } from "./IProps";
 
-const MemoizedTHeadCell = function <T>({
+const MemoizedTHeadCell = function <T extends object>({
   refs,
   states,
   methods,

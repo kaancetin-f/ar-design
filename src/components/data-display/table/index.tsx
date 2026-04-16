@@ -88,6 +88,8 @@ const Table = forwardRef(
     // states
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [showSubitems, setShowSubitems] = useState<{ [key: string]: boolean }>({});
+    // states -> Action Buttons
+    const [createTrigger, setCreateTrigger] = useState<boolean>(false);
     // states -> Search
     const [searchedText, setSearchedText] = useState<SearchedParam | null>(null);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | null>(null);
@@ -745,9 +747,27 @@ const Table = forwardRef(
     }, [selectedPerPage]);
 
     useEffect(() => {
+      if (typeof selections !== "function" && config.validation) {
+        const updatedData = data.map((item) => {
+          if (!("trackByValue" in item) && trackBy) {
+            return { ...item, trackByValue: trackBy(item) };
+          }
+
+          return item;
+        });
+
+        config.validation?.getChangeData?.(updatedData);
+      }
+    }, [createTrigger]);
+
+    useEffect(() => {
       setIsMobile(window.innerWidth <= 768);
 
       window.addEventListener("resize", handleResize);
+
+      if (typeof selections !== "function" && config.validation) {
+        config.validation.getChangeData?.(data.map((d) => ({ ...d, trackByValue: trackBy?.(d) })) ?? []);
+      }
 
       return () => {
         window.removeEventListener("resize", handleResize);
@@ -768,7 +788,12 @@ const Table = forwardRef(
     return (
       <div ref={_tableWrapper} className={_tableClassName.map((c) => c).join(" ")}>
         {(title || description || actions || React.Children.count(children) > 0) && (
-          <Header title={title} description={description} actions={actions} />
+          <Header
+            states={{ createTrigger: { get: createTrigger, set: setCreateTrigger } }}
+            title={title}
+            description={description}
+            actions={actions}
+          />
         )}
 
         <div ref={_tableContent} className="content" onScroll={handleScroll}>

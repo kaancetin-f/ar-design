@@ -1,14 +1,17 @@
-import React, { memo } from "react";
+import React, { Dispatch, memo, SetStateAction } from "react";
 import { Actions } from "../IProps";
 import ActionButtons from "./ActionButtons";
 
 interface IProps {
+  states: {
+    createTrigger: { get: boolean; set: Dispatch<SetStateAction<boolean>> };
+  };
   title?: string;
   description?: string;
   actions?: Actions;
 }
 
-const Header = ({ title, description, actions }: IProps) => {
+const Header = ({ states, title, description, actions }: IProps) => {
   return (
     <div className="header">
       <div className="title">
@@ -16,7 +19,7 @@ const Header = ({ title, description, actions }: IProps) => {
         {description && <h5>{description}</h5>}
       </div>
 
-      {actions && <ActionButtons actions={actions} />}
+      {actions && <ActionButtons states={states} actions={actions} />}
     </div>
   );
 };

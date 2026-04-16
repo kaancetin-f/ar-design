@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { Dispatch, memo, SetStateAction, useState } from "react";
 import { Actions } from "../IProps";
 import React from "react";
 import Grid from "../../grid-system";
@@ -9,12 +9,15 @@ import Button from "../../../form/button";
 import { ARIcon } from "../../../icons";
 
 interface IProps {
+  states: {
+    createTrigger: { get: boolean; set: Dispatch<SetStateAction<boolean>> };
+  };
   actions: Actions;
 }
 
 const { Row, Column } = Grid;
 
-const ActionButtons = ({ actions }: IProps) => {
+const ActionButtons = ({ states, actions }: IProps) => {
   // states
   const [files, setFiles] = useState<File[]>([]);
   const [formData, setFormData] = useState<FormData | undefined>(undefined);
@@ -115,7 +118,12 @@ const ActionButtons = ({ actions }: IProps) => {
             variant="outlined"
             color="green"
             icon={{ element: <ARIcon icon="Add" size={24} /> }}
-            onClick={actions.create.onClick}
+            onClick={(event) => {
+              if (!actions.create) return;
+
+              actions.create.onClick(event);
+              states.createTrigger.set((prev) => !prev);
+            }}
           />
         </Tooltip>
       )}

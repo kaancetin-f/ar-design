@@ -8,7 +8,7 @@ import { ExtractKey } from "./Helpers";
 import { Config, Sort } from "./IProps";
 import { useTranslation } from "../../../libs/core/application/hooks";
 
-interface IProps<T> {
+interface IProps<T extends object> {
   refs: {
     tableContent: MutableRefObject<HTMLDivElement | null>;
     buttons: MutableRefObject<(HTMLSpanElement | null)[]>;

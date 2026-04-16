@@ -6,7 +6,7 @@ import Editable from "./Editable";
 import { Config } from "../IProps";
 import { useTranslation } from "../../../../libs/core/application/hooks";
 
-interface IProps<T> {
+interface IProps<T extends object> {
   data: T[];
   columns: TableColumnType<T>[];
   refs: {
@@ -223,7 +223,6 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
               item={item}
               trackByValue={methods.trackBy?.(item) ?? ""}
               onEditable={methods.onEditable}
-              validation={config.validation}
               config={config}
             />
           ) : (
