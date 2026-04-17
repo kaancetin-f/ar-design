@@ -8,7 +8,7 @@ import DnD from "../dnd";
 import { ARIcon } from "../../icons";
 import Filter from "./filter";
 
-const KanbanBoard = function <T, TColumnProperties>({
+const KanbanBoard = function <T extends object, TColumnProperties>({
   trackBy,
   columns,
   onChange,
@@ -16,6 +16,7 @@ const KanbanBoard = function <T, TColumnProperties>({
 }: IProps<T, TColumnProperties>) {
   // refs
   const _kanbanWrapper = useRef<HTMLDivElement>(null);
+  const _kanbanItems = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const _hoverItemIndex = useRef<number | null>(null);
   const _scrollInterval = useRef<number | null>(null);
   const _scrollAnimationFrame = useRef<number | null>(null);
@@ -224,15 +225,23 @@ const KanbanBoard = function <T, TColumnProperties>({
       ...col,
       items: [...col.items],
     }));
+    let firstMatchedId: string | number | null = null;
 
     // Search varsa...
     if (config?.filter?.search && search?.trim()) {
       const q = search.trim();
+      nextData = nextData.map((col) => {
+        const filteredItems = col.items.filter((item) => {
+          const isMatch = config.filter!.search!(item, q);
+          if (isMatch && !firstMatchedId) firstMatchedId = trackBy(item);
 
-      nextData = nextData.map((col) => ({
-        ...col,
-        items: col.items.filter((item) => config.filter!.search!(item, q)),
-      }));
+          return isMatch;
+        });
+
+        return { ...col, items: filteredItems };
+      });
+    } else {
+      if (config?.filter?.search) config.filter.search({} as any, "");
     }
 
     // Select ve Date varsa...
@@ -271,6 +280,29 @@ const KanbanBoard = function <T, TColumnProperties>({
     }));
 
     setData(nextData);
+
+    // Focus / Scroll Control
+    if (search?.trim() && firstMatchedId) {
+      const element = _kanbanItems.current[firstMatchedId];
+      const container = _kanbanWrapper.current;
+
+      if (element && container) {
+        const elementRect = element.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+
+        // Senin hesaplaman: Mevcut scroll + elemanın container'a göre konumu - ofset değerlerin
+        const scrollLeft = container.scrollLeft + (elementRect.left - containerRect.left) - 17.5;
+        const scrollTop = container.scrollTop + (elementRect.top - containerRect.top) - 100;
+
+        container.scrollTo({
+          left: scrollLeft,
+          top: scrollTop,
+          behavior: "smooth",
+        });
+      }
+    } else if (!search?.trim() && _kanbanWrapper.current) {
+      _kanbanWrapper.current.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
   }, [columns, search, selectedFilters, dateFilters]);
 
   return (
@@ -295,6 +327,7 @@ const KanbanBoard = function <T, TColumnProperties>({
               set: setSelectedFilters,
             },
           }}
+          config={config}
         />
       )}
 
@@ -360,6 +393,11 @@ const KanbanBoard = function <T, TColumnProperties>({
                     return (
                       <div
                         key={dndIndex}
+                        ref={(el) => {
+                          if (!el) return;
+
+                          _kanbanItems.current[trackBy(item)] = el;
+                        }}
                         className="item"
                         onDragOver={(event) => {
                           event.preventDefault();

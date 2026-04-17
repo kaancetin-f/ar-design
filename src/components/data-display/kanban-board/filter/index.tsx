@@ -5,8 +5,10 @@ import DateFilters from "./DateFilters";
 import SelectFilters from "./SelectFilters";
 import React from "react";
 import Input from "../../../form/input";
+import { Config } from "../IProps";
+import { useTranslation } from "../../../../libs/core/application/hooks";
 
-interface IProps {
+interface IProps<T extends object> {
   states: {
     search: {
       get: string;
@@ -25,11 +27,15 @@ interface IProps {
       set: Dispatch<SetStateAction<Record<string, Set<string | null>>>>;
     };
   };
+  config?: Config<T>;
 }
 
-const Filter = ({ states }: IProps) => {
+function Filter<T extends object>({ states, config }: IProps<T>) {
   // states
   const [openName, setOpenName] = useState<string | null>(null);
+
+  // hooks
+  const { t } = useTranslation(String(config?.locale ?? "tr"));
 
   // methods
   const handleOpen = (name: string | null) => setOpenName(openName === name ? null : name);
@@ -38,7 +44,7 @@ const Filter = ({ states }: IProps) => {
     <div className="filters">
       <Input
         variant="borderless"
-        placeholder="Filter by keyword"
+        placeholder={t("KanbanBoard.Search.Input.Placeholder")}
         onChange={(event) => states.search.set(event.target.value.toLocaleLowerCase())}
       />
 
@@ -54,6 +60,7 @@ const Filter = ({ states }: IProps) => {
           methods={{
             open: handleOpen,
           }}
+          config={config}
         />
 
         <SelectFilters
@@ -69,10 +76,11 @@ const Filter = ({ states }: IProps) => {
             openName: { get: openName },
           }}
           methods={{ open: handleOpen }}
+          config={config}
         />
       </ul>
     </div>
   );
-};
+}
 
 export default Filter;

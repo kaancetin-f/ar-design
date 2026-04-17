@@ -1,11 +1,13 @@
-import React, { Dispatch, memo, SetStateAction } from "react";
+import React, { Dispatch, JSX, memo, SetStateAction } from "react";
 import DatePicker from "../../../form/date-picker";
 import { ARIcon } from "../../../icons";
 import Grid from "../../grid-system";
 import Button from "../../../form/button";
 import Divider from "../../divider";
+import { useTranslation } from "../../../../libs/core/application/hooks";
+import { Config } from "../IProps";
 
-interface IProps {
+interface IProps<T extends object> {
   states: {
     dateFilters: {
       get: Record<string, { from: Date | null; to: Date | null }>;
@@ -18,11 +20,15 @@ interface IProps {
   methods: {
     open: (name: string | null) => void;
   };
+  config?: Config<T>;
 }
 
 const { Row, Column, Box } = Grid;
 
-const DateFilters = ({ states, methods }: IProps) => {
+function DateFilters<T extends object>({ states, methods, config }: IProps<T>) {
+  // hooks
+  const { t } = useTranslation(String(config?.locale ?? "tr"));
+
   return Object.entries(states.dateFilters.get).map(([name, range], index) => {
     const isEqualsName = states.openName.get === name;
     const className: string[] = [];
@@ -88,7 +94,7 @@ const DateFilters = ({ states, methods }: IProps) => {
                     }));
                   }}
                 >
-                  Clear
+                  {t("KanbanBoard.Search.Button.Clear.Text")}
                 </Button>
               </Box>
             </ul>
@@ -97,6 +103,6 @@ const DateFilters = ({ states, methods }: IProps) => {
       </>
     );
   });
-};
+}
 
-export default memo(DateFilters);
+export default memo(DateFilters) as <T extends object>(props: IProps<T>) => JSX.Element;

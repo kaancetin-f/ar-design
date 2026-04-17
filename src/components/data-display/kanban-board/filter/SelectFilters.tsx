@@ -1,11 +1,13 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, JSX, memo, SetStateAction } from "react";
 import { ARIcon } from "../../../icons";
 import Checkbox from "../../../form/checkbox";
 import Grid from "../../grid-system";
 import Button from "../../../form/button";
 import Divider from "../../divider";
+import { useTranslation } from "../../../../libs/core/application/hooks";
+import { Config } from "../IProps";
 
-interface IProps {
+interface IProps<T extends object> {
   states: {
     selectFilters: {
       get: { [key: string]: (string | null)[] };
@@ -22,11 +24,15 @@ interface IProps {
   methods: {
     open: (name: string | null) => void;
   };
+  config?: Config<T>;
 }
 
 const { Box } = Grid;
 
-const SelectFilters = ({ states, methods }: IProps) => {
+function SelectFilters<T extends object>({ states, methods, config }: IProps<T>) {
+  // hooks
+  const { t } = useTranslation(String(config?.locale ?? "tr"));
+
   return Object.entries(states.selectFilters.get).map(([name, values], index) => {
     const isEqualsName = states.openName.get === name;
     const className: string[] = [];
@@ -77,7 +83,7 @@ const SelectFilters = ({ states, methods }: IProps) => {
                   });
                 }}
               >
-                Clear
+                {t("KanbanBoard.Search.Button.Clear.Text")}
               </Button>
             </Box>
           </ul>
@@ -85,6 +91,6 @@ const SelectFilters = ({ states, methods }: IProps) => {
       </li>
     );
   });
-};
+}
 
-export default SelectFilters;
+export default memo(SelectFilters) as <T extends object>(props: IProps<T>) => JSX.Element;
