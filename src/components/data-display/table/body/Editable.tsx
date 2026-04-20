@@ -20,9 +20,9 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
   // variables
   const key = c.key as keyof T;
   const itemValue = item[c.key as keyof T];
-  const selectItem = c.editable?.options?.find((x) => x.value === itemValue);
+  const selectItem = c.editable?.(item)?.options?.find((x) => x.value === itemValue);
   const selectItems = Array.isArray(itemValue)
-    ? (c.editable?.options?.filter((x) => itemValue.includes(x.value)) as Option[])
+    ? (c.editable?.(item)?.options?.filter((x) => itemValue.includes(x.value)) as Option[])
     : [];
   const validation = config.validation;
   const _vText = validation?.errors?.[`${c.key as string}_${trackByValue}` as keyof typeof validation.errors];
@@ -33,7 +33,7 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
   // useEffects
   useEffect(() => setValue(itemValue as string), [item]);
 
-  switch (c.editable?.type) {
+  switch (c.editable?.(item)?.type) {
     case "string":
     case "number":
       return (
@@ -45,13 +45,13 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
 
             setValue(value);
             onEditable(
-              { ...item, [key]: c.editable?.type === "number" ? Number(value) : value } as T,
+              { ...item, [key]: c.editable?.(item)?.type === "number" ? Number(value) : value } as T,
               trackByValue,
               ExtractKey(c.key),
             );
           }}
           validation={{ text: _vText }}
-          {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
+          {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}
         />
       );
     case "decimal":
@@ -68,7 +68,7 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
           }}
           validation={{ text: _vText }}
           locale={config.locale}
-          {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
+          {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}
         />
       );
     case "input-formatted-decimal":
@@ -85,7 +85,7 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
           }}
           validation={{ text: _vText }}
           locale={config.locale}
-          {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
+          {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}
         />
       );
     case "date-picker":
@@ -98,7 +98,7 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
             onEditable({ ...item, [key]: value } as T, trackByValue, ExtractKey(c.key));
           }}
           validation={{ text: _vText }}
-          {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
+          {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}
         />
       );
     case "single-select":
@@ -106,13 +106,13 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
         <Select
           variant="borderless"
           value={selectItem}
-          options={c.editable.options as Option[]}
-          onClick={async () => await c.editable?.method?.()}
+          options={c.editable?.(item).options as Option[]}
+          onClick={async () => await c.editable?.(item)?.method?.()}
           onChange={(option) => {
             onEditable({ ...item, [key]: option?.value } as T, trackByValue, ExtractKey(c.key));
           }}
           validation={{ text: _vText }}
-          {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
+          {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}
         />
       );
     case "multiple-select":
@@ -120,14 +120,14 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
         <Select
           variant="borderless"
           value={selectItems}
-          options={c.editable.options as Option[]}
-          onClick={async () => await c.editable?.method?.()}
+          options={c.editable?.(item).options as Option[]}
+          onClick={async () => await c.editable?.(item)?.method?.()}
           onChange={(options) => {
             onEditable({ ...item, [key]: options.map((option) => option.value) } as T, trackByValue, ExtractKey(c.key));
           }}
           validation={{ text: _vText }}
           multiple
-          {...(c.editable.where ? { disabled: c.editable.where(item) } : {})}
+          {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}
         />
       );
     default:

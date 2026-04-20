@@ -75,7 +75,7 @@ export type TableColumnType<T> = {
   filters?: Option[];
   filterDataType?: FilterDataType;
   render?: (item: T) => React.ReactNode;
-  editable?: {
+  editable?: (item: T) => {
     type:
       | "string"
       | "number"
@@ -86,7 +86,7 @@ export type TableColumnType<T> = {
       | "multiple-select";
     options?: Option[];
     method?: () => void | Promise<void>;
-    where?: (item: T) => boolean;
+    where?: boolean;
   };
   config?: {
     width?: number | "auto" | "fit-content" | "max-content" | "min-content";
