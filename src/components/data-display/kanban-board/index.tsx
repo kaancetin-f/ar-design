@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import IProps from "./IProps";
 import { KanbanBoardColumnType } from "../../../libs/types";
 import "../../../assets/css/components/data-display/kanban-board/styles.css";
@@ -12,6 +12,7 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
   trackBy,
   columns,
   onChange,
+  onLazy,
   config,
 }: IProps<T, TColumnProperties>) {
   // refs
@@ -20,10 +21,12 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
   const _hoverItemIndex = useRef<number | null>(null);
   const _scrollInterval = useRef<number | null>(null);
   const _scrollAnimationFrame = useRef<number | null>(null);
-  const _scrollSpeedRef = useRef(0); // px/frame
+  const _scrollSpeedRef = useRef(0);
+  const _lastScrollTop = useRef(0);
 
   // states
   const [data, setData] = useState<KanbanBoardColumnType<T, TColumnProperties>[]>([]);
+  const [perPage, setPerPage] = useState<number>(config?.perPage ?? 10);
   // states -> Filters
   const [search, setSearch] = useState<string>("");
   const [selectFilters, setSelectFilters] = useState<{
@@ -137,6 +140,23 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
 
     if (item.classList.contains("dragging")) item.classList.remove("dragging");
   };
+
+  const handleLazyScroll = useMemo(() => {
+    return (event: React.UIEvent<HTMLDivElement>) => {
+      const target = event.currentTarget;
+      const { scrollTop, scrollHeight, clientHeight } = target;
+      const isVerticalScroll = scrollTop !== _lastScrollTop.current;
+      _lastScrollTop.current = scrollTop;
+
+      if (!isVerticalScroll) return;
+
+      const isBottom = scrollHeight - scrollTop <= clientHeight;
+
+      if (isBottom) {
+        setPerPage((prev) => prev + Number(config?.perPage ?? 10));
+      }
+    };
+  }, [config?.perPage]);
 
   const handleStartScroll = (direction: "left" | "right") => {
     const el = _kanbanWrapper.current;
@@ -300,10 +320,15 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
           behavior: "smooth",
         });
       }
-    } else if (!search?.trim() && _kanbanWrapper.current) {
-      _kanbanWrapper.current.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     }
+    // else if (!search?.trim() && _kanbanWrapper.current) {
+    //   _kanbanWrapper.current.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    // }
   }, [columns, search, selectedFilters, dateFilters]);
+
+  useEffect(() => {
+    if (onLazy) onLazy(perPage);
+  }, [perPage, onLazy]);
 
   return (
     <>
@@ -337,6 +362,7 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
         style={{
           height: `calc(100dvh - (${_kanbanWrapper.current?.getBoundingClientRect().top}px + ${config?.safeAreaOffset?.bottom ?? 0}px))`,
         }}
+        onScroll={handleLazyScroll}
         onDragOver={handleBoardDragOver}
         onDragEnd={stopScrolling}
         onDrop={stopScrolling}
