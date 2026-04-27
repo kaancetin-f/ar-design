@@ -148,7 +148,7 @@ const useValidation = function <TData extends object>(
 
       if (param.where) {
         if (param.where(data)) {
-          setError(param.subkey ? key : param.key, s.message, param.step);
+          setError(param.subkey ? key : param.key, s.message, param.step, trackByValue);
         }
       } else {
         handleValidation(key, s);
