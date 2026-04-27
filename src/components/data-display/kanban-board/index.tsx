@@ -258,36 +258,44 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
   const _prevFilters = useRef(JSON.stringify({ search, selectedFilters, dateFilters }));
 
   useEffect(() => {
-    const currentFilters = JSON.stringify({
+    const normalizedFilters = JSON.stringify({
       search,
-      selectedFilters: Object.fromEntries(Object.entries(selectedFilters).map(([k, v]) => [k, Array.from(v)])),
+      selectedFilters: Object.fromEntries(Object.entries(selectedFilters).map(([k, v]) => [k, Array.from(v).sort()])),
       dateFilters,
     });
 
-    if (_prevFilters.current !== currentFilters) {
+    const hasSelectedFilters = Object.values(selectedFilters).some((set) => set.size > 0);
+    const hasDateFilters = Object.values(dateFilters).some((r) => r.from || r.to);
+
+    // Page reset + Scroll logic.
+    if (_prevFilters.current !== normalizedFilters) {
       setCurrentPage(1);
-      _prevFilters.current = currentFilters;
+      _prevFilters.current = normalizedFilters;
 
       if (_kanbanWrapper.current) {
         _isProgrammaticScroll.current = true;
-        _kanbanWrapper.current.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+        _kanbanWrapper.current.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "smooth",
+        });
       }
     }
-  }, [search, selectedFilters, dateFilters]);
 
-  useEffect(() => {
-    if (!search && Object.keys(selectedFilters).length === 0 && Object.keys(dateFilters).length === 0) {
+    // Query Build Logic.
+    if (!search && !hasSelectedFilters && !hasDateFilters) {
       setQuery(null);
 
       return;
     }
 
-    const sampleItem = columns[0]?.items[0];
-    const keys = sampleItem ? (config?.filter?.keys(sampleItem) ?? []) : [];
+    const sampleItem = columns?.[0]?.items?.[0];
+    const keys = config?.filter?.keys(sampleItem) ?? [];
+    const keyMap = Object.fromEntries(keys.map((k) => [k.name, k.key]));
 
     const dateQuery = Object.entries(dateFilters).reduce((acc: Record<string, any>, [name, range]) => {
       if (range.from || range.to) {
-        const technicalKey = keys.find((k) => k.name === name)?.key || name;
+        const technicalKey = keyMap[name] || name;
         acc[technicalKey as string] = {
           from: range.from,
           to: range.to,
@@ -296,23 +304,20 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
       return acc;
     }, {});
 
-    const selectQuery = Object.entries(selectedFilters).reduce(
-      (acc: Record<string, any>, [filterName, selectedSet]) => {
-        if (selectedSet && selectedSet.size > 0) {
-          const technicalKey = keys.find((k) => k.name === filterName)?.key || filterName;
-          acc[technicalKey as string] = Array.from(selectedSet);
-        }
-        return acc;
-      },
-      {},
-    );
+    const selectQuery = Object.entries(selectedFilters).reduce((acc: Record<string, any>, [name, set]) => {
+      if (set.size > 0) {
+        const technicalKey = keyMap[name] || name;
+        acc[technicalKey as string] = Array.from(set);
+      }
+      return acc;
+    }, {});
 
     setQuery({
       keyword: search ?? "",
       ...dateQuery,
       ...selectQuery,
     });
-  }, [search, selectedFilters, dateFilters]);
+  }, [search, selectedFilters, dateFilters, columns, config]);
 
   useEffect(() => {
     if (!onLazyLoad) return;
