@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import DateFilters from "./DateFilters";
 import SelectFilters from "./SelectFilters";
 import React from "react";
@@ -11,8 +11,8 @@ import { useTranslation } from "../../../../libs/core/application/hooks";
 interface IProps<T extends object> {
   states: {
     search: {
-      get: string;
-      set: Dispatch<React.SetStateAction<string>>;
+      get: string | null;
+      set: Dispatch<React.SetStateAction<string | null>>;
     };
     dateFilters: {
       get: Record<string, { from: Date | null; to: Date | null }>;
@@ -31,6 +31,9 @@ interface IProps<T extends object> {
 }
 
 function Filter<T extends object>({ states, config }: IProps<T>) {
+  // refs
+  const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
+
   // states
   const [openName, setOpenName] = useState<string | null>(null);
 
@@ -45,7 +48,13 @@ function Filter<T extends object>({ states, config }: IProps<T>) {
       <Input
         variant="borderless"
         placeholder={t("KanbanBoard.Search.Input.Placeholder")}
-        onChange={(event) => states.search.set(event.target.value.toLocaleLowerCase())}
+        onChange={(event) => {
+          if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
+
+          _searchTimeOut.current = setTimeout(() => {
+            states.search.set(event.target.value.toLocaleLowerCase());
+          }, 750);
+        }}
       />
 
       <ul>

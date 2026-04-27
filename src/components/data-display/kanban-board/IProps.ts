@@ -5,8 +5,11 @@ export type Config<T extends object> = {
   safeAreaOffset?: { top?: number; right?: number; bottom?: number; left?: number };
   perPage?: number;
   filter?: {
+    /**
+     * @deprecated *
+     */
     search?: (item: T, value: string) => boolean;
-    keys: (item: T) => { name: string; key: string; type: "select" | "date" }[];
+    keys: (item: T) => { key: keyof T; name: string; value: string; type: "select" | "date" }[];
   };
 };
 
@@ -14,7 +17,7 @@ interface IProps<T extends object, TColumnProperties> {
   trackBy: (item: T) => string;
   columns: KanbanBoardColumnType<T, TColumnProperties>[];
   onChange?: (item: T, columnKey: string, columnProperties: TColumnProperties, hoverIndex: number) => void;
-  onLazy?: (perPage: number) => void;
+  onLazyLoad?: (query: Record<string, string>, perPage: number, currentPage: number) => void;
   config?: Config<T>;
 }
 

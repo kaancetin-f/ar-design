@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import IProps from "./IProps";
 import { KanbanBoardColumnType } from "../../../libs/types";
 import "../../../assets/css/components/data-display/kanban-board/styles.css";
@@ -12,23 +12,28 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
   trackBy,
   columns,
   onChange,
-  onLazy,
+  onLazyLoad,
   config,
 }: IProps<T, TColumnProperties>) {
   // refs
   const _kanbanWrapper = useRef<HTMLDivElement>(null);
   const _kanbanItems = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const _hoverItemIndex = useRef<number | null>(null);
+  const _isProgrammaticScroll = useRef<boolean>(false);
   const _scrollInterval = useRef<number | null>(null);
   const _scrollAnimationFrame = useRef<number | null>(null);
   const _scrollSpeedRef = useRef(0);
   const _lastScrollTop = useRef(0);
+  const _lastRequest = useRef<string>("");
 
   // states
   const [data, setData] = useState<KanbanBoardColumnType<T, TColumnProperties>[]>([]);
-  const [perPage, setPerPage] = useState<number>(config?.perPage ?? 10);
+  // states -> Lazy Load
+  const [query, setQuery] = useState<any>(null);
+  const [perPage] = useState<number>(config?.perPage ?? 10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   // states -> Filters
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<string | null>(null);
   const [selectFilters, setSelectFilters] = useState<{
     [k: string]: (string | null)[];
   }>({});
@@ -141,22 +146,25 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
     if (item.classList.contains("dragging")) item.classList.remove("dragging");
   };
 
-  const handleLazyScroll = useMemo(() => {
-    return (event: React.UIEvent<HTMLDivElement>) => {
-      const target = event.currentTarget;
-      const { scrollTop, scrollHeight, clientHeight } = target;
-      const isVerticalScroll = scrollTop !== _lastScrollTop.current;
-      _lastScrollTop.current = scrollTop;
+  const handleLazyLoadScroll = useCallback((event: React.UIEvent<HTMLDivElement>) => {
+    const target = event.currentTarget;
+    const { scrollTop, scrollHeight, clientHeight } = target;
 
-      if (!isVerticalScroll) return;
+    if (_isProgrammaticScroll.current) {
+      if (scrollTop <= 5) _isProgrammaticScroll.current = false;
 
-      const isBottom = scrollHeight - scrollTop <= clientHeight;
+      return;
+    }
 
-      if (isBottom) {
-        setPerPage((prev) => prev + Number(config?.perPage ?? 10));
-      }
-    };
-  }, [config?.perPage]);
+    const isScrollingDown = scrollTop > _lastScrollTop.current;
+    _lastScrollTop.current = scrollTop;
+
+    if (!isScrollingDown) return;
+
+    const isBottom = scrollHeight - scrollTop <= clientHeight;
+
+    if (isBottom) setCurrentPage((prev) => prev + 1);
+  }, []);
 
   const handleStartScroll = (direction: "left" | "right") => {
     const el = _kanbanWrapper.current;
@@ -207,6 +215,13 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
 
   // useEffects
   useEffect(() => {
+    let _data = columns.map((col) => ({
+      ...col,
+      items: [...col.items],
+    }));
+
+    setData(_data);
+
     const selectMap = new Map<string, Set<string | null>>();
     const dateMap = new Map<string, true>();
 
@@ -218,7 +233,7 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
           if (k.type === "select") {
             if (!selectMap.has(k.name)) selectMap.set(k.name, new Set());
 
-            selectMap.get(k.name)!.add(k.key ?? null);
+            selectMap.get(k.name)!.add(k.value ?? null);
           }
 
           if (k.type === "date") dateMap.set(k.name, true);
@@ -240,95 +255,76 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
     });
   }, [columns]);
 
+  const _prevFilters = useRef(JSON.stringify({ search, selectedFilters, dateFilters }));
+
   useEffect(() => {
-    let nextData = columns.map((col) => ({
-      ...col,
-      items: [...col.items],
-    }));
-    let firstMatchedId: string | number | null = null;
+    const currentFilters = JSON.stringify({
+      search,
+      selectedFilters: Object.fromEntries(Object.entries(selectedFilters).map(([k, v]) => [k, Array.from(v)])),
+      dateFilters,
+    });
 
-    // Search varsa...
-    if (config?.filter?.search && search?.trim()) {
-      const q = search.trim();
-      nextData = nextData.map((col) => {
-        const filteredItems = col.items.filter((item) => {
-          const isMatch = config.filter!.search!(item, q);
-          if (isMatch && !firstMatchedId) firstMatchedId = trackBy(item);
+    if (_prevFilters.current !== currentFilters) {
+      setCurrentPage(1);
+      _prevFilters.current = currentFilters;
 
-          return isMatch;
-        });
-
-        return { ...col, items: filteredItems };
-      });
-    } else {
-      if (config?.filter?.search) config.filter.search({} as any, "");
-    }
-
-    // Select ve Date varsa...
-    nextData = nextData.map((col) => ({
-      ...col,
-      items: col.items.filter((item) => {
-        const keys = config?.filter?.keys(item) ?? [];
-
-        // Select (checkbox)
-        const selectOk = Object.entries(selectedFilters).every(([filterName, selectedSet]) => {
-          if (!selectedSet || selectedSet.size === 0) return true;
-
-          const value = keys.find((k) => k.name === filterName)?.key ?? null;
-
-          return selectedSet.has(value);
-        });
-
-        if (!selectOk) return false;
-
-        // Date (range)
-        const dateOk = Object.entries(dateFilters).every(([filterName, range]) => {
-          if (!range.from && !range.to) return true;
-
-          const raw = keys.find((k) => k.name === filterName)?.key;
-          if (!raw) return false;
-
-          const d = new Date(raw);
-          if (range.from && d < range.from) return false;
-          if (range.to && d > range.to) return false;
-
-          return true;
-        });
-
-        return dateOk;
-      }),
-    }));
-
-    setData(nextData);
-
-    // Focus / Scroll Control
-    if (search?.trim() && firstMatchedId) {
-      const element = _kanbanItems.current[firstMatchedId];
-      const container = _kanbanWrapper.current;
-
-      if (element && container) {
-        const elementRect = element.getBoundingClientRect();
-        const containerRect = container.getBoundingClientRect();
-
-        // Senin hesaplaman: Mevcut scroll + elemanın container'a göre konumu - ofset değerlerin
-        const scrollLeft = container.scrollLeft + (elementRect.left - containerRect.left) - 17.5;
-        const scrollTop = container.scrollTop + (elementRect.top - containerRect.top) - 100;
-
-        container.scrollTo({
-          left: scrollLeft,
-          top: scrollTop,
-          behavior: "smooth",
-        });
+      if (_kanbanWrapper.current) {
+        _isProgrammaticScroll.current = true;
+        _kanbanWrapper.current.scrollTo({ top: 0, left: 0, behavior: "smooth" });
       }
     }
-    // else if (!search?.trim() && _kanbanWrapper.current) {
-    //   _kanbanWrapper.current.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-    // }
-  }, [columns, search, selectedFilters, dateFilters]);
+  }, [search, selectedFilters, dateFilters]);
 
   useEffect(() => {
-    if (onLazy) onLazy(perPage);
-  }, [perPage, onLazy]);
+    if (!search && Object.keys(selectedFilters).length === 0 && Object.keys(dateFilters).length === 0) {
+      setQuery(null);
+
+      return;
+    }
+
+    const sampleItem = columns[0]?.items[0];
+    const keys = sampleItem ? (config?.filter?.keys(sampleItem) ?? []) : [];
+
+    const dateQuery = Object.entries(dateFilters).reduce((acc: Record<string, any>, [name, range]) => {
+      if (range.from || range.to) {
+        const technicalKey = keys.find((k) => k.name === name)?.key || name;
+        acc[technicalKey as string] = {
+          from: range.from,
+          to: range.to,
+        };
+      }
+      return acc;
+    }, {});
+
+    const selectQuery = Object.entries(selectedFilters).reduce(
+      (acc: Record<string, any>, [filterName, selectedSet]) => {
+        if (selectedSet && selectedSet.size > 0) {
+          const technicalKey = keys.find((k) => k.name === filterName)?.key || filterName;
+          acc[technicalKey as string] = Array.from(selectedSet);
+        }
+        return acc;
+      },
+      {},
+    );
+
+    setQuery({
+      keyword: search ?? "",
+      ...dateQuery,
+      ...selectQuery,
+    });
+  }, [search, selectedFilters, dateFilters]);
+
+  useEffect(() => {
+    if (!onLazyLoad) return;
+
+    const key = JSON.stringify({ query, currentPage, perPage });
+
+    if (_lastRequest.current === key) return;
+
+    _lastRequest.current = key;
+
+    onLazyLoad(query, perPage, currentPage);
+  }, [query, currentPage, perPage, onLazyLoad]);
 
   return (
     <>
@@ -362,7 +358,7 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
         style={{
           height: `calc(100dvh - (${_kanbanWrapper.current?.getBoundingClientRect().top}px + ${config?.safeAreaOffset?.bottom ?? 0}px))`,
         }}
-        onScroll={handleLazyScroll}
+        onScroll={handleLazyLoadScroll}
         onDragOver={handleBoardDragOver}
         onDragEnd={stopScrolling}
         onDrop={stopScrolling}
@@ -432,7 +428,7 @@ const KanbanBoard = function <T extends object, TColumnProperties>({
                           const mouseY = event.clientY;
                           const isBelow = mouseY > rect.top + rect.height / 2;
 
-                          _hoverItemIndex.current = isBelow ? index + 1 : index;
+                          _hoverItemIndex.current = isBelow ? dndIndex + 1 : dndIndex;
                         }}
                       >
                         {board.renderItem(item, index)}
