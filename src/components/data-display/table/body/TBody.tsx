@@ -69,7 +69,9 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
   const { t } = useTranslation(String(config.locale ?? "tr"));
 
   // methods
-  const renderRow = (item: T, index: number, deph: number) => {
+  const renderRow = (item: T, index: number, deph: number, parentKey = "") => {
+    const id = methods.trackBy?.(item) ?? index.toString();
+    const key = parentKey ? `${parentKey}.${id}` : id;
     const isHasSubitems = _subrowSelector in item;
 
     return (
@@ -128,11 +130,11 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
               {item[_subrowSelector as keyof typeof item] && (
                 <div className="subitem-open-button-wrapper">
                   <span
-                    className={`subitem-open-button ${(states.showSubitems.get[index] && "opened") ?? ""}`}
+                    className={`subitem-open-button ${(states.showSubitems.get[key] && "opened") ?? ""}`}
                     onClick={() => {
                       states.showSubitems.set((prev) => ({
                         ...prev,
-                        [`${index}`]: !prev[`${index}`],
+                        [`${key}`]: !prev[`${key}`],
                       }));
                     }}
                   />
@@ -157,12 +159,13 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
         </tr>
 
         {/* Alt satırları burada listele */}
-        {states.showSubitems.get[index] && item[_subrowSelector as keyof typeof item] && (
+        {states.showSubitems.get[key] && item[_subrowSelector as keyof typeof item] && (
           <SubitemList
             items={item[_subrowSelector as keyof typeof item] as T[]}
             columns={columns}
             index={index}
             depth={1.5}
+            parentKey={key}
           />
         )}
       </Fragment>
@@ -201,7 +204,10 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
         }}
         data-sticky-position={column.config?.sticky}
       >
-        <div style={{ paddingLeft: `${depth == 0 ? 1 : depth}rem` }} className="table-cell">
+        <div
+          style={{ paddingLeft: cIndex === (methods.selections ? 1 : 0) ? `${depth == 0 ? 1 : depth}rem` : "" }}
+          className="table-cell"
+        >
           {config.isTreeView && cIndex === 0 && (
             <>
               {isSubrows &&
@@ -238,7 +244,7 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
     );
   };
 
-  const SubitemList = ({ items, columns, index, depth, level = 1 }: any) => {
+  const SubitemList = ({ items, columns, index, depth, level = 1, parentKey = "" }: any) => {
     if (config.subrow?.render) {
       return (
         <tr className={`subrow-item ${_subrowButton ? "type-b" : "type-a"}`} data-level={level}>
@@ -252,6 +258,8 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
     }
 
     return items.map((subitem: T, subindex: number) => {
+      const id = methods.trackBy?.(subitem) ?? subindex.toString();
+      const key = `${parentKey}.${id}`;
       const _subitem = subitem[_subrowSelector as keyof typeof subitem];
       const isHasSubitems = _subrowSelector in subitem;
 
@@ -262,13 +270,13 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
               <td>
                 <div className="subitem-open-button-wrapper">
                   <span
-                    className={`${(states.showSubitems.get[`${index}.${subindex}`] && "opened") ?? ""} ${!_subitem && "passive"}`}
+                    className={`${(states.showSubitems.get[key] && "opened") ?? ""} ${!_subitem && "passive"}`}
                     onClick={() => {
                       if (!_subitem) return;
 
                       states.showSubitems.set((prev) => ({
                         ...prev,
-                        [`${index}.${subindex}`]: !prev[`${index}.${subindex}`],
+                        [key]: !prev[key],
                       }));
                     }}
                   />
@@ -296,13 +304,14 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
             )}
           </tr>
 
-          {states.showSubitems.get[`${index}.${subindex}`] && _subitem && (
+          {states.showSubitems.get[key] && _subitem && (
             <SubitemList
               items={_subitem as T[]}
               columns={columns}
               index={subindex}
               depth={depth + 0.75}
               level={level + 1}
+              parentKey={key}
             />
           )}
         </Fragment>

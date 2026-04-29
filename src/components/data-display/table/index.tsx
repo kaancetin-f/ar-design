@@ -465,8 +465,9 @@ const Table = forwardRef(
     const openAllSubrowsRecursively = (data: T[], parentKey: string = ""): Record<string, boolean> => {
       let result: Record<string, boolean> = {};
 
-      data.forEach((item, index) => {
-        const key = parentKey ? `${parentKey}.${index}` : `${index}`;
+      data.forEach((item) => {
+        const id = trackBy?.(item);
+        const key = parentKey ? `${parentKey}.${id}` : `${id}`;
         const subitems = item[_subrowSelector as keyof typeof item];
 
         if (subitems && Array.isArray(subitems) && subitems.length > 0) {
