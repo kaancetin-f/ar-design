@@ -79,6 +79,7 @@ export type TableColumnType<T> = {
     type:
       | "string"
       | "number"
+      | "boolean"
       | "decimal"
       | "input-formatted-decimal"
       | "date-picker"

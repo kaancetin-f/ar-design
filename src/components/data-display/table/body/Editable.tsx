@@ -7,6 +7,7 @@ import { Option, TableColumnType } from "../../../../libs/types";
 import Select from "../../../form/select";
 import { Config } from "../IProps";
 import { ExtractKey } from "../Helpers";
+import Checkbox from "../../../form/checkbox";
 
 interface IProps<T extends object> {
   c: TableColumnType<T>;
@@ -28,7 +29,7 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
   const _vText = validation?.errors?.[`${c.key as string}_${trackByValue}` as keyof typeof validation.errors];
 
   // states
-  const [_value, setValue] = useState<string | number | readonly string[] | undefined>(itemValue as string);
+  const [_value, setValue] = useState<string | number | boolean | readonly string[] | undefined>(itemValue as string);
 
   // useEffects
   useEffect(() => setValue(itemValue as string), [item]);
@@ -39,7 +40,7 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
       return (
         <Input
           variant="borderless"
-          value={_value}
+          value={String(_value ?? "")}
           onChange={(event) => {
             const { value } = event.target;
 
@@ -54,12 +55,36 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
           {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}
         />
       );
+    case "boolean":
+      return (
+        <Checkbox
+          variant="borderless"
+          color="blue"
+          checked={Boolean(_value)}
+          onChange={(event) => {
+            const checked = event.target.checked;
+
+            setValue(checked);
+
+            onEditable(
+              {
+                ...item,
+                [key]: checked,
+              } as T,
+              trackByValue,
+              ExtractKey(c.key),
+            );
+          }}
+          validation={{ text: _vText }}
+          {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}
+        />
+      );
     case "decimal":
       return (
         <Input.Decimal
           variant="borderless"
           name={c.key as string}
-          value={_value}
+          value={String(_value ?? "")}
           onChange={(event) => {
             const { value } = event.target;
 
@@ -76,7 +101,7 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
         <Input.FormattedDecimal
           variant="borderless"
           name={c.key as string}
-          value={_value}
+          value={String(_value ?? "")}
           onChange={(event) => {
             const { value } = event.target;
 
@@ -92,7 +117,7 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
       return (
         <DatePicker
           variant="borderless"
-          value={_value}
+          value={String(_value ?? "")}
           onChange={(value) => {
             setValue(value);
             onEditable({ ...item, [key]: value } as T, trackByValue, ExtractKey(c.key));
