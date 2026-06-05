@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Props } from "./Props";
 import Input from "../input";
 import "../../../assets/css/components/form/select/styles.css";
@@ -28,7 +28,7 @@ const Select: React.FC<Props> = ({
   upperCase,
   disabled,
   readOnly,
-  config = { clear: true },
+  config = { clear: true, validation: { text: "visible" } },
 }) => {
   const _selectionClassName: string[] = ["selections"];
 
@@ -40,17 +40,20 @@ const Select: React.FC<Props> = ({
   const _options = useRef<HTMLDivElement>(null);
   const _optionItems = useRef<(HTMLLIElement | null)[]>([]);
   const _searchField = useRef<HTMLInputElement>(null);
-  // const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
   let _otoFocus = useRef<NodeJS.Timeout | null>(null).current;
   let _navigationIndex = useRef<number>(0);
 
   // states
   const [optionsOpen, setOptionsOpen] = useState<boolean>(false);
-  const [filteredOptions, setFilteredOptions] = useState<Option[]>([]);
+  const [filteredOptions, setFilteredOptions] = useState<Option[]>(() => options ?? []);
   const [isSearchTextEqual, setIsSearchTextEqual] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>("");
   const [singleInputText, setSingleInputText] = useState<string>("");
   const [navigationIndex, setNavigationIndex] = useState<number>(0);
+
+  // options referans kararlılığı için JSON key
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const optionsKey = useMemo(() => JSON.stringify(options), [options]);
 
   _selectionClassName.push(
     ...Utils.GetClassName(
@@ -67,7 +70,6 @@ const Select: React.FC<Props> = ({
   // methods
   const handleClickOutSide = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
-
     if (_arSelect.current && !_arSelect.current.contains(target)) setOptionsOpen(false);
   };
 
@@ -77,40 +79,23 @@ const Select: React.FC<Props> = ({
 
     if (key === "ArrowUp" || key === "ArrowLeft") {
       setNavigationIndex((prev) => {
-        let result: number = 0;
-
-        if (prev > 0) result = prev - 1;
-        if (prev === 0) result = optionItems.length - 1;
-
+        const result = prev > 0 ? prev - 1 : optionItems.length - 1;
         _navigationIndex.current = result;
         return result;
       });
     } else if (key === "ArrowDown" || key === "ArrowRight") {
       setNavigationIndex((prev) => {
-        let result: number = 0;
-
-        if (prev === optionItems.length - 1) result = 0;
-        if (prev < optionItems.length - 1) result = prev + 1;
-
+        const result = prev === optionItems.length - 1 ? 0 : prev + 1;
         _navigationIndex.current = result;
         return result;
       });
     } else if (key === "Enter") {
       if (_navigationIndex.current === -1) return;
-
       optionItems[_navigationIndex.current]?.click();
-    } else if (key === "Escape") setOptionsOpen(false);
+    } else if (key === "Escape") {
+      setOptionsOpen(false);
+    }
   };
-
-  // const handleSearch = (value: string) => {
-  //   if (searchText.length === 0 || !onSearch) return;
-  //   if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
-
-  //   _searchTimeOut.current = setTimeout(() => {
-  //     setSearchText(value);
-  //     onSearch(value);
-  //   }, 750);
-  // };
 
   const handlePosition = () => {
     if (_options.current) {
@@ -141,7 +126,6 @@ const Select: React.FC<Props> = ({
   const handleItemSelected = (option: Option) => {
     if (multiple) {
       const hasItem = value.some((item) => item.value === option.value && item.text === option.text);
-
       if (hasItem) onChange(value.filter((v) => !(v.value === option.value && v.text === option.text)));
       else onChange([...value, option]);
     } else {
@@ -153,17 +137,14 @@ const Select: React.FC<Props> = ({
   const handleCleanSelection = () => {
     if (multiple) {
       if (_searchField.current) setSearchText("");
-
       onChange([]);
     } else {
       if (_singleInput.current) {
         setSingleInputText("");
         _singleInput.current.placeholder = `${validation ? "* " : ""}${placeholder ?? ""}`;
       }
-
       onChange(undefined);
     }
-
     setOptionsOpen(false);
   };
 
@@ -191,7 +172,6 @@ const Select: React.FC<Props> = ({
     );
   };
 
-  // Özel büyük harfe dönüştürme işlevi.
   const convertToUpperCase = (str: string) => {
     return str
       .replace(/ş/g, "S")
@@ -209,49 +189,42 @@ const Select: React.FC<Props> = ({
       .replace(/[a-z]/g, (match) => match.toUpperCase());
   };
 
-  // useEffects
+  // value değiştiğinde input metnini güncelle
   useEffect(() => {
     if (multiple) setSearchText("");
     else setSingleInputText(value?.text ?? "");
-  }, [value]);
+  }, [value, multiple]);
 
-  useEffect(() => setFilteredOptions(options), [options]);
+  // options dışarıdan değiştiğinde filtreyi güncelle (searchText ile uyumlu)
+  useEffect(() => {
+    setFilteredOptions(
+      (options ?? []).filter((option) => option.text.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())),
+    );
+    setIsSearchTextEqual(
+      (options ?? []).some((option) => option.text.toLocaleLowerCase() === searchText.toLocaleLowerCase()),
+    );
+    // optionsKey kullanarak referans karşılaştırması yerine içerik karşılaştırması yapıyoruz
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [optionsKey]);
 
+  // options paneli açılıp kapandığında
   useEffect(() => {
     if (optionsOpen) {
       setTimeout(() => handlePosition(), 0);
 
-      if (!multiple) {
-        // const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
-
-        // Scroll ile kaydırma işlemi
-        // if (_options.current) {
-        //   const list = _options.current.querySelector("ul") as HTMLUListElement;
-
-        //   list.scrollTo({
-        //     top: optionItems[_selectedItemIndex.current].offsetTop,
-        //     behavior: "smooth",
-        //   });
-        // }
-
-        if (_singleInput.current) {
-          setSingleInputText("");
-          _singleInput.current.placeholder = value?.text || `${validation ? "* " : ""}${placeholder ?? ""}` || "";
-        }
+      if (!multiple && _singleInput.current) {
+        setSingleInputText("");
+        _singleInput.current.placeholder = value?.text || `${validation ? "* " : ""}${placeholder ?? ""}` || "";
       }
 
-      // Options açıldıktan 100ms sonra arama kutusuna otomatik olarak focus oluyor.
       _otoFocus = setTimeout(() => {
         if (_searchField.current) _searchField.current.focus();
       }, 250);
 
-      // Options paneli için olay dinleyileri ekleniyor.
-      window.addEventListener("blur", () => setOptionsOpen(false));
+      window.addEventListener("blur", handleBlur);
       document.addEventListener("click", handleClickOutSide);
       document.addEventListener("keydown", handleKeys);
     } else {
-      // Options paneli kapanma süresi 250ms.
-      // 300ms sonra temizlenmesinin sebebi kapanırken birder veriler gerliyor ve panel yüksekliği artıyor.
       setTimeout(() => setSearchText(""), 300);
 
       if (multiple) {
@@ -266,63 +239,57 @@ const Select: React.FC<Props> = ({
 
     return () => {
       _otoFocus && clearTimeout(_otoFocus);
-
-      window.removeEventListener("blur", () => setOptionsOpen(false));
+      window.removeEventListener("blur", handleBlur);
       document.removeEventListener("click", handleClickOutSide);
       document.removeEventListener("keydown", handleKeys);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optionsOpen]);
 
+  // arama metni değiştiğinde filtrele
   useEffect(() => {
     if (searchText.length > 0 && onSearch) {
       onSearch(searchText);
     } else {
-      // Arama kriterlerine uygun olan değerleri bir state e gönderiyoruz.
       setFilteredOptions(
-        options?.filter((option) => {
-          if (!optionsOpen) return option;
-
+        (options ?? []).filter((option) => {
+          if (!optionsOpen) return true;
           return option.text.toLocaleLowerCase().includes(searchText.toLocaleLowerCase());
         }),
       );
       setIsSearchTextEqual(
-        options?.some((option) => {
-          if (!optionsOpen) return option;
-
-          return option.text.toLocaleLowerCase() == searchText.toLocaleLowerCase();
+        (options ?? []).some((option) => {
+          if (!optionsOpen) return false;
+          return option.text.toLocaleLowerCase() === searchText.toLocaleLowerCase();
         }),
       );
     }
 
-    // Arama yapılması durumunda değerleri sıfırla.
     setNavigationIndex(0);
     _navigationIndex.current = 0;
 
-    // Arama yapılması durumunda arama sonuçlarından ilk olan değeri işaretle.
-    const optionItems = _optionItems.current.filter((optionItem) => optionItem !== null);
+    const optionItems = _optionItems.current.filter((item) => item !== null);
     optionItems[_navigationIndex.current]?.classList.add("navigate-with-arrow-keys");
 
-    // Yeniden konumlandır.
     setTimeout(() => handlePosition(), 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText]);
 
+  // klavye navigasyonu highlight
   useEffect(() => {
-    // Seçilen öğeye 'navigate-with-arrow-keys' sınıfını ekle
     _optionItems.current
-      .filter((optionItem) => optionItem !== null)
+      .filter((item) => item !== null)
       .forEach((item, index) => {
         if (index === navigationIndex) {
           item?.classList.add("navigate-with-arrow-keys");
-
-          item.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest",
-          });
+          item.scrollIntoView({ behavior: "smooth", block: "nearest" });
         } else {
           item?.classList.remove("navigate-with-arrow-keys");
         }
       });
   }, [navigationIndex]);
+
+  const handleBlur = () => setOptionsOpen(false);
 
   return (
     <div ref={_arSelect} className="ar-select-wrapper">
@@ -347,13 +314,10 @@ const Select: React.FC<Props> = ({
                     },
                   }
                 : {})}
-              className={_selectionClassName.map((c) => c).join(" ")}
+              className={_selectionClassName.join(" ")}
               onClick={() => {
                 onClick && onClick();
-
-                (() => {
-                  setOptionsOpen((prev) => !prev);
-                })();
+                setOptionsOpen((prev) => !prev);
               }}
             >
               <div className="items">
@@ -373,7 +337,6 @@ const Select: React.FC<Props> = ({
               className={`placeholder ${value.length > 0 ? "visible" : "hidden"}`}
               onClick={() => {
                 onClick && onClick();
-
                 setOptionsOpen((prev) => !prev);
               }}
             >
@@ -387,30 +350,26 @@ const Select: React.FC<Props> = ({
             style={{ ...style, paddingRight: config.clear === false ? "1.5rem" : "3.5rem" }}
             variant={variant}
             color={!Utils.IsNullOrEmpty(validation?.text) ? "red" : color}
-            // status={!Utils.IsNullOrEmpty(validation?.text) ? "danger" : status}
             border={{ radius: border.radius }}
             value={singleInputText}
             onClick={() => {
               onClick && onClick();
-
-              (() => {
-                setOptionsOpen((prev) => !prev);
-              })();
+              setOptionsOpen((prev) => !prev);
             }}
             onChange={(event) => {
               !optionsOpen && setOptionsOpen(true);
-
               if (upperCase) event.target.value = convertToUpperCase(event.target.value);
-
               setSingleInputText(event.target.value);
             }}
             onKeyUp={(event) => {
               if (event.key === "Enter") return;
-
               setSearchText(event.currentTarget.value);
             }}
             placeholder={placeholder}
-            validation={validation}
+            validation={{
+              ...validation,
+              text: config.validation?.text === "visible" ? validation?.text : "",
+            }}
             disabled={disabled}
             readOnly={readOnly}
           />
@@ -422,27 +381,26 @@ const Select: React.FC<Props> = ({
               className={`button-clear ${!disabled && (multiple ? value.length > 0 : value) ? "opened" : "closed"}`}
               onClick={(event) => {
                 if (disabled) return;
-
                 event.stopPropagation();
                 handleCleanSelection();
               }}
-            ></span>
+            />
           )}
 
           <span
             className={`angel-down ${!disabled && optionsOpen ? "opened" : "closed"}`}
             onClick={(event) => {
               if (disabled) return;
-
               onClick && onClick();
-
               event.stopPropagation();
               setOptionsOpen((prev) => !prev);
             }}
-          ></span>
+          />
         </div>
 
-        {multiple && validation && <span className="validation">{validation.text}</span>}
+        {multiple && validation && config.validation?.text === "visible" && (
+          <span className="validation">{validation.text}</span>
+        )}
       </div>
       {/* :End: Select and Multiple Select Field */}
 
@@ -476,7 +434,6 @@ const Select: React.FC<Props> = ({
                       key={index}
                       ref={(element) => {
                         if (!element) return;
-
                         _optionItems.current[index] = element;
                       }}
                       className={option === value ? "selectedItem" : ""}

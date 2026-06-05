@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Input from "..";
 import IProps from "./IProps";
 import Select from "../../select";
@@ -23,6 +23,10 @@ const Phone: React.FC<IProps> = ({
   const [_value, setValue] = useState<string | number | readonly string[] | undefined>("");
   const [selected, setSelected] = useState<Option | undefined>(undefined);
 
+  // options referans kararlılığı için JSON key
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const optionsKey = useMemo(() => JSON.stringify(options), [options]);
+
   // methods
   const handleClick = () => {
     const input = _input.current;
@@ -37,7 +41,8 @@ const Phone: React.FC<IProps> = ({
   useEffect(() => {
     setValue(values.value);
     setSelected(options?.find((option) => option.value === values.option));
-  }, [values]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values.value, values.option, optionsKey]);
 
   return (
     <div className="ar-input-phone-wrapper">
@@ -52,6 +57,8 @@ const Phone: React.FC<IProps> = ({
             onSelected?.(option);
             setSelected(option);
           }}
+          validation={validation}
+          config={{ validation: { text: "hidden" } }}
         />
       )}
 
@@ -67,23 +74,8 @@ const Phone: React.FC<IProps> = ({
         onChange={(event) => {
           if (attributes.disabled) return;
 
-          (() => {
-            if (attributes.onChange) {
-              const { id, name, value, type, dataset } = event.target;
-
-              attributes.onChange({
-                ...event,
-                target: {
-                  ...event.target,
-                  id: id,
-                  name: name,
-                  value: value,
-                  type: type,
-                  dataset: dataset,
-                },
-              });
-            }
-          })();
+          setValue(event.target.value);
+          attributes.onChange?.(event);
         }}
         onClick={handleClick}
         validation={validation}

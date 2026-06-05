@@ -13,7 +13,7 @@
 
     li {
       list-style: none;
-      height: 2rem;
+      height: auto;
 
       > ul.submenu {
         display: grid;
@@ -46,7 +46,7 @@
         align-items: center;
         gap: 0.5rem;
         width: 100%;
-        height: inherit;
+        height: 2rem; /* DÜZELTİLMEDİ: inherit yerine ana eleman yüksekliği buraya sabitlendi */
         padding: 0.3rem;
         white-space: nowrap;
         cursor: pointer;

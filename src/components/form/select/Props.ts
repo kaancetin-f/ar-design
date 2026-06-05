@@ -40,6 +40,9 @@ export type Props = {
   readOnly?: boolean;
   config?: {
     clear?: boolean;
+    validation?: {
+      text: "visible" | "hidden";
+    };
   };
 } & (IMultiple | ISingle) &
   IVariant &

@@ -13,6 +13,9 @@ import Switch from "./components/form/switch";
 import TextEditor from "./components/form/text-editor";
 import Upload from "./components/form/upload";
 
+// Charts
+import Gantt from "./components/charts/gantt";
+
 // Data Display
 import Calendar from "./components/data-display/calendar";
 import Card from "./components/data-display/card";
@@ -58,6 +61,9 @@ export {
   Switch,
   TextEditor,
   Upload,
+
+  // Charts
+  Gantt,
 
   // Data Display
   Calendar,
