@@ -28,7 +28,7 @@ const List = ({
         const message = validationErrors.find((v) => v.fileName === selectedFile.name)?.message;
 
         return (
-          <li>
+          <li key={selectedFile.name}>
             {message && (
               <div className="error">
                 <ARIcon icon={"ExclamationDiamond-Fill"} fill="var(--white)" />

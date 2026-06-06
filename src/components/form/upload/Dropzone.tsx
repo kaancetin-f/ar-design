@@ -62,12 +62,14 @@ const Dropzone = ({ selectedFiles, validationErrors = [], handleFileToBase64, ha
   // useEffects
   useEffect(() => {
     (async () => {
-      const newMap: Record<string, string> = {};
-
-      for (const file of selectedFiles) {
-        const base64 = await handleFileToBase64(file);
-        newMap[file.name] = base64;
-      }
+      const base64s = await Promise.all(selectedFiles.map((f) => handleFileToBase64(f)));
+      const newMap: Record<string, string> = selectedFiles.reduce(
+        (acc, file, index) => {
+          acc[file.name] = base64s[index];
+          return acc;
+        },
+        {} as Record<string, string>,
+      );
 
       setFileBase64Map(newMap);
       setSelectedFile(selectedFiles[0]);

@@ -38,25 +38,25 @@ const Upload: React.FC<Props> = ({
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
 
   // methods
-  const handleFileChange = useCallback((files: FileList | null) => {
-    const _files = Array.from(files ?? []);
+  const handleFileChange = useCallback(
+    (files: FileList | null) => {
+      const _files = Array.from(files ?? []);
 
-    setSelectedFiles((prev) => {
-      const previousFileNames = prev.map((f) => f.name);
-      const newFiles = _files.filter((f) => !previousFileNames.includes(f.name)) ?? [];
+      setSelectedFiles((prev) => {
+        if (!multiple) return _files;
 
-      return [...prev, ...newFiles];
-    });
-  }, []);
+        const previousFileNames = prev.map((f) => f.name);
+        const newFiles = _files.filter((f) => !previousFileNames.includes(f.name)) ?? [];
+
+        return [...prev, ...newFiles];
+      });
+    },
+    [multiple],
+  );
 
   const handleFileRemove = useCallback((fileToRemove: File) => {
-    const dataTransfer = new DataTransfer();
-
     setSelectedFiles((prev) => {
       const newList = prev.filter((x) => x.name !== fileToRemove.name);
-      newList.forEach((file) => dataTransfer.items.add(file));
-
-      if (_input.current) _input.current.files = dataTransfer.files;
 
       if (newList.length === 0) setClassName((prev) => prev.filter((c) => c !== "has-file"));
 
@@ -64,27 +64,30 @@ const Upload: React.FC<Props> = ({
     });
   }, []);
 
-  const handleValidationFile = useCallback((file: File) => {
-    const newErrors: ValidationError[] = [];
+  const validateFile = useCallback(
+    (file: File) => {
+      const newErrors: ValidationError[] = [];
 
-    if (allowedTypes) {
-      if (!allowedTypes.includes(file.type as MimeTypes)) {
-        newErrors.push({ fileName: file.name, message: "Geçersiz dosya türü." });
-        _validationErrors.current.push(file.name);
+      if (allowedTypes) {
+        if (!allowedTypes.includes(file.type as MimeTypes)) {
+          newErrors.push({ fileName: file.name, message: "Geçersiz dosya türü." });
+          _validationErrors.current.push(file.name);
+        }
       }
-    }
 
-    if (maxSize) {
-      const _maxSize = maxSize * 1024 * 1024; // MB
+      if (maxSize) {
+        const _maxSize = maxSize * 1024 * 1024; // MB
 
-      if (file.size > _maxSize) {
-        newErrors.push({ fileName: file.name, message: "Dosya boyutu çok büyük." });
-        _validationErrors.current.push(file.name);
+        if (file.size > _maxSize) {
+          newErrors.push({ fileName: file.name, message: "Dosya boyutu çok büyük." });
+          _validationErrors.current.push(file.name);
+        }
       }
-    }
 
-    setValidationErrors((prev) => [...prev, ...newErrors]);
-  }, []);
+      setValidationErrors((prev) => [...prev, ...newErrors]);
+    },
+    [allowedTypes, maxSize],
+  );
 
   const handleFileToBase64 = useCallback((file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -120,16 +123,18 @@ const Upload: React.FC<Props> = ({
     }
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-    const files = e.dataTransfer.files;
+      const files = e.dataTransfer.files;
+      if (files && files.length > 0) handleFileChange(files);
 
-    if (files && files.length > 0) setSelectedFiles(Array.from(files));
-
-    setClassName((prev) => prev.filter((c) => c !== "dragging"));
-  }, []);
+      setClassName((prev) => prev.filter((c) => c !== "dragging"));
+    },
+    [handleFileChange],
+  );
 
   const renderUploadFile = (params: { children: React.ReactNode }) => {
     return (
@@ -148,6 +153,8 @@ const Upload: React.FC<Props> = ({
 
   // useEffects
   useEffect(() => {
+    let isMounted = true;
+
     (async () => {
       const dataTransfer = new DataTransfer();
       const fileFormData = new FormData();
@@ -164,7 +171,7 @@ const Upload: React.FC<Props> = ({
         }
 
         // Seçilmiş olan dosyalar validasyona gönderiliyor.
-        selectedFiles.forEach((f) => handleValidationFile(f));
+        selectedFiles.forEach((f) => validateFile(f));
         const inValidFiles = Array.from(new Set(_validationErrors.current));
         // Input içerisine dosyalar aktarılıyor.
         selectedFiles.forEach((f) => dataTransfer.items.add(f));
@@ -177,7 +184,9 @@ const Upload: React.FC<Props> = ({
         // Geçerli olan dosyalar base64'e dönüştürülüyor...
         const base64Array = await Promise.all(validFiles.map((validFile) => handleFileToBase64(validFile)));
 
-        onChange(fileFormData, validFiles, base64Array, _validationErrors.current.length === 0);
+        if (isMounted) {
+          onChange(fileFormData, validFiles, base64Array, _validationErrors.current.length === 0);
+        }
 
         // Eğer dosya varsa.
         setClassName((prev) => {
@@ -189,6 +198,10 @@ const Upload: React.FC<Props> = ({
         });
       }
     })();
+
+    return () => {
+      isMounted = false;
+    };
   }, [selectedFiles]);
 
   useEffect(() => {
@@ -199,7 +212,7 @@ const Upload: React.FC<Props> = ({
 
   useEffect(() => {
     if (type === "dropzone") setClassName((prev) => [...prev, "dropzone"]);
-  }, []);
+  }, [type]);
 
   switch (type) {
     case "list":
