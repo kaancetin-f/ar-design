@@ -115,13 +115,22 @@ class Api {
     try {
       const config = getApiConfig();
 
-      // Request merge: init + headers + global config
+      const mergedHeaders = {
+        ...config.headers,
+        ...init.headers,
+      } as Record<string, string>;
+
+      // Eğer gönderilen body bir FormData ise (Dosya yükleniyorsa),
+      // birleşen tüm headers içinden Content-Type'ı tamamen kazıyoruz.
+      // Böylece tarayıcı kendi boundary şifresini basabilir.
+      if (init.body instanceof FormData) {
+        delete (mergedHeaders as any)["Content-Type"];
+        delete (mergedHeaders as any)["content-type"];
+      }
+
       let requestInit: RequestInit = {
         ...init,
-        headers: {
-          ...config.headers,
-          ...init.headers,
-        },
+        headers: mergedHeaders,
       };
 
       // Request interceptor (runtime'da eklenmiş olabilir.)
@@ -133,7 +142,7 @@ class Api {
       // Response interceptor.
       if (config.responseInterceptor) return await config.responseInterceptor(response);
 
-      // Error handling
+      // Error handling.
       if (!response.ok) console.error(`HTTP Error ${response.status}: ${response.statusText}`);
 
       return response;
