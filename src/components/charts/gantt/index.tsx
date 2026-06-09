@@ -8,31 +8,47 @@ import IProps, { Task } from "./IProps";
 
 const colors = ["#A881FA", "#75CFA4", "#EE6D63", "#FAD87A"];
 
-const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: false } }) => {
+const Gantt: React.FC<IProps> = ({ title, description, data, pagination, config = { isSearchable: false } }) => {
   // refs
   const _svg = useRef<SVGSVGElement>(null);
   const _mapIsMoveField = useRef<SVGRectElement>(null);
+  const _scrollX = useRef<number>(0);
+  const _isPressedCtrl = useRef<boolean>(false);
 
   // states
+  const [startX, setStartX] = useState<number>(0);
   const [scrollX, setScrollX] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [startX, setStartX] = useState<number>(0);
+  const [zoom, setZoom] = useState<number>(1); // 1 = %100, 1.5 = %150 zoom
   // states -> Pagination
-  // const [totalRecords, _] = useState<number>(0); // Not used, pagination.totalRecords is used directly or tasks.length. Keeping it commented out.
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedPerPage, setSelectedPerPage] = useState<number>(pagination?.perPage ?? 10);
   // states -> Mobil
   const [isMobile, setIsMobile] = useState(false);
 
   // variables
-  const TIMELINE = generateGanttTimeline(data);
+  const getData = useMemo(() => {
+    let _data: Task[] = [...data];
+
+    if (pagination && !config.isServerSide) {
+      const indexOfLastRow = currentPage * selectedPerPage;
+      const indexOfFirstRow = indexOfLastRow - selectedPerPage;
+
+      _data = _data.slice(indexOfFirstRow, indexOfLastRow);
+    }
+
+    return _data;
+  }, [data, currentPage, selectedPerPage, config.isServerSide]);
+
+  const DAY_WIDTH = 60 * zoom;
+  const TIMELINE = useMemo(() => generateGanttTimeline(data), [data]);
 
   const HEADER_HEIGHT = 75;
   const STROKE_WIDTH = 0.5;
   const ROW_HEIGHT = 45;
 
   const LABEL_WIDTH = useMemo(() => {
-    const longestName = data.reduce(
+    const longestName = getData.reduce(
       (maxTask, currentTask) => (currentTask.name.length > maxTask.name.length ? currentTask : maxTask), // Corrected logic
       {
         name: "",
@@ -41,10 +57,10 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
     const estimatedWidth = longestName.length * 7 + 25;
 
     return Math.min(Math.max(estimatedWidth, 120), 250);
-  }, [data]);
+  }, [getData]);
 
   const SVG_WIDTH = "100%";
-  const SVG_HEIGHT = HEADER_HEIGHT + data.length * ROW_HEIGHT + ROW_HEIGHT * 2;
+  const SVG_HEIGHT = HEADER_HEIGHT + getData.length * ROW_HEIGHT + ROW_HEIGHT * 2;
 
   let PREVMATCHMONT: number = 0;
   let PREVMATCHDAY: number = 0;
@@ -53,18 +69,32 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
   const { t } = useTranslation(String(config.locale ?? "tr"));
 
   // methods
-  const handleResize = useMemo(() => {
+  const handleResize = useCallback(() => {
     return (_: UIEvent) => {
       setIsMobile(window.innerWidth <= 768);
     };
   }, []);
 
-  const handleMouseDown = (e: React.MouseEvent<SVGSVGElement>) => {
+  const handleMouseDown = useCallback((e: React.MouseEvent<SVGSVGElement>) => {
     if (e.button !== 0) return;
 
     setIsDragging(true);
-    setStartX(e.clientX + scrollX);
-  };
+    setStartX(e.clientX + _scrollX.current);
+  }, []);
+
+  const handleKeyboardDown = useCallback((event: KeyboardEvent) => {
+    if (["Control", "Meta"].includes(event.key)) {
+      event.preventDefault();
+      _isPressedCtrl.current = true;
+    }
+  }, []);
+
+  const handleKeyboardUp = useCallback((event: KeyboardEvent) => {
+    if (["Control", "Meta"].includes(event.key)) {
+      event.preventDefault();
+      _isPressedCtrl.current = false;
+    }
+  }, []);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<SVGSVGElement>) => {
@@ -74,15 +104,22 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
 
       if (newScrollX < 0) newScrollX = 0;
 
-      const maxScrollWidth = TIMELINE.days.length * 60 - ((_svg.current?.clientWidth ?? 0) - LABEL_WIDTH);
+      // Ekrana sığan alanı çıkarırken doğru clientWidth kontrolü
+      const availableWidth = (_svg.current?.clientWidth ?? 0) - LABEL_WIDTH;
+      const maxScrollWidth = TIMELINE.days.length * DAY_WIDTH - availableWidth;
+
       if (newScrollX > maxScrollWidth) newScrollX = maxScrollWidth;
 
+      // Eğer içerik zaten ekrana sığıyorsa scrollX 0 olmalı
+      if (maxScrollWidth <= 0) newScrollX = 0;
+
       setScrollX(newScrollX);
+      _scrollX.current = newScrollX;
     },
-    [isDragging, startX, TIMELINE.days.length, LABEL_WIDTH],
+    [startX, isDragging, TIMELINE.days.length, DAY_WIDTH, LABEL_WIDTH], // DAY_WIDTH bağımlılığını eklemeyi unutma!
   );
 
-  const handleMouseUpOrLeave = () => {
+  const handleMouseUpOrLeave = useCallback(() => {
     const svgRect = _svg.current?.getBoundingClientRect();
     const mapIsMoveFieldRect = _mapIsMoveField.current?.getBoundingClientRect();
 
@@ -90,7 +127,7 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
       const svgElement = _svg.current;
       if (!svgElement) return;
 
-      const chartContentWidth = TIMELINE.days.length * 60;
+      const chartContentWidth = TIMELINE.days.length * DAY_WIDTH;
       const viewportWidth = svgElement.clientWidth;
 
       const availableChartWidth = viewportWidth - LABEL_WIDTH;
@@ -99,22 +136,29 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
         const maxScrollX = chartContentWidth - availableChartWidth;
         if (scrollX > maxScrollX) {
           setScrollX(maxScrollX);
+          _scrollX.current = maxScrollX;
         }
       } else {
         setScrollX(0);
       }
     }
     setIsDragging(false);
-  };
+  }, [TIMELINE.days.length, LABEL_WIDTH]);
 
   // useEffects
   useEffect(() => {
     setIsMobile(window.innerWidth <= 768);
 
     window.addEventListener("resize", handleResize);
+    // Keyboard Events
+    window.addEventListener("keydown", handleKeyboardDown);
+    window.addEventListener("keyup", handleKeyboardUp);
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      // Keyboard Events
+      window.removeEventListener("keydown", handleKeyboardDown);
+      window.removeEventListener("keyup", handleKeyboardUp);
     };
   }, [handleResize]);
 
@@ -128,16 +172,23 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
         height={SVG_HEIGHT}
         className="ar-gantt-chart-svg"
       >
+        <defs>
+          <pattern id="weekend-stripes" width="8" height="8" patternUnits="userSpaceOnUse">
+            <rect width="8" height="8" fill="rgba(0, 0, 0, 0.03)" />
+            <line x1="0" y1="8" x2="8" y2="0" opacity={0.25} stroke="var(--red-500)" strokeWidth={0.5} />
+          </pattern>
+        </defs>
+
         {/* :Begin: Header */}
         <g className="header" width={"100%"}>
           {/* Background */}
           <rect x={0} y={0} width={"100%"} height={HEADER_HEIGHT} />
 
           <g transform={`translate(25, ${HEADER_HEIGHT / 2})`} className="title-group">
-            <text className="title">Ar Gantt Chart</text>
+            <text className="title">{title}</text>
 
             <text y={20} className="title-description">
-              Daily View
+              {description}
             </text>
           </g>
 
@@ -158,36 +209,63 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
           {/* :Begin: Time Axis & Bars */}
           <g
             className={`${isDragging ? "dragging" : "no-dragging"} time-and-bars`}
-            transform={`translate(${LABEL_WIDTH - scrollX}, 0)`} // Apply scrollX as a negative offset
+            transform={`translate(${LABEL_WIDTH - scrollX}, 0)`}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUpOrLeave}
             onMouseLeave={handleMouseUpOrLeave}
+            onWheel={(event) => {
+              if (!_isPressedCtrl.current) return;
+
+              // 1. Mevcut toplam genişliği hesapla. (eski zoom ile)
+              const currentTotalWidth = TIMELINE.days.length * DAY_WIDTH;
+              const availableWidth = (_svg.current?.clientWidth ?? 0) - LABEL_WIDTH;
+
+              // 2. Şu anki kaydırma oranını bul. (0 ile 1 arasında bir değer)
+              // Eğer içerik ekrana sığıyorsa oran 0'dır.
+              const currentScrollRatio =
+                currentTotalWidth > availableWidth ? scrollX / (currentTotalWidth - availableWidth) : 0;
+
+              // 3. Yeni zoom değerini hesapla.
+              const nextZoom = event.deltaY < 0 ? Math.min(zoom + 0.5, 5) : Math.max(zoom - 0.5, 1);
+
+              // Eğer zoom değişmeyecekse (sınırlara takıldıysa) işlem yapma.
+              if (nextZoom === zoom) return;
+
+              // 4. Yeni zoom'a göre yeni DAY_WIDTH ve yeni toplam genişliği hesapla.
+              const nextDayWidth = 60 * nextZoom;
+              const nextTotalWidth = TIMELINE.days.length * nextDayWidth;
+
+              // 5. Yeni maksimum kaydırma genişliğini bul ve eski orana göre scrollX'i güncelle.
+              const nextMaxScrollWidth = nextTotalWidth - availableWidth;
+              const nextScrollX = Math.max(0, nextMaxScrollWidth * currentScrollRatio);
+
+              // State'leri güncelle.
+              setZoom(nextZoom);
+              setScrollX(nextScrollX);
+              _scrollX.current = nextScrollX;
+            }}
             style={{ cursor: isDragging ? "grabbing" : "grab", userSelect: "none" }}
           >
             {/* :Begin: Months & Days */}
-            <g>
+            <g id="month-and-days">
               {TIMELINE.days.map((day, index) => {
-                const xPos = (index + 1) * 60;
+                const xPos = (index + 1) * DAY_WIDTH;
                 const nextDay = new Date(day.date);
                 nextDay.setDate(nextDay.getDate() + 1);
                 const isLastDayOfMonth = day.date.getMonth() !== nextDay.getMonth();
 
                 const isSunday = day.date.getDay() === 0;
-                if (!isSunday && !isLastDayOfMonth) return null; // Return null if not to be rendered
+                if (!isSunday && !isLastDayOfMonth) return null;
 
                 const currentMonthNum = day.date.getMonth();
                 const currentDayNum = day.date.getDate();
-                // NOTE: PREVMATCHMONT and PREVMATCHDAY are mutable variables used in render,
-                // which is an anti-pattern in React. This logic should ideally be moved
-                // to a memoized function or derived from state/props.
-                // For this change, we'll keep the existing logic but acknowledge it's not ideal.
-                // Resetting for each render pass to avoid unexpected behavior across renders.
+
                 if (index === 0) {
-                  // Reset on first iteration
                   PREVMATCHMONT = 0;
                   PREVMATCHDAY = 0;
                 }
+
                 const dayDiff = currentDayNum - (currentMonthNum !== PREVMATCHMONT ? 0 : PREVMATCHDAY);
                 // Bir sonraki turda kullanabilmek için hafızayı güncelliyoruz.
                 PREVMATCHMONT = currentMonthNum;
@@ -206,7 +284,7 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
                     />
 
                     <text
-                      x={xPos - (dayDiff * 60) / 2}
+                      x={xPos - (dayDiff * DAY_WIDTH) / 2}
                       y={-ROW_HEIGHT * 2 + ROW_HEIGHT / 2}
                       fill="var(--black)"
                       fontSize="12"
@@ -220,12 +298,12 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
               })}
 
               {TIMELINE.days.map((day, index) => {
-                const xPos = (index + 1) * 60; // 01:00 -> 60px, 02:00 -> 120px...
+                const xPos = (index + 1) * DAY_WIDTH; // 01:00 -> 60px, 02:00 -> 120px...
 
                 return (
                   <g key={index}>
                     <text
-                      x={(index + 1) * 60 - 30}
+                      x={(index + 1) * DAY_WIDTH - 30}
                       y={-ROW_HEIGHT + ROW_HEIGHT / 2}
                       fill={day.isWeekend ? "var(--red-500)" : "var(--black)"}
                       fontSize="12"
@@ -234,6 +312,16 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
                     >
                       {String(day.number).padStart(2, "0")} {day.name}
                     </text>
+
+                    {day.isWeekend && (
+                      <rect
+                        x={xPos - DAY_WIDTH}
+                        y={0}
+                        width={DAY_WIDTH}
+                        height={SVG_HEIGHT}
+                        fill="url(#weekend-stripes)"
+                      />
+                    )}
 
                     <line
                       x1={xPos}
@@ -252,7 +340,7 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
               <line
                 x1={0}
                 y1={-ROW_HEIGHT}
-                x2={TIMELINE.days.length * 60}
+                x2={TIMELINE.days.length * DAY_WIDTH}
                 y2={-ROW_HEIGHT}
                 opacity={0.25}
                 stroke="var(--black)"
@@ -262,7 +350,7 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
               <line
                 x1={0}
                 y1={0}
-                x2={TIMELINE.days.length * 60}
+                x2={TIMELINE.days.length * DAY_WIDTH}
                 y2={0}
                 opacity={0.25}
                 stroke="var(--black)"
@@ -273,26 +361,26 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
 
             {/* :Begin: Map */}
             <g transform={`translate(0, 0)`}>
-              {data.map((task, index) => {
+              {getData.map((task, index) => {
                 const taskStart = new Date(task.start);
                 const taskEnd = new Date(task.end);
 
                 // 1. Proje başlangıcından bu görevin başlangıcına kadar geçen toplam milisaniye
                 const diffMsFromStart = taskStart.getTime() - Number(TIMELINE.timelineStart?.getTime());
 
-                // Milisaniyeyi saate çeviriyoruz
+                // Milisaniyeyi DOĞRU şekilde saate çeviriyoruz (Sabit: 1000 * 60 * 60)
                 const hoursFromStart = diffMsFromStart / (1000 * 60 * 60);
 
-                // X Konumu: Geçen toplam saati, saat başına düşen piksel genişliğiyle çarpıyoruz
-                const x = hoursFromStart * (60 / 24);
+                // X Konumu: Geçen toplam saati, dinamik saat başına düşen pikselle çarpıyoruz
+                const x = hoursFromStart * (DAY_WIDTH / 24);
 
-                // 2. Görevin toplam süresini saat cinsinden buluyoruz
+                // 2. Görevin toplam süresini DOĞRU şekilde saat cinsinden buluyoruz
                 const durationHours = (taskEnd.getTime() - taskStart.getTime()) / (1000 * 60 * 60);
 
-                // Genişlik (Width): Süreyi saat başına düşen pikselle çarpıyoruz
-                const width = durationHours * (60 / 24);
+                // Genişlik (Width): Süreyi dinamik saat başına düşen pikselle çarpıyoruz
+                const width = durationHours * (DAY_WIDTH / 24);
 
-                // 3. Dikey Konumlandırma (Senin mevcut mantığın)
+                // 3. Dikey Konumlandırma
                 const height = ROW_HEIGHT / 1.5;
                 const y = index * ROW_HEIGHT + height / 4;
 
@@ -300,6 +388,7 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
                   <g key={task.id}>
                     <rect x={x} y={y} width={width} height={height} fill={colors[index % colors.length]} rx={3} />
 
+                    {/* Yazının taşmaması kontrolünü de DAY_WIDTH yerine dinamik yazı boyutuna veya width'e göre yapıyoruz */}
                     {width > 60 && (
                       <text
                         x={x + width / 2}
@@ -322,7 +411,7 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
               ref={_mapIsMoveField}
               x={0}
               y={-ROW_HEIGHT}
-              width={TIMELINE.days.length * 60} // This is the total width of the chart content
+              width={TIMELINE.days.length * DAY_WIDTH}
               height={SVG_HEIGHT}
               fill="transparent"
               pointerEvents="all"
@@ -333,24 +422,17 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
           {/* :Begin:Left Label Axis */}
           <g className="left-axis">
             {/* Background */}
-            <rect x={0} y={-ROW_HEIGHT * 2 + 0.5} width={LABEL_WIDTH} height={SVG_HEIGHT} fill="var(--gray-200)" />
+            <rect x={0} y={-ROW_HEIGHT * 2 + 0.5} width={LABEL_WIDTH} height={SVG_HEIGHT} fill="var(--gray-100)" />
 
             <g className="label-list">
-              {data.map((task, index) => {
+              {getData.map((item, index) => {
                 const y = index * ROW_HEIGHT;
-                const textContent = task.name;
-                const maxTextWidth = LABEL_WIDTH - 20; // 10px padding on each side
+                const textContent = item.name;
+                const maxTextWidth = LABEL_WIDTH - 20;
 
                 return (
-                  <g key={task.id} className="label-row">
-                    <text
-                      x="10"
-                      y={y + ROW_HEIGHT / 2}
-                      className="label-text"
-                      // Add title for tooltip if text is truncated
-                      // title={textContent.length * 7 > maxTextWidth ? textContent : undefined}
-                    >
-                      {/* Truncate text if it exceeds maxTextWidth (rough character count estimation) */}
+                  <g key={item.id} className="label-row">
+                    <text x="10" y={y + ROW_HEIGHT / 2} className="label-text">
                       {textContent.length * 7 > maxTextWidth
                         ? `${textContent.substring(0, Math.floor(maxTextWidth / 7) - 3)}...`
                         : textContent}
@@ -369,7 +451,7 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
                     <line
                       x1={LABEL_WIDTH}
                       y1={y + ROW_HEIGHT}
-                      x2={LABEL_WIDTH + TIMELINE.days.length * 60} // Extend across the entire chart width
+                      x2={LABEL_WIDTH + TIMELINE.days.length * DAY_WIDTH}
                       y2={y + ROW_HEIGHT}
                       opacity={0.25}
                       stroke="var(--black)"
@@ -385,10 +467,6 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
         </g>
         {/* :End: Body */}
       </svg>
-      {/* Hidden text element for measuring width (optional, for more accurate truncation if needed) */}
-      {/* <svg style={{ position: 'absolute', visibility: 'hidden', height: 0, width: 0 }}>
-        <text ref={_textMeasureRef} style={{ fontSize: '12px', fontWeight: '600', fontFamily: 'sans-serif' }}></text>
-      </svg> */}
 
       <div className="footer">
         <span>
@@ -396,7 +474,6 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
             <>
               <strong>
                 {(currentPage - 1) * selectedPerPage + 1} -{" "}
-                {/* Corrected to use tasks.length or pagination.totalRecords */}
                 {Math.min(currentPage * selectedPerPage, pagination?.totalRecords || data.length)} of{" "}
                 {pagination?.totalRecords || data.length}
               </strong>
@@ -404,7 +481,7 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
           ) : (
             t(
               "Table.Pagination.Information.Text",
-              (currentPage - 1) * selectedPerPage + 1, // Corrected to use tasks.length or pagination.totalRecords
+              (currentPage - 1) * selectedPerPage + 1,
               Math.min(currentPage * selectedPerPage, pagination?.totalRecords || data.length),
               pagination?.totalRecords || data.length,
             )
@@ -413,7 +490,7 @@ const Gantt: React.FC<IProps> = ({ data, pagination, config = { isSearchable: fa
 
         {pagination && (
           <Pagination
-            totalRecords={config.isServerSide ? pagination.totalRecords : (data.length ?? 0)} // Corrected to use tasks.length
+            totalRecords={config.isServerSide ? pagination.totalRecords : (data.length ?? 0)}
             currentPage={currentPage}
             perPage={selectedPerPage}
             onChange={(currentPage, perPage) => {

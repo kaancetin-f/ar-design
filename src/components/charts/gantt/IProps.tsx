@@ -12,6 +12,8 @@ export type Config = {
 };
 
 interface IProps {
+  title?: string;
+  description?: string;
   data: Task[];
   pagination?: {
     totalRecords: number;
