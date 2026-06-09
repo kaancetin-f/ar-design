@@ -801,12 +801,8 @@ const Table = forwardRef(
           <table ref={_innerRef}>
             <thead>
               <tr key="selection">
-                {data.some((item) => _subrowSelector in item) && _subrowButton && (
-                  <td style={{ width: 0, minWidth: 0 }}></td>
-                )}
-
                 {selections && (
-                  <th className="selection-col sticky-left" data-sticky-position="left" style={{ bottom: 0 }}>
+                  <th className="selection-col sticky sticky-left" data-sticky-position="left" style={{ bottom: 0 }}>
                     <Checkbox
                       variant="filled"
                       color="green"
@@ -824,6 +820,10 @@ const Table = forwardRef(
                       }}
                     />
                   </th>
+                )}
+
+                {data.some((item) => _subrowSelector in item) && _subrowButton && (
+                  <th className="subrow-col sticky sticky-left" data-sticky-position="left" style={{ bottom: 0 }}></th>
                 )}
 
                 <THeadCell
@@ -848,6 +848,14 @@ const Table = forwardRef(
                     <th
                       key={`column-selections`}
                       className="selection-col sticky-left"
+                      data-sticky-position="left"
+                    ></th>
+                  )}
+
+                  {data.some((item) => _subrowSelector in item) && _subrowButton && (
+                    <th
+                      key={`column-selections`}
+                      className="subrow-col sticky sticky-left"
                       data-sticky-position="left"
                     ></th>
                   )}

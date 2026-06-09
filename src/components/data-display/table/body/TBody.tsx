@@ -89,8 +89,8 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
               ref={(element) => {
                 _tHeadTH.current[index] = element;
               }}
-              className="flex justify-content-center sticky-left"
-              style={{ display: "flex", alignItems: "center", height: rowHeights[index] ?? 0 }}
+              className="flex justify-content-center sticky sticky-left"
+              // style={{ display: "flex", alignItems: "center", height: rowHeights[index] ?? 0 }}
               data-sticky-position="left"
             >
               <Checkbox
@@ -126,7 +126,11 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
           )}
 
           {isHasSubitems && _subrowButton ? (
-            <td>
+            <td
+              className="subrow-col sticky sticky-left"
+              data-sticky-position="left"
+              // style={{ display: "flex", alignItems: "center", height: rowHeights[index] ?? 0 }}
+            >
               {item[_subrowSelector as keyof typeof item] && (
                 <div className="subitem-open-button-wrapper">
                   <span

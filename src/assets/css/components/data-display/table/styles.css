@@ -126,6 +126,11 @@
               z-index: 3;
             }
 
+            &.subrow-col {
+              width: 2rem;
+              z-index: 3;
+            }
+
             &.type-of-number {
               text-align: right;
             }
@@ -557,6 +562,11 @@
               }
 
               &.selection-col {
+                width: 2rem;
+                z-index: 3;
+              }
+
+              &.subrow-col {
                 width: 2rem;
                 z-index: 3;
               }
