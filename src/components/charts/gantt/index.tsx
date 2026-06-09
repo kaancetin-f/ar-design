@@ -278,7 +278,7 @@ const Gantt: React.FC<IProps> = ({ title, description, data, pagination, config 
                       y1={-ROW_HEIGHT * 2}
                       x2={xPos}
                       y2={0}
-                      opacity={0.25}
+                      opacity={0.15}
                       stroke="var(--black)"
                       strokeWidth={STROKE_WIDTH}
                     />
@@ -342,9 +342,9 @@ const Gantt: React.FC<IProps> = ({ title, description, data, pagination, config 
                 y1={-ROW_HEIGHT}
                 x2={TIMELINE.days.length * DAY_WIDTH}
                 y2={-ROW_HEIGHT}
-                opacity={0.25}
+                opacity={0.15}
                 stroke="var(--black)"
-                strokeWidth={1}
+                strokeWidth={STROKE_WIDTH}
               />
 
               <line
@@ -352,9 +352,9 @@ const Gantt: React.FC<IProps> = ({ title, description, data, pagination, config 
                 y1={0}
                 x2={TIMELINE.days.length * DAY_WIDTH}
                 y2={0}
-                opacity={0.25}
+                opacity={0.15}
                 stroke="var(--black)"
-                strokeWidth={1}
+                strokeWidth={STROKE_WIDTH}
               />
             </g>
             {/* :End: Months & Days */}
@@ -422,7 +422,17 @@ const Gantt: React.FC<IProps> = ({ title, description, data, pagination, config 
           {/* :Begin:Left Label Axis */}
           <g className="left-axis">
             {/* Background */}
-            <rect x={0} y={-ROW_HEIGHT * 2 + 0.5} width={LABEL_WIDTH} height={SVG_HEIGHT} fill="var(--gray-100)" />
+            <rect x={0} y={-ROW_HEIGHT * 2 + 0.5} width={LABEL_WIDTH} height={SVG_HEIGHT} fill="var(--white)" />
+
+            <line
+              x1={LABEL_WIDTH}
+              y1={-ROW_HEIGHT * 2}
+              x2={LABEL_WIDTH}
+              y2={SVG_HEIGHT}
+              opacity={0.25}
+              stroke="var(--black)"
+              strokeWidth={1}
+            />
 
             <g className="label-list">
               {getData.map((item, index) => {
