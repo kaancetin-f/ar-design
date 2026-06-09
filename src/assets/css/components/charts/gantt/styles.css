@@ -1,49 +1,60 @@
 .ar-gantt-chart {
-  background-color: var(--gray-700);
-  fill: var(--gray-700);
-  border-radius: var(--border-radius-lg);
-  font-family: var(--system);
-  box-shadow: 0px 10px 15px -5px rgba(var(--black-rgb), 0.1);
+  .ar-gantt-chart-svg {
+    /* background-color: var(--gray-700); */
+    /* fill: var(--gray-700); */
+    border-radius: var(--border-radius-lg);
+    font-family: var(--system);
+    border: solid 1px var(--gray-200);
+    /* box-shadow: 0px 10px 15px -5px rgba(var(--black-rgb), 0.1); */
 
-  > .header {
-    fill: var(--white);
-    height: 75px;
-
-    > .title-group {
-      > .title {
-        fill: var(--gray-700);
-        font-size: 16px;
-        font-weight: bold;
-      }
-
-      > .title-description {
-        fill: var(--gray-500);
-        font-size: 13.28px;
-      }
-    }
-  }
-
-  > .body {
-    > .time-and-bars {
-      transition: transform 250ms ease-in-out;
-
-      &.dragging {
-        transition: none !important;
-      }
-    }
-
-    > .left-axis {
+    > .header {
       fill: var(--white);
+      height: 75px;
 
-      > .label-list {
-        > .label-row {
-          > .label-text {
-            fill: var(--gray-700);
-            font-size: 14px;
-            dominant-baseline: central;
+      > .title-group {
+        > .title {
+          fill: var(--gray-700);
+          font-size: 16px;
+          font-weight: bold;
+        }
+
+        > .title-description {
+          fill: var(--gray-500);
+          font-size: 13.28px;
+        }
+      }
+    }
+
+    > .body {
+      > .time-and-bars {
+        transition: transform 250ms ease-in-out;
+
+        &.dragging {
+          transition: none !important;
+        }
+      }
+
+      > .left-axis {
+        fill: var(--white);
+
+        > .label-list {
+          > .label-row {
+            > .label-text {
+              fill: var(--gray-700);
+              font-size: 14px;
+              dominant-baseline: central;
+            }
           }
         }
       }
     }
+  }
+
+  > .footer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
   }
 }
