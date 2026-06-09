@@ -449,13 +449,13 @@ const Gantt: React.FC<IProps> = ({ title, description, data, pagination, config 
                     </text>
 
                     <line
-                      x1="0"
+                      x1={0}
                       y1={y + ROW_HEIGHT}
                       x2={LABEL_WIDTH}
                       y2={y + ROW_HEIGHT}
+                      opacity={0.15}
                       stroke="var(--black)"
                       strokeWidth="0.5"
-                      opacity={0.25}
                     ></line>
 
                     <line
