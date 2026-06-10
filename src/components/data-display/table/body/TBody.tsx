@@ -72,6 +72,7 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
   const renderRow = (item: T, index: number, deph: number, parentKey = "") => {
     const id = methods.trackBy?.(item) ?? index.toString();
     const key = parentKey ? `${parentKey}.${id}` : id;
+    const _subitem = item[_subrowSelector as keyof typeof item];
     const isHasSubitems = _subrowSelector in item;
 
     return (
@@ -131,19 +132,19 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
               data-sticky-position="left"
               // style={{ display: "flex", alignItems: "center", height: rowHeights[index] ?? 0 }}
             >
-              {item[_subrowSelector as keyof typeof item] && (
-                <div className="subitem-open-button-wrapper">
-                  <span
-                    className={`subitem-open-button ${(states.showSubitems.get[key] && "opened") ?? ""}`}
-                    onClick={() => {
-                      states.showSubitems.set((prev) => ({
-                        ...prev,
-                        [`${key}`]: !prev[`${key}`],
-                      }));
-                    }}
-                  />
-                </div>
-              )}
+              {/* {item[_subrowSelector as keyof typeof item] && ( */}
+              <div className="subitem-open-button-wrapper">
+                <span
+                  className={`subitem-open-button ${(states.showSubitems.get[key] && "opened") ?? ""} ${!_subitem && "passive"}`}
+                  onClick={() => {
+                    states.showSubitems.set((prev) => ({
+                      ...prev,
+                      [`${key}`]: !prev[`${key}`],
+                    }));
+                  }}
+                />
+              </div>
+              {/* )} */}
             </td>
           ) : isHasSubitems && _subrowButton ? (
             <td style={{ width: 0, minWidth: 0 }}></td>
@@ -178,6 +179,7 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
 
   const renderCell = ({ item, column, index, cIndex, depth, level, height = 0, isSubrows = false }: IRenderCell<T>) => {
     let render: any;
+    const isHasSubitems = _subrowSelector in item;
 
     // `column.key` bir string ise
     if (typeof column.key !== "object") render = column.render ? column.render(item) : item[column.key as keyof T];
@@ -209,7 +211,12 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
         data-sticky-position={column.config?.sticky}
       >
         <div
-          style={{ paddingLeft: cIndex === (methods.selections ? 1 : 0) ? `${depth == 0 ? 1 : depth}rem` : "" }}
+          style={{
+            paddingLeft:
+              cIndex === (methods.selections || (isHasSubitems && _subrowButton) ? 1 : 0)
+                ? `${depth == 0 ? 1 : depth}rem`
+                : "",
+          }}
           className="table-cell"
         >
           {config.isTreeView && cIndex === 0 && (
@@ -271,7 +278,7 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
         <Fragment key={`subitem-${index}-${subindex}-${Math.random()}`}>
           <tr className={`subrow-item ${_subrowButton ? "type-b" : "type-a"}`} data-level={level}>
             {isHasSubitems && _subrowButton ? (
-              <td>
+              <td className="subrow-col sticky sticky-left" data-sticky-position="left">
                 <div className="subitem-open-button-wrapper">
                   <span
                     className={`${(states.showSubitems.get[key] && "opened") ?? ""} ${!_subitem && "passive"}`}
