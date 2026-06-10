@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Input from "../../../form/input";
 import DatePicker from "../../../form/date-picker";
 import { Option, TableColumnType } from "../../../../libs/types";
@@ -18,6 +18,8 @@ interface IProps<T extends object> {
 }
 
 const Editable = function <T extends object>({ c, item, trackByValue, onEditable, config }: IProps<T>) {
+  // refs
+
   // variables
   const key = c.key as keyof T;
   const itemValue = item[c.key as keyof T];
@@ -31,9 +33,19 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
   // states
   const [_value, setValue] = useState<string | number | boolean | readonly string[] | undefined>(itemValue as string);
 
-  // useEffects
-  useEffect(() => setValue(itemValue as string), [item]);
+  // methods
+  const handleChange = useCallback(
+    (value: any, set: boolean = true) => {
+      if (set) setValue(value);
+      onEditable({ ...item, [key]: value } as T, trackByValue, ExtractKey(c.key));
+    },
+    [item],
+  );
 
+  // useEffects
+  useEffect(() => setValue(itemValue as string), [itemValue]);
+
+  // return
   switch (c.editable?.(item)?.type) {
     case "string":
     case "number":
@@ -42,14 +54,7 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
           variant="borderless"
           value={String(_value ?? "")}
           onChange={(event) => {
-            const { value } = event.target;
-
-            setValue(value);
-            onEditable(
-              { ...item, [key]: c.editable?.(item)?.type === "number" ? Number(value) : value } as T,
-              trackByValue,
-              ExtractKey(c.key),
-            );
+            handleChange(c.editable?.(item)?.type === "number" ? Number(event.target.value) : event.target.value);
           }}
           validation={{ text: _vText }}
           {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}
@@ -85,12 +90,7 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
           variant="borderless"
           name={c.key as string}
           value={String(_value ?? "")}
-          onChange={(event) => {
-            const { value } = event.target;
-
-            setValue(value);
-            onEditable({ ...item, [key]: value } as T, trackByValue, ExtractKey(c.key));
-          }}
+          onChange={(event) => handleChange(event.target.value)}
           validation={{ text: _vText }}
           locale={config.locale}
           {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}
@@ -102,12 +102,7 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
           variant="borderless"
           name={c.key as string}
           value={String(_value ?? "")}
-          onChange={(event) => {
-            const { value } = event.target;
-
-            setValue(value);
-            onEditable({ ...item, [key]: value } as T, trackByValue, ExtractKey(c.key));
-          }}
+          onChange={(event) => handleChange(event.target.value)}
           validation={{ text: _vText }}
           locale={config.locale}
           {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}
@@ -118,10 +113,7 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
         <DatePicker
           variant="borderless"
           value={String(_value ?? "")}
-          onChange={(value) => {
-            setValue(value);
-            onEditable({ ...item, [key]: value } as T, trackByValue, ExtractKey(c.key));
-          }}
+          onChange={(value) => handleChange(value)}
           validation={{ text: _vText }}
           {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}
         />
@@ -133,9 +125,7 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
           value={selectItem}
           options={c.editable?.(item).options as Option[]}
           onClick={async () => await c.editable?.(item)?.method?.()}
-          onChange={(option) => {
-            onEditable({ ...item, [key]: option?.value } as T, trackByValue, ExtractKey(c.key));
-          }}
+          onChange={(option) => handleChange(option?.value, false)}
           validation={{ text: _vText }}
           {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}
         />
@@ -147,9 +137,12 @@ const Editable = function <T extends object>({ c, item, trackByValue, onEditable
           value={selectItems}
           options={c.editable?.(item).options as Option[]}
           onClick={async () => await c.editable?.(item)?.method?.()}
-          onChange={(options) => {
-            onEditable({ ...item, [key]: options.map((option) => option.value) } as T, trackByValue, ExtractKey(c.key));
-          }}
+          onChange={(options) =>
+            handleChange(
+              options.map((option) => option.value),
+              false,
+            )
+          }
           validation={{ text: _vText }}
           multiple
           {...(c.editable?.(item).where ? { disabled: c.editable?.(item).where } : {})}

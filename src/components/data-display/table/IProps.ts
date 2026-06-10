@@ -94,6 +94,7 @@ interface IProps<T extends object> extends IChildren {
   actions?: Actions;
   rowBackgroundColor?: (item: T) => string;
   selections?: (selectionItems: T[]) => void;
+  selectionDisabled?: (item: T) => boolean;
   previousSelections?: T[];
   sortedParams?: (params: Sort<T>[], query: string) => void;
   searchedParams?: (params: SearchedParam | null, query: string, operator: FilterOperator) => void;

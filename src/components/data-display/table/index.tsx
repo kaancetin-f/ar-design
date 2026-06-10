@@ -48,6 +48,7 @@ const Table = forwardRef(
       actions,
       rowBackgroundColor,
       selections,
+      selectionDisabled,
       previousSelections,
       sortedParams,
       searchedParams,
@@ -516,7 +517,8 @@ const Table = forwardRef(
         _data = _data.slice(indexOfFirstRow, indexOfLastRow);
       }
 
-      handleScroll();
+      // Önemli, Data yenilenmesi durumunda sticky alanlar tazelenir.
+      setTimeout(() => handleScroll(), 0);
       return _data;
     }, [data, searchedText, currentPage, selectedPerPage, sortConfig, config.isServerSide]);
 
@@ -759,6 +761,8 @@ const Table = forwardRef(
 
         config.validation?.getChangeData?.(updatedData);
       }
+
+      handleScroll();
     }, [createTrigger]);
 
     useEffect(() => {
@@ -986,6 +990,7 @@ const Table = forwardRef(
                 methods={{
                   trackBy: trackBy,
                   selections: selections,
+                  selectionDisabled: selectionDisabled,
                   onDnD: onDnD,
                   onEditable: onEditable,
                   rowBackgroundColor: rowBackgroundColor,
@@ -1065,12 +1070,16 @@ const Table = forwardRef(
   },
 );
 
-export default memo(Table, <T extends object>(prevProps: IProps<T>, nextProps: IProps<T>) => {
-  const data = Utils.DeepEqual(prevProps.data, nextProps.data);
-  const columns = Utils.DeepEqual(prevProps.columns, nextProps.columns);
-  const actions = Utils.DeepEqual(prevProps.actions, nextProps.actions);
-  const previousSelections = Utils.DeepEqual(prevProps.previousSelections, nextProps.previousSelections);
-  const pagination = Utils.DeepEqual(prevProps.pagination, nextProps.pagination);
+// export default memo(Table, <T extends object>(prevProps: IProps<T>, nextProps: IProps<T>) => {
+//   const data = Utils.DeepEqual(prevProps.data, nextProps.data);
+//   const columns = Utils.DeepEqual(prevProps.columns, nextProps.columns);
+//   const actions = Utils.DeepEqual(prevProps.actions, nextProps.actions);
+//   const previousSelections = Utils.DeepEqual(prevProps.previousSelections, nextProps.previousSelections);
+//   const pagination = Utils.DeepEqual(prevProps.pagination, nextProps.pagination);
 
-  return data && columns && actions && previousSelections && pagination;
-}) as <T extends object>(props: IProps<T> & { ref?: React.Ref<HTMLTableElement> }) => React.JSX.Element;
+//   return data && columns && actions && previousSelections && pagination;
+// }) as <T extends object>(props: IProps<T> & { ref?: React.Ref<HTMLTableElement> }) => React.JSX.Element;
+
+export default memo(Table) as <T extends object>(
+  props: IProps<T> & { ref?: React.Ref<HTMLTableElement> },
+) => React.JSX.Element;
