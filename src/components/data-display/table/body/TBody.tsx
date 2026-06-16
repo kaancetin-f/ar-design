@@ -188,7 +188,12 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
         style={{
           ...(column.config?.sticky ? { height } : {}),
           ...(column.config?.width
-            ? { width: column.config.width, minWidth: column.config.width, maxWidth: column.config.width }
+            ? {
+                width: column.config.width,
+                minWidth: column.config.width,
+                maxWidth: column.config.width,
+                overflow: "hidden",
+              }
             : {}),
         }}
         data-sticky-position={column.config?.sticky}
