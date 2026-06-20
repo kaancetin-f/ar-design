@@ -1,7 +1,6 @@
 import { IBorder, IColors, IStatus, IValidation, IVariant } from "../../../libs/types/IGlobalProps";
 
 type Props = {
-  label?: string;
   onChange: (value: string) => void;
   config?: {
     locale?: Intl.LocalesArgument;

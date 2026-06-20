@@ -1,3 +1,13 @@
+@import url("./calendar/calendar.css");
+@import url("./calendar/header.css");
+@import url("./calendar/content.css");
+@import url("./calendar/footer.css");
+
+@import url("./clock/clock.css");
+@import url("./clock/header.css");
+@import url("./clock/content.css");
+@import url("./clock/footer.css");
+
 :root {
   --header-height: 2.75rem;
   --footer-height: 2.75rem;
@@ -24,13 +34,3 @@
   transition: top 250ms ease-in-out;
   z-index: 1;
 }
-
-@import url("./calendar/calendar.css");
-@import url("./calendar/header.css");
-@import url("./calendar/content.css");
-@import url("./calendar/footer.css");
-
-@import url("./clock/clock.css");
-@import url("./clock/header.css");
-@import url("./clock/content.css");
-@import url("./clock/footer.css");

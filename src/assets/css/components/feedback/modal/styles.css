@@ -1,3 +1,12 @@
+@import url("./header.css");
+@import url("./content.css");
+@import url("./footer.css");
+
+/* Media Queries */
+@import url("./media-queries/x-large.css");
+@import url("./media-queries/medium.css");
+@import url("./media-queries/small.css");
+
 .ar-modal-wrapper {
   position: fixed;
   inset: 0;
@@ -13,12 +22,16 @@
 .ar-modal-wrapper.opened {
   visibility: visible;
   opacity: 1;
-  transition: visibility 250ms, opacity 250ms ease-in-out;
+  transition:
+    visibility 250ms,
+    opacity 250ms ease-in-out;
 }
 .ar-modal-wrapper.closed {
   visibility: hidden;
   opacity: 0;
-  transition: visibility 250ms, opacity 250ms ease-in-out;
+  transition:
+    visibility 250ms,
+    opacity 250ms ease-in-out;
 }
 /* #endregion */
 /* Open or Close */
@@ -38,12 +51,3 @@
 .ar-modal-wrapper > .ar-modal.small {
   width: 25%;
 }
-
-@import url("./header.css");
-@import url("./content.css");
-@import url("./footer.css");
-
-/* Media Queries */
-@import url("./media-queries/x-large.css");
-@import url("./media-queries/medium.css");
-@import url("./media-queries/small.css");

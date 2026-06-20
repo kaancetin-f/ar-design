@@ -1,3 +1,5 @@
+@import url("./options.css");
+
 .ar-select-wrapper {
   position: relative;
   width: 100%;
@@ -180,5 +182,3 @@
     }
   }
 }
-
-@import url("./options.css");

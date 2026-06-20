@@ -1,3 +1,6 @@
+@import url("./animations.css");
+@import url("./statuses.css");
+
 .ar-progress {
   position: relative;
   display: block;
@@ -45,6 +48,3 @@
   border: solid 2.5px transparent;
   border-top-color: var(--black);
 }
-
-@import url("./animations.css");
-@import url("./statuses.css");

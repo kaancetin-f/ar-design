@@ -59,7 +59,6 @@ const Table = forwardRef(
     }: IProps<T>,
     ref: React.ForwardedRef<HTMLTableElementWithCustomAttributes>,
   ) => {
-    // refs
     const _innerRef = useRef<HTMLTableElementWithCustomAttributes>(null);
     const _tableWrapper = useRef<HTMLDivElement>(null);
     const _tableContent = useRef<HTMLDivElement>(null);
@@ -67,65 +66,48 @@ const Table = forwardRef(
     const _dragItem = useRef<HTMLElement>(null);
     const _checkboxItems = useRef<(HTMLInputElement | null)[]>([]);
     const _filterCheckboxItems = useRef<(HTMLInputElement | null)[]>([]);
-    // refs -> Search
     const _searchTextInputs = useRef<(HTMLInputElement | null)[]>([]);
     const _searchTimeOut = useRef<NodeJS.Timeout | null>(null);
-    // refs -> Properties
     const _propertiesButton = useRef<(HTMLSpanElement | null)[]>([]);
-    // refs -> Filter
     const _filterButton = useRef<(HTMLSpanElement | null)[]>([]);
-    // refs -> Selection
     const _selectionItems = useRef<T[]>([]);
     const lastSentRef = useRef<T[]>([]);
 
-    // variables
     const _subrowOpenAutomatically: boolean = config.subrow?.openAutomatically ?? false;
     const _subrowSelector: string = config.subrow?.selector ?? "subitems";
     const _subrowButton: boolean = config.subrow?.button ?? true;
 
-    // className
     const _tableClassName: string[] = ["ar-table", "scroll"];
 
-    // states
     const [selectAll, setSelectAll] = useState<boolean>(false);
     const [showSubitems, setShowSubitems] = useState<{ [key: string]: boolean }>({});
-    // states -> Action Buttons
     const [createTrigger, setCreateTrigger] = useState<boolean>(false);
-    // states -> Search
     const [searchedText, setSearchedText] = useState<SearchedParam | null>(null);
     const [_searchedParams, setSearchedParams] = useState<SearchedParam | null>(null);
     const [checkboxSelectedParams, setCheckboxSelectedParams] = useState<SearchedParam | null>(null);
-    // states -> Sort
     const [sortConfig, setSortConfig] = useState<Sort<T>[]>([]);
     const [sortCurrentColumn, setSortCurrentColumn] = useState<TableColumnType<T> | null>(null);
-    // states -> Properties
     const [openProperties, setOpenProperties] = useState<boolean>(false);
     const [propertiesButtonCoordinate, setPropertiesButtonCoordinate] = useState<{ x: number; y: number }>({
       x: 0,
       y: 0,
     });
-    // states -> Filter
     const [filterButtonCoordinate, setFilterButtonCoordinate] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
     const [filterPopupContent, setFilterPopupContent] = useState<React.JSX.Element | null>(null);
     const [filterPopupOption, setFilterPopupOption] = useState<{ key: string; option: Option | undefined } | null>(
       null,
     );
     const [filterPopupOptionSearchText, setFilterPopupOptionSearchText] = useState<string | null>(null);
-    // states -> Filter Fields Backup
     const [openFilter, setOpenFilter] = useState<boolean>(false);
     const [filterCurrentColumn, setFilterCurrentColumn] = useState<TableColumnType<T> | null>(null);
     const [filterCurrentDataType, setFilterCurrentDataType] = useState<FilterDataType | null>(null);
     const [filterCurrentIndex, setFilterCurrentIndex] = useState<number | null>(null);
-    // states -> Pagination
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [selectedPerPage, setSelectedPerPage] = useState<number>(pagination?.perPage ?? 10);
-    // states -> Mobil
     const [isMobile, setIsMobile] = useState(false);
 
-    // hooks
     const { t } = useTranslation(String(config.locale ?? "tr"));
-    // Dışarıdan gelen ref'i _innerRef'e bağla.
     useImperativeHandle(ref, () => _innerRef.current as HTMLTableElementWithCustomAttributes);
 
     if (config && Object.keys(config.scroll || {}).length > 0) {
@@ -136,10 +118,8 @@ const Table = forwardRef(
       }
     }
 
-    // methods
     const handleScroll = useCallback(() => {
       if (!_tableWrapper.current) return;
-
       const wrapperRect = _tableWrapper.current.getBoundingClientRect();
 
       const updateStickyPositions = (elements: NodeListOf<HTMLTableRowElement>) => {
@@ -152,46 +132,34 @@ const Table = forwardRef(
             .filter((child) => child.dataset.stickyPosition === "right")
             .reverse();
 
-          // Calculate positions and minimize `getBoundingClientRect` calls
           const leftRects = leftChildren.map((child) => child.getBoundingClientRect());
           const rightRects = rightChildren.map((child) => child.getBoundingClientRect());
 
           const leftPrevious = leftRects.map((rect) => Math.abs(rect.right - wrapperRect.left));
           const rightPrevious = rightRects.map((rect) => Math.abs(rect.left - wrapperRect.right));
 
-          // #region Left
           leftChildren.forEach((child, index) => {
             const prevLeft = index > 0 ? leftPrevious[index - 1] : 0;
-
             if (index > 0) {
               const childLeft = leftRects[index].left - wrapperRect.left;
-
               if (Math.floor(childLeft) === Math.floor(prevLeft)) {
                 if (!child.classList.contains("active-sticky")) child.classList.add("active-sticky");
               } else child.classList.remove("active-sticky");
-
               child.style.left = `${prevLeft}px`;
             } else child.classList.add("sticky");
-
             if (child.nodeName === "TD") child.style.zIndex = `5`;
           });
-          // #endregion
 
-          // #region Right
           rightChildren.forEach((child, index) => {
             const prevRight = index > 0 ? rightPrevious[index - 1] : 0;
-
             if (index > 0) {
               const childRight = Math.abs(rightRects[index].right - wrapperRect.right);
-
               if (Math.floor(childRight) === Math.floor(prevRight)) {
                 if (!child.classList.contains("active-sticky")) child.classList.add("active-sticky");
               } else child.classList.remove("active-sticky");
-
               child.style.right = `${prevRight}px`;
             } else child.classList.add("sticky");
           });
-          // #endregion
         });
       };
 
@@ -205,7 +173,7 @@ const Table = forwardRef(
     }, []);
 
     const handleResize = useMemo(() => {
-      return (_: UIEvent) => {
+      return () => {
         setIsMobile(window.innerWidth <= 768);
       };
     }, []);
@@ -213,20 +181,18 @@ const Table = forwardRef(
     const handleSearch = useCallback(
       (name: string, value: string, dataType?: FilterDataType) => {
         const operator =
-          filterPopupOption?.key == name
+          filterPopupOption?.key === name
             ? (filterPopupOption.option?.value as FilterOperator)
             : FilterOperator.Contains;
 
         if (config.isServerSide) {
           if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
-
           _searchTimeOut.current = setTimeout(
             () => {
               setSearchedParams((prev) => ({
                 ...prev,
                 [name]: { value: value, operator: operator },
               }));
-
               if (pagination) pagination.onChange?.(1, selectedPerPage);
             },
             dataType === "date" ? 0 : 750,
@@ -234,25 +200,21 @@ const Table = forwardRef(
         } else {
           setSearchedText((prev) => {
             const _state = { ...prev };
-
             if (value === "") {
-              delete _state[name]; // Key'i siliyoruz
+              delete _state[name];
             } else {
-              _state[name] = { value: value, operator: operator }; // Yeni değeri ekliyoruz
+              _state[name] = { value: value, operator: operator };
             }
-
             return _state;
           });
         }
-
         setCurrentPage(1);
       },
-      [filterPopupOption],
+      [filterPopupOption, config.isServerSide, pagination, selectedPerPage],
     );
 
     const handleCheckboxChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
       event.stopPropagation();
-
       const { name, value, checked } = event.target;
 
       setCheckboxSelectedParams((prev) => {
@@ -263,7 +225,7 @@ const Table = forwardRef(
 
         const updatedArray: FilterValue[] = Array.from(updatedSet).map((v) => ({
           value: v,
-          operator: FilterOperator.Equals, // Checkbox’lar genelde “Equals” anlamındadır.
+          operator: FilterOperator.Equals,
         }));
 
         return {
@@ -275,20 +237,15 @@ const Table = forwardRef(
 
     const handleFilterPopupContent = (c: TableColumnType<T>, dataType: FilterDataType, index: number | null) => {
       const key: keyof T | null = ExtractKey(c.key);
-
       if (!key) return;
 
-      const value = Array.isArray(searchedText?.[key])
-        ? "" // veya ihtiyacına göre birleştirme yap: searchedText[key].map(v => v.value).join(", ").
-        : ((searchedText?.[key] as FilterValue)?.value as string);
+      const value = Array.isArray(searchedText?.[key]) ? "" : ((searchedText?.[key] as FilterValue)?.value as string);
 
-      const handleChange = (value: string) => {
+      const handleChange = (val: string) => {
         const input = _searchTextInputs.current[index ?? 0];
-
         if (input) {
-          const event = new Event("input", { bubbles: true });
-          input.value = value;
-          input.dispatchEvent(event);
+          input.value = val;
+          handleSearch(key as string, val, dataType);
         }
       };
 
@@ -327,12 +284,11 @@ const Table = forwardRef(
               <Row>
                 <Column size={12}>
                   <Input
-                    value={value ?? ""}
+                    value={filterPopupOptionSearchText ?? ""}
                     onChange={(event) => setFilterPopupOptionSearchText(event.target.value)}
                     placeholder={t("Table.Filters.Search.Input.Placeholder")}
                   />
                 </Column>
-
                 <Column size={12}>
                   {c.filters
                     ?.filter((filter) =>
@@ -340,14 +296,11 @@ const Table = forwardRef(
                     )
                     ?.map((filter, fIndex) => {
                       const name = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
-
                       return (
-                        <div>
+                        <div key={`filter-check-${fIndex}`}>
                           <Checkbox
                             ref={(element) => {
-                              if (!element) return;
-
-                              _filterCheckboxItems.current[fIndex] = element;
+                              if (element) _filterCheckboxItems.current[fIndex] = element;
                             }}
                             variant="filled"
                             color="green"
@@ -356,7 +309,9 @@ const Table = forwardRef(
                             value={filter.value as string}
                             checked={
                               Array.isArray(checkboxSelectedParams?.[name]) &&
-                              checkboxSelectedParams?.[name]?.some((f) => String(f.value) === String(filter.value))
+                              (checkboxSelectedParams?.[name] as FilterValue[])?.some(
+                                (f) => String(f.value) === String(filter.value),
+                              )
                             }
                             onChange={async (event) => await handleCheckboxChange(event)}
                           />
@@ -366,25 +321,20 @@ const Table = forwardRef(
                 </Column>
               </Row>
             );
-
           default:
             return <></>;
         }
       });
     };
 
-    // Derinlemesine arama yapmak için özyinelemeli bir fonksiyon olarak kullanılmaktadır.
-    const deepSearch = (item: T, searchedText: SearchedParam | undefined): boolean => {
-      if (!searchedText || Object.keys(searchedText).length === 0) return true;
+    const deepSearch = (item: T, searchParams: SearchedParam | undefined): boolean => {
+      if (!searchParams || Object.keys(searchParams).length === 0) return true;
 
       const applyOperator = (value: any, filter: FilterValue): boolean => {
         if (Array.isArray(value)) {
-          // Array içindeki herhangi bir öğe eşleşirse true dön
-          return value.some((item) => applyOperator(item, filter));
+          return value.some((arrItem) => applyOperator(arrItem, filter));
         }
-
         if (typeof value === "object" && value !== null) {
-          // Eğer obje ise, içindeki değerlerden biri eşleşirse true dön
           return Object.values(value).some((v) => applyOperator(v, filter));
         }
 
@@ -413,9 +363,8 @@ const Table = forwardRef(
         }
       };
 
-      return Object.entries(searchedText).every(([key, param]) => {
+      return Object.entries(searchParams).every(([key, param]) => {
         const _itemValue = item[key as keyof typeof item];
-
         if (Array.isArray(param)) {
           if (param.length === 0) return true;
           return param.some((filter) => applyOperator(_itemValue, filter));
@@ -423,89 +372,43 @@ const Table = forwardRef(
           return applyOperator(_itemValue, param);
         }
       });
-
-      // Eğer değer bir sayı veya string ise, aranan metinle eşleşip eşleşmediğini kontrol ediyoruz.
-      // return Object.entries(searchedText).every(([key, param]) => {
-      //   const _itemValue = item[key as keyof typeof item];
-
-      //   if (typeof _itemValue === "number" || typeof _itemValue === "string" || typeof _itemValue === "boolean") {
-      //     if (Array.isArray(param)) {
-      //       if (param.length === 0) return true;
-      //       else return param.some((v) => _itemValue.toString().toLocaleLowerCase().includes(v.toLocaleLowerCase()));
-      //     }
-
-      //     return _itemValue
-      //       .toString()
-      //       .toLocaleLowerCase()
-      //       .includes(param.toLocaleLowerCase() ?? "");
-      //   }
-
-      //   if (typeof _itemValue === "object") {
-      //     if (Array.isArray(param)) {
-      //       if (param.length === 0) return true;
-      //       else {
-      //         return param.some((v) => {
-      //           if (Array.isArray(_itemValue)) {
-      //             return Object.values(_itemValue?.[0 as keyof typeof _itemValue] ?? {}).some((objValue) => {
-      //               return String(objValue).toLocaleLowerCase().includes(String(v).toLocaleLowerCase());
-      //             });
-      //           }
-      //         });
-      //       }
-      //     }
-      //   }
-
-      //   if (Array.isArray(_itemValue)) {
-      //     console.log("Buradasın", _itemValue);
-      //   }
-
-      //   return false;
-      // });
     };
 
-    const openAllSubrowsRecursively = (data: T[], parentKey: string = ""): Record<string, boolean> => {
+    const openAllSubrowsRecursively = (targetData: T[], parentKey: string = ""): Record<string, boolean> => {
       let result: Record<string, boolean> = {};
-
-      data.forEach((item) => {
+      targetData.forEach((item) => {
         const id = trackBy?.(item);
         const key = parentKey ? `${parentKey}.${id}` : `${id}`;
         const subitems = item[_subrowSelector as keyof typeof item];
 
         if (subitems && Array.isArray(subitems) && subitems.length > 0) {
           const nested = openAllSubrowsRecursively(subitems as T[], key);
-
           result[key] = true;
           result = { ...result, ...nested };
         }
       });
-
       return result;
     };
 
     const getData = useMemo(() => {
       let _data: T[] = [...data];
-
       if (_subrowOpenAutomatically) setShowSubitems(openAllSubrowsRecursively(data));
 
       if (searchedText && Object.keys(searchedText).length > 0) {
         _data = _data.filter((item) => deepSearch(item, searchedText));
-
         setTotalRecords(_data.length);
       } else {
         setTotalRecords(data.length);
       }
 
-      // Sorting...
       if (sortConfig.length > 0 && !config.isServerSide) {
         _data.sort((a, b) => {
-          for (const config of sortConfig) {
-            const aValue = a[config.key];
-            const bValue = b[config.key];
-
-            if (aValue < bValue) return config.direction === "asc" ? -1 : 1;
-            if (aValue > bValue) return config.direction === "asc" ? 1 : -1;
+          for (const sCfg of sortConfig) {
+            const aValue = a[sCfg.key];
+            const bValue = b[sCfg.key];
+            if (aValue < bValue) return sCfg.direction === "asc" ? -1 : 1;
+            if (aValue > bValue) return sCfg.direction === "asc" ? 1 : -1;
           }
-
           return 0;
         });
       }
@@ -513,27 +416,21 @@ const Table = forwardRef(
       if (pagination && !config.isServerSide) {
         const indexOfLastRow = currentPage * selectedPerPage;
         const indexOfFirstRow = indexOfLastRow - selectedPerPage;
-
         _data = _data.slice(indexOfFirstRow, indexOfLastRow);
       }
 
-      // Önemli, Data yenilenmesi durumunda sticky alanlar tazelenir.
       setTimeout(() => handleScroll(), 0);
       return _data;
     }, [data, searchedText, currentPage, selectedPerPage, sortConfig, config.isServerSide]);
 
-    // useEffects
     useEffect(() => {
       if (!previousSelections || previousSelections.length === 0) {
         _selectionItems.current = [];
         return;
       }
-
       const validSelections = data.filter((item) =>
         previousSelections.some((selected) => trackBy?.(selected) === trackBy?.(item)),
       );
-
-      // Gereksiz overwrite’i engelle.
       if (!Utils.DeepEqual(_selectionItems.current, validSelections)) {
         _selectionItems.current = validSelections;
       }
@@ -542,13 +439,10 @@ const Table = forwardRef(
     useEffect(() => {
       if (config?.isServerSide && sortedParams) {
         const sortRecord: Record<string, string> = {};
-
         sortConfig?.forEach((s) => {
           if (s.direction) sortRecord[String(s.key)] = s.direction;
         });
-
         const query = new URLSearchParams(sortRecord);
-
         sortedParams(sortConfig ?? [], query.toString());
       }
     }, [sortConfig]);
@@ -556,10 +450,8 @@ const Table = forwardRef(
     useEffect(() => {
       if (config?.isServerSide && searchedParams) {
         const searchRecord: Record<string, string> = {};
-
         Object.entries(_searchedParams ?? {}).forEach(([key, value]) => {
           if (Array.isArray(value)) {
-            // Çoklu filtre değerleri varsa virgülle birleştir.
             searchRecord[key] = value.map((v) => v.value).join(",");
           } else if (value && typeof value === "object") {
             searchRecord[key] = String(value.value);
@@ -567,47 +459,36 @@ const Table = forwardRef(
         });
 
         const query = new URLSearchParams(searchRecord);
-
         columns.forEach((column) => {
           const key = column.key as keyof typeof _searchedParams;
           const filterValue = _searchedParams?.[key];
-
           const filterArray = Array.isArray(filterValue) ? filterValue : filterValue ? [filterValue] : [];
-
-          const getParamsLength = column.filters?.length ?? 0;
-          const searchedParamLength = filterArray.length;
-
-          if (getParamsLength === searchedParamLength) {
+          if ((column.filters?.length ?? 0) === filterArray.length) {
             query.delete(column.key as string);
           }
         });
-
         searchedParams(_searchedParams, query.toString(), filterPopupOption?.option?.value as FilterOperator);
       }
     }, [_searchedParams]);
 
     useEffect(() => {
       if (!checkboxSelectedParams) return;
-
       if (config.isServerSide) {
         if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
         setSearchedParams((prev) => ({ ...prev, ...checkboxSelectedParams }));
       } else {
         setSearchedText((prev) => ({ ...prev, ...checkboxSelectedParams }));
       }
-
       setCurrentPage(1);
       if (pagination) pagination.onChange?.(1, selectedPerPage);
     }, [checkboxSelectedParams]);
 
     useEffect(() => {
       if (typeof selections !== "function") return;
-
       const payload = _selectionItems.current.map((item) => ({
         ...item,
         trackByValue: trackBy?.(item),
       }));
-
       if (!Utils.DeepEqual(payload, lastSentRef.current)) {
         lastSentRef.current = payload;
         selections(payload);
@@ -615,28 +496,22 @@ const Table = forwardRef(
     }, [selections, trackBy]);
 
     useEffect(() => {
-      // Filter Content alanı re-render işlemi.
       if (filterCurrentColumn && filterCurrentDataType) {
         handleFilterPopupContent(filterCurrentColumn, filterCurrentDataType, filterCurrentIndex);
       }
     }, [checkboxSelectedParams, filterPopupOption, filterPopupOptionSearchText]);
 
     useLayoutEffect(() => {
-      // @DND
       if (!onDnD || !_tBody.current || data.length === 0) return;
 
       _tBody.current.childNodes.forEach((item) => {
         const _item = item as HTMLElement;
-
-        // Events
         _item.ondragstart = (event) => {
           const dragItem = event.currentTarget as HTMLElement;
-
           _dragItem.current = dragItem;
           dragItem.classList.add("drag-item");
 
           if (event.dataTransfer) {
-            // 1. Geçici bir kapsayıcı oluştur
             const shadowContainer = document.createElement("div");
             shadowContainer.style.position = "absolute";
             shadowContainer.style.top = "-9999px";
@@ -644,16 +519,11 @@ const Table = forwardRef(
             document.body.appendChild(shadowContainer);
 
             if (config.dnd?.renderItem) {
-              // 2a. React Node varsa: createRoot ile render et
               const root = createRoot(shadowContainer);
-
-              // flushSync kullanıyoruz çünkü setDragImage çağrılmadan önce
-              // DOM'un hemen güncellenmesi gerekiyor.
               flushSync(() => {
                 root.render(config.dnd?.renderItem);
               });
             } else {
-              // 2b. React Node yoksa: Varsayılan HTML string
               shadowContainer.innerHTML = `
                 <div class="ar-dnd-shadow" style="background: white; padding: 10px; border: 1px solid #ccc;">
                   <i class="bi bi-gear-wide-connected"></i>
@@ -661,30 +531,23 @@ const Table = forwardRef(
                 </div>
               `;
             }
-
-            // 3. Tarayıcıya bu elementi sürükleme görseli yapmasını söyle
-            // (0, 0) koordinatları mouse'un görselin neresinde duracağını belirler
             event.dataTransfer.setDragImage(shadowContainer, 20, 20);
-
-            // 4. Temizlik: Görsel hafızaya alındıktan sonra DOM'dan kaldırabiliriz
-            // Bir sonraki event loop'ta silmek en güvenlisidir
             setTimeout(() => {
-              document.body.removeChild(shadowContainer);
+              if (document.body.contains(shadowContainer)) {
+                document.body.removeChild(shadowContainer);
+              }
             }, 0);
           }
         };
 
         _item.ondragover = (event) => {
           event.preventDefault();
-
           const overItem = event.currentTarget as HTMLElement;
           const rect = overItem.getBoundingClientRect();
 
-          // Otomatik scroll.
           if (rect.top < 250) window.scrollBy(0, -20);
           if (rect.bottom > window.innerHeight - 150) window.scrollBy(0, 20);
 
-          // Gerçek taşıma işlemi.
           if (_dragItem.current !== overItem) {
             if (_tBody.current && _dragItem.current) {
               const dragItemIndex = [..._tBody.current.children].indexOf(_dragItem.current!);
@@ -698,7 +561,6 @@ const Table = forwardRef(
               );
 
               const movedItem = data.splice(dragItemIndex, 1)[0];
-
               if (movedItem) {
                 data.splice(dropItemIndex, 0, movedItem);
                 onDnD?.(data);
@@ -708,14 +570,12 @@ const Table = forwardRef(
         };
 
         _item.ondragend = (event) => {
-          const item = event.currentTarget as HTMLElement;
-          item.classList.remove("drag-item");
-          item.classList.add("end-item");
-
+          const dragEndItem = event.currentTarget as HTMLElement;
+          dragEndItem.classList.remove("drag-item");
+          dragEndItem.classList.add("end-item");
           setTimeout(() => {
-            item.classList.remove("end-item");
-
-            if (item.classList.length === 0) item.removeAttribute("class");
+            dragEndItem.classList.remove("end-item");
+            if (dragEndItem.classList.length === 0) dragEndItem.removeAttribute("class");
           }, 1000);
         };
       });
@@ -724,22 +584,18 @@ const Table = forwardRef(
 
       return () => {
         if (!_tBody.current) return;
-
         _tBody.current.childNodes.forEach((item) => {
-          const _item = item as HTMLElement;
-
-          _item.ondragstart = null;
-          _item.ondragover = null;
-          _item.ondragend = null;
+          const cleanupItem = item as HTMLElement;
+          cleanupItem.ondragstart = null;
+          cleanupItem.ondragover = null;
+          cleanupItem.ondragend = null;
         });
-
         _tBody.current.ondragover = null;
       };
-    }, [data]);
+    }, [data, onDnD]);
 
     useLayoutEffect(() => {
       if (!pagination?.currentPage) return;
-
       setTimeout(() => handleScroll(), 0);
       setCurrentPage(pagination?.currentPage ?? 1);
     }, [pagination?.currentPage]);
@@ -755,19 +611,15 @@ const Table = forwardRef(
           if (!("trackByValue" in item) && trackBy) {
             return { ...item, trackByValue: trackBy(item) };
           }
-
           return item;
         });
-
         config.validation?.getChangeData?.(updatedData);
       }
-
       handleScroll();
     }, [createTrigger]);
 
     useEffect(() => {
       setIsMobile(window.innerWidth <= 768);
-
       window.addEventListener("resize", handleResize);
 
       if (typeof selections !== "function" && config.validation) {
@@ -776,6 +628,7 @@ const Table = forwardRef(
 
       return () => {
         window.removeEventListener("resize", handleResize);
+        if (_searchTimeOut.current) clearTimeout(_searchTimeOut.current);
       };
     }, []);
 
@@ -814,11 +667,8 @@ const Table = forwardRef(
                       onChange={(event) => {
                         if (_checkboxItems.current.length > 0) {
                           setSelectAll(event.target.checked);
-
                           _checkboxItems.current.forEach((item) => {
-                            if (item) {
-                              if (item.checked !== event.target.checked) item.click();
-                            }
+                            if (item && item.checked !== event.target.checked) item.click();
                           });
                         }
                       }}
@@ -831,9 +681,7 @@ const Table = forwardRef(
                 )}
 
                 <THeadCell
-                  refs={{
-                    propertiesButton: _propertiesButton,
-                  }}
+                  refs={{ propertiesButton: _propertiesButton }}
                   states={{
                     open: { get: openProperties, set: setOpenProperties },
                     sort: { get: sortConfig, set: setSortConfig },
@@ -848,47 +696,30 @@ const Table = forwardRef(
 
               {config?.isSearchable && (
                 <tr key="isSearchable">
-                  {selections && (
-                    <th
-                      key={`column-selections`}
-                      className="selection-col sticky-left"
-                      data-sticky-position="left"
-                    ></th>
-                  )}
+                  {selections && <th className="selection-col sticky-left" data-sticky-position="left"></th>}
 
                   {data.some((item) => _subrowSelector in item) && _subrowButton && (
-                    <th
-                      key={`column-selections`}
-                      className="subrow-col sticky sticky-left"
-                      data-sticky-position="left"
-                    ></th>
+                    <th className="subrow-col sticky sticky-left" data-sticky-position="left"></th>
                   )}
 
-                  {/* Buraya */}
                   {columns.map((c, cIndex) => {
                     let _className: string[] = [];
                     const key = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
                     const csrValue = Array.isArray(searchedText?.[key])
-                      ? "" // veya ihtiyacına göre birleştirme yap: searchedText[key].map(v => v.value).join(", ").
+                      ? ""
                       : ((searchedText?.[key] as FilterValue)?.value as string);
                     const ssrValue = Array.isArray(_searchedParams?.[key])
-                      ? "" // veya ihtiyacına göre birleştirme yap: _searchedParams[key].map(v => v.value).join(", ").
+                      ? ""
                       : ((_searchedParams?.[key] as FilterValue)?.value as string);
 
                     if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
-                    if (c.config?.alignContent) {
-                      _className.push(`align-content-${c.config.alignContent}`);
-                    }
+                    if (c.config?.alignContent) _className.push(`align-content-${c.config.alignContent}`);
 
                     return (
                       <th
-                        key={`column-${cIndex}`}
-                        {...(_className.length > 0 && {
-                          className: `${_className.map((c) => c).join(" ")}`,
-                        })}
-                        {...(c.config?.sticky && {
-                          "data-sticky-position": c.config.sticky,
-                        })}
+                        key={`column-search-${cIndex}`}
+                        {...(_className.length > 0 && { className: `${_className.join(" ")}` })}
+                        {...(c.config?.sticky && { "data-sticky-position": c.config.sticky })}
                       >
                         {c.key && (
                           <div className="filter-field">
@@ -896,9 +727,7 @@ const Table = forwardRef(
                               <DatePicker
                                 value={(config.isServerSide ? ssrValue : csrValue) ?? ""}
                                 name={key}
-                                onClick={() => {
-                                  handleScroll();
-                                }}
+                                onClick={() => handleScroll()}
                                 onChange={(value) => handleSearch(key, value, c.filterDataType)}
                                 style={{ height: "2rem" }}
                                 config={{ isClock: true, isFooterButton: true, locale: config.locale }}
@@ -908,55 +737,48 @@ const Table = forwardRef(
                               <>
                                 <Input
                                   ref={(element) => {
-                                    if (!element) return;
-
-                                    _searchTextInputs.current[cIndex] = element;
+                                    if (element) _searchTextInputs.current[cIndex] = element;
                                   }}
                                   variant={c.key && !c.filters ? "outlined" : "filled"}
                                   style={{ height: "2rem" }}
                                   value={(config.isServerSide ? ssrValue : csrValue) ?? ""}
                                   name={key}
-                                  onClick={() => {
-                                    handleScroll();
-                                  }}
+                                  onClick={() => handleScroll()}
                                   onInput={(event) => handleSearch(event.currentTarget.name, event.currentTarget.value)}
                                   disabled={!c.key || !!c.filters}
                                 />
 
                                 <span
                                   ref={(element) => {
-                                    if (!element) return;
-
-                                    _filterButton.current[cIndex] = element;
+                                    if (element) _filterButton.current[cIndex] = element;
                                   }}
                                   onClick={(event) => {
                                     event.preventDefault();
                                     event.stopPropagation();
-
-                                    // Temizlik...
                                     setFilterPopupOptionSearchText("");
 
                                     const rect = event.currentTarget.getBoundingClientRect();
                                     const screenCenterX = window.innerWidth / 2;
-                                    // const screenCenterY = window.innerHeight / 2;
                                     const coordinateX = rect.x > screenCenterX ? rect.x + rect.width - 225 : rect.x;
                                     const coordinateY = rect.y + rect.height;
-                                    // data içindeki alanların tiplerini bulmak için kullanılmaktadır
                                     const getDataFirstItem = { ...data[0] };
-                                    const key = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
+                                    const searchKey = typeof c.key !== "object" ? String(c.key) : String(c.key.field);
 
-                                    const getValueByKey = getDataFirstItem[key as keyof typeof getDataFirstItem];
+                                    const getValueByKey = getDataFirstItem[searchKey as keyof typeof getDataFirstItem];
                                     let dataType = typeof getValueByKey;
-
                                     if (getValueByKey == null) dataType = "string";
 
                                     setFilterButtonCoordinate({ x: coordinateX, y: coordinateY });
                                     setFilterCurrentColumn(c);
-                                    setFilterCurrentDataType(c.filterDataType ?? dataType);
+                                    setFilterCurrentDataType(c.filterDataType ?? (dataType as FilterDataType));
                                     setFilterCurrentIndex(cIndex);
                                     setOpenFilter(true);
 
-                                    handleFilterPopupContent(c, c.filterDataType ?? dataType, cIndex);
+                                    handleFilterPopupContent(
+                                      c,
+                                      c.filterDataType ?? (dataType as FilterDataType),
+                                      cIndex,
+                                    );
                                     handleScroll();
                                   }}
                                 >
@@ -1002,13 +824,8 @@ const Table = forwardRef(
         </div>
 
         <FilterPopup
-          refs={{
-            tableContent: _tableContent,
-            buttons: _filterButton,
-          }}
-          states={{
-            open: { get: openFilter, set: setOpenFilter },
-          }}
+          refs={{ tableContent: _tableContent, buttons: _filterButton }}
+          states={{ open: { get: openFilter, set: setOpenFilter } }}
           coordinate={filterButtonCoordinate}
         >
           {filterPopupContent}
@@ -1016,10 +833,7 @@ const Table = forwardRef(
 
         {config.isProperties && (
           <PropertiesPopup
-            refs={{
-              tableContent: _tableContent,
-              buttons: _propertiesButton,
-            }}
+            refs={{ tableContent: _tableContent, buttons: _propertiesButton }}
             states={{
               open: { get: openProperties, set: setOpenProperties },
               sort: { get: sortConfig, set: setSortConfig, currentColumn: sortCurrentColumn },
@@ -1033,13 +847,11 @@ const Table = forwardRef(
         <div className="footer">
           <span>
             {isMobile ? (
-              <>
-                <strong>
-                  {(currentPage - 1) * selectedPerPage + 1} -{" "}
-                  {Math.min(currentPage * selectedPerPage, pagination?.totalRecords || getData.length)} of{" "}
-                  {pagination?.totalRecords || getData.length}
-                </strong>
-              </>
+              <strong>
+                {(currentPage - 1) * selectedPerPage + 1} -{" "}
+                {Math.min(currentPage * selectedPerPage, pagination?.totalRecords || getData.length)} of{" "}
+                {pagination?.totalRecords || getData.length}
+              </strong>
             ) : (
               t(
                 "Table.Pagination.Information.Text",

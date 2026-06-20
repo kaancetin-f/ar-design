@@ -47,16 +47,9 @@ function PropertiesPopup<T extends object>({ refs, states, methods, coordinate, 
   const handleSort = useMemo(() => {
     return (columnKey: keyof T | null, direction: "asc" | "desc") => {
       if (!columnKey) return;
-
-      states.sort.set((prev) => {
-        const index = prev.findIndex((s) => s.key === columnKey);
-
-        if (index !== -1) return [{ key: columnKey, direction }];
-
-        return [{ key: columnKey, direction }];
-      });
+      states.sort.set(() => [{ key: columnKey, direction }]);
     };
-  }, []);
+  }, [states.sort]);
 
   const handleKeys = (event: KeyboardEvent) => {
     const key = event.key;
@@ -76,29 +69,22 @@ function PropertiesPopup<T extends object>({ refs, states, methods, coordinate, 
 
   // useEffects
   useEffect(() => {
-    refs.buttons.current.map((button) => {
+    const currentButtons = refs.buttons.current;
+    currentButtons.forEach((button) => {
       if (button) button.addEventListener("click", handleOpen);
     });
 
     return () => {
-      refs.buttons.current.map((button) => {
+      currentButtons.forEach((button) => {
         if (button) button.removeEventListener("click", handleOpen);
       });
     };
   }, [refs.buttons]);
 
   useEffect(() => {
-    const firstFilterButton = refs.buttons.current[0];
-
-    if (firstFilterButton) {
-      const rect = firstFilterButton.getBoundingClientRect();
-
-      coordinate.x = rect.left;
-      coordinate.y = rect.top + rect.height;
-    }
-
-    if (refs.tableContent.current) {
-      refs.tableContent.current.addEventListener("scroll", handleClose);
+    const tableContentRef = refs.tableContent.current;
+    if (tableContentRef) {
+      tableContentRef.addEventListener("scroll", handleClose);
     }
 
     document.addEventListener("click", handleClickOutSide);
@@ -108,8 +94,8 @@ function PropertiesPopup<T extends object>({ refs, states, methods, coordinate, 
       document.removeEventListener("click", handleClickOutSide);
       document.removeEventListener("keydown", handleKeys);
 
-      if (refs.tableContent.current) {
-        refs.tableContent.current.removeEventListener("scroll", handleClose);
+      if (tableContentRef) {
+        tableContentRef.removeEventListener("scroll", handleClose);
       }
     };
   }, []);

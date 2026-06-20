@@ -1,3 +1,5 @@
+@import url("./core/jsx.template.css");
+
 .ar-syntax {
   display: flex;
   flex-direction: column;
@@ -54,5 +56,3 @@
   font-size: 0.9rem;
   overflow-x: auto;
 }
-
-@import url("./core/jsx.template.css");

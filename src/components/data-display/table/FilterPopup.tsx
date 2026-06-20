@@ -40,29 +40,22 @@ const FilterPopup = ({ children, refs, states, coordinate }: IProps) => {
 
   // useEffects
   useEffect(() => {
-    refs.buttons.current.map((button) => {
+    const currentButtons = refs.buttons.current;
+    currentButtons.forEach((button) => {
       if (button) button.addEventListener("click", handleOpen);
     });
 
     return () => {
-      refs.buttons.current.map((button) => {
+      currentButtons.forEach((button) => {
         if (button) button.removeEventListener("click", handleOpen);
       });
     };
   }, [refs.buttons]);
 
   useEffect(() => {
-    const firstFilterButton = refs.buttons.current[0];
-
-    if (firstFilterButton) {
-      const rect = firstFilterButton.getBoundingClientRect();
-
-      coordinate.x = rect.left;
-      coordinate.y = rect.top + rect.height;
-    }
-
-    if (refs.tableContent.current) {
-      refs.tableContent.current.addEventListener("scroll", handleClose);
+    const tableContentRef = refs.tableContent.current;
+    if (tableContentRef) {
+      tableContentRef.addEventListener("scroll", handleClose);
     }
 
     document.addEventListener("click", handleClickOutSide);
@@ -72,8 +65,8 @@ const FilterPopup = ({ children, refs, states, coordinate }: IProps) => {
       document.removeEventListener("click", handleClickOutSide);
       document.removeEventListener("keydown", handleKeys);
 
-      if (refs.tableContent.current) {
-        refs.tableContent.current.removeEventListener("scroll", handleClose);
+      if (tableContentRef) {
+        tableContentRef.removeEventListener("scroll", handleClose);
       }
     };
   }, []);

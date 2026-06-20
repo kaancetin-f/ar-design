@@ -43,7 +43,9 @@ const MemoizedTHeadCell = function <T extends object>({
     <>
       {columns.map((c, cIndex) => {
         const { isProperties = true } = c.config ?? {};
-        const _direction = states.sort.get.find((s) => s.key === c.key)?.direction;
+        // Orijinal c.key araması optimize edildi ve string formatına güvenli şekilde çekildi
+        const columnKeyString = String(ExtractKey(c.key) ?? cIndex);
+        const _direction = states.sort.get.find((s) => s.key === columnKeyString)?.direction;
         let _className: string[] = [];
 
         if (c.config?.sticky) _className.push(`sticky-${c.config.sticky}`);
@@ -54,17 +56,15 @@ const MemoizedTHeadCell = function <T extends object>({
 
         return (
           <th
-            key={`column-${cIndex}-${Math.random()}`}
-            // key={`column-${typeof c.key == "object" ? c.key.field : c.key}`}
+            key={`column-head-${columnKeyString}`}
             {...(_className.length > 0 && {
-              className: `${_className.map((c) => c).join(" ")}`,
+              className: `${_className.join(" ")}`,
             })}
             {...(c.config?.width
               ? {
                   style: { minWidth: c.config.width, maxWidth: c.config.width },
                 }
-              : // : { style: { maxWidth: thWidths[cIndex], minWidth: thWidths[cIndex] } })}
-                { style: {} })}
+              : { style: {} })}
             {...(c.config?.sticky && {
               "data-sticky-position": c.config.sticky,
             })}
@@ -77,16 +77,15 @@ const MemoizedTHeadCell = function <T extends object>({
                     {_direction === "desc" && <ARIcon icon="ArrowDown" />}
                   </span>
                 )}
-
                 {c.title}
               </span>
 
               {config.isProperties && isProperties && (
                 <span
                   ref={(element) => {
-                    if (!element) return;
-
-                    refs.propertiesButton.current[cIndex] = element;
+                    if (element) {
+                      refs.propertiesButton.current[cIndex] = element;
+                    }
                   }}
                   className="properties-field"
                   data-properties-button="true"
@@ -110,7 +109,6 @@ const MemoizedTHeadCell = function <T extends object>({
                       const index = prev.findIndex((s) => s.key === key);
 
                       if (index === -1) return [...prev, { key, direction: null }];
-
                       return prev;
                     });
                     states.open.set(true);

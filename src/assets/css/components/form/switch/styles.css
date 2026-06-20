@@ -1,3 +1,5 @@
+@import url("./core/border.css");
+
 .ar-switch-wrapper {
   display: flex;
   flex-wrap: nowrap;
@@ -29,7 +31,11 @@
           height: 1rem;
           border: solid 1px var(--gray-300);
           box-shadow: 0 0 0 0 rgba(var(--black-rgb), 0.2);
-          transition: left 150ms, width 150ms 150ms, height 150ms 150ms, box-shadow 150ms 150ms ease-in-out;
+          transition:
+            left 150ms,
+            width 150ms 150ms,
+            height 150ms 150ms,
+            box-shadow 150ms 150ms ease-in-out;
         }
       }
 
@@ -53,5 +59,3 @@
     }
   }
 }
-
-@import url("./core/border.css");

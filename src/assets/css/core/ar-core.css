@@ -1,3 +1,13 @@
+@import url("./color-palette.css");
+@import url("./animation.css");
+@import url("./variants/filled.css");
+@import url("./variants/surface.css");
+@import url("./variants/outlined.css");
+@import url("./variants/dashed.css");
+@import url("./variants/borderless.css");
+@import url("./variants/border.css");
+@import url("./utils.css");
+
 *,
 *::before,
 *::after {
@@ -24,7 +34,6 @@
 /* Height */
 
 /* #region Color Palette */
-@import url("./color-palette.css");
 
 :root {
   --white: #fff;
@@ -103,46 +112,47 @@
 /* Box Shadow */
 
 /* #region Variants */
-@import url("./animation.css");
 
 .filled {
   border-color: transparent;
-  transition: border 250ms, box-shadow 250ms ease-in-out;
+  transition:
+    border 250ms,
+    box-shadow 250ms ease-in-out;
 }
-
-@import url("./variants/filled.css");
 
 .surface {
-  transition: border 250ms, box-shadow 250ms ease-in-out;
+  transition:
+    border 250ms,
+    box-shadow 250ms ease-in-out;
 }
-
-@import url("./variants/surface.css");
 
 .outlined {
   background-color: transparent;
   border-style: solid;
   border-width: 1px !important;
   border-color: transparent;
-  transition: border 250ms, box-shadow 250ms ease-in-out;
+  transition:
+    border 250ms,
+    box-shadow 250ms ease-in-out;
 }
-
-@import url("./variants/outlined.css");
 
 .dashed {
   background-color: transparent;
   border-style: dashed;
   border-width: 1px !important;
   border-color: transparent;
-  transition: border 250ms, box-shadow 250ms ease-in-out;
+  transition:
+    border 250ms,
+    box-shadow 250ms ease-in-out;
 }
-
-@import url("./variants/dashed.css");
 
 .borderless {
   background-color: transparent;
   border-width: 1px;
   border-color: transparent;
-  transition: border 250ms, box-shadow 250ms ease-in-out;
+  transition:
+    border 250ms,
+    box-shadow 250ms ease-in-out;
 }
 .borderless:disabled {
   background-color: var(--gray-100) !important;
@@ -150,9 +160,6 @@
   color: var(--gray-500) !important;
   cursor: no-drop !important;
 }
-
-@import url("./variants/borderless.css");
-@import url("./variants/border.css");
 
 :is(input) {
   border: solid 1px transparent;
@@ -183,5 +190,3 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 /* #endregion */
 /* Variants */
-
-@import url("./utils.css");

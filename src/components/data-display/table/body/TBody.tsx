@@ -53,8 +53,6 @@ interface ISubitemListProps<T> {
   renderCell: (args: IRenderCell<T>) => React.ReactNode;
 }
 
-// SubitemList bağımsız bir bileşen.
-// Böylece her render döngüsünde hafızada sıfırdan yaratılıp alt DOM elementlerini çökertmiyor.
 const SubitemList = <T extends object>({
   items,
   columns,
@@ -72,7 +70,8 @@ const SubitemList = <T extends object>({
   if (config.subrow?.render) {
     return (
       <tr className={`subrow-item ${_subrowButton ? "type-b" : "type-a"}`} data-level={level}>
-        {_subrowButton && <td style={{ ...config.subrow.render.styles, width: 0, minWidth: 0 }}></td>}
+        {methods.selections && <td className="sticky sticky-left" data-sticky-position="left"></td>}
+        {_subrowButton && <td className="sticky sticky-left" data-sticky-position="left"></td>}
         <td colSpan={columns.length || 1} style={{ ...config.subrow.render.styles, padding: "7.5px 7.5px 7.5px 0" }}>
           {config.subrow?.render.element(items) ?? <></>}
         </td>
@@ -91,21 +90,34 @@ const SubitemList = <T extends object>({
         return (
           <Fragment key={`subitem-wrapper-${key}`}>
             <tr className={`subrow-item ${_subrowButton ? "type-b" : "type-a"}`} data-level={level}>
-              {isHasSubitems && _subrowButton ? (
-                <td className="subrow-col sticky sticky-left" data-sticky-position="left">
-                  <div className="subitem-open-button-wrapper">
+              {methods.selections && (
+                <td
+                  className="sticky sticky-left"
+                  data-sticky-position="left"
+                  style={{ display: "table-cell", verticalAlign: "middle" }}
+                ></td>
+              )}
+
+              {_subrowButton && (
+                <td
+                  className="subrow-col sticky sticky-left"
+                  data-sticky-position="left"
+                  style={{ display: "table-cell", verticalAlign: "middle" }}
+                >
+                  <div
+                    className="subitem-open-button-wrapper"
+                    style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+                  >
                     <span
-                      className={`${(states.showSubitems.get[key] && "opened") ?? ""} ${!_subitem && "passive"}`}
+                      className={`${(states.showSubitems.get[key] && "opened") ?? ""} ${!isHasSubitems || !_subitem ? "passive passive-arrow" : ""}`}
                       onClick={() => {
-                        if (!_subitem) return;
+                        if (!isHasSubitems || !_subitem) return;
                         states.showSubitems.set((prev: any) => ({ ...prev, [key]: !prev[key] }));
                       }}
                     />
                   </div>
                 </td>
-              ) : !isHasSubitems && _subrowButton ? (
-                <td style={{ width: 0, minWidth: 0 }}></td>
-              ) : null}
+              )}
 
               {columns.map((column: TableColumnType<T>, cIndex: number) =>
                 renderCell({
@@ -142,25 +154,18 @@ const SubitemList = <T extends object>({
 };
 
 function TBody<T extends object>({ data, columns, refs, methods, states, config }: IProps<T>) {
-  // refs
   const _tBodyTR = useRef<(HTMLTableRowElement | null)[]>([]);
   const _tHeadTH = useRef<(HTMLTableCellElement | null)[]>([]);
 
-  // states
   const [triggerForRender, setTriggerForRender] = useState<boolean>(false);
   const [rowHeights, setRowHeights] = useState<number[]>([]);
 
-  // variables
   const _subrowSelector: string = config.subrow?.selector ?? "subitems";
   const _subrowButton: boolean = config.subrow?.button ?? true;
-
-  // hooks
   const { t } = useTranslation(String(config.locale ?? "tr"));
 
-  // methods
   const renderCell = ({ item, column, index, cIndex, depth, level, height = 0, isSubrows = false }: IRenderCell<T>) => {
     let render: any;
-    // const isHasSubitems = _subrowSelector in item;
     const itemTrackId = methods.trackBy?.(item) ?? index.toString();
 
     if (typeof column.key !== "object") render = column.render ? column.render(item) : item[column.key as keyof T];
@@ -200,7 +205,7 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
       >
         <div
           style={{
-            paddingLeft: isTargetPaddingColumn ? `${depth == 0 ? 1 : depth}rem` : "",
+            paddingLeft: isTargetPaddingColumn ? `${depth === 0 ? 1 : depth}rem` : "",
           }}
           className="table-cell"
         >
@@ -221,7 +226,7 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
             render
           ) : column.editable && methods.onEditable ? (
             <Editable
-              key={`editable-${itemTrackId}-${String(column.key)}`} // Benzersiz, zıplamayan hücre anahtarı
+              key={`editable-${itemTrackId}-${String(column.key)}`}
               c={column}
               item={item}
               trackByValue={itemTrackId}
@@ -246,6 +251,7 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
     const key = parentKey ? `${parentKey}.${id}` : id;
     const _subitem = item[_subrowSelector as keyof typeof item];
     const isHasSubitems = _subrowSelector in item;
+    const currentRowHeight = rowHeights[index] ?? 0;
 
     return (
       <Fragment key={`row-wrapper-${id}`}>
@@ -261,51 +267,66 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
               ref={(element) => {
                 _tHeadTH.current[index] = element;
               }}
-              className="flex justify-content-center sticky sticky-left"
+              className="sticky sticky-left"
               data-sticky-position="left"
+              style={{
+                display: "table-cell",
+                verticalAlign: "middle",
+              }}
             >
-              <Checkbox
-                ref={(element) => {
-                  if (element) refs._checkboxItems.current[index] = element;
-                }}
-                variant="filled"
-                color="green"
-                checked={refs._selectionItems.current.some(
-                  (sItem) => methods.trackBy?.(sItem) === methods.trackBy?.(item),
-                )}
-                onChange={(event) => {
-                  const rKey = methods.trackBy?.(item);
-                  if (event.target.checked) {
-                    if (!refs._selectionItems.current.some((_item) => methods.trackBy?.(_item) === rKey)) {
-                      refs._selectionItems.current = [...refs._selectionItems.current, item];
+              <div className="flex justify-content-center align-items-center" style={{ width: "100%", height: "100%" }}>
+                <Checkbox
+                  ref={(element) => {
+                    if (element) refs._checkboxItems.current[index] = element;
+                  }}
+                  variant="filled"
+                  color="green"
+                  checked={refs._selectionItems.current.some(
+                    (sItem) => methods.trackBy?.(sItem) === methods.trackBy?.(item),
+                  )}
+                  onChange={(event) => {
+                    const rKey = methods.trackBy?.(item);
+                    if (event.target.checked) {
+                      if (!refs._selectionItems.current.some((_item) => methods.trackBy?.(_item) === rKey)) {
+                        refs._selectionItems.current = [...refs._selectionItems.current, item];
+                      }
+                    } else {
+                      refs._selectionItems.current = refs._selectionItems.current.filter(
+                        (_item) => methods.trackBy?.(_item) !== rKey,
+                      );
                     }
-                  } else {
-                    refs._selectionItems.current = refs._selectionItems.current.filter(
-                      (_item) => methods.trackBy?.(_item) !== rKey,
-                    );
-                  }
-                  methods.selections?.(refs._selectionItems.current);
-                  setTriggerForRender((prev) => !prev);
-                }}
-                disabled={methods.selectionDisabled?.(item)}
-              />
+                    methods.selections?.(refs._selectionItems.current);
+                    setTriggerForRender((prev) => !prev);
+                  }}
+                  disabled={methods.selectionDisabled?.(item)}
+                />
+              </div>
             </td>
           )}
 
-          {isHasSubitems && _subrowButton ? (
-            <td className="subrow-col sticky sticky-left" data-sticky-position="left">
-              <div className="subitem-open-button-wrapper">
+          {_subrowButton && (
+            <td
+              className="subrow-col sticky sticky-left"
+              data-sticky-position="left"
+              style={{
+                display: "table-cell",
+                verticalAlign: "middle",
+              }}
+            >
+              <div
+                className="subitem-open-button-wrapper"
+                style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+              >
                 <span
-                  className={`subitem-open-button ${(states.showSubitems.get[key] && "opened") ?? ""} ${!_subitem && "passive"}`}
+                  className={`subitem-open-button ${(states.showSubitems.get[key] && "opened") ?? ""} ${!isHasSubitems || !_subitem ? "passive passive-arrow" : ""}`}
                   onClick={() => {
+                    if (!isHasSubitems || !_subitem) return;
                     states.showSubitems.set((prev) => ({ ...prev, [key]: !prev[key] }));
                   }}
                 />
               </div>
             </td>
-          ) : isHasSubitems && _subrowButton ? (
-            <td style={{ width: 0, minWidth: 0 }}></td>
-          ) : null}
+          )}
 
           {columns.map((column, cIndex) =>
             renderCell({
@@ -315,7 +336,7 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
               cIndex,
               depth: deph * (config.isTreeView ? 1.75 : 0),
               level: 0,
-              height: rowHeights[index] ?? 0,
+              height: currentRowHeight,
             }),
           )}
         </tr>
@@ -341,7 +362,7 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
     if (!data || data.length === 0) return;
     const heights = _tBodyTR.current.map((el) => (el ? el.getBoundingClientRect().height : 0));
     setRowHeights(heights);
-  }, [data.length]);
+  }, [data.length, data]);
 
   useEffect(() => {
     if (Array.isArray(refs._checkboxItems.current) && refs._checkboxItems.current.length > 0) {
@@ -349,6 +370,20 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
       states.setSelectAll.set(allChecked);
     }
   }, [triggerForRender]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const tableContainer = _tBodyTR.current[0]?.closest("div");
+
+    if (tableContainer && tableContainer.scrollLeft > 0) {
+      const currentScroll = tableContainer.scrollLeft;
+      requestAnimationFrame(() => {
+        tableContainer.scrollLeft = currentScroll + 1;
+        tableContainer.scrollLeft = currentScroll;
+      });
+    }
+  }, [states.showSubitems.get]);
 
   return data.length > 0 ? (
     data.map((item, index) => {

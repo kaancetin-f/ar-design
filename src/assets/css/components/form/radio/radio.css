@@ -1,3 +1,5 @@
+@import url("./core/border.css");
+
 .ar-radio-wrapper {
   display: flex;
   align-items: center;
@@ -65,5 +67,3 @@
   font-size: 0.8rem;
   font-weight: 400;
 }
-
-@import url("./core/border.css");

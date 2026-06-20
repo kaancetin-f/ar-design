@@ -1,3 +1,14 @@
+/* PHONE */
+@import url("./phone/styles.css");
+/* OTP */
+@import url("./otp/styles.css");
+
+/* Core Css */
+@import url("./core/icon.css");
+@import url("./core/border.css");
+@import url("./core/button.css");
+@import url("./core/addon.css");
+
 .ar-input-wrapper {
   display: flex;
   flex-direction: row;
@@ -56,7 +67,10 @@
         font-size: 1rem;
         outline: none;
         box-sizing: border-box;
-        transition: background 250ms, border 250ms, box-shadow 250ms ease-in-out;
+        transition:
+          background 250ms,
+          border 250ms,
+          box-shadow 250ms ease-in-out;
       }
 
       .handle-number-button {
@@ -104,14 +118,3 @@
     }
   }
 }
-
-/* PHONE */
-@import url("./phone/styles.css");
-/* OTP */
-@import url("./otp/styles.css");
-
-/* Core Css */
-@import url("./core/icon.css");
-@import url("./core/border.css");
-@import url("./core/button.css");
-@import url("./core/addon.css");
