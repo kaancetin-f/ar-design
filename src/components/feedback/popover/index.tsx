@@ -20,6 +20,7 @@ const Popover: React.FC<IProps> = ({ children, title, message, content, onConfir
 
   // states
   const [open, setOpen] = useState<boolean>(false);
+  const [mounted, setMounted] = useState(false);
 
   // methods
   const handleClickOutSide = (event: MouseEvent) => {
@@ -82,9 +83,16 @@ const Popover: React.FC<IProps> = ({ children, title, message, content, onConfir
     };
   }, [open]);
 
+  useEffect(() => {
+    setMounted(true);
+
+    return () => setMounted(false);
+  }, []);
+
   return (
     <div ref={_arPopoverWrapper} className={_arPopoverClassName.map((c) => c).join(" ")} role="dialog">
       {open &&
+        mounted &&
         ReactDOM.createPortal(
           <div ref={_arPopover} className="ar-popover">
             {title && (
@@ -120,7 +128,7 @@ const Popover: React.FC<IProps> = ({ children, title, message, content, onConfir
               </div>
             )}
           </div>,
-          document.body
+          document.body,
         )}
 
       <div ref={_arPopoverElement} onClick={() => setOpen((prev) => !prev)}>

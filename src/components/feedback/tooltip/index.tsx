@@ -14,6 +14,14 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
   const [mouseEnter, setMouseEnter] = useState<boolean>(false);
   const [_direction, setDirection] = useState<string>(direction);
 
+  // 💡 Donma ve sonsuz döngüyü engellemek için dışarıdan seçilen ana yönü bir ref'te saklıyoruz
+  const currentInitialDirection = useRef<string>(direction);
+
+  useEffect(() => {
+    currentInitialDirection.current = direction;
+    setDirection(direction); // Storybook panelinden elle yön değiştiğinde senkronize et
+  }, [direction]);
+
   // methods
   const handlePosition = useCallback(() => {
     const child = _children.current;
@@ -23,24 +31,48 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
 
     const margin = 17.5;
     const windowWidth = window.innerWidth;
-    const screenCenterX = windowWidth / 2;
+    const windowHeight = window.innerHeight;
 
     const childRect = child.getBoundingClientRect();
     const tooltipRect = tooltip.getBoundingClientRect();
-    const isOnRight = childRect.left > screenCenterX;
 
-    if (direction === "top" || direction === "bottom") {
-      if (isOnRight && tooltipRect.right > windowWidth - 10) {
-        direction = "left";
-      } else if (!isOnRight && tooltipRect.left < 10) {
-        direction = "right";
-      }
+    const spaceTop = childRect.top;
+    const spaceBottom = windowHeight - childRect.bottom;
+    const spaceLeft = childRect.left;
+    const spaceRight = windowWidth - childRect.right;
+
+    // 💡 Hesaplamaya state'ten değil, doğrudan orijinal seçilen yönden başlıyoruz
+    let finalDirection = currentInitialDirection.current;
+
+    // Sıkışma durumlarına göre yönü dinamik değiştir
+    if (finalDirection === "top" && spaceTop < tooltipRect.height + margin) {
+      finalDirection = "bottom";
+    } else if (finalDirection === "bottom" && spaceBottom < tooltipRect.height + margin) {
+      finalDirection = "top";
+    } else if (finalDirection === "left" && spaceLeft < tooltipRect.width + margin) {
+      finalDirection = "right";
+    } else if (finalDirection === "right" && spaceRight < tooltipRect.width + margin) {
+      finalDirection = "left";
+    }
+
+    // Eğer hala hiçbir yere sığmıyorsa en geniş boşluğu bul
+    const maxSpace = Math.max(spaceTop, spaceBottom, spaceLeft, spaceRight);
+    if (
+      (finalDirection === "top" && spaceTop < tooltipRect.height + margin) ||
+      (finalDirection === "bottom" && spaceBottom < tooltipRect.height + margin) ||
+      (finalDirection === "left" && spaceLeft < tooltipRect.width + margin) ||
+      (finalDirection === "right" && spaceRight < tooltipRect.width + margin)
+    ) {
+      if (maxSpace === spaceTop) finalDirection = "top";
+      else if (maxSpace === spaceBottom) finalDirection = "bottom";
+      else if (maxSpace === spaceLeft) finalDirection = "left";
+      else if (maxSpace === spaceRight) finalDirection = "right";
     }
 
     let top = 0;
     let left = 0;
 
-    switch (direction) {
+    switch (finalDirection) {
       case "top":
         top = childRect.top - tooltipRect.height - margin;
         left = childRect.left + childRect.width / 2 - tooltipRect.width / 2;
@@ -59,13 +91,28 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
         break;
     }
 
+    // Ekran taşma koruması
+    if (left < 10) left = 10;
+    if (left + tooltipRect.width > windowWidth - 10) {
+      left = windowWidth - tooltipRect.width - 10;
+    }
+
     tooltip.style.top = `${top}px`;
     tooltip.style.left = `${left}px`;
-    setDirection(direction);
-  }, []);
 
-  //useEffects
+    // 💡 KRİTİK DEĞİŞİKLİK: Sadece yön gerçekten değiştiyse state güncellenir.
+    // Bu kontrol MutationObserver'ın yarattığı kısır döngüyü anında kırar.
+    setDirection((prev) => {
+      if (prev !== finalDirection) return finalDirection;
+      return prev;
+    });
+  }, []); // Bağımlılık dizisini boş bırakarak fonksiyonun kimliğini sabitliyoruz
+
+  // useEffects
   useEffect(() => {
+    window.addEventListener("resize", handlePosition);
+    window.addEventListener("scroll", handlePosition, { passive: true });
+
     const observer = new MutationObserver(() => {
       handlePosition();
     });
@@ -77,13 +124,15 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
     });
 
     return () => {
+      window.removeEventListener("resize", handlePosition);
+      window.removeEventListener("scroll", handlePosition);
       observer.disconnect();
     };
-  }, []);
+  }, [handlePosition]);
 
   useEffect(() => {
     if (mouseEnter) setTimeout(() => handlePosition(), 0);
-  }, [mouseEnter]);
+  }, [mouseEnter, handlePosition]);
 
   return (
     <div className="ar-tooltip-wrapper">
@@ -95,8 +144,8 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
         ReactDOM.createPortal(
           <div ref={_arTooltip} className={`ar-tooltip ${_direction}`}>
             {Array.isArray(text) ? (
-              text.map((t) => (
-                <span className="text">
+              text.map((t, index) => (
+                <span key={index} className="text">
                   <span className="bullet">&#8226;</span>
                   <span>{t}</span>
                 </span>
@@ -105,7 +154,7 @@ const Tooltip: React.FC<IProps> = ({ children, text, direction = "top" }) => {
               <span className="text">{text}</span>
             )}
           </div>,
-          document.body
+          document.body,
         )}
     </div>
   );
