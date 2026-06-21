@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../../../assets/css/components/data-display/diagram/styles.css";
 import Grid from "../grid-system";
@@ -63,7 +65,7 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
 
   const getClosestPort = (
     position: Position,
-    threshold = 20
+    threshold = 20,
   ): { id: string | number; port: "top" | "bottom" } | null => {
     for (const key in _arNodes.current) {
       const el = _arNodes.current[key];
@@ -224,7 +226,7 @@ const Diagram: React.FC<IProps> = ({ nodes, edges }) => {
       const newY = _dragStartNodePosition.current.y + deltaY;
 
       setNodes((prev) =>
-        prev.map((node) => (node.id === draggedNode ? { ...node, position: { x: newX, y: newY } } : node))
+        prev.map((node) => (node.id === draggedNode ? { ...node, position: { x: newX, y: newY } } : node)),
       );
     }
   };

@@ -161,7 +161,7 @@ function TBody<T extends object>({ data, columns, refs, methods, states, config 
   const [rowHeights, setRowHeights] = useState<number[]>([]);
 
   const _subrowSelector: string = config.subrow?.selector ?? "subitems";
-  const _subrowButton: boolean = config.subrow?.button ?? true;
+  const _subrowButton: boolean = config.subrow?.button ?? false;
   const { t } = useTranslation(String(config.locale ?? "tr"));
 
   const renderCell = ({ item, column, index, cIndex, depth, level, height = 0, isSubrows = false }: IRenderCell<T>) => {

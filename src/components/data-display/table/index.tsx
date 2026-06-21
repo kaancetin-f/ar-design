@@ -75,7 +75,7 @@ const Table = forwardRef(
 
     const _subrowOpenAutomatically: boolean = config.subrow?.openAutomatically ?? false;
     const _subrowSelector: string = config.subrow?.selector ?? "subitems";
-    const _subrowButton: boolean = config.subrow?.button ?? true;
+    const _subrowButton: boolean = config.subrow?.button ?? false;
 
     const _tableClassName: string[] = ["ar-table", "scroll"];
 
